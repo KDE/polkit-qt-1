@@ -21,6 +21,8 @@
 #ifndef POLKIT_QT_AUTH_H
 #define POLKIT_QT_AUTH_H
 
+#include "polkit_qt_export.h"
+
 #include <QtCore>
 #include <QtCore/QString>
 
@@ -36,7 +38,7 @@ namespace PolKitQt {
  * org.freedesktop.PolicyKit.AuthenticationAgent to make usage of
  * policykit easier in Qt/KDE worlds
  */
-class PkAuth : public QObject
+class POLKIT_QT_EXPORT PkAuth : public QObject
 {
 Q_OBJECT
 public:

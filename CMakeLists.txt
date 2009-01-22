@@ -9,8 +9,11 @@ set(polkit_qt_LIB_SRCS
 kde4_add_library(polkit_qt SHARED ${polkit_qt_LIB_SRCS})
 
 target_link_libraries(polkit_qt
-# 	${POLKITDBUS_LIBRARIES}
-# 	${POLKITGRANT_LIBRARIES}
+ 	${POLKITDBUS_LIBRARIES}
+ 	${POLKITGRANT_LIBRARIES}
+	${QT_QTCORE_LIBRARY}
+	${QT_QTGUI_LIBRARY}
+	${QT_QTDBUS_LIBRARY}
 	${POLKIT_LIBRARIES}
 )
 

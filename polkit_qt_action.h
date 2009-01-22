@@ -21,6 +21,8 @@
 #ifndef POLKIT_QT_ACTION_H
 #define POLKIT_QT_ACTION_H
 
+#include "polkit_qt_export.h"
+
 #include <QtCore>
 
 #include <QAction>
@@ -40,7 +42,7 @@ namespace PolKitQt {
  * with this class you can track the policykit result
  * of a given action
  */
-class PkAction : public QObject
+class POLKIT_QT_EXPORT PkAction : public QObject
 {
 Q_OBJECT
 public:

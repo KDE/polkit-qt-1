@@ -64,9 +64,11 @@ public:
      * This method was meant to be used only be PkAction but
      * you can use it as long as you know what you're doing
      * (ie. computing the Pokit Result for the given action first)
-     Gets the files contained in the given \p packages
      *
-     * \sa Transaction::files
+     * \p actionId is the action in question (ie org.freedesktop.policykit.read)
+     * \p winId the X window id for the request (use 0 if there's no window)
+     * \p pid Process id of the aplication in question
+     * \return TRUE if the user is authorized otherwise FALSE
      */
     static bool obtainAuth(const QString &action_id, uint xid, uint pid = QCoreApplication::applicationPid());
 };

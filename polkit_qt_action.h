@@ -33,7 +33,7 @@
 namespace PolKitQt {
 
 /**
- * \class PolkitQtAuthProxy polkit_qt_auth.h PolkitQtAuthProxy
+ * \class PkAction polkit_qt_auth.h PkAction
  * \author Daniel Nicoletti <dantti85-pk@yahoo.com.br>
  *
  * \brief Class used to manage actions
@@ -51,12 +51,10 @@ public:
 
 signals:
     /**
-     * Emitted when PolicyKit configuration
-     * (e.g. /etc/PolicyKit/PolicyKit.conf or .policy files)
-     * changes content
-     *
-     * If you're not using this class as a proxy
-     * connect to this signal to update your widgets
+     * Emitted when PolicyKit the PolKitResul for
+     * the given action changes, you should connect
+     * to this signal if you want to track these
+     * changes.
      */
     void resultChanged();
 
@@ -80,8 +78,45 @@ public:
     /**
      * Changes the action being tracked
      */
-    void setPolkiAction(const QString &action_id);
+    void setPolkiAction(const QString &actionId);
     PolKitAction* polkiAction() const;
+    QString       actionId() const;
+
+    /**
+     * Whether the Action should be visible
+     */
+//     void setVisible(bool value);
+    bool visible() const;
+
+    /**
+     * Whether the Action should be enabled
+     */
+//     void setEnabled(bool value);
+    bool enabled() const;
+
+    /**
+     * The current Text for the given action
+     */
+//     void setText(const QString &text);
+    QString text() const;
+
+    /**
+     * The current Tool tip
+     */
+//     void setToolTip(const QString &toolTip);
+    QString toolTip() const;
+
+    /**
+     * The current What's this
+     */
+//     void setWhatsThis(const QString &whatsThis);
+    QString whatsThis() const;
+
+    /**
+     * The current Icon Name
+     */
+//     void setIcon(const QString &icon);
+    QIcon icon() const;
 
     /**
      * If PolicyKit evaluates the result as 'no' and the reason is that
@@ -124,8 +159,8 @@ public:
      * If PolicyKit evaluates the result as 'no' and the reason is that
      * the user has a self-granted negative authorization, use this icon-name
      */
-    void setSelfBlockedIconName(const QString &iconName);
-    QString selfBlockedIconName() const;
+    void setSelfBlockedIcon(const QIcon &icon);
+    QIcon selfBlockedIcon() const;
 
 
     /**
@@ -161,8 +196,8 @@ public:
     /**
      * If PolicyKit evaluates the result as 'no', use this icon-name
      */
-    void setNoIconName(const QString &iconName);
-    QString noIconName() const;
+    void setNoIcon(const QIcon &icon);
+    QIcon noIcon() const;
 
 
     /**
@@ -198,8 +233,8 @@ public:
     /**
      * If PolicyKit evaluates the result as 'auth', use this icon-name
      */
-    void setAuthIconName(const QString &iconName);
-    QString authIconName() const;
+    void setAuthIcon(const QIcon &icon);
+    QIcon authIcon() const;
 
 
     /**
@@ -235,8 +270,8 @@ public:
     /**
      * If PolicyKit evaluates the result as 'yes', use this icon-name
      */
-    void setYesIconName(const QString &iconName);
-    QString yesIconName() const;
+    void setYesIcon(const QIcon &icon);
+    QIcon yesIcon() const;
 
 
     /**
@@ -265,6 +300,7 @@ public:
      * \p pid the process id that the action can be requested for
      */
     static PolKitResult computePkResultDirect(PolKitAction *action, pid_t pid);
+
 private slots:
     void configChanged();
 
@@ -280,43 +316,43 @@ private:
 
     // current data
     bool    m_visible;
-    bool    m_sensitive;
+    bool    m_enabled;
     QString m_text;
     QString m_whatsThis;
     QString m_tooltip;
-    QString m_iconName;
+    QIcon   m_icon;
 
     // states data
-    bool    self_blocked_visible;
-    bool    self_blocked_sensitive;
-    QString self_blocked_text;
-    QString self_blocked_short_text;
-    QString self_blocked_tooltip;
-    QString self_blocked_icon_name;
+    bool    m_selfBlockedVisible;
+    bool    m_selfBlockedEnabled;
+    QString m_selfBlockedText;
+    QString m_selfBlockedWhatsThis;
+    QString m_selfBlockedToolTip;
+    QIcon   m_selfBlockedIcon;
 
-    bool    no_visible;
-    bool    no_sensitive;
-    QString no_text;
-    QString no_short_text;
-    QString no_tooltip;
-    QString no_icon_name;
+    bool    m_noVisible;
+    bool    m_noEnabled;
+    QString m_noText;
+    QString m_noWhatsThis;
+    QString m_noToolTip;
+    QIcon   m_noIcon;
 
-    bool    auth_visible;
-    bool    auth_sensitive;
-    QString auth_text;
-    QString auth_short_text;
-    QString auth_tooltip;
-    QString auth_icon_name;
+    bool    m_authVisible;
+    bool    m_authEnabled;
+    QString m_authText;
+    QString m_authWhatsThis;
+    QString m_authToolTip;
+    QIcon   m_authIcon;
 
-    bool    yes_visible;
-    bool    yes_sensitive;
-    QString yes_text;
-    QString yes_short_text;
-    QString yes_tooltip;
-    QString yes_icon_name;
+    bool    m_yesVisible;
+    bool    m_yesEnabled;
+    QString m_yesText;
+    QString m_yesWhatsThis;
+    QString m_yesToolTip;
+    QIcon   m_yesIcon;
 
-    bool master_visible;
-    bool master_sensitive;
+    bool m_masterVisible;
+    bool m_masterEnabled;
 };
 
 }

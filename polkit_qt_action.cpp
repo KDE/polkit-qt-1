@@ -30,45 +30,41 @@ using namespace PolKitQt;
 PkAction::PkAction(const QString &actionId, WId winId, const QIcon &icon, const QString &text,  const QString &tooltip, QObject *parent)
  : QObject(parent), m_pkAction(0), m_targetPID(0), m_winId(winId)
 {
-
-//     PolKitCaller *pk_caller;
-//     DBusError dbus_error;
-
     // Set the default values
-    self_blocked_visible     = true;
-    self_blocked_sensitive   = false;
-    self_blocked_text        = text;
-    self_blocked_short_text  = tooltip;
-    self_blocked_tooltip     = tooltip;
-//     self_blocked_icon_name   = QIcon();
+    m_selfBlockedVisible   = true;
+    m_selfBlockedEnabled   = false;
+    m_selfBlockedText      = text;
+    m_selfBlockedWhatsThis = tooltip;
+    m_selfBlockedToolTip   = tooltip;
+    m_selfBlockedIcon      = icon;
 
-    no_visible       = true;
-    no_sensitive     = false;
-    no_text          = text;
-    no_short_text    = tooltip;
-    no_tooltip       = tooltip;
-//     no_icon_name     = QIcon();
+    m_noVisible     = true;
+    m_noEnabled     = false;
+    m_noText        = text;
+    m_noWhatsThis   = tooltip;
+    m_noToolTip     = tooltip;
+    m_noIcon        = icon;
 
-    auth_visible     = true;
-    auth_sensitive   = true;
-    auth_text        = text;
-    auth_short_text  = tooltip;
-    auth_tooltip     = tooltip;
-//     auth_icon_name   = GTK_STOCK_DIALOG_AUTHENTICATION;
+    m_authVisible   = true;
+    m_authEnabled   = true;
+    m_authText      = text;
+    m_authWhatsThis = tooltip;
+    m_authToolTip   = tooltip;
+    m_authIcon      = icon;
 
-    yes_visible      = true;
-    yes_sensitive    = true;
-    yes_text         = text;
-    yes_short_text   = tooltip;
-    yes_tooltip      = tooltip;
-//     yes_icon_name    = QIcon();
+    m_yesVisible    = true;
+    m_yesEnabled    = true;
+    m_yesText       = text;
+    m_yesWhatsThis  = tooltip;
+    m_yesToolTip    = tooltip;
+    m_yesIcon       = icon;
 
-    master_visible   = true;
-    master_sensitive = true;
+    m_masterVisible = true;
+    m_masterEnabled = true;
 
     // this must be called after the values initialization
     setPolkiAction(actionId);
-    
+
     // track the config changes to update the action
     connect(PkContext::instance(), SIGNAL(configChanged()),
             this, SLOT(configChanged()));
@@ -117,6 +113,7 @@ void PkAction::activate()
              * Hence, they probably have a good reason for doing
              * this so do let the 'activate' signal propagate..
              */
+            // TODO not sure in Qt we should do this
             emit activated();
             break;
     }
@@ -125,6 +122,8 @@ void PkAction::activate()
 void PkAction::updateAction()
 {
         PolKitAuthorizationDB *authdb;
+        if (PkContext::instance()->hasError())
+            return;
         authdb = polkit_context_get_authorization_db (PkContext::instance()->pkContext);
 
         switch (m_pkResult) {
@@ -137,19 +136,19 @@ void PkAction::updateAction()
                                                                     m_pkAction,
                                                                     getuid (),
                                                                     NULL)) {
-                    m_visible = self_blocked_visible && master_visible;
-                    m_sensitive = self_blocked_sensitive && master_sensitive;
-                    m_whatsThis = self_blocked_short_text;
-                    m_text = self_blocked_text;
-                    m_tooltip = self_blocked_tooltip;
-                    m_iconName = self_blocked_icon_name;
+                    m_visible   = m_selfBlockedVisible && m_masterVisible;
+                    m_enabled   = m_selfBlockedEnabled && m_masterEnabled;
+                    m_whatsThis = m_selfBlockedWhatsThis;
+                    m_text      = m_selfBlockedText;
+                    m_tooltip   = m_selfBlockedToolTip;
+                    m_icon      = m_selfBlockedIcon;
                 } else {
-                    m_visible = no_visible && master_visible;
-                    m_sensitive = no_sensitive && master_sensitive;
-                    m_whatsThis = no_short_text;
-                    m_text = no_text;
-                    m_tooltip = no_tooltip;
-                    m_iconName = no_icon_name;
+                    m_visible   = m_noVisible && m_masterVisible;
+                    m_enabled   = m_noEnabled && m_masterEnabled;
+                    m_whatsThis = m_noWhatsThis;
+                    m_text      = m_noText;
+                    m_tooltip   = m_noToolTip;
+                    m_icon      = m_noIcon;
                 }
                 break;
 
@@ -161,21 +160,21 @@ void PkAction::updateAction()
             case POLKIT_RESULT_ONLY_VIA_SELF_AUTH:
             case POLKIT_RESULT_ONLY_VIA_SELF_AUTH_KEEP_SESSION:
             case POLKIT_RESULT_ONLY_VIA_SELF_AUTH_KEEP_ALWAYS:
-                m_visible = auth_visible && master_visible;
-                m_sensitive = auth_sensitive && master_sensitive;
-                m_whatsThis = auth_short_text;
-                m_text = auth_text;
-                m_tooltip = auth_tooltip;
-                m_iconName = auth_icon_name;
+                m_visible   = m_authVisible && m_masterVisible;
+                m_enabled   = m_authEnabled && m_masterEnabled;
+                m_whatsThis = m_authWhatsThis;
+                m_text      = m_authText;
+                m_tooltip   = m_authToolTip;
+                m_icon      = m_authIcon;
                 break;
 
             case POLKIT_RESULT_YES:
-                m_visible = yes_visible && master_visible;
-                m_sensitive = yes_sensitive && master_sensitive;
-                m_whatsThis = yes_short_text;
-                m_text = yes_text;
-                m_tooltip = yes_tooltip;
-                m_iconName = yes_icon_name;
+                m_visible   = m_yesVisible && m_masterVisible;
+                m_enabled   = m_yesEnabled && m_masterEnabled;
+                m_whatsThis = m_yesWhatsThis;
+                m_text      = m_yesText;
+                m_tooltip   = m_yesToolTip;
+                m_icon      = m_yesIcon;
                 break;
         }
 }
@@ -196,30 +195,30 @@ bool PkAction::computePkResult()
 
     old_result = m_pkResult;
     m_pkResult = POLKIT_RESULT_UNKNOWN;
-qDebug() << "computePkResult 1";
+
     if (m_pkAction == 0) {
         m_pkResult = POLKIT_RESULT_YES;
     } else {
-    qDebug() << "computePkResult 2";
         m_pkResult = computePkResultDirect(m_pkAction, targetPID());
     }
-qDebug() << "computePkResult 3";
+
     return old_result != m_pkResult;
 }
 
 PolKitResult PkAction::computePkResultDirect(PolKitAction *action, pid_t pid)
 {
+    qDebug() << "computePkResultDirect";
+
     PolKitCaller *pk_caller;
     PolKitResult pk_result;
     DBusError dbus_error;
-    // TODO
-//     _ensure_pk_g_context (action);
-qDebug() << "computePkResultDirect 1";
     dbus_error_init (&dbus_error);
+
+    if (PkContext::instance()->hasError())
+        return pk_result = POLKIT_RESULT_UNKNOWN;
     pk_caller = polkit_tracker_get_caller_from_pid (PkContext::instance()->pkTracker,
                                                     pid,
                                                     &dbus_error);
-qDebug() << "computePkResultDirect 2";
     if (pk_caller == NULL) {
         qWarning("Cannot get PolKitCaller object for target (pid=%d): %s: %s",
                     pid, dbus_error.name, dbus_error.message);
@@ -255,7 +254,7 @@ qDebug() << "computePkResultDirect 2";
 //             }
 //         }
     }
-qDebug() << "computePkResultDirect 3";
+
     if (pk_caller != NULL)
             polkit_caller_unref (pk_caller);
 
@@ -278,13 +277,11 @@ void PkAction::setTargetPID(pid_t pid)
     updateAction();
 }
 
-void PkAction::setPolkiAction(const QString &action_id)
+void PkAction::setPolkiAction(const QString &actionId)
 {
-qDebug() << "setPolkiAction";
-    PolKitAction *pkAction = polkit_action_new ();
-    qDebug() << "hello";
-    qDebug() << action_id.toLocal8Bit().data();
-    polkit_action_set_action_id (pkAction, action_id.toAscii().data());
+    qDebug() << "setPolkiAction" << actionId;
+    PolKitAction *pkAction = polkit_action_new();
+    polkit_action_set_action_id(pkAction, actionId.toAscii().data());
     /* Don't bother updating polkit_action if it's the same
      * value.. it will just cause a lot of unnecessary work as
      * we'll recompute the answer via PolicyKit..
@@ -292,316 +289,316 @@ qDebug() << "setPolkiAction";
      * unless it's on the initial call (where priv->polkit_action
      * is alread NULL) because we need that initial update;
      */
-     qDebug() << "hello1";
     if (!m_pkAction || m_pkAction != pkAction) {
-qDebug() << "hello2";
-//                 action->priv->polkit_action_set_once = TRUE;
-
+//         action->priv->polkit_action_set_once = TRUE;
         if (m_pkAction != 0)
                 polkit_action_unref (m_pkAction);
-qDebug() << "hello3";
         if (pkAction != NULL) {
             m_pkAction = polkit_action_ref (pkAction);
-            m_actionId = action_id;
+            m_actionId = actionId;
         } else {
             m_pkAction = 0;
             m_actionId.clear();
         }
-qDebug() << "hello4";
         computePkResult();
-qDebug() << "hello5";
         updateAction();
     }
-    qDebug() << "visible" << m_visible;
-    qDebug() << "sensitive" << m_sensitive;
-    qDebug() << "setPolkiAction end";
+}
 
+PolKitAction* PkAction::polkiAction() const
+{
+    return m_pkAction;
+}
+
+QString PkAction::actionId() const
+{
+    return m_actionId;
 }
 
 void PkAction::setSelfBlockedVisible(bool value)
 {
-    self_blocked_visible = value;
+    m_selfBlockedVisible = value;
     updateAction();
 }
 
 bool PkAction::selfBlockedVisible() const
 {
-    return self_blocked_visible;
+    return m_selfBlockedVisible;
 }
 
 void PkAction::setSelfBlockedEnabled(bool value)
 {
-    self_blocked_sensitive = value;
+    m_selfBlockedEnabled = value;
     updateAction();
 }
 
 bool PkAction::selfBlockedEnabled() const
 {
-    return self_blocked_sensitive;
+    return m_selfBlockedEnabled;
 }
 
 void PkAction::setSelfBlockedText(const QString &text)
 {
-    self_blocked_text = text;
+    m_selfBlockedText = text;
     updateAction();
 }
 
 QString PkAction::selfBlockedText() const
 {
-    return self_blocked_text;
+    return m_selfBlockedText;
 }
 
 void PkAction::setSelfBlockedToolTip(const QString &toolTip)
 {
-    self_blocked_tooltip = toolTip;
+    m_selfBlockedToolTip = toolTip;
     updateAction();
 }
 
 QString PkAction::selfBlockedToolTip() const
 {
-    return self_blocked_tooltip;
+    return m_selfBlockedToolTip;
 }
 
 void PkAction::setSelfBlockedWhatsThis(const QString &whatsThis)
 {
-    self_blocked_short_text = whatsThis;
+    m_selfBlockedWhatsThis = whatsThis;
     updateAction();
 }
 
 QString PkAction::selfBlockedWhatsThis() const
 {
-    return self_blocked_short_text;
+    return m_selfBlockedWhatsThis;
 }
 
-void PkAction::setSelfBlockedIconName(const QString &iconName)
+void PkAction::setSelfBlockedIcon(const QIcon &icon)
 {
-    self_blocked_icon_name = iconName;
+    m_selfBlockedIcon = icon;
     updateAction();
 }
 
-QString PkAction::selfBlockedIconName() const
+QIcon PkAction::selfBlockedIcon() const
 {
-    return self_blocked_icon_name;
+    return m_selfBlockedIcon;
 }
 //----------------------------------------------------------
 void PkAction::setNoVisible(bool value)
 {
-    no_visible = value;
+    m_noVisible = value;
     updateAction();
 }
 
 bool PkAction::noVisible() const
 {
-    return no_visible;
+    return m_noVisible;
 }
 
 void PkAction::setNoEnabled(bool value)
 {
-    no_sensitive = value;
+    m_noEnabled = value;
     updateAction();
 }
 
 bool PkAction::noEnabled() const
 {
-    return no_sensitive;
+    return m_noEnabled;
 }
 
 void PkAction::setNoText(const QString &text)
 {
-    no_text = text;
+    m_noText = text;
     updateAction();
 }
 
 QString PkAction::noText() const
 {
-    return no_text;
+    return m_noText;
 }
 
 void PkAction::setNoToolTip(const QString &toolTip)
 {
-    no_tooltip = toolTip;
+    m_noToolTip = toolTip;
     updateAction();
 }
 
 QString PkAction::noToolTip() const
 {
-    return no_tooltip;
+    return m_noToolTip;
 }
 
 void PkAction::setNoWhatsThis(const QString &whatsThis)
 {
-    no_short_text = whatsThis;
+    m_noWhatsThis = whatsThis;
     updateAction();
 }
 
 QString PkAction::noWhatsThis() const
 {
-    return no_short_text;
+    return m_noWhatsThis;
 }
 
-void PkAction::setNoIconName(const QString &iconName)
+void PkAction::setNoIcon(const QIcon &icon)
 {
-    no_icon_name = iconName;
+    m_noIcon = icon;
     updateAction();
 }
 
-QString PkAction::noIconName() const
+QIcon PkAction::noIcon() const
 {
-    return no_icon_name;
+    return m_noIcon;
 }
 //-----------------------------------------
 void PkAction::setAuthVisible(bool value)
 {
-    auth_visible = value;
+    m_authVisible = value;
     updateAction();
 }
 
 bool PkAction::authVisible() const
 {
-    return auth_visible;
+    return m_authVisible;
 }
 
 void PkAction::setAuthEnabled(bool value)
 {
-    auth_sensitive = value;
+    m_authEnabled = value;
     updateAction();
 }
 
 bool PkAction::authEnabled() const
 {
-    return auth_sensitive;
+    return m_authEnabled;
 }
 
 void PkAction::setAuthText(const QString &text)
 {
-    auth_text = text;
+    m_authText = text;
     updateAction();
 }
 
 QString PkAction::authText() const
 {
-    return auth_text;
+    return m_authText;
 }
 
 void PkAction::setAuthToolTip(const QString &toolTip)
 {
-    auth_tooltip = toolTip;
+    m_authToolTip = toolTip;
     updateAction();
 }
 
 QString PkAction::authToolTip() const
 {
-    return auth_tooltip;
+    return m_authToolTip;
 }
 
 void PkAction::setAuthWhatsThis(const QString &whatsThis)
 {
-    auth_short_text = whatsThis;
+    m_authWhatsThis = whatsThis;
     updateAction();
 }
 
 QString PkAction::authWhatsThis() const
 {
-    return auth_short_text;
+    return m_authWhatsThis;
 }
 
-void PkAction::setAuthIconName(const QString &iconName)
+void PkAction::setAuthIcon(const QIcon &icon)
 {
-    auth_icon_name = iconName;
+    m_authIcon = icon;
     updateAction();
 }
 
-QString PkAction::authIconName() const
+QIcon PkAction::authIcon() const
 {
-    return auth_icon_name;
+    return m_authIcon;
 }
 //-------------------------------------------------
 void PkAction::setYesVisible(bool value)
 {
-    yes_visible = value;
+    m_yesVisible = value;
     updateAction();
 }
 
 bool PkAction::yesVisible() const
 {
-    return yes_visible;
+    return m_yesVisible;
 }
 
 void PkAction::setYesEnabled(bool value)
 {
-    yes_sensitive = value;
+    m_yesEnabled = value;
     updateAction();
 }
 
 bool PkAction::yesEnabled() const
 {
-    return yes_sensitive;
+    return m_yesEnabled;
 }
 
 void PkAction::setYesText(const QString &text)
 {
-    yes_text = text;
+    m_yesText = text;
     updateAction();
 }
 
 QString PkAction::yesText() const
 {
-    return yes_text;
+    return m_yesText;
 }
 
 void PkAction::setYesToolTip(const QString &toolTip)
 {
-    yes_tooltip = toolTip;
+    m_yesToolTip = toolTip;
     updateAction();
 }
 
 QString PkAction::yesToolTip() const
 {
-    return yes_tooltip;
+    return m_yesToolTip;
 }
 
 void PkAction::setYesWhatsThis(const QString &whatsThis)
 {
-    yes_short_text = whatsThis;
+    m_yesWhatsThis = whatsThis;
     updateAction();
 }
 
 QString PkAction::yesWhatsThis() const
 {
-    return yes_short_text;
+    return m_yesWhatsThis;
 }
 
-void PkAction::setYesIconName(const QString &iconName)
+void PkAction::setYesIcon(const QIcon &icon)
 {
-    yes_icon_name = iconName;
+    m_yesIcon = icon;
     updateAction();
 }
 
-QString PkAction::yesIconName() const
+QIcon PkAction::yesIcon() const
 {
-    return yes_icon_name;
+    return m_yesIcon;
 }
 //------------------------------------------------------
 void PkAction::setMasterVisible(bool value)
 {
-    master_visible = value;
+    m_masterVisible = value;
     updateAction();
 }
 
 bool PkAction::masterVisible() const
 {
-    return master_visible;
+    return m_masterVisible;
 }
 
 void PkAction::setMasterEnabled(bool value)
 {
-    master_sensitive = value;
+    m_masterEnabled = value;
     updateAction();
 }
 
 bool PkAction::masterEnabled() const
 {
-    return master_sensitive;
+    return m_masterEnabled;
 }
 
 #include "polkit_qt_action.moc"

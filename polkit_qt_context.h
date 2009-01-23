@@ -21,6 +21,8 @@
 #ifndef POLKIT_QT_CONTEXT_H
 #define POLKIT_QT_CONTEXT_H
 
+#include "polkit_qt_export.h"
+
 #include <polkit-dbus/polkit-dbus.h>
 
 #include <QtCore>
@@ -30,19 +32,20 @@
 namespace PolKitQt {
 
 /**
- * \class PolkitQtAuth polkit_qt_auth.h PolkitQtAuth
+ * \class PkContext polkit_qt_context.h PkContext
  * \author Daniel Nicoletti <dantti85-pk@yahoo.com.br>
  *
- * \brief Class used to obtain authorizations
+ * \brief Convenience class for Qt/KDE aplications
  *
- * This class is a simple wrapper around the DBus interface
- * org.freedesktop.PolicyKit.AuthenticationAgent to make usage of
- * policykit easier in Qt/KDE worlds
+ * This class is a singleton that provides easy of use
+ * for PolKitContext and PolKitTracker, it emits configChanged()
+ * whether PolicyKit files change (e.g. the PolicyKit.conf
+ * or .policy files) or when ConsoleKit report activities changes.
  *
- * \note This class is a singleton, its constructor is private. Call PkContext::instance() to get
- * an instance of the PkContext object
+ * \note This class is a singleton, its constructor is private.
+ * Call PkContext::instance() to get an instance of the PkContext object
  */
-class PkContext : public QObject
+class POLKIT_QT_EXPORT PkContext : public QObject
 {
 Q_OBJECT
 public:
@@ -55,10 +58,34 @@ public:
     static PkContext* instance();
     ~PkContext();
 
+    /**
+     * You should always call first this method,
+     * if an error exist it'll try to reinitialize
+     * \return TRUE if not error has happened
+     */
+    bool hasError();
+
+    /**
+     * \return the last error message
+     */
+    QString lastError() const;
+
+    /**
+     * Do not use any of the life cycle methods of these objects;
+     * only use them to gather information.
+     */
     PolKitContext *pkContext;
     PolKitTracker *pkTracker;
 
 signals:
+    /**
+     * This signal will be emitted when some configuration
+     * file is changed or when ConsoleKit report Activities.
+     * You should connect to this signal if you want to track
+     * actions.
+     * \note If you use PkAction you'll probably prefer to
+     * use the resultChanged() signal to track Actions changes.
+     */
     void configChanged();
 
 private slots:
@@ -67,12 +94,15 @@ private slots:
 private:
     PkContext(QObject *parent = 0);
     static PkContext *m_self;
+    void init();
+    bool m_hasError;
+    QString m_lastError;
 
     QMap<int, QSocketNotifier*> m_watches;
 
     static int  io_add_watch(PolKitContext *context, int fd);
     static void io_remove_watch(PolKitContext *context, int fd);
-    static void pk_config_changed(PolKitContext *ontext, void *user_data);
+    static void pk_config_changed(PolKitContext *context, void *user_data);
 };
 
 }

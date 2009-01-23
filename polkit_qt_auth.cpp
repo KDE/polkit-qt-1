@@ -30,12 +30,12 @@
 
 using namespace PolKitQt;
 
-bool PkAuth::computeAndObtainAuth(const QString &actionId, uint winId, uint pid)
+bool QPkAuth::computeAndObtainAuth(const QString &actionId, uint winId, uint pid)
 {
     PolKitAction *pkAction = polkit_action_new();
     polkit_action_set_action_id (pkAction, actionId.toAscii().data());
     PolKitResult result;
-    result = PkAction::computePkResultDirect(pkAction, pid);
+    result = QPkAction::computePkResultDirect(pkAction, pid);
     switch (result) {
         case POLKIT_RESULT_YES:
             // If PolicyKit says yes.. emit the 'activated' signal
@@ -62,7 +62,7 @@ bool PkAuth::computeAndObtainAuth(const QString &actionId, uint winId, uint pid)
     }
 }
 
-bool PkAuth::obtainAuth(const QString &actionId, uint winId, uint pid)
+bool QPkAuth::obtainAuth(const QString &actionId, uint winId, uint pid)
 {
     qDebug() << "obtainAuth" << actionId << winId << pid;
     QDBusMessage message = QDBusMessage::createMethodCall(PK_NAME, PK_PATH, PK_INTERFACE, QLatin1String("ObtainAuthorization"));

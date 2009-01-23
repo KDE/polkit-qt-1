@@ -33,7 +33,7 @@
 namespace PolKitQt {
 
 /**
- * \class PkAction polkit_qt_auth.h PkAction
+ * \class QPkAction polkit_qt_auth.h QPkAction
  * \author Daniel Nicoletti <dantti85-pk@yahoo.com.br>
  *
  * \brief Class used to manage actions
@@ -42,21 +42,22 @@ namespace PolKitQt {
  * with this class you can track the policykit result
  * of a given action
  */
-class POLKIT_QT_EXPORT PkAction : public QObject
+class POLKIT_QT_EXPORT QPkAction : public QObject
 {
 Q_OBJECT
 public:
-    PkAction(const QString &actionId, WId winId, const QIcon &icon, const QString &text,  const QString &tooltip, QObject *parent);
-    ~PkAction();
+    QPkAction(const QString &actionId, WId winId, QObject *parent);
+    ~QPkAction();
 
 signals:
     /**
-     * Emitted when PolicyKit the PolKitResul for
-     * the given action changes, you should connect
-     * to this signal if you want to track these
-     * changes.
+     * Emitted when PolicyKit the PolKitResult for
+     * the given action or the internal data changes
+     * (ie the user called one of the set methods)
+     * You should connect to this signal if you want
+     * to track these changes.
      */
-    void resultChanged();
+    void dataChanged();
 
     /**
      * Emitted when using this class as a proxy
@@ -71,8 +72,14 @@ public slots:
      * Use this slot if you want activated()
      * to be emitted if the given action is
      * autorized
+     *
+     * \note this will call the auth dialog
+     * if needed. Only use the return value if
+     * you want a sync behavior
+     * 
+     * \return TRUE if the caller can do the action
      */
-    void activate();
+    bool activate();
 
 public:
     /**
@@ -85,37 +92,51 @@ public:
     /**
      * Whether the Action should be visible
      */
-//     void setVisible(bool value);
     bool visible() const;
+
+    /**
+     * Can be set to FALSE to force invisibility no matter what PolicyKit reports
+     */
+    void setMasterVisible(bool value);
+    bool masterVisible() const;
 
     /**
      * Whether the Action should be enabled
      */
-//     void setEnabled(bool value);
     bool enabled() const;
 
     /**
-     * The current Text for the given action
+     * Can be set to FALSE to force disabled no matter what PolicyKit reports
      */
-//     void setText(const QString &text);
+    void setMasterEnabled(bool value);
+    bool masterEnabled() const;
+
+    /**
+     * The current Text for the given action
+     * \p text set the text in all four states
+     */
+    void setText(const QString &text);
     QString text() const;
 
     /**
      * The current Tool tip
+     * \p toolTip set the toolTip in all four states
      */
-//     void setToolTip(const QString &toolTip);
+    void setToolTip(const QString &toolTip);
     QString toolTip() const;
 
     /**
      * The current What's this
+     * \p whatsThis set the whatsThis in all four states
      */
-//     void setWhatsThis(const QString &whatsThis);
+    void setWhatsThis(const QString &whatsThis);
     QString whatsThis() const;
 
     /**
      * The current Icon Name
+     * \p icon set the icon in all four states
      */
-//     void setIcon(const QString &icon);
+    void setIcon(const QIcon &icon);
     QIcon icon() const;
 
     /**
@@ -171,6 +192,8 @@ public:
 
     /**
      * If PolicyKit evaluates the result as 'no', whether the action will be enabled
+     * \note if you set this to TRUE the activated() signal will be
+     * emitted even when the PolKitResult is POLKIT_RESULT_NO
      */
     void setNoEnabled(bool value);
     bool noEnabled() const;
@@ -273,20 +296,6 @@ public:
     void setYesIcon(const QIcon &icon);
     QIcon yesIcon() const;
 
-
-    /**
-     * Can be set to FALSE to force invisibility no matter what PolicyKit reports
-     */
-    void setMasterVisible(bool value);
-    bool masterVisible() const;
-
-    /**
-     * Can be set to FALSE to force insensitivity no matter what PolicyKit reports
-     */
-    void setMasterEnabled(bool value);
-    bool masterEnabled() const;
-
-
     /**
      * The target process id to receive the authorization; if 0 it is the current process
      */
@@ -319,7 +328,7 @@ private:
     bool    m_enabled;
     QString m_text;
     QString m_whatsThis;
-    QString m_tooltip;
+    QString m_toolTip;
     QIcon   m_icon;
 
     // states data

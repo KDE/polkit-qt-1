@@ -4,6 +4,7 @@ set(polkit_qt_LIB_SRCS
     polkit_qt_action.cpp
     polkit_qt_auth.cpp
     polkit_qt_context.cpp
+    QPkActionButton.cpp
 )
 
 kde4_add_library(polkit_qt SHARED ${polkit_qt_LIB_SRCS})

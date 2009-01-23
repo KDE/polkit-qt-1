@@ -29,7 +29,7 @@
 namespace PolKitQt {
 
 /**
- * \class PolkitQtAuth polkit_qt_auth.h PolkitQtAuth
+ * \class QPkAuth polkit_qt_auth.h QPkAuth
  * \author Daniel Nicoletti <dantti85-pk@yahoo.com.br>
  *
  * \brief Class used to obtain authorizations
@@ -38,11 +38,11 @@ namespace PolKitQt {
  * org.freedesktop.PolicyKit.AuthenticationAgent to make usage of
  * policykit easier in Qt/KDE worlds
  */
-class POLKIT_QT_EXPORT PkAuth : public QObject
+class POLKIT_QT_EXPORT QPkAuth : public QObject
 {
 Q_OBJECT
 public:
-    PkAuth(QObject *parent = 0) : QObject(parent) {};
+    QPkAuth(QObject *parent = 0) : QObject(parent) {};
 
     /**
      * Obtain authorization for the given action regardless of

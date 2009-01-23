@@ -32,7 +32,7 @@
 namespace PolKitQt {
 
 /**
- * \class PkContext polkit_qt_context.h PkContext
+ * \class QPkContext polkit_qt_context.h QPkContext
  * \author Daniel Nicoletti <dantti85-pk@yahoo.com.br>
  *
  * \brief Convenience class for Qt/KDE aplications
@@ -43,20 +43,20 @@ namespace PolKitQt {
  * or .policy files) or when ConsoleKit report activities changes.
  *
  * \note This class is a singleton, its constructor is private.
- * Call PkContext::instance() to get an instance of the PkContext object
+ * Call QPkContext::instance() to get an instance of the QPkContext object
  */
-class POLKIT_QT_EXPORT PkContext : public QObject
+class POLKIT_QT_EXPORT QPkContext : public QObject
 {
 Q_OBJECT
 public:
     /**
-     * \brief Returns an instance of PkContext
+     * \brief Returns an instance of QPkContext
      *
-     * The PkContext class is a singleton, you can call this method several times,
-     * a single PkContext object will exist.
+     * The QPkContext class is a singleton, you can call this method several times,
+     * a single QPkContext object will exist.
      */
-    static PkContext* instance();
-    ~PkContext();
+    static QPkContext* instance();
+    ~QPkContext();
 
     /**
      * You should always call first this method,
@@ -92,8 +92,8 @@ private slots:
     void watchActivatedContext(int fd);
 
 private:
-    PkContext(QObject *parent = 0);
-    static PkContext *m_self;
+    QPkContext(QObject *parent = 0);
+    static QPkContext *m_self;
     void init();
     bool m_hasError;
     QString m_lastError;

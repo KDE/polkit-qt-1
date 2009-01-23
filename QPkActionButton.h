@@ -49,13 +49,16 @@ class POLKIT_QT_EXPORT QPkActionButton : public QPkAction
 {
 Q_OBJECT
 public:
-    QPkActionButton(QAbstractButton *button, const QString &actionId, WId winId, QWidget *parent = 0);
+    QPkActionButton(QAbstractButton *button, const QString &actionId, QWidget *parent = 0);
 
 private slots:
     void updateButton();
+    void toggled();
+    void activateProxy();
 
 private:
     QAbstractButton *m_button;
+    bool m_initiallyChecked;
 };
 
 }

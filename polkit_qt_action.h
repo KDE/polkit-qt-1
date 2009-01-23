@@ -46,7 +46,7 @@ class POLKIT_QT_EXPORT QPkAction : public QObject
 {
 Q_OBJECT
 public:
-    QPkAction(const QString &actionId, WId winId, QObject *parent);
+    QPkAction(const QString &actionId, QObject *parent);
     ~QPkAction();
 
 signals:
@@ -79,7 +79,7 @@ public slots:
      * 
      * \return TRUE if the caller can do the action
      */
-    bool activate();
+    bool activate(WId winId = 0);
 
 public:
     /**
@@ -310,6 +310,14 @@ public:
      */
     static PolKitResult computePkResultDirect(PolKitAction *action, pid_t pid);
 
+    /**
+     * This method to check the if the given action can be performed
+     * ie. PolKitResult is YES.
+     * \note This method does not call the authentication dialog
+     * \return TRUE if the action can be done
+     */
+     bool canDoAction() const;
+
 private slots:
     void configChanged();
 
@@ -318,7 +326,6 @@ private:
     PolKitAction *m_pkAction;
     PolKitResult  m_pkResult;
     uint          m_targetPID;
-    WId           m_winId;
 
     void         updateAction();
     bool         computePkResult();

@@ -27,12 +27,12 @@
 
 using namespace PolKitQt;
 
-QPkAction::QPkAction(const QString &actionId, WId winId, QObject *parent)
- : QObject(parent), m_pkAction(NULL), m_targetPID(0), m_winId(winId)
+QPkAction::QPkAction(const QString &actionId, QObject *parent)
+ : QObject(parent), m_pkAction(NULL), m_targetPID(0)
 {
     // Set the default values
-    m_selfBlockedVisible   = true;
-    m_selfBlockedEnabled   = false;
+    m_selfBlockedVisible = true;
+    m_selfBlockedEnabled = false;
 
     m_noVisible     = true;
     m_noEnabled     = false;
@@ -60,7 +60,7 @@ QPkAction::~QPkAction()
         polkit_action_unref(m_pkAction);
 }
 
-bool QPkAction::activate()
+bool QPkAction::activate(WId winId)
 {
     qDebug() << "QPkAction::activate()";
     switch (m_pkResult) {
@@ -82,7 +82,7 @@ bool QPkAction::activate()
              * and start auth process..
              */
             if (m_pkAction != NULL) {
-                if (QPkAuth::obtainAuth(m_actionId, m_winId, targetPID())) {
+                if (QPkAuth::obtainAuth(m_actionId, winId, targetPID())) {
                     // Make sure our result is up to date
                     computePkResult();
                     // emit activated as the obtain auth said it was ok
@@ -271,7 +271,7 @@ void QPkAction::setTargetPID(pid_t pid)
 
 void QPkAction::setPolkitAction(const QString &actionId)
 {
-    qDebug() << "setPolkiAction" << actionId;
+    qDebug() << "setPolkitAction" << actionId;
     PolKitAction *pkAction = polkit_action_new();
     polkit_action_set_action_id(pkAction, actionId.toAscii().data());
     /* Don't bother updating polkit_action if it's the same
@@ -295,6 +295,11 @@ void QPkAction::setPolkitAction(const QString &actionId)
         computePkResult();
         updateAction();
     }
+}
+
+bool QPkAction::canDoAction() const
+{
+    return m_pkResult == POLKIT_RESULT_YES;
 }
 
 bool QPkAction::visible() const

@@ -47,7 +47,7 @@ QPkAction::QPkAction(const QString &actionId, WId winId, QObject *parent)
     m_masterEnabled = true;
 
     // this must be called AFTER the values initialization
-    setPolkiAction(actionId);
+    setPolkitAction(actionId);
 
     // track the config changes to update the action
     connect(QPkContext::instance(), SIGNAL(configChanged()),
@@ -269,7 +269,7 @@ void QPkAction::setTargetPID(pid_t pid)
     updateAction();
 }
 
-void QPkAction::setPolkiAction(const QString &actionId)
+void QPkAction::setPolkitAction(const QString &actionId)
 {
     qDebug() << "setPolkiAction" << actionId;
     PolKitAction *pkAction = polkit_action_new();
@@ -363,7 +363,7 @@ QIcon QPkAction::icon() const
     return m_icon;
 }
 //--------------------------------------------------
-PolKitAction* QPkAction::polkiAction() const
+PolKitAction* QPkAction::polkitAction() const
 {
     return m_pkAction;
 }

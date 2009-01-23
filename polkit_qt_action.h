@@ -85,8 +85,8 @@ public:
     /**
      * Changes the action being tracked
      */
-    void setPolkiAction(const QString &actionId);
-    PolKitAction* polkiAction() const;
+    void setPolkitAction(const QString &actionId);
+    PolKitAction* polkitAction() const;
     QString       actionId() const;
 
     /**

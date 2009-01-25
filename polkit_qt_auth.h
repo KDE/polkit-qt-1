@@ -23,8 +23,8 @@
 
 #include "polkit_qt_export.h"
 
-#include <QtCore>
 #include <QtCore/QString>
+#include <QtCore/QCoreApplication>
 
 namespace QPolicyKit {
 

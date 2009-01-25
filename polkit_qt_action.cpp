@@ -22,7 +22,8 @@
 #include "polkit_qt_context.h"
 #include "polkit_qt_auth.h"
 
-#include <QtDBus/QtDBus>
+#include <QtCore/QDebug>
+
 #include <polkit-dbus/polkit-dbus.h>
 
 using namespace QPolicyKit;
@@ -331,7 +332,7 @@ void Action::setToolTip(const QString &toolTip)
     m_selfBlockedToolTip = toolTip;
     m_noToolTip          = toolTip;
     m_authToolTip        = toolTip;
-    m_yesToolTip         = toolTip; 
+    m_yesToolTip         = toolTip;
     updateAction();
 }
 

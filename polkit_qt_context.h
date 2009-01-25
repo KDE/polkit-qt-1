@@ -25,9 +25,11 @@
 
 #include <polkit-dbus/polkit-dbus.h>
 
-#include <QtCore>
-
+#include <QtCore/QObject>
 #include <QtCore/QString>
+#include <QtCore/QMap>
+
+class QSocketNotifier;
 
 namespace QPolicyKit {
 

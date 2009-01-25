@@ -20,8 +20,9 @@
 
 #include "polkit_qt_context.h"
 
-#include <QtCore>
-#include <QSocketNotifier>
+#include <QtCore/QSocketNotifier>
+#include <QtCore/QCoreApplication>
+#include <QtCore/QDebug>
 
 #include <polkit-dbus/polkit-dbus.h>
 

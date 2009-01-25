@@ -23,9 +23,7 @@
 
 #include "polkit_qt_export.h"
 
-#include <QtCore>
-
-#include <QAction>
+#include <QtGui/QAction>
 #include <QtCore/QString>
 
 #include <polkit/polkit.h>
@@ -76,7 +74,7 @@ public slots:
      * \note this will call the auth dialog
      * if needed. Only use the return value if
      * you want a sync behavior
-     * 
+     *
      * \return TRUE if the caller can do the action
      */
     bool activate(WId winId = 0);

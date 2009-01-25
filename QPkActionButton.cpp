@@ -20,10 +20,10 @@
 
 #include "QPkActionButton.h"
 
-using namespace PolKitQt;
+using namespace QPolicyKit;
 
-QPkActionButton::QPkActionButton(QAbstractButton *button, const QString &actionId, QWidget *parent)
- : QPkAction(actionId, parent), m_button(button), m_initiallyChecked(false)
+ActionButton::ActionButton(QAbstractButton *button, const QString &actionId, QWidget *parent)
+ : Action(actionId, parent), m_button(button), m_initiallyChecked(false)
 {
     connect(this, SIGNAL(dataChanged()), SLOT(updateButton()));
     if (m_button->isCheckable()) {
@@ -39,9 +39,9 @@ QPkActionButton::QPkActionButton(QAbstractButton *button, const QString &actionI
     updateButton();
 }
 
-void QPkActionButton::updateButton()
+void ActionButton::updateButton()
 {
-    qDebug() << "QPkActionButton::updateButton()";
+    qDebug() << "ActionButton::updateButton()";
     m_button->setVisible(visible());
     m_button->setEnabled(enabled());
     // We check for Null to see if the user
@@ -65,12 +65,12 @@ void QPkActionButton::updateButton()
     }
 }
 
-void QPkActionButton::activateProxy()
+void ActionButton::activateProxy()
 {
     activate(m_button->winId());
 }
 
-void QPkActionButton::toggled()
+void ActionButton::toggled()
 {
     qDebug() << "toggle";
     // We store the value cause it might create an

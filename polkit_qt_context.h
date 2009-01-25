@@ -29,10 +29,10 @@
 
 #include <QtCore/QString>
 
-namespace PolKitQt {
+namespace QPolicyKit {
 
 /**
- * \class QPkContext polkit_qt_context.h QPkContext
+ * \class Context polkit_qt_context.h Context
  * \author Daniel Nicoletti <dantti85-pk@yahoo.com.br>
  *
  * \brief Convenience class for Qt/KDE aplications
@@ -43,20 +43,20 @@ namespace PolKitQt {
  * or .policy files) or when ConsoleKit report activities changes.
  *
  * \note This class is a singleton, its constructor is private.
- * Call QPkContext::instance() to get an instance of the QPkContext object
+ * Call Context::instance() to get an instance of the Context object
  */
-class POLKIT_QT_EXPORT QPkContext : public QObject
+class POLKIT_QT_EXPORT Context : public QObject
 {
 Q_OBJECT
 public:
     /**
-     * \brief Returns an instance of QPkContext
+     * \brief Returns an instance of Context
      *
-     * The QPkContext class is a singleton, you can call this method several times,
-     * a single QPkContext object will exist.
+     * The Context class is a singleton, you can call this method several times,
+     * a single Context object will exist.
      */
-    static QPkContext* instance();
-    ~QPkContext();
+    static Context* instance();
+    ~Context();
 
     /**
      * You should always call first this method,
@@ -92,8 +92,8 @@ private slots:
     void watchActivatedContext(int fd);
 
 private:
-    QPkContext(QObject *parent = 0);
-    static QPkContext *m_self;
+    Context(QObject *parent = 0);
+    static Context *m_self;
     void init();
     bool m_hasError;
     QString m_lastError;

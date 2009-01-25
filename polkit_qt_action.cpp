@@ -25,9 +25,9 @@
 #include <QtDBus/QtDBus>
 #include <polkit-dbus/polkit-dbus.h>
 
-using namespace PolKitQt;
+using namespace QPolicyKit;
 
-QPkAction::QPkAction(const QString &actionId, QObject *parent)
+Action::Action(const QString &actionId, QObject *parent)
  : QObject(parent), m_pkAction(NULL), m_targetPID(0)
 {
     // Set the default values
@@ -50,19 +50,19 @@ QPkAction::QPkAction(const QString &actionId, QObject *parent)
     setPolkitAction(actionId);
 
     // track the config changes to update the action
-    connect(QPkContext::instance(), SIGNAL(configChanged()),
+    connect(Context::instance(), SIGNAL(configChanged()),
             this, SLOT(configChanged()));
 }
 
-QPkAction::~QPkAction()
+Action::~Action()
 {
     if (m_pkAction != NULL)
         polkit_action_unref(m_pkAction);
 }
 
-bool QPkAction::activate(WId winId)
+bool Action::activate(WId winId)
 {
-    qDebug() << "QPkAction::activate()";
+    qDebug() << "Action::activate()";
     switch (m_pkResult) {
         case POLKIT_RESULT_YES:
             // If PolicyKit says yes.. emit the 'activated' signal
@@ -82,7 +82,7 @@ bool QPkAction::activate(WId winId)
              * and start auth process..
              */
             if (m_pkAction != NULL) {
-                if (QPkAuth::obtainAuth(m_actionId, winId, targetPID())) {
+                if (Auth::obtainAuth(m_actionId, winId, targetPID())) {
                     // Make sure our result is up to date
                     computePkResult();
                     // emit activated as the obtain auth said it was ok
@@ -110,13 +110,13 @@ bool QPkAction::activate(WId winId)
     return false;
 }
 
-void QPkAction::updateAction()
+void Action::updateAction()
 {
     PolKitAuthorizationDB *authdb;
-    if (QPkContext::instance()->hasError()) {
+    if (Context::instance()->hasError()) {
         return;
     }
-    authdb = polkit_context_get_authorization_db (QPkContext::instance()->pkContext);
+    authdb = polkit_context_get_authorization_db (Context::instance()->pkContext);
 
     switch (m_pkResult) {
         default:
@@ -172,7 +172,7 @@ void QPkAction::updateAction()
     emit dataChanged();
 }
 
-void QPkAction::configChanged()
+void Action::configChanged()
 {
     bool result_changed;
     result_changed = computePkResult();
@@ -181,7 +181,7 @@ void QPkAction::configChanged()
     }
 }
 
-bool QPkAction::computePkResult()
+bool Action::computePkResult()
 {
     PolKitResult old_result;
 
@@ -197,7 +197,7 @@ bool QPkAction::computePkResult()
     return old_result != m_pkResult;
 }
 
-PolKitResult QPkAction::computePkResultDirect(PolKitAction *action, pid_t pid)
+PolKitResult Action::computePkResultDirect(PolKitAction *action, pid_t pid)
 {
     qDebug() << "computePkResultDirect";
 
@@ -206,9 +206,9 @@ PolKitResult QPkAction::computePkResultDirect(PolKitAction *action, pid_t pid)
     DBusError dbus_error;
     dbus_error_init (&dbus_error);
 
-    if (QPkContext::instance()->hasError())
+    if (Context::instance()->hasError())
         return pk_result = POLKIT_RESULT_UNKNOWN;
-    pk_caller = polkit_tracker_get_caller_from_pid (QPkContext::instance()->pkTracker,
+    pk_caller = polkit_tracker_get_caller_from_pid (Context::instance()->pkTracker,
                                                     pid,
                                                     &dbus_error);
     if (pk_caller == NULL) {
@@ -219,7 +219,7 @@ PolKitResult QPkAction::computePkResultDirect(PolKitAction *action, pid_t pid)
         /* this is bad so cop-out to UKNOWN */
         pk_result = POLKIT_RESULT_UNKNOWN;
     } else {
-        pk_result = polkit_context_is_caller_authorized (QPkContext::instance()->pkContext,
+        pk_result = polkit_context_is_caller_authorized (Context::instance()->pkContext,
                                                             action,
                                                             pk_caller,
                                                             FALSE,
@@ -253,7 +253,7 @@ PolKitResult QPkAction::computePkResultDirect(PolKitAction *action, pid_t pid)
     return pk_result;
 }
 
-pid_t QPkAction::targetPID()
+pid_t Action::targetPID()
 {
     if (m_targetPID != 0)
         return m_targetPID;
@@ -261,7 +261,7 @@ pid_t QPkAction::targetPID()
         return QCoreApplication::applicationPid();
 }
 
-void QPkAction::setTargetPID(pid_t pid)
+void Action::setTargetPID(pid_t pid)
 {
     m_targetPID = pid;
 
@@ -269,7 +269,7 @@ void QPkAction::setTargetPID(pid_t pid)
     updateAction();
 }
 
-void QPkAction::setPolkitAction(const QString &actionId)
+void Action::setPolkitAction(const QString &actionId)
 {
     qDebug() << "setPolkitAction" << actionId;
     PolKitAction *pkAction = polkit_action_new();
@@ -297,22 +297,22 @@ void QPkAction::setPolkitAction(const QString &actionId)
     }
 }
 
-bool QPkAction::canDoAction() const
+bool Action::canDoAction() const
 {
     return m_pkResult == POLKIT_RESULT_YES;
 }
 
-bool QPkAction::visible() const
+bool Action::visible() const
 {
     return m_visible;
 }
 
-bool QPkAction::enabled() const
+bool Action::enabled() const
 {
     return m_enabled;
 }
 
-void QPkAction::setText(const QString &text)
+void Action::setText(const QString &text)
 {
     m_selfBlockedText = text;
     m_noText          = text;
@@ -321,12 +321,12 @@ void QPkAction::setText(const QString &text)
     updateAction();
 }
 
-QString QPkAction::text() const
+QString Action::text() const
 {
     return m_text;
 }
 
-void QPkAction::setToolTip(const QString &toolTip)
+void Action::setToolTip(const QString &toolTip)
 {
     m_selfBlockedToolTip = toolTip;
     m_noToolTip          = toolTip;
@@ -335,12 +335,12 @@ void QPkAction::setToolTip(const QString &toolTip)
     updateAction();
 }
 
-QString QPkAction::toolTip() const
+QString Action::toolTip() const
 {
     return m_toolTip;
 }
 
-void QPkAction::setWhatsThis(const QString &whatsThis)
+void Action::setWhatsThis(const QString &whatsThis)
 {
     m_selfBlockedWhatsThis = whatsThis;
     m_noWhatsThis          = whatsThis;
@@ -349,12 +349,12 @@ void QPkAction::setWhatsThis(const QString &whatsThis)
     updateAction();
 }
 
-QString QPkAction::whatsThis() const
+QString Action::whatsThis() const
 {
     return m_whatsThis;
 }
 
-void QPkAction::setIcon(const QIcon &icon)
+void Action::setIcon(const QIcon &icon)
 {
     m_selfBlockedIcon = icon;
     m_noIcon          = icon;
@@ -363,303 +363,303 @@ void QPkAction::setIcon(const QIcon &icon)
     updateAction();
 }
 
-QIcon QPkAction::icon() const
+QIcon Action::icon() const
 {
     return m_icon;
 }
 //--------------------------------------------------
-PolKitAction* QPkAction::polkitAction() const
+PolKitAction* Action::polkitAction() const
 {
     return m_pkAction;
 }
 
-QString QPkAction::actionId() const
+QString Action::actionId() const
 {
     return m_actionId;
 }
 //---------------------------------------------------
-void QPkAction::setSelfBlockedVisible(bool value)
+void Action::setSelfBlockedVisible(bool value)
 {
     m_selfBlockedVisible = value;
     updateAction();
 }
 
-bool QPkAction::selfBlockedVisible() const
+bool Action::selfBlockedVisible() const
 {
     return m_selfBlockedVisible;
 }
 
-void QPkAction::setSelfBlockedEnabled(bool value)
+void Action::setSelfBlockedEnabled(bool value)
 {
     m_selfBlockedEnabled = value;
     updateAction();
 }
 
-bool QPkAction::selfBlockedEnabled() const
+bool Action::selfBlockedEnabled() const
 {
     return m_selfBlockedEnabled;
 }
 
-void QPkAction::setSelfBlockedText(const QString &text)
+void Action::setSelfBlockedText(const QString &text)
 {
     m_selfBlockedText = text;
     updateAction();
 }
 
-QString QPkAction::selfBlockedText() const
+QString Action::selfBlockedText() const
 {
     return m_selfBlockedText;
 }
 
-void QPkAction::setSelfBlockedToolTip(const QString &toolTip)
+void Action::setSelfBlockedToolTip(const QString &toolTip)
 {
     m_selfBlockedToolTip = toolTip;
     updateAction();
 }
 
-QString QPkAction::selfBlockedToolTip() const
+QString Action::selfBlockedToolTip() const
 {
     return m_selfBlockedToolTip;
 }
 
-void QPkAction::setSelfBlockedWhatsThis(const QString &whatsThis)
+void Action::setSelfBlockedWhatsThis(const QString &whatsThis)
 {
     m_selfBlockedWhatsThis = whatsThis;
     updateAction();
 }
 
-QString QPkAction::selfBlockedWhatsThis() const
+QString Action::selfBlockedWhatsThis() const
 {
     return m_selfBlockedWhatsThis;
 }
 
-void QPkAction::setSelfBlockedIcon(const QIcon &icon)
+void Action::setSelfBlockedIcon(const QIcon &icon)
 {
     m_selfBlockedIcon = icon;
     updateAction();
 }
 
-QIcon QPkAction::selfBlockedIcon() const
+QIcon Action::selfBlockedIcon() const
 {
     return m_selfBlockedIcon;
 }
 //----------------------------------------------------------
-void QPkAction::setNoVisible(bool value)
+void Action::setNoVisible(bool value)
 {
     m_noVisible = value;
     updateAction();
 }
 
-bool QPkAction::noVisible() const
+bool Action::noVisible() const
 {
     return m_noVisible;
 }
 
-void QPkAction::setNoEnabled(bool value)
+void Action::setNoEnabled(bool value)
 {
     m_noEnabled = value;
     updateAction();
 }
 
-bool QPkAction::noEnabled() const
+bool Action::noEnabled() const
 {
     return m_noEnabled;
 }
 
-void QPkAction::setNoText(const QString &text)
+void Action::setNoText(const QString &text)
 {
     m_noText = text;
     updateAction();
 }
 
-QString QPkAction::noText() const
+QString Action::noText() const
 {
     return m_noText;
 }
 
-void QPkAction::setNoToolTip(const QString &toolTip)
+void Action::setNoToolTip(const QString &toolTip)
 {
     m_noToolTip = toolTip;
     updateAction();
 }
 
-QString QPkAction::noToolTip() const
+QString Action::noToolTip() const
 {
     return m_noToolTip;
 }
 
-void QPkAction::setNoWhatsThis(const QString &whatsThis)
+void Action::setNoWhatsThis(const QString &whatsThis)
 {
     m_noWhatsThis = whatsThis;
     updateAction();
 }
 
-QString QPkAction::noWhatsThis() const
+QString Action::noWhatsThis() const
 {
     return m_noWhatsThis;
 }
 
-void QPkAction::setNoIcon(const QIcon &icon)
+void Action::setNoIcon(const QIcon &icon)
 {
     m_noIcon = icon;
     updateAction();
 }
 
-QIcon QPkAction::noIcon() const
+QIcon Action::noIcon() const
 {
     return m_noIcon;
 }
 //-----------------------------------------
-void QPkAction::setAuthVisible(bool value)
+void Action::setAuthVisible(bool value)
 {
     m_authVisible = value;
     updateAction();
 }
 
-bool QPkAction::authVisible() const
+bool Action::authVisible() const
 {
     return m_authVisible;
 }
 
-void QPkAction::setAuthEnabled(bool value)
+void Action::setAuthEnabled(bool value)
 {
     m_authEnabled = value;
     updateAction();
 }
 
-bool QPkAction::authEnabled() const
+bool Action::authEnabled() const
 {
     return m_authEnabled;
 }
 
-void QPkAction::setAuthText(const QString &text)
+void Action::setAuthText(const QString &text)
 {
     m_authText = text;
     updateAction();
 }
 
-QString QPkAction::authText() const
+QString Action::authText() const
 {
     return m_authText;
 }
 
-void QPkAction::setAuthToolTip(const QString &toolTip)
+void Action::setAuthToolTip(const QString &toolTip)
 {
     m_authToolTip = toolTip;
     updateAction();
 }
 
-QString QPkAction::authToolTip() const
+QString Action::authToolTip() const
 {
     return m_authToolTip;
 }
 
-void QPkAction::setAuthWhatsThis(const QString &whatsThis)
+void Action::setAuthWhatsThis(const QString &whatsThis)
 {
     m_authWhatsThis = whatsThis;
     updateAction();
 }
 
-QString QPkAction::authWhatsThis() const
+QString Action::authWhatsThis() const
 {
     return m_authWhatsThis;
 }
 
-void QPkAction::setAuthIcon(const QIcon &icon)
+void Action::setAuthIcon(const QIcon &icon)
 {
     m_authIcon = icon;
     updateAction();
 }
 
-QIcon QPkAction::authIcon() const
+QIcon Action::authIcon() const
 {
     return m_authIcon;
 }
 //-------------------------------------------------
-void QPkAction::setYesVisible(bool value)
+void Action::setYesVisible(bool value)
 {
     m_yesVisible = value;
     updateAction();
 }
 
-bool QPkAction::yesVisible() const
+bool Action::yesVisible() const
 {
     return m_yesVisible;
 }
 
-void QPkAction::setYesEnabled(bool value)
+void Action::setYesEnabled(bool value)
 {
     m_yesEnabled = value;
     updateAction();
 }
 
-bool QPkAction::yesEnabled() const
+bool Action::yesEnabled() const
 {
     return m_yesEnabled;
 }
 
-void QPkAction::setYesText(const QString &text)
+void Action::setYesText(const QString &text)
 {
     m_yesText = text;
     updateAction();
 }
 
-QString QPkAction::yesText() const
+QString Action::yesText() const
 {
     return m_yesText;
 }
 
-void QPkAction::setYesToolTip(const QString &toolTip)
+void Action::setYesToolTip(const QString &toolTip)
 {
     m_yesToolTip = toolTip;
     updateAction();
 }
 
-QString QPkAction::yesToolTip() const
+QString Action::yesToolTip() const
 {
     return m_yesToolTip;
 }
 
-void QPkAction::setYesWhatsThis(const QString &whatsThis)
+void Action::setYesWhatsThis(const QString &whatsThis)
 {
     m_yesWhatsThis = whatsThis;
     updateAction();
 }
 
-QString QPkAction::yesWhatsThis() const
+QString Action::yesWhatsThis() const
 {
     return m_yesWhatsThis;
 }
 
-void QPkAction::setYesIcon(const QIcon &icon)
+void Action::setYesIcon(const QIcon &icon)
 {
     m_yesIcon = icon;
     updateAction();
 }
 
-QIcon QPkAction::yesIcon() const
+QIcon Action::yesIcon() const
 {
     return m_yesIcon;
 }
 //------------------------------------------------------
-void QPkAction::setMasterVisible(bool value)
+void Action::setMasterVisible(bool value)
 {
     m_masterVisible = value;
     updateAction();
 }
 
-bool QPkAction::masterVisible() const
+bool Action::masterVisible() const
 {
     return m_masterVisible;
 }
 
-void QPkAction::setMasterEnabled(bool value)
+void Action::setMasterEnabled(bool value)
 {
     m_masterEnabled = value;
     updateAction();
 }
 
-bool QPkAction::masterEnabled() const
+bool Action::masterEnabled() const
 {
     return m_masterEnabled;
 }

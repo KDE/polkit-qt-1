@@ -26,10 +26,10 @@
 #include <QtCore>
 #include <QtCore/QString>
 
-namespace PolKitQt {
+namespace QPolicyKit {
 
 /**
- * \class QPkAuth polkit_qt_auth.h QPkAuth
+ * \class Auth polkit_qt_auth.h Auth
  * \author Daniel Nicoletti <dantti85-pk@yahoo.com.br>
  *
  * \brief Class used to obtain authorizations
@@ -38,11 +38,11 @@ namespace PolKitQt {
  * org.freedesktop.PolicyKit.AuthenticationAgent to make usage of
  * policykit easier in Qt/KDE worlds
  */
-class POLKIT_QT_EXPORT QPkAuth : public QObject
+class POLKIT_QT_EXPORT Auth : public QObject
 {
 Q_OBJECT
 public:
-    QPkAuth(QObject *parent = 0) : QObject(parent) {};
+    Auth(QObject *parent = 0) : QObject(parent) {};
 
     /**
      * Obtain authorization for the given action regardless of

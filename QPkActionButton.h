@@ -28,10 +28,10 @@
 #include <QtCore/QString>
 #include <QtGui/QAbstractButton>
 
-namespace PolKitQt {
+namespace QPolicyKit {
 
 /**
- * \class QPkActionButton polkit_qt_auth.h QPkActionButton
+ * \class ActionButton polkit_qt_auth.h ActionButton
  * \author Daniel Nicoletti <dantti85-pk@yahoo.com.br>
  *
  * \brief Class used to hold and update a QAbstractButton
@@ -45,11 +45,11 @@ namespace PolKitQt {
  * permitted to do the given action. If you set 'noEnabled'
  * to TRUE it will be emmited when PolKitResult is NO.
  */
-class POLKIT_QT_EXPORT QPkActionButton : public QPkAction
+class POLKIT_QT_EXPORT ActionButton : public Action
 {
 Q_OBJECT
 public:
-    QPkActionButton(QAbstractButton *button, const QString &actionId, QWidget *parent = 0);
+    ActionButton(QAbstractButton *button, const QString &actionId, QWidget *parent = 0);
 
 private slots:
     void updateButton();

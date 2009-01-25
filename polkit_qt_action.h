@@ -30,10 +30,10 @@
 
 #include <polkit/polkit.h>
 
-namespace PolKitQt {
+namespace QPolicyKit {
 
 /**
- * \class QPkAction polkit_qt_auth.h QPkAction
+ * \class Action polkit_qt_auth.h Action
  * \author Daniel Nicoletti <dantti85-pk@yahoo.com.br>
  *
  * \brief Class used to manage actions
@@ -42,12 +42,12 @@ namespace PolKitQt {
  * with this class you can track the policykit result
  * of a given action
  */
-class POLKIT_QT_EXPORT QPkAction : public QObject
+class POLKIT_QT_EXPORT Action : public QObject
 {
 Q_OBJECT
 public:
-    QPkAction(const QString &actionId, QObject *parent);
-    ~QPkAction();
+    Action(const QString &actionId, QObject *parent);
+    ~Action();
 
 signals:
     /**

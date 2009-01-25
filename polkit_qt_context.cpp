@@ -25,32 +25,32 @@
 
 #include <polkit-dbus/polkit-dbus.h>
 
-using namespace PolKitQt;
+using namespace QPolicyKit;
 
-QPkContext* QPkContext::m_self = 0;
+Context* Context::m_self = 0;
 
-QPkContext* QPkContext::instance()
+Context* Context::instance()
 {
     if(!m_self)
-        new QPkContext(qApp);
+        new Context(qApp);
 
     return m_self;
 }
 
 // I'm using null instead of 0 as polkit will return
 // NULL on failures
-QPkContext::QPkContext(QObject *parent)
+Context::Context(QObject *parent)
  : QObject(parent), pkContext(NULL),
    pkTracker(NULL), m_hasError(false)
 {
     Q_ASSERT(!m_self);
     m_self = this;
 
-    qDebug() << "QPkContext - Constructing singleton";
+    qDebug() << "Context - Constructing singleton";
     init();
 }
 
-QPkContext::~QPkContext()
+Context::~Context()
 {
     if (pkContext != NULL) {
         polkit_context_unref(pkContext);
@@ -60,7 +60,7 @@ QPkContext::~QPkContext()
     }
 }
 
-void QPkContext::init()
+void Context::init()
 {
 //         DBusError dbus_error;
         PolKitError *pk_error;
@@ -153,7 +153,7 @@ void QPkContext::init()
     m_hasError = false;
 }
 
-bool QPkContext::hasError()
+bool Context::hasError()
 {
     if (m_hasError) {
         // try init again maybe something get
@@ -163,12 +163,12 @@ bool QPkContext::hasError()
     return m_hasError;
 }
 
-QString QPkContext::lastError() const
+QString Context::lastError() const
 {
     return m_lastError;
 }
 
-int QPkContext::io_add_watch(PolKitContext *context, int fd)
+int Context::io_add_watch(PolKitContext *context, int fd)
 {
     qDebug() << "add_watch" << context << fd;
 
@@ -179,7 +179,7 @@ int QPkContext::io_add_watch(PolKitContext *context, int fd)
     return fd; // use simply the fd as the unique id for the watch
 }
 
-void QPkContext::watchActivatedContext(int fd)
+void Context::watchActivatedContext(int fd)
 {
     Q_ASSERT(m_watches.contains(fd));
 
@@ -188,7 +188,7 @@ void QPkContext::watchActivatedContext(int fd)
     polkit_context_io_func(pkContext, fd);
 }
 
-void QPkContext::io_remove_watch(PolKitContext *context, int id)
+void Context::io_remove_watch(PolKitContext *context, int id)
 {
     Q_ASSERT(id > 0);
     qDebug() << "remove_watch" << context << id;
@@ -200,7 +200,7 @@ void QPkContext::io_remove_watch(PolKitContext *context, int id)
     notify->setEnabled(false);
 }
 
-void QPkContext::pk_config_changed(PolKitContext *context, void *user_data)
+void Context::pk_config_changed(PolKitContext *context, void *user_data)
 {
     Q_UNUSED(context);
     Q_UNUSED(user_data);

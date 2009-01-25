@@ -18,15 +18,15 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.          *
  ***************************************************************************/
 
-#ifndef SHAMAN_MACROS_H
-#define SHAMAN_MACROS_H
+#ifndef POLKIT_QT_EXPORT_H
+#define POLKIT_QT_EXPORT_H
 
-/** \file shaman_macros.h
-    \brief Contains Macros used in Shaman
-    
-    This contains some macros that help in exporting/importing symbols and plugins
+/** \file polkit_qt_export.h
+    \brief Contains Macros for exporting symbols
+
+    This file contains macros needed for exporting/importing symbols
 */
 
 #define POLKIT_QT_EXPORT __attribute__ ((visibility("default")))
 
-#endif /*SHAMAN_MACROS_H*/
+#endif /*POLKIT_QT_EXPORT_H*/

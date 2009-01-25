@@ -27,6 +27,7 @@
 
 #include <QtCore/QObject>
 #include <QtCore/QString>
+#include <QtDBus/QDBusMessage>
 #include <QtCore/QMap>
 
 class QSocketNotifier;
@@ -82,7 +83,8 @@ public:
 signals:
     /**
      * This signal will be emitted when some configuration
-     * file is changed or when ConsoleKit report Activities.
+     * file is changed (e.g. /etc/PolicyKit/PolicyKit.conf or
+     * .policy files).
      * You should connect to this signal if you want to track
      * actions.
      * \note If you use PkAction you'll probably prefer to
@@ -90,8 +92,22 @@ signals:
      */
     void configChanged();
 
+    /**
+     * This signal is emitted when CconsoleKit configuration
+     * chages, this might happen when a session becomes active
+     * or inactive.
+     * actions.
+     * If you want to track you actions directly you should
+     * connect to this signal as this might change the result
+     * PolicyKit will return.
+     * \note If you use PkAction you'll probably prefer to
+     * use the resultChanged() signal to track Actions changes.
+     */
+    void consoleKitDBChanged();
+
 private slots:
     void watchActivatedContext(int fd);
+    void dbusFilter(const QDBusMessage &message);
 
 private:
     Context(QObject *parent = 0);
@@ -99,6 +115,7 @@ private:
     void init();
     bool m_hasError;
     QString m_lastError;
+    DBusConnection *m_systemBus;
 
     QMap<int, QSocketNotifier*> m_watches;
 

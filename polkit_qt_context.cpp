@@ -22,6 +22,7 @@
 
 #include <QtCore/QSocketNotifier>
 #include <QtCore/QCoreApplication>
+#include <QtDBus/QDBusConnection>
 #include <QtCore/QDebug>
 
 #include <polkit-dbus/polkit-dbus.h>
@@ -63,12 +64,17 @@ Context::~Context()
 
 void Context::init()
 {
-//         DBusError dbus_error;
+        DBusError error;
+        DBusError dbus_error;
         PolKitError *pk_error;
-
+dbus_error_init(&error);
 //         if ((_singleton->priv->system_bus = dbus_g_bus_get (DBUS_BUS_SYSTEM, error)) == NULL) {
 //                 goto error;
 //         }
+
+if ((m_systemBus = dbus_bus_get(DBUS_BUS_SYSTEM, &error )) == NULL) {
+qWarning() << "Failed to initialize DBus";
+        }
 
     pkContext = polkit_context_new ();
     polkit_context_set_io_watch_functions (pkContext, io_add_watch, io_remove_watch);
@@ -91,50 +97,67 @@ void Context::init()
          * this..
          */
 
-//         dbus_error_init (&dbus_error);
+        dbus_error_init (&dbus_error);
 //
-//         /* need to listen to NameOwnerChanged */
-//         dbus_bus_add_match (dbus_g_connection_get_connection (_singleton->priv->system_bus),
+        /* need to listen to NameOwnerChanged */
+//         dbus_bus_add_match (m_systemBus,
 //                             "type='signal'"
 //                             ",interface='"DBUS_INTERFACE_DBUS"'"
 //                             ",sender='"DBUS_SERVICE_DBUS"'"
 //                             ",member='NameOwnerChanged'",
 //                             &dbus_error);
-//
+ if (QDBusConnection::systemBus().connect( DBUS_SERVICE_DBUS, QString(), DBUS_INTERFACE_DBUS, "NameOwnerChanged", this, SLOT(dbusFilter(const QDBusMessage &)))) {
+qWarning() << "---------------------OK";
+ } else {
+qWarning() << "---------------------not Ok";
+ }
+
 //         if (dbus_error_is_set (&dbus_error)) {
-//                 dbus_set_g_error (error, &dbus_error);
+// //                 dbus_set_g_error (error, &dbus_error);
 //                 dbus_error_free (&dbus_error);
-//                 goto error;
+//                 m_hasError  = true;
+//                 qWarning() << "Failed to initialize NameOwnerChanged";
+//                 return;
+// //                 goto error;
 //         }
 //
-//         /* need to listen to ConsoleKit signals */
-//         dbus_bus_add_match (dbus_g_connection_get_connection (_singleton->priv->system_bus),
+
+ if (QDBusConnection::systemBus().connect( "org.freedesktop.ConsoleKit", QString(), "org.freedesktop.ConsoleKit", QString(), this, SLOT(dbusFilter(const QDBusMessage &)))) {
+qWarning() << "---------------------OK";
+ } else {
+qWarning() << "---------------------not Ok";
+ }
+        /* need to listen to ConsoleKit signals */
+//         dbus_bus_add_match (m_systemBus,
 //                             "type='signal',sender='org.freedesktop.ConsoleKit'",
 //                             &dbus_error);
 //
-//         if (dbus_error_is_set (&dbus_error)) {
+        if (dbus_error_is_set (&dbus_error)) {
 //                 dbus_set_g_error (error, &dbus_error);
-//                 dbus_error_free (&dbus_error);
-//                 goto error;
-//         }
+                dbus_error_free (&dbus_error);
+                qWarning() << "Failed to initialize ConsoleKit";
+                m_hasError  = true;
+                return;
+        }
 //
-//         if (!dbus_connection_add_filter (dbus_g_connection_get_connection (_singleton->priv->system_bus),
-//                                          _filter,
-//                                          _singleton,
+//         if (!dbus_connection_add_filter (m_systemBus,
+//                                          filter,
+//                                          this,
 //                                          NULL)) {
-//                 *error = g_error_new_literal (POLKIT_GNOME_CONTEXT_ERROR,
-//                                               POLKIT_GNOME_CONTEXT_ERROR_FAILED,
-//                                               "Cannot add D-Bus filter");
-//                 goto error;
+// //                 *error = g_error_new_literal (POLKIT_GNOME_CONTEXT_ERROR,
+// //                                               POLKIT_GNOME_CONTEXT_ERROR_FAILED,
+// //                                               "Cannot add D-Bus filter");
+// //                 goto error;
+// qWarning() << "Failed to dbus_connection_add_filter";
+//                 m_hasError  = true;
+//                 return;
 //         }
 
-    DBusError dbus_error;
-    DBusConnection *con;
+//     DBusConnection *con;
 
-    dbus_error_init(&dbus_error);
-    con = dbus_bus_get(DBUS_BUS_SYSTEM, &dbus_error);
+//     con = dbus_bus_get(DBUS_BUS_SYSTEM, &dbus_error);
     pkTracker = polkit_tracker_new();
-    polkit_tracker_set_system_bus_connection(pkTracker, con);
+    polkit_tracker_set_system_bus_connection(pkTracker, m_systemBus);
 
     if (dbus_error_is_set (&dbus_error)) {
         m_hasError  = true;
@@ -152,6 +175,33 @@ void Context::init()
     polkit_tracker_init (pkTracker);
     m_lastError.clear();
     m_hasError = false;
+}
+
+void Context::dbusFilter(const QDBusMessage &message)
+{
+    qDebug() << "=============================================" << message.service();
+
+qDebug() << message.path();
+qDebug() << message.interface() << DBUS_INTERFACE_DBUS;
+qDebug() << message.member();
+
+    // forward only NameOwnerChanged and ConsoleKit signals to PolkitTracker
+    if ((message.type()        == QDBusMessage::SignalMessage
+        && message.interface() == "org.freedesktop.DBus"
+        && message.member()    == "NameOwnerChanged")
+        || (!message.interface().isEmpty()
+        && message.interface().startsWith("org.freedesktop.ConsoleKit")) ) {
+        qDebug() << "inside";
+        DBusMessage *msg = 0;
+        msg = dbus_message_new_method_call(message.service().toUtf8().data(),
+                message.path().toUtf8().data(), message.interface().toUtf8().data(),
+                message.member().toUtf8().data());
+        if (msg && polkit_tracker_dbus_func(pkTracker, msg)) {
+            qDebug() << "++++++++++++++++++++++ EMIT CONSOLE_KIT_DB_CHANGED";
+            emit consoleKitDBChanged();
+        }
+    }
+    qDebug() << "====================END======================" << message.service();
 }
 
 bool Context::hasError()

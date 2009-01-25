@@ -53,7 +53,7 @@ public:
      *
      * \p actionId is the action in question (ie org.freedesktop.policykit.read)
      * \p winId the X window id for the request (use 0 if there's no window)
-     * \p pid Process id of the aplication in question
+     * \p pid Process id of the application in question
      * \return TRUE if the user is authorized otherwise FALSE
      */
     static bool computeAndObtainAuth(const QString &action_id, uint winId, uint pid = QCoreApplication::applicationPid());
@@ -67,7 +67,7 @@ public:
      *
      * \p actionId is the action in question (ie org.freedesktop.policykit.read)
      * \p winId the X window id for the request (use 0 if there's no window)
-     * \p pid Process id of the aplication in question
+     * \p pid Process id of the application in question
      * \return TRUE if the user is authorized otherwise FALSE
      */
     static bool obtainAuth(const QString &action_id, uint xid, uint pid = QCoreApplication::applicationPid());

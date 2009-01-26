@@ -54,32 +54,58 @@ Context *Context::instance()
     return s_globalContext->q;
 }
 
+class Context::Private
+{
+    public:
+        Private() : pkContext(NULL)
+        , pkTracker(NULL)
+        , m_hasError(false)
+        {};
+
+        void init();
+
+        PolKitContext *pkContext;
+        PolKitTracker *pkTracker;
+        bool m_hasError;
+        QString m_lastError;
+        DBusConnection *m_systemBus;
+
+        QMap<int, QSocketNotifier*> m_watches;
+
+        static int  io_add_watch(PolKitContext *context, int fd);
+        static void io_remove_watch(PolKitContext *context, int fd);
+        static void pk_config_changed(PolKitContext *context, void *user_data);
+
+        QDomDocument introspect(const QString &service, const QString &path, const QDBusConnection &c);
+        QStringList getSignals(const QDomDocument &iface);
+};
+
 // I'm using null instead of 0 as polkit will return
 // NULL on failures
 Context::Context(QObject *parent)
  : QObject(parent)
- , pkContext(NULL)
- , pkTracker(NULL)
- , m_hasError(false)
+ , d(new Private())
 {
     Q_ASSERT(!s_globalContext->q);
     s_globalContext->q = this;
 
     qDebug() << "Context - Constructing singleton";
-    init();
+    d->init();
 }
 
 Context::~Context()
 {
-    if (pkContext != NULL) {
-        polkit_context_unref(pkContext);
+    if (d->pkContext != NULL) {
+        polkit_context_unref(d->pkContext);
     }
-    if (pkTracker != NULL) {
-        polkit_tracker_unref(pkTracker);
+    if (d->pkTracker != NULL) {
+        polkit_tracker_unref(d->pkTracker);
     }
+
+    delete d;
 }
 
-void Context::init()
+void Context::Private::init()
 {
     DBusError error;
     DBusError dbus_error;
@@ -95,7 +121,7 @@ void Context::init()
 
     pkContext = polkit_context_new ();
     polkit_context_set_io_watch_functions (pkContext, io_add_watch, io_remove_watch);
-    polkit_context_set_config_changed (pkContext, pk_config_changed, this);
+    polkit_context_set_config_changed (pkContext, pk_config_changed, Context::instance());
 
     pk_error = NULL;
     if (!polkit_context_init (pkContext, &pk_error)) {
@@ -123,7 +149,8 @@ void Context::init()
     //                             ",sender='"DBUS_SERVICE_DBUS"'"
     //                             ",member='NameOwnerChanged'",
     //                             &dbus_error);
-    if (QDBusConnection::systemBus().connect( DBUS_SERVICE_DBUS, QString(), DBUS_INTERFACE_DBUS, "NameOwnerChanged", this, SLOT(dbusFilter(const QDBusMessage &)))) {
+    if (QDBusConnection::systemBus().connect( DBUS_SERVICE_DBUS, QString(), DBUS_INTERFACE_DBUS, "NameOwnerChanged",
+                                              Context::instance(), SLOT(dbusFilter(const QDBusMessage &)))) {
         qWarning() << "---------------------OK";
     } else {
         qWarning() << "---------------------not Ok";
@@ -150,7 +177,7 @@ void Context::init()
     foreach (const QString &sig, sigs) {
 
         if (QDBusConnection::systemBus().connect("org.freedesktop.ConsoleKit", QString(), "org.freedesktop.ConsoleKit",
-                                                 sig, this, SLOT(dbusFilter(const QDBusMessage &)))) {
+                                                 sig, Context::instance(), SLOT(dbusFilter(const QDBusMessage &)))) {
             qWarning() << "---------------------OK";
         } else {
             qWarning() << "---------------------not Ok";
@@ -226,7 +253,7 @@ qDebug() << message.member();
         msg = dbus_message_new_method_call(message.service().toUtf8().data(),
                 message.path().toUtf8().data(), message.interface().toUtf8().data(),
                 message.member().toUtf8().data());
-        if (msg && polkit_tracker_dbus_func(pkTracker, msg)) {
+        if (msg && polkit_tracker_dbus_func(d->pkTracker, msg)) {
             qDebug() << "++++++++++++++++++++++ EMIT CONSOLE_KIT_DB_CHANGED";
             emit consoleKitDBChanged();
         }
@@ -236,25 +263,25 @@ qDebug() << message.member();
 
 bool Context::hasError()
 {
-    if (m_hasError) {
+    if (d->m_hasError) {
         // try init again maybe something get
         // back to normal (as DBus might restarted, crashed...)
-        init();
+        d->init();
     }
-    return m_hasError;
+    return d->m_hasError;
 }
 
 QString Context::lastError() const
 {
-    return m_lastError;
+    return d->m_lastError;
 }
 
-int Context::io_add_watch(PolKitContext *context, int fd)
+int Context::Private::io_add_watch(PolKitContext *context, int fd)
 {
     qDebug() << "add_watch" << context << fd;
 
     QSocketNotifier *notify = new QSocketNotifier(fd, QSocketNotifier::Read, Context::instance());
-    Context::instance()->m_watches[fd] = notify;
+    Context::instance()->d->m_watches[fd] = notify;
     notify->connect(notify, SIGNAL(activated(int)), Context::instance(), SLOT(watchActivatedContext(int)));
 
     return fd; // use simply the fd as the unique id for the watch
@@ -262,26 +289,26 @@ int Context::io_add_watch(PolKitContext *context, int fd)
 
 void Context::watchActivatedContext(int fd)
 {
-    Q_ASSERT(m_watches.contains(fd));
+    Q_ASSERT(d->m_watches.contains(fd));
 
 //    kDebug() << "watchActivated" << fd;
 
-    polkit_context_io_func(pkContext, fd);
+    polkit_context_io_func(d->pkContext, fd);
 }
 
-void Context::io_remove_watch(PolKitContext *context, int id)
+void Context::Private::io_remove_watch(PolKitContext *context, int id)
 {
     Q_ASSERT(id > 0);
     qDebug() << "remove_watch" << context << id;
-    if (!Context::instance()->m_watches.contains(id))
+    if (!Context::instance()->d->m_watches.contains(id))
         return; // policykit likes to do this more than once
 
-    QSocketNotifier *notify = Context::instance()->m_watches.take(id);
+    QSocketNotifier *notify = Context::instance()->d->m_watches.take(id);
     notify->deleteLater();
     notify->setEnabled(false);
 }
 
-void Context::pk_config_changed(PolKitContext *context, void *user_data)
+void Context::Private::pk_config_changed(PolKitContext *context, void *user_data)
 {
     Q_UNUSED(context);
     Q_UNUSED(user_data);
@@ -289,7 +316,7 @@ void Context::pk_config_changed(PolKitContext *context, void *user_data)
     emit Context::instance()->configChanged();
 }
 
-QDomDocument Context::introspect(const QString &service, const QString &path, const QDBusConnection &c)
+QDomDocument Context::Private::introspect(const QString &service, const QString &path, const QDBusConnection &c)
 {
     QDomDocument doc;
 
@@ -319,7 +346,7 @@ QDomDocument Context::introspect(const QString &service, const QString &path, co
     return doc;
 }
 
-QStringList Context::getSignals(const QDomDocument &doc)
+QStringList Context::Private::getSignals(const QDomDocument &doc)
 {
     QStringList retlist;
 
@@ -342,6 +369,16 @@ QStringList Context::getSignals(const QDomDocument &doc)
     }
 
     return retlist;
+}
+
+PolKitContext *Context::getPolKitContext()
+{
+    return d->pkContext;
+}
+
+PolKitTracker *Context::getPolKitTracker()
+{
+    return d->pkTracker;
 }
 
 #include "polkit_qt_context.moc"

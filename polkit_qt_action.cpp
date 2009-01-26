@@ -117,7 +117,7 @@ void Action::updateAction()
     if (Context::instance()->hasError()) {
         return;
     }
-    authdb = polkit_context_get_authorization_db (Context::instance()->pkContext);
+    authdb = polkit_context_get_authorization_db (Context::instance()->getPolKitContext());
 
     switch (m_pkResult) {
         default:
@@ -209,7 +209,7 @@ PolKitResult Action::computePkResultDirect(PolKitAction *action, pid_t pid)
 
     if (Context::instance()->hasError())
         return pk_result = POLKIT_RESULT_UNKNOWN;
-    pk_caller = polkit_tracker_get_caller_from_pid (Context::instance()->pkTracker,
+    pk_caller = polkit_tracker_get_caller_from_pid (Context::instance()->getPolKitTracker(),
                                                     pid,
                                                     &dbus_error);
     if (pk_caller == NULL) {
@@ -220,7 +220,7 @@ PolKitResult Action::computePkResultDirect(PolKitAction *action, pid_t pid)
         /* this is bad so cop-out to UKNOWN */
         pk_result = POLKIT_RESULT_UNKNOWN;
     } else {
-        pk_result = polkit_context_is_caller_authorized (Context::instance()->pkContext,
+        pk_result = polkit_context_is_caller_authorized (Context::instance()->getPolKitContext(),
                                                             action,
                                                             pk_caller,
                                                             FALSE,

@@ -81,8 +81,8 @@ public:
      * Do not use any of the life cycle methods of these objects;
      * only use them to gather information.
      */
-    PolKitContext *pkContext;
-    PolKitTracker *pkTracker;
+    PolKitContext *getPolKitContext();
+    PolKitTracker *getPolKitTracker();
 
 signals:
     /**
@@ -114,19 +114,8 @@ private slots:
     void dbusFilter(const QDBusMessage &message);
 
 private:
-    void init();
-    bool m_hasError;
-    QString m_lastError;
-    DBusConnection *m_systemBus;
-
-    QMap<int, QSocketNotifier*> m_watches;
-
-    static int  io_add_watch(PolKitContext *context, int fd);
-    static void io_remove_watch(PolKitContext *context, int fd);
-    static void pk_config_changed(PolKitContext *context, void *user_data);
-
-    QDomDocument introspect(const QString &service, const QString &path, const QDBusConnection &c);
-    QStringList getSignals(const QDomDocument &iface);
+    class Private;
+    Private *d;
 };
 
 }

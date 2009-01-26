@@ -22,8 +22,10 @@
 
 #include <QtCore/QSocketNotifier>
 #include <QtCore/QCoreApplication>
-#include <QtDBus/QDBusConnection>
 #include <QtCore/QDebug>
+#include <QtCore/QStringList>
+#include <QtDBus/QDBusInterface>
+#include <QtDBus/QDBusReply>
 
 #include <polkit-dbus/polkit-dbus.h>
 
@@ -64,17 +66,17 @@ Context::~Context()
 
 void Context::init()
 {
-        DBusError error;
-        DBusError dbus_error;
-        PolKitError *pk_error;
-dbus_error_init(&error);
-//         if ((_singleton->priv->system_bus = dbus_g_bus_get (DBUS_BUS_SYSTEM, error)) == NULL) {
-//                 goto error;
-//         }
+    DBusError error;
+    DBusError dbus_error;
+    PolKitError *pk_error;
+    dbus_error_init(&error);
+    //         if ((_singleton->priv->system_bus = dbus_g_bus_get (DBUS_BUS_SYSTEM, error)) == NULL) {
+    //                 goto error;
+    //         }
 
-if ((m_systemBus = dbus_bus_get(DBUS_BUS_SYSTEM, &error )) == NULL) {
-qWarning() << "Failed to initialize DBus";
-        }
+    if ((m_systemBus = dbus_bus_get(DBUS_BUS_SYSTEM, &error )) == NULL) {
+        qWarning() << "Failed to initialize DBus";
+    }
 
     pkContext = polkit_context_new ();
     polkit_context_set_io_watch_functions (pkContext, io_add_watch, io_remove_watch);
@@ -91,43 +93,56 @@ qWarning() << "Failed to initialize DBus";
         polkit_error_free (pk_error);
         return;
     }
-        /* TODO FIXME: I'm pretty sure dbus-glib blows in a way that
-         * we can't say we're interested in all signals from all
-         * members on all interfaces for a given service... So we do
-         * this..
-         */
+    /* TODO FIXME: I'm pretty sure dbus-glib blows in a way that
+     * we can't say we're interested in all signals from all
+     * members on all interfaces for a given service... So we do
+     * this..
+     */
 
-        dbus_error_init (&dbus_error);
-//
-        /* need to listen to NameOwnerChanged */
-//         dbus_bus_add_match (m_systemBus,
-//                             "type='signal'"
-//                             ",interface='"DBUS_INTERFACE_DBUS"'"
-//                             ",sender='"DBUS_SERVICE_DBUS"'"
-//                             ",member='NameOwnerChanged'",
-//                             &dbus_error);
- if (QDBusConnection::systemBus().connect( DBUS_SERVICE_DBUS, QString(), DBUS_INTERFACE_DBUS, "NameOwnerChanged", this, SLOT(dbusFilter(const QDBusMessage &)))) {
-qWarning() << "---------------------OK";
- } else {
-qWarning() << "---------------------not Ok";
- }
+    dbus_error_init (&dbus_error);
+    //
+    /* need to listen to NameOwnerChanged */
+    //         dbus_bus_add_match (m_systemBus,
+    //                             "type='signal'"
+    //                             ",interface='"DBUS_INTERFACE_DBUS"'"
+    //                             ",sender='"DBUS_SERVICE_DBUS"'"
+    //                             ",member='NameOwnerChanged'",
+    //                             &dbus_error);
+    if (QDBusConnection::systemBus().connect( DBUS_SERVICE_DBUS, QString(), DBUS_INTERFACE_DBUS, "NameOwnerChanged", this, SLOT(dbusFilter(const QDBusMessage &)))) {
+        qWarning() << "---------------------OK";
+    } else {
+        qWarning() << "---------------------not Ok";
+    }
 
-//         if (dbus_error_is_set (&dbus_error)) {
-// //                 dbus_set_g_error (error, &dbus_error);
-//                 dbus_error_free (&dbus_error);
-//                 m_hasError  = true;
-//                 qWarning() << "Failed to initialize NameOwnerChanged";
-//                 return;
-// //                 goto error;
-//         }
-//
+    //         if (dbus_error_is_set (&dbus_error)) {
+    // //                 dbus_set_g_error (error, &dbus_error);
+    //                 dbus_error_free (&dbus_error);
+    //                 m_hasError  = true;
+    //                 qWarning() << "Failed to initialize NameOwnerChanged";
+    //                 return;
+    // //                 goto error;
+    //         }
+    //
 
- if (QDBusConnection::systemBus().connect( "org.freedesktop.ConsoleKit", QString(), "org.freedesktop.ConsoleKit", QString(), this, SLOT(dbusFilter(const QDBusMessage &)))) {
-qWarning() << "---------------------OK";
- } else {
-qWarning() << "---------------------not Ok";
- }
-        /* need to listen to ConsoleKit signals */
+    // Ok, let's get what we need here
+
+    QStringList sigs;
+
+    sigs += getSignals(introspect("org.freedesktop.ConsoleKit", "/org/freedesktop/ConsoleKit/Manager", QDBusConnection::systemBus()));
+    sigs += getSignals(introspect("org.freedesktop.ConsoleKit", "/org/freedesktop/ConsoleKit/Session1", QDBusConnection::systemBus()));
+    sigs += getSignals(introspect("org.freedesktop.ConsoleKit", "/org/freedesktop/ConsoleKit/Seat1", QDBusConnection::systemBus()));
+
+    foreach (const QString &sig, sigs) {
+
+        if (QDBusConnection::systemBus().connect("org.freedesktop.ConsoleKit", QString(), "org.freedesktop.ConsoleKit",
+                                                 sig, this, SLOT(dbusFilter(const QDBusMessage &)))) {
+            qWarning() << "---------------------OK";
+        } else {
+            qWarning() << "---------------------not Ok";
+        }
+
+    }
+    /* need to listen to ConsoleKit signals */
 //         dbus_bus_add_match (m_systemBus,
 //                             "type='signal',sender='org.freedesktop.ConsoleKit'",
 //                             &dbus_error);
@@ -257,6 +272,61 @@ void Context::pk_config_changed(PolKitContext *context, void *user_data)
     Q_UNUSED(user_data);
     qDebug() << "PolicyKit reports that the config have changed";
     emit m_self->configChanged();
+}
+
+QDomDocument Context::introspect(const QString &service, const QString &path, const QDBusConnection &c)
+{
+    QDomDocument doc;
+
+    QDBusInterface iface(service, path, "org.freedesktop.DBus.Introspectable", c);
+    if (!iface.isValid()) {
+        QDBusError err(iface.lastError());
+        /*emit busError(QString("Cannot introspect object %1 at %2:\n  %3 (%4)\n").arg(path).arg(
+                      service).arg(err.name()).arg(err.message()));*/
+        return doc;
+    }
+
+    QDBusReply<QString> xml = iface.call("Introspect");
+
+    if (!xml.isValid()) {
+        QDBusError err(xml.error());
+        if (err.isValid()) {
+            /*emit busError(QString("Call to object %1 at %2:\n  %3 (%4) failed\n").arg(
+                        path).arg(service).arg(err.name()).arg(err.message()));*/
+        } else {
+            /*emit busError(QString("Invalid XML received from object %1 at %2\n").arg(
+                    path).arg(service));*/
+        }
+        return doc;
+    }
+
+    doc.setContent(xml);
+    return doc;
+}
+
+QStringList Context::getSignals(const QDomDocument &doc)
+{
+    QStringList retlist;
+
+    QDomElement node = doc.documentElement();
+    QDomElement child = node.firstChildElement();
+
+    while (!child.isNull()) {
+        if (child.tagName() == QLatin1String("node") || child.tagName() == QLatin1String("interface")) {
+            QDomElement iface = child.firstChildElement();
+            while (!iface.isNull()) {
+                if (iface.tagName() == QLatin1String("signal")) {
+                    qDebug() << "Found signal: " << iface.attribute("name");
+                    retlist.append(iface.attribute("name"));
+                }
+                iface = iface.nextSiblingElement();
+            }
+        }
+
+        child = child.nextSiblingElement();
+    }
+
+    return retlist;
 }
 
 #include "polkit_qt_context.moc"

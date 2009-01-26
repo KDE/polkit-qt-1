@@ -15,6 +15,7 @@ target_link_libraries(polkit_qt
 	${QT_QTCORE_LIBRARY}
 	${QT_QTGUI_LIBRARY}
 	${QT_QTDBUS_LIBRARY}
+	${QT_QTXML_LIBRARY}
 	${POLKIT_LIBRARIES}
 )
 

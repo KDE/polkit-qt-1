@@ -28,7 +28,9 @@
 #include <QtCore/QObject>
 #include <QtCore/QString>
 #include <QtDBus/QDBusMessage>
+#include <QtDBus/QDBusConnection>
 #include <QtCore/QMap>
+#include <QtXml/QDomDocument>
 
 class QSocketNotifier;
 
@@ -122,6 +124,9 @@ private:
     static int  io_add_watch(PolKitContext *context, int fd);
     static void io_remove_watch(PolKitContext *context, int fd);
     static void pk_config_changed(PolKitContext *context, void *user_data);
+
+    QDomDocument introspect(const QString &service, const QString &path, const QDBusConnection &c);
+    QStringList getSignals(const QDomDocument &iface);
 };
 
 }

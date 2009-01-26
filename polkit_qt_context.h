@@ -61,6 +61,8 @@ public:
      * a single Context object will exist.
      */
     static Context* instance();
+
+    Context(QObject *parent = 0);
     ~Context();
 
     /**
@@ -112,8 +114,6 @@ private slots:
     void dbusFilter(const QDBusMessage &message);
 
 private:
-    Context(QObject *parent = 0);
-    static Context *m_self;
     void init();
     bool m_hasError;
     QString m_lastError;

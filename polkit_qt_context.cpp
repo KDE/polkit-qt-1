@@ -20,6 +20,8 @@
 
 #include "polkit_qt_context.h"
 
+#include "polkit_qt_singleton.h"
+
 #include <QtCore/QSocketNotifier>
 #include <QtCore/QCoreApplication>
 #include <QtCore/QDebug>
@@ -31,24 +33,37 @@
 
 using namespace QPolicyKit;
 
-Context* Context::m_self = 0;
-
-Context* Context::instance()
+class ContextHelper
 {
-    if(!m_self)
-        new Context(qApp);
+public:
+    ContextHelper() : q(0) {}
+    ~ContextHelper() {
+        delete q;
+    }
+    Context *q;
+};
 
-    return m_self;
+POLKIT_QT_GLOBAL_STATIC(ContextHelper, s_globalContext)
+
+Context *Context::instance()
+{
+    if (!s_globalContext->q) {
+        new Context;
+    }
+
+    return s_globalContext->q;
 }
 
 // I'm using null instead of 0 as polkit will return
 // NULL on failures
 Context::Context(QObject *parent)
- : QObject(parent), pkContext(NULL),
-   pkTracker(NULL), m_hasError(false)
+ : QObject(parent)
+ , pkContext(NULL)
+ , pkTracker(NULL)
+ , m_hasError(false)
 {
-    Q_ASSERT(!m_self);
-    m_self = this;
+    Q_ASSERT(!s_globalContext->q);
+    s_globalContext->q = this;
 
     qDebug() << "Context - Constructing singleton";
     init();
@@ -238,9 +253,9 @@ int Context::io_add_watch(PolKitContext *context, int fd)
 {
     qDebug() << "add_watch" << context << fd;
 
-    QSocketNotifier *notify = new QSocketNotifier(fd, QSocketNotifier::Read, m_self);
-    m_self->m_watches[fd] = notify;
-    notify->connect(notify, SIGNAL(activated(int)), m_self, SLOT(watchActivatedContext(int)));
+    QSocketNotifier *notify = new QSocketNotifier(fd, QSocketNotifier::Read, Context::instance());
+    Context::instance()->m_watches[fd] = notify;
+    notify->connect(notify, SIGNAL(activated(int)), Context::instance(), SLOT(watchActivatedContext(int)));
 
     return fd; // use simply the fd as the unique id for the watch
 }
@@ -258,10 +273,10 @@ void Context::io_remove_watch(PolKitContext *context, int id)
 {
     Q_ASSERT(id > 0);
     qDebug() << "remove_watch" << context << id;
-    if (!m_self->m_watches.contains(id))
+    if (!Context::instance()->m_watches.contains(id))
         return; // policykit likes to do this more than once
 
-    QSocketNotifier *notify = m_self->m_watches.take(id);
+    QSocketNotifier *notify = Context::instance()->m_watches.take(id);
     notify->deleteLater();
     notify->setEnabled(false);
 }
@@ -271,7 +286,7 @@ void Context::pk_config_changed(PolKitContext *context, void *user_data)
     Q_UNUSED(context);
     Q_UNUSED(user_data);
     qDebug() << "PolicyKit reports that the config have changed";
-    emit m_self->configChanged();
+    emit Context::instance()->configChanged();
 }
 
 QDomDocument Context::introspect(const QString &service, const QString &path, const QDBusConnection &c)

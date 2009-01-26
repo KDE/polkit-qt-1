@@ -57,6 +57,8 @@ Context *Context::instance()
 class Context::Private
 {
     public:
+        // I'm using null instead of 0 as polkit will return
+        // NULL on failures
         Private() : pkContext(NULL)
         , pkTracker(NULL)
         , m_hasError(false)
@@ -80,8 +82,6 @@ class Context::Private
         QStringList getSignals(const QDomDocument &iface);
 };
 
-// I'm using null instead of 0 as polkit will return
-// NULL on failures
 Context::Context(QObject *parent)
  : QObject(parent)
  , d(new Private())
@@ -176,7 +176,7 @@ void Context::Private::init()
 
     foreach (const QString &sig, sigs) {
 
-        if (QDBusConnection::systemBus().connect("org.freedesktop.ConsoleKit", QString(), "org.freedesktop.ConsoleKit",
+        if (QDBusConnection::systemBus().connect("org.freedesktop.ConsoleKit", QString(), QString(),
                                                  sig, Context::instance(), SLOT(dbusFilter(const QDBusMessage &)))) {
             qWarning() << "---------------------OK";
         } else {

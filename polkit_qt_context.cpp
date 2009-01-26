@@ -296,8 +296,8 @@ QDomDocument Context::introspect(const QString &service, const QString &path, co
     QDBusInterface iface(service, path, "org.freedesktop.DBus.Introspectable", c);
     if (!iface.isValid()) {
         QDBusError err(iface.lastError());
-        /*emit busError(QString("Cannot introspect object %1 at %2:\n  %3 (%4)\n").arg(path).arg(
-                      service).arg(err.name()).arg(err.message()));*/
+        qDebug() << QString("Cannot introspect object %1 at %2:\n  %3 (%4)\n").arg(path).arg(
+                      service).arg(err.name()).arg(err.message());
         return doc;
     }
 
@@ -306,11 +306,11 @@ QDomDocument Context::introspect(const QString &service, const QString &path, co
     if (!xml.isValid()) {
         QDBusError err(xml.error());
         if (err.isValid()) {
-            /*emit busError(QString("Call to object %1 at %2:\n  %3 (%4) failed\n").arg(
-                        path).arg(service).arg(err.name()).arg(err.message()));*/
+            qDebug() << QString("Call to object %1 at %2:\n  %3 (%4) failed\n").arg(
+                        path).arg(service).arg(err.name()).arg(err.message());
         } else {
-            /*emit busError(QString("Invalid XML received from object %1 at %2\n").arg(
-                    path).arg(service));*/
+            qDebug() << QString("Invalid XML received from object %1 at %2\n").arg(
+                    path).arg(service);
         }
         return doc;
     }

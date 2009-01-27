@@ -1,6 +1,7 @@
 /*
  * This file is part of the Polkit-qt project
  * Copyright (C) 2009 Daniel Nicoletti <dantti85-pk@yahoo.com.br>
+ * Copyright (C) 2009 Dario Freddi <drf54321@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -48,7 +49,8 @@ namespace QPolicyKit {
  * or .policy files) or when ConsoleKit report activities changes.
  *
  * \note This class is a singleton, its constructor is private.
- * Call Context::instance() to get an instance of the Context object
+ * Call Context::instance() to get an instance of the Context object.
+ * Do not delete Context::instance(), the cleanup is done automatically.
  */
 class POLKIT_QT_EXPORT Context : public QObject
 {
@@ -62,7 +64,6 @@ public:
      */
     static Context* instance();
 
-    Context(QObject *parent = 0);
     ~Context();
 
     /**
@@ -114,6 +115,8 @@ private slots:
     void dbusFilter(const QDBusMessage &message);
 
 private:
+    Context(QObject *parent = 0);
+
     class Private;
     Private *d;
 };

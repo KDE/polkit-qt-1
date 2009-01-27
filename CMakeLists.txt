@@ -1,5 +1,9 @@
 ## Polkit Qt Library
 
+set(MAJOR_POLKIT_QT_VERSION "1")
+set(MINOR_POLKIT_QT_VERSION "0")
+set(PATCH_POLKIT_QT_VERSION "0")
+
 set(polkit_qt_LIB_SRCS
     polkit_qt_action.cpp
     polkit_qt_auth.cpp
@@ -7,9 +11,19 @@ set(polkit_qt_LIB_SRCS
     QPkActionButton.cpp
 )
 
-kde4_add_library(polkit_qt SHARED ${polkit_qt_LIB_SRCS})
+SET(polkit_qt_MOC_HDRS
+    polkit_qt_action.h
+    polkit_qt_auth.h
+    polkit_qt_context.h
+    QPkActionButton.h
+)
 
-target_link_libraries(polkit_qt
+QT4_WRAP_CPP(polkit_qt_MOC_SRCS ${polkit_qt_MOC_HDRS})
+QT4_AUTOMOC(${polkit_qt_SRCS})
+
+add_library(polkit-qt SHARED ${polkit_qt_LIB_SRCS} ${polkit_qt_MOC_SRCS})
+
+target_link_libraries(polkit-qt
  	${POLKITDBUS_LIBRARIES}
  	${POLKITGRANT_LIBRARIES}
 	${QT_QTCORE_LIBRARY}
@@ -19,5 +33,8 @@ target_link_libraries(polkit_qt
 	${POLKIT_LIBRARIES}
 )
 
-set_target_properties(polkit_qt PROPERTIES VERSION ${GENERIC_LIB_VERSION} SOVERSION ${GENERIC_LIB_SOVERSION} )
-install(TARGETS polkit_qt  ${INSTALL_TARGETS_DEFAULT_ARGS})
+set_target_properties(polkit-qt PROPERTIES VERSION ${MAJOR_POLKIT_QT_VERSION}.${MINOR_POLKIT_QT_VERSION}.${PATCH_POLKIT_QT_VERSION}
+                                      SOVERSION ${MAJOR_POLKIT_QT_VERSION}
+                      )
+                      
+install(TARGETS polkit-qt  ${INSTALL_TARGETS_DEFAULT_ARGS})

@@ -1,6 +1,7 @@
 /*
  * This file is part of the Polkit-qt project
  * Copyright (C) 2009 Daniel Nicoletti <dantti85-pk@yahoo.com.br>
+ * Copyright (C) 2009 Dario Freddi <drf54321@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -20,20 +21,35 @@
 
 #include "QPkActionButton.h"
 
+#include <QtCore/QDebug>
+
 using namespace QPolicyKit;
 
+class ActionButton::Private
+{
+    public:
+        Private(QAbstractButton *b)
+         : button(b)
+         , initiallyChecked(false)
+        {};
+
+        QAbstractButton *button;
+        bool initiallyChecked;
+};
+
 ActionButton::ActionButton(QAbstractButton *button, const QString &actionId, QWidget *parent)
- : Action(actionId, parent), m_button(button), m_initiallyChecked(false)
+ : Action(actionId, parent)
+ , d(new Private(button))
 {
     connect(this, SIGNAL(dataChanged()), SLOT(updateButton()));
-    if (m_button->isCheckable()) {
-        m_initiallyChecked = m_button->isChecked();
+    if (d->button->isCheckable()) {
+        d->initiallyChecked = d->button->isChecked();
         // we track the clicked signal to not enter in an
         // infinete loop as setChecked() would call toggled over
         // and over...
-        connect(m_button, SIGNAL(clicked()), SLOT(toggled()));
+        connect(d->button, SIGNAL(clicked()), SLOT(toggled()));
     } else {
-        connect(m_button, SIGNAL(clicked()), SLOT(activateProxy()));
+        connect(d->button, SIGNAL(clicked()), SLOT(activateProxy()));
     }
     // call this after m_activateOnCheck receives the value
     updateButton();
@@ -42,32 +58,32 @@ ActionButton::ActionButton(QAbstractButton *button, const QString &actionId, QWi
 void ActionButton::updateButton()
 {
     qDebug() << "ActionButton::updateButton()";
-    m_button->setVisible(visible());
-    m_button->setEnabled(enabled());
+    d->button->setVisible(visible());
+    d->button->setEnabled(enabled());
     // We check for Null to see if the user
     // never set anything as "" is not NULL
     if (!text().isNull()) {
-        m_button->setText(text());
+        d->button->setText(text());
     }
     if (!toolTip().isNull()) {
-        m_button->setToolTip(toolTip());
+        d->button->setToolTip(toolTip());
     }
     if (!whatsThis().isNull()) {
-        m_button->setWhatsThis(whatsThis());
+        d->button->setWhatsThis(whatsThis());
     }
     if (!icon().isNull()) {
-        m_button->setIcon(icon());
+        d->button->setIcon(icon());
     }
     // if the item cannot do the action anymore
     // lets revert to the initial state
-    if (m_button->isCheckable() && !canDoAction()) {
-        m_button->setChecked(m_initiallyChecked);
+    if (d->button->isCheckable() && !canDoAction()) {
+        d->button->setChecked(d->initiallyChecked);
     }
 }
 
 void ActionButton::activateProxy()
 {
-    activate(m_button->winId());
+    activate(d->button->winId());
 }
 
 void ActionButton::toggled()
@@ -76,17 +92,15 @@ void ActionButton::toggled()
     // We store the value cause it might create an
     // event loop that can conflict with our desired
     // value.
-    bool checked = m_button->isChecked();
+    bool checked = d->button->isChecked();
     // we set the the opposite option in case the activate fails
-    if (activate(m_button->winId())) {
-        m_button->setChecked(checked);
+    if (activate(d->button->winId())) {
+        d->button->setChecked(checked);
     } else {
         // don't undo the checked before
         // you call activate because the
         // activated signal is emmited from there
         // and the user will see the wrong checked state
-        m_button->setChecked(!checked);
+        d->button->setChecked(!checked);
     }
 }
-
-#include "QPkActionButton.moc"

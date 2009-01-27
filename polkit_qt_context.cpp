@@ -1,6 +1,7 @@
 /*
  * This file is part of the Polkit-qt project
  * Copyright (C) 2009 Daniel Nicoletti <dantti85-pk@yahoo.com.br>
+ * Copyright (C) 2009 Dario Freddi <drf54321@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -247,7 +248,7 @@ qDebug() << message.member();
         && message.interface() == "org.freedesktop.DBus"
         && message.member()    == "NameOwnerChanged")
         || (!message.interface().isEmpty()
-        && message.interface().startsWith("org.freedesktop.ConsoleKit")) ) {
+        && message.interface().startsWith(QLatin1String("org.freedesktop.ConsoleKit"))) ) {
         qDebug() << "inside";
         DBusMessage *msg = 0;
         msg = dbus_message_new_signal(
@@ -392,5 +393,3 @@ PolKitTracker *Context::getPolKitTracker()
 {
     return d->pkTracker;
 }
-
-#include "polkit_qt_context.moc"

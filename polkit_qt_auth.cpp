@@ -18,13 +18,14 @@
  * Boston, MA 02110-1301, USA.
  */
 
+#include "polkit_qt_auth.h"
+
 #define PK_NAME      "org.freedesktop.PolicyKit.AuthenticationAgent"
 #define PK_PATH      "/"
 #define PK_INTERFACE "org.freedesktop.PolicyKit.AuthenticationAgent"
 
 #include <limits.h>
 
-#include "polkit_qt_auth.h"
 #include "polkit_qt_action.h"
 
 #include <QtCore/QDebug>
@@ -93,5 +94,3 @@ bool Auth::obtainAuth(const QString &actionId, uint winId, uint pid)
     }
     return false;
 }
-
-#include "polkit_qt_auth.moc"

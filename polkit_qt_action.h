@@ -1,6 +1,7 @@
 /*
  * This file is part of the Polkit-qt project
  * Copyright (C) 2009 Daniel Nicoletti <dantti85-pk@yahoo.com.br>
+ * Copyright (C) 2009 Dario Freddi <drf54321@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -320,53 +321,8 @@ private slots:
     void configChanged();
 
 private:
-    QString       m_actionId;
-    PolKitAction *m_pkAction;
-    PolKitResult  m_pkResult;
-    uint          m_targetPID;
-
-    void         updateAction();
-    bool         computePkResult();
-
-    // current data
-    bool    m_visible;
-    bool    m_enabled;
-    QString m_text;
-    QString m_whatsThis;
-    QString m_toolTip;
-    QIcon   m_icon;
-
-    // states data
-    bool    m_selfBlockedVisible;
-    bool    m_selfBlockedEnabled;
-    QString m_selfBlockedText;
-    QString m_selfBlockedWhatsThis;
-    QString m_selfBlockedToolTip;
-    QIcon   m_selfBlockedIcon;
-
-    bool    m_noVisible;
-    bool    m_noEnabled;
-    QString m_noText;
-    QString m_noWhatsThis;
-    QString m_noToolTip;
-    QIcon   m_noIcon;
-
-    bool    m_authVisible;
-    bool    m_authEnabled;
-    QString m_authText;
-    QString m_authWhatsThis;
-    QString m_authToolTip;
-    QIcon   m_authIcon;
-
-    bool    m_yesVisible;
-    bool    m_yesEnabled;
-    QString m_yesText;
-    QString m_yesWhatsThis;
-    QString m_yesToolTip;
-    QIcon   m_yesIcon;
-
-    bool m_masterVisible;
-    bool m_masterEnabled;
+    class Private;
+    Private *d;
 };
 
 }

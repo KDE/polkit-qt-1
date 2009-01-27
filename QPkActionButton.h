@@ -1,6 +1,7 @@
 /*
  * This file is part of the Polkit-qt project
  * Copyright (C) 2009 Daniel Nicoletti <dantti85-pk@yahoo.com.br>
+ * Copyright (C) 2009 Dario Freddi <drf54321@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -24,7 +25,6 @@
 #include "polkit_qt_export.h"
 #include "polkit_qt_action.h"
 
-#include <QtCore>
 #include <QtCore/QString>
 #include <QtGui/QAbstractButton>
 
@@ -37,13 +37,13 @@ namespace QPolicyKit {
  * \brief Class used to hold and update a QAbstractButton
  *
  * This class allows you to associate QAbstractButtons
- * (ie QPushButton) and let this class to update the
- * button proprieties according to the PolicyKit Action.
+ * (ie QPushButton) to a PolicyKit Action. It will update the
+ * button properties according to the PolicyKit Action on itself.
  *
- * \note You should connect the activated signal to receive
+ * \note You should connect the activated() signal to receive
  * a notification when the user clicked the button and he's
  * permitted to do the given action. If you set 'noEnabled'
- * to TRUE it will be emmited when PolKitResult is NO.
+ * to TRUE it will be emitted when PolKitResult is NO.
  */
 class POLKIT_QT_EXPORT ActionButton : public Action
 {
@@ -57,8 +57,8 @@ private slots:
     void activateProxy();
 
 private:
-    QAbstractButton *m_button;
-    bool m_initiallyChecked;
+    class Private;
+    Private *d;
 };
 
 }

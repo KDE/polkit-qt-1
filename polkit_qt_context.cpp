@@ -250,10 +250,22 @@ qDebug() << message.member();
         && message.interface().startsWith("org.freedesktop.ConsoleKit")) ) {
         qDebug() << "inside";
         DBusMessage *msg = 0;
-        msg = dbus_message_new_method_call(message.service().toUtf8().data(),
+        msg = dbus_message_new_signal(
                 message.path().toUtf8().data(), message.interface().toUtf8().data(),
                 message.member().toUtf8().data());
+        qDebug() << "dbus_message_get_type() " <<  dbus_message_get_type (msg);
+        qDebug() << "dbus_message_get_interface() " << dbus_message_get_interface (msg);
+        qDebug() << "dbus_message_get_member() " << dbus_message_get_member (msg);
+        qDebug() << "dbus_message_get_signature() " << dbus_message_get_signature (msg);
+       qDebug() << "QT dbus_message_get_signature() " << message.signature();
+
+       // WE NEED TO set the msg signature to "s" quite simple but
+       // even QDbusMessage don't allow us to do that so...
+       // i guess we need to get back and use
+       // std DBus
         if (msg && polkit_tracker_dbus_func(d->pkTracker, msg)) {
+        //THIS is getting emmited but there's a warning... and i hate
+        // warnings :D
             qDebug() << "++++++++++++++++++++++ EMIT CONSOLE_KIT_DB_CHANGED";
             emit consoleKitDBChanged();
         }

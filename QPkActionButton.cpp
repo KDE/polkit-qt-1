@@ -44,12 +44,6 @@ ActionButton::ActionButton(QAbstractButton *button, const QString &actionId, QWi
     connect(this, SIGNAL(dataChanged()), SLOT(updateButton()));
     if (d->button->isCheckable()) {
         d->initiallyChecked = d->button->isChecked();
-        // we track the clicked signal to not enter in an
-        // infinete loop as setChecked() would call toggled over
-        // and over...
-        connect(d->button, SIGNAL(clicked()), SLOT(toggled()));
-    } else {
-        connect(d->button, SIGNAL(clicked()), SLOT(activateProxy()));
     }
     // call this after m_activateOnCheck receives the value
     updateButton();
@@ -81,26 +75,26 @@ void ActionButton::updateButton()
     }
 }
 
-void ActionButton::activateProxy()
+bool ActionButton::activate()
 {
-    activate(d->button->winId());
-}
-
-void ActionButton::toggled()
-{
-    qDebug() << "toggle";
-    // We store the value cause it might create an
-    // event loop that can conflict with our desired
-    // value.
-    bool checked = d->button->isChecked();
-    // we set the the opposite option in case the activate fails
-    if (activate(d->button->winId())) {
-        d->button->setChecked(checked);
+    if (d->button->isCheckable()) {
+        // We store the value cause it might create an
+        // event loop that can conflict with our desired
+        // value.
+        bool checked = d->button->isChecked();
+        // we set the the opposite option in case the activate fails
+        if (Action::activate(d->button->winId())) {
+            d->button->setChecked(checked);
+            return true;
+        } else {
+            // don't undo the checked before
+            // you call activate because the
+            // activated signal is emmited from there
+            // and the user will see the wrong checked state
+            d->button->setChecked(!checked);
+            return false;
+        }
     } else {
-        // don't undo the checked before
-        // you call activate because the
-        // activated signal is emmited from there
-        // and the user will see the wrong checked state
-        d->button->setChecked(!checked);
+        return Action::activate(d->button->winId());
     }
 }

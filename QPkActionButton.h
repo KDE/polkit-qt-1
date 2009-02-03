@@ -51,15 +51,27 @@ Q_OBJECT
 public:
     ActionButton(QAbstractButton *button, const QString &actionId, QWidget *parent = 0);
 
+public slots:
+    /**
+     * Connect clicked() signals to this slot, this should be
+     * manually done by you as in some cases we might want
+     * to manually call this. Calling this will emit activated().
+     *
+     * \note This slot is reentrant which is likely to only be a problem
+     * if you are creating an interface to setup PolicyKit policies.
+     * \note If you have a check box connect to it's clicked() signal
+     * to avoid an infinite loop as we internally do setChecked().
+     */
+    bool activate();
+
 private slots:
     void updateButton();
-    void toggled();
-    void activateProxy();
 
 private:
     class Private;
     Private *d;
 };
+
 
 }
 

@@ -22,7 +22,7 @@
 #ifndef POLKIT_QT_ACTION_H
 #define POLKIT_QT_ACTION_H
 
-#include "polkit_qt_export.h"
+#include "export.h"
 
 #include <QtGui/QAction>
 #include <QtCore/QString>

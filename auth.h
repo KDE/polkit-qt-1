@@ -21,7 +21,7 @@
 #ifndef POLKIT_QT_AUTH_H
 #define POLKIT_QT_AUTH_H
 
-#include "polkit_qt_export.h"
+#include "export.h"
 
 #include <QtCore/QString>
 #include <QtCore/QCoreApplication>

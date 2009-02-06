@@ -5,17 +5,17 @@ set(MINOR_POLKIT_QT_VERSION "9")
 set(PATCH_POLKIT_QT_VERSION "0")
 
 set(polkit_qt_LIB_SRCS
-    polkit_qt_action.cpp
-    polkit_qt_auth.cpp
-    polkit_qt_context.cpp
-    QPkActionButton.cpp
+    action.cpp
+    auth.cpp
+    context.cpp
+    actionbutton.cpp
 )
 
 SET(polkit_qt_MOC_HDRS
-    polkit_qt_action.h
-    polkit_qt_auth.h
-    polkit_qt_context.h
-    QPkActionButton.h
+    action.h
+    auth.h
+    context.h
+    actionbutton.h
 )
 
 QT4_WRAP_CPP(polkit_qt_MOC_SRCS ${polkit_qt_MOC_HDRS})

@@ -19,9 +19,9 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "polkit_qt_context.h"
+#include "context.h"
 
-#include "polkit_qt_singleton.h"
+#include "singleton.h"
 
 #include <QtCore/QSocketNotifier>
 #include <QtCore/QCoreApplication>

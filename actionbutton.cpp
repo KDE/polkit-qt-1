@@ -19,7 +19,7 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "QPkActionButton.h"
+#include "actionbutton.h"
 
 #include <QtCore/QDebug>
 

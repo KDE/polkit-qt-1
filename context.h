@@ -22,7 +22,7 @@
 #ifndef POLKIT_QT_CONTEXT_H
 #define POLKIT_QT_CONTEXT_H
 
-#include "polkit_qt_export.h"
+#include "export.h"
 
 #include <polkit-dbus/polkit-dbus.h>
 

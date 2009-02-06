@@ -18,22 +18,20 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "polkit_qt_auth.h"
-
 #define PK_NAME      "org.freedesktop.PolicyKit.AuthenticationAgent"
 #define PK_PATH      "/"
 #define PK_INTERFACE "org.freedesktop.PolicyKit.AuthenticationAgent"
 
-#include <limits.h>
+#include "auth.h"
+#include "action.h"
 
-#include "polkit_qt_action.h"
+#include <limits.h>
+#include <polkit-dbus/polkit-dbus.h>
 
 #include <QtCore/QDebug>
 
 #include <QtDBus/QDBusMessage>
 #include <QtDBus/QDBusConnection>
-
-#include <polkit-dbus/polkit-dbus.h>
 
 using namespace QPolicyKit;
 

@@ -22,8 +22,8 @@
 #ifndef POLKIT_QT_ACTION_BUTTON_H
 #define POLKIT_QT_ACTION_BUTTON_H
 
-#include "polkit_qt_export.h"
-#include "polkit_qt_action.h"
+#include "export.h"
+#include "action.h"
 
 #include <QtCore/QString>
 #include <QtGui/QAbstractButton>

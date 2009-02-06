@@ -19,9 +19,9 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "polkit_qt_action.h"
-#include "polkit_qt_context.h"
-#include "polkit_qt_auth.h"
+#include "action.h"
+#include "context.h"
+#include "auth.h"
 
 #include <QtCore/QDebug>
 

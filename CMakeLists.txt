@@ -38,3 +38,13 @@ set_target_properties(polkit-qt PROPERTIES VERSION ${MAJOR_POLKIT_QT_VERSION}.${
                       )
                       
 install(TARGETS polkit-qt  ${INSTALL_TARGETS_DEFAULT_ARGS})
+
+install(FILES
+	includes/Action
+	includes/Auth
+	includes/Context
+	includes/ActionButton
+	DESTINATION
+	${INCLUDE_INSTALL_DIR}/PolicyKit/polkit-qt)
+
+add_subdirectory(modules)

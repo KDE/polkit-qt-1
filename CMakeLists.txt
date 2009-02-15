@@ -40,6 +40,14 @@ set_target_properties(polkit-qt PROPERTIES VERSION ${MAJOR_POLKIT_QT_VERSION}.${
 install(TARGETS polkit-qt  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 install(FILES
+	action.h
+	auth.h
+	context.h
+	actionbutton.h
+	DESTINATION
+	${INCLUDE_INSTALL_DIR}/polkit-qt)
+
+install(FILES
 	includes/Action
 	includes/Auth
 	includes/Context

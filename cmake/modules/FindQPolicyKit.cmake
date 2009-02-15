@@ -1,10 +1,10 @@
 # - Try to find QPolicyKit
 # Once done this will define
 #
-#  QPACKAGEKIT_FOUND - system has QPackageKit
-#  QPACKAGEKIT_INCLUDE_DIR - the QPackageKit include directory
-#  QPACKAGEKIT_LIB - Link these to use QPackageKit
-#  QPACKAGEKIT_DEFINITIONS - Compiler switches required for using QPackageKit
+#  QPOLICYKIT_FOUND - system has QPackageKit
+#  QPOLICYKIT_INCLUDE_DIR - the QPackageKit include directory
+#  QPOLICYKIT_LIB - Link these to use QPackageKit
+#  QPOLICYKIT_DEFINITIONS - Compiler switches required for using QPackageKit
 
 # Copyright (c) 2008, Adrien Bustany, <madcat@mymadcat.com>
 # Copyright (c) 2009, Daniel Nicoletti, <dantti85-pk@yahoo.com.br>

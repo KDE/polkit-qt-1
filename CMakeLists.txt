@@ -47,4 +47,4 @@ install(FILES
 	DESTINATION
 	${INCLUDE_INSTALL_DIR}/PolicyKit/polkit-qt)
 
-add_subdirectory(modules)
+add_subdirectory(cmake)

@@ -251,9 +251,17 @@ qDebug() << message.member();
         && message.interface().startsWith(QLatin1String("org.freedesktop.ConsoleKit"))) ) {
         qDebug() << "inside";
         DBusMessage *msg = 0;
+        DBusMessageIter args;
         msg = dbus_message_new_signal(
                 message.path().toUtf8().data(), message.interface().toUtf8().data(),
                 message.member().toUtf8().data());
+        dbus_message_iter_init_append(msg, &args);
+        foreach (QVariant arg, message.arguments()) {
+            if (!dbus_message_iter_append_basic(&args, DBUS_TYPE_STRING, qstrdup(arg.toString().toUtf8()))) {
+                qFatal("Out Of Memory!");
+                exit(1);
+            }
+        }
         qDebug() << "dbus_message_get_type() " <<  dbus_message_get_type (msg);
         qDebug() << "dbus_message_get_interface() " << dbus_message_get_interface (msg);
         qDebug() << "dbus_message_get_member() " << dbus_message_get_member (msg);

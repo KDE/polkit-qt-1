@@ -257,10 +257,27 @@ qDebug() << message.member();
                 message.member().toUtf8().data());
         dbus_message_iter_init_append(msg, &args);
         foreach (QVariant arg, message.arguments()) {
-            if (!dbus_message_iter_append_basic(&args, DBUS_TYPE_STRING, qstrdup(arg.toString().toUtf8()))) {
-                qFatal("Out Of Memory!");
-                exit(1);
+            qDebug() << "First loop in" << arg.toString();
+
+            switch (arg.type()) {
+                case QVariant::String:
+                    if (!dbus_message_iter_append_basic(&args, DBUS_TYPE_STRING, qstrdup(arg.toString().toAscii()))) {
+                        qFatal("Out Of Memory!");
+                        exit(1);
+                    }
+                    break;
+                case QVariant::Bool:
+                    if (!dbus_message_iter_append_basic(&args, DBUS_TYPE_BOOLEAN, qstrdup(arg.toString().toAscii()))) {
+                        qFatal("Out Of Memory!");
+                        exit(1);
+                    }
+                    break;
+                default:
+                    qDebug() << "Crap!!";
+                    break;
             }
+
+
         }
         qDebug() << "dbus_message_get_type() " <<  dbus_message_get_type (msg);
         qDebug() << "dbus_message_get_interface() " << dbus_message_get_interface (msg);

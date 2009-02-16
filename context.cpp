@@ -264,7 +264,7 @@ qDebug() << message.member();
 
             switch (arg.type()) {
                 case QVariant::String:
-                    if (!dbus_message_iter_append_basic(&args, DBUS_TYPE_STRING, (void*)argument)) {
+                    if (!dbus_message_iter_append_basic(&args, DBUS_TYPE_STRING, &argument)) {
                         qFatal("Out Of Memory!");
                         exit(1);
                     }

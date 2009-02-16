@@ -44,10 +44,6 @@ install(FILES
 	auth.h
 	context.h
 	actionbutton.h
-	DESTINATION
-	${INCLUDE_INSTALL_DIR}/polkit-qt)
-
-install(FILES
 	includes/Action
 	includes/Auth
 	includes/Context

@@ -35,35 +35,47 @@
 
 using namespace QPolicyKit;
 
+class Auth::Private
+{
+
+};
+
+Auth::Auth(QObject *parent)
+        : QObject(parent)
+        , d(new Private)
+{
+
+}
+
 bool Auth::computeAndObtainAuth(const QString &actionId, uint winId, uint pid)
 {
     PolKitAction *pkAction = polkit_action_new();
-    polkit_action_set_action_id (pkAction, actionId.toAscii().data());
+    polkit_action_set_action_id(pkAction, actionId.toAscii().data());
     PolKitResult result;
     result = Action::computePkResultDirect(pkAction, pid);
     switch (result) {
-        case POLKIT_RESULT_YES:
-            // If PolicyKit says yes.. emit the 'activated' signal
-            return true;
-            break;
-        case POLKIT_RESULT_ONLY_VIA_ADMIN_AUTH_ONE_SHOT:
-        case POLKIT_RESULT_ONLY_VIA_ADMIN_AUTH:
-        case POLKIT_RESULT_ONLY_VIA_ADMIN_AUTH_KEEP_SESSION:
-        case POLKIT_RESULT_ONLY_VIA_ADMIN_AUTH_KEEP_ALWAYS:
-        case POLKIT_RESULT_ONLY_VIA_SELF_AUTH_ONE_SHOT:
-        case POLKIT_RESULT_ONLY_VIA_SELF_AUTH:
-        case POLKIT_RESULT_ONLY_VIA_SELF_AUTH_KEEP_SESSION:
-        case POLKIT_RESULT_ONLY_VIA_SELF_AUTH_KEEP_ALWAYS:
-            // Otherwise, the action needs auth..
-            // we now issue the obtain auth dialog
-            if (pkAction != 0) {
-                return obtainAuth(actionId, winId, pid);
-            }
-        default:
-        case POLKIT_RESULT_NO:
-            // if result is no then the user cannot even try to auth
-            return false;
-            break;
+    case POLKIT_RESULT_YES:
+        // If PolicyKit says yes.. emit the 'activated' signal
+        return true;
+        break;
+    case POLKIT_RESULT_ONLY_VIA_ADMIN_AUTH_ONE_SHOT:
+    case POLKIT_RESULT_ONLY_VIA_ADMIN_AUTH:
+    case POLKIT_RESULT_ONLY_VIA_ADMIN_AUTH_KEEP_SESSION:
+    case POLKIT_RESULT_ONLY_VIA_ADMIN_AUTH_KEEP_ALWAYS:
+    case POLKIT_RESULT_ONLY_VIA_SELF_AUTH_ONE_SHOT:
+    case POLKIT_RESULT_ONLY_VIA_SELF_AUTH:
+    case POLKIT_RESULT_ONLY_VIA_SELF_AUTH_KEEP_SESSION:
+    case POLKIT_RESULT_ONLY_VIA_SELF_AUTH_KEEP_ALWAYS:
+        // Otherwise, the action needs auth..
+        // we now issue the obtain auth dialog
+        if (pkAction != 0) {
+            return obtainAuth(actionId, winId, pid);
+        }
+    default:
+    case POLKIT_RESULT_NO:
+        // if result is no then the user cannot even try to auth
+        return false;
+        break;
     }
 }
 

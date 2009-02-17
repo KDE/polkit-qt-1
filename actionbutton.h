@@ -28,7 +28,8 @@
 #include <QtCore/QString>
 #include <QtGui/QAbstractButton>
 
-namespace QPolicyKit {
+namespace QPolicyKit
+{
 
 /**
  * \class ActionButton polkit_qt_auth.h ActionButton
@@ -47,11 +48,11 @@ namespace QPolicyKit {
  */
 class POLKIT_QT_EXPORT ActionButton : public Action
 {
-Q_OBJECT
+    Q_OBJECT
 public:
     ActionButton(QAbstractButton *button, const QString &actionId, QWidget *parent = 0);
 
-public slots:
+public Q_SLOTS:
     /**
      * Connect clicked() signals to this slot, this should be
      * manually done by you as in some cases we might want
@@ -64,12 +65,12 @@ public slots:
      */
     bool activate();
 
-private slots:
+private Q_SLOTS:
     void updateButton();
 
 private:
     class Private;
-    Private *d;
+    Private * const d;
 };
 
 

@@ -29,7 +29,8 @@
 
 #include <polkit/polkit.h>
 
-namespace QPolicyKit {
+namespace QPolicyKit
+{
 
 /**
  * \class Action polkit_qt_auth.h Action
@@ -43,12 +44,12 @@ namespace QPolicyKit {
  */
 class POLKIT_QT_EXPORT Action : public QObject
 {
-Q_OBJECT
+    Q_OBJECT
 public:
     Action(const QString &actionId, QObject *parent);
     ~Action();
 
-signals:
+Q_SIGNALS:
     /**
      * Emitted when PolicyKit the PolKitResult for
      * the given action or the internal data changes
@@ -66,7 +67,7 @@ signals:
      */
     void activated();
 
-public slots:
+public Q_SLOTS:
     /**
      * Use this slot if you want activated()
      * to be emitted if the given action is
@@ -315,14 +316,14 @@ public:
      * \note This method does not call the authentication dialog
      * \return TRUE if the action can be done
      */
-     bool canDoAction() const;
+    bool canDoAction() const;
 
-private slots:
+private Q_SLOTS:
     void configChanged();
 
 private:
     class Private;
-    Private *d;
+    Private * const d;
 };
 
 }

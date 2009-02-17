@@ -27,19 +27,18 @@ using namespace QPolicyKit;
 
 class ActionButton::Private
 {
-    public:
-        Private(QAbstractButton *b)
-         : button(b)
-         , initiallyChecked(false)
-        {};
+public:
+    Private(QAbstractButton *b)
+            : button(b)
+            , initiallyChecked(false) {};
 
-        QAbstractButton *button;
-        bool initiallyChecked;
+    QAbstractButton *button;
+    bool initiallyChecked;
 };
 
 ActionButton::ActionButton(QAbstractButton *button, const QString &actionId, QWidget *parent)
- : Action(actionId, parent)
- , d(new Private(button))
+        : Action(actionId, parent)
+        , d(new Private(button))
 {
     connect(this, SIGNAL(dataChanged()), SLOT(updateButton()));
     if (d->button->isCheckable()) {

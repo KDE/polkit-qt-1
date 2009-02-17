@@ -31,64 +31,64 @@ using namespace QPolicyKit;
 
 class Action::Private
 {
-    public:
-        Private (Action *p);
+public:
+    Private(Action *p);
 
-        Action *parent;
+    Action *parent;
 
-        QString       actionId;
-        PolKitAction *pkAction;
-        PolKitResult  pkResult;
-        uint          targetPID;
+    QString       actionId;
+    PolKitAction *pkAction;
+    PolKitResult  pkResult;
+    uint          targetPID;
 
-        void         updateAction();
-        bool         computePkResult();
+    void         updateAction();
+    bool         computePkResult();
 
-        // current data
-        bool    visible;
-        bool    enabled;
-        QString text;
-        QString whatsThis;
-        QString toolTip;
-        QIcon   icon;
+    // current data
+    bool    visible;
+    bool    enabled;
+    QString text;
+    QString whatsThis;
+    QString toolTip;
+    QIcon   icon;
 
-        // states data
-        bool    selfBlockedVisible;
-        bool    selfBlockedEnabled;
-        QString selfBlockedText;
-        QString selfBlockedWhatsThis;
-        QString selfBlockedToolTip;
-        QIcon   selfBlockedIcon;
+    // states data
+    bool    selfBlockedVisible;
+    bool    selfBlockedEnabled;
+    QString selfBlockedText;
+    QString selfBlockedWhatsThis;
+    QString selfBlockedToolTip;
+    QIcon   selfBlockedIcon;
 
-        bool    noVisible;
-        bool    noEnabled;
-        QString noText;
-        QString noWhatsThis;
-        QString noToolTip;
-        QIcon   noIcon;
+    bool    noVisible;
+    bool    noEnabled;
+    QString noText;
+    QString noWhatsThis;
+    QString noToolTip;
+    QIcon   noIcon;
 
-        bool    authVisible;
-        bool    authEnabled;
-        QString authText;
-        QString authWhatsThis;
-        QString authToolTip;
-        QIcon   authIcon;
+    bool    authVisible;
+    bool    authEnabled;
+    QString authText;
+    QString authWhatsThis;
+    QString authToolTip;
+    QIcon   authIcon;
 
-        bool    yesVisible;
-        bool    yesEnabled;
-        QString yesText;
-        QString yesWhatsThis;
-        QString yesToolTip;
-        QIcon   yesIcon;
+    bool    yesVisible;
+    bool    yesEnabled;
+    QString yesText;
+    QString yesWhatsThis;
+    QString yesToolTip;
+    QIcon   yesIcon;
 
-        bool masterVisible;
-        bool masterEnabled;
+    bool masterVisible;
+    bool masterEnabled;
 };
 
 Action::Private::Private(Action *p)
- : parent(p)
- , pkAction(NULL)
- , targetPID(0)
+        : parent(p)
+        , pkAction(NULL)
+        , targetPID(0)
 {
     // Set the default values
     selfBlockedVisible = true;
@@ -108,8 +108,8 @@ Action::Private::Private(Action *p)
 }
 
 Action::Action(const QString &actionId, QObject *parent)
- : QObject(parent)
- , d(new Private(this))
+        : QObject(parent)
+        , d(new Private(this))
 {
     // this must be called AFTER the values initialization
     setPolkitAction(actionId);
@@ -132,48 +132,48 @@ bool Action::activate(WId winId)
 {
     qDebug() << "Action::activate()";
     switch (d->pkResult) {
-        case POLKIT_RESULT_YES:
-            // If PolicyKit says yes.. emit the 'activated' signal
-            emit activated();
-            return true;
-            break;
+    case POLKIT_RESULT_YES:
+        // If PolicyKit says yes.. emit the 'activated' signal
+        emit activated();
+        return true;
+        break;
 
-        case POLKIT_RESULT_ONLY_VIA_ADMIN_AUTH_ONE_SHOT:
-        case POLKIT_RESULT_ONLY_VIA_ADMIN_AUTH:
-        case POLKIT_RESULT_ONLY_VIA_ADMIN_AUTH_KEEP_SESSION:
-        case POLKIT_RESULT_ONLY_VIA_ADMIN_AUTH_KEEP_ALWAYS:
-        case POLKIT_RESULT_ONLY_VIA_SELF_AUTH_ONE_SHOT:
-        case POLKIT_RESULT_ONLY_VIA_SELF_AUTH:
-        case POLKIT_RESULT_ONLY_VIA_SELF_AUTH_KEEP_SESSION:
-        case POLKIT_RESULT_ONLY_VIA_SELF_AUTH_KEEP_ALWAYS:
-            /* Otherwise, if the action needs auth..  stop the emission
-             * and start auth process..
-             */
-            if (d->pkAction != NULL) {
-                if (Auth::obtainAuth(d->actionId, winId, targetPID())) {
-                    // Make sure our result is up to date
-                    d->computePkResult();
-                    // emit activated as the obtain auth said it was ok
-                    emit activated();
-                    return true;
-                }
-            }
-            break;
-
-        default:
-        case POLKIT_RESULT_NO:
-            if (d->noEnabled) {
-                /* If PolicyKit says no... and we got here.. it means
-                 * that the user set the property "no-enabled" to
-                 * TRUE..
-                 *
-                 * Hence, they probably have a good reason for doing
-                 * this so do let the 'activate' signal propagate..
-                 */
+    case POLKIT_RESULT_ONLY_VIA_ADMIN_AUTH_ONE_SHOT:
+    case POLKIT_RESULT_ONLY_VIA_ADMIN_AUTH:
+    case POLKIT_RESULT_ONLY_VIA_ADMIN_AUTH_KEEP_SESSION:
+    case POLKIT_RESULT_ONLY_VIA_ADMIN_AUTH_KEEP_ALWAYS:
+    case POLKIT_RESULT_ONLY_VIA_SELF_AUTH_ONE_SHOT:
+    case POLKIT_RESULT_ONLY_VIA_SELF_AUTH:
+    case POLKIT_RESULT_ONLY_VIA_SELF_AUTH_KEEP_SESSION:
+    case POLKIT_RESULT_ONLY_VIA_SELF_AUTH_KEEP_ALWAYS:
+        /* Otherwise, if the action needs auth..  stop the emission
+         * and start auth process..
+         */
+        if (d->pkAction != NULL) {
+            if (Auth::obtainAuth(d->actionId, winId, targetPID())) {
+                // Make sure our result is up to date
+                d->computePkResult();
+                // emit activated as the obtain auth said it was ok
                 emit activated();
                 return true;
             }
-            break;
+        }
+        break;
+
+    default:
+    case POLKIT_RESULT_NO:
+        if (d->noEnabled) {
+            /* If PolicyKit says no... and we got here.. it means
+             * that the user set the property "no-enabled" to
+             * TRUE..
+             *
+             * Hence, they probably have a good reason for doing
+             * this so do let the 'activate' signal propagate..
+             */
+            emit activated();
+            return true;
+        }
+        break;
     }
     return false;
 }
@@ -184,58 +184,58 @@ void Action::Private::updateAction()
     if (Context::instance()->hasError()) {
         return;
     }
-    authdb = polkit_context_get_authorization_db (Context::instance()->getPolKitContext());
+    authdb = polkit_context_get_authorization_db(Context::instance()->getPolKitContext());
 
     switch (pkResult) {
-        default:
-        case POLKIT_RESULT_UNKNOWN:
-        case POLKIT_RESULT_NO:
-            /* TODO: see if we're self-blocked */
-            if (pkAction != NULL &&
-                polkit_authorization_db_is_uid_blocked_by_self (authdb,
-                                                                pkAction,
-                                                                getuid (),
-                                                                NULL)) {
-                visible   = selfBlockedVisible && masterVisible;
-                enabled   = selfBlockedEnabled && masterEnabled;
-                whatsThis = selfBlockedWhatsThis;
-                text      = selfBlockedText;
-                toolTip   = selfBlockedToolTip;
-                icon      = selfBlockedIcon;
-            } else {
-                visible   = noVisible && masterVisible;
-                enabled   = noEnabled && masterEnabled;
-                whatsThis = noWhatsThis;
-                text      = noText;
-                toolTip   = noToolTip;
-                icon      = noIcon;
-            }
-            break;
+    default:
+    case POLKIT_RESULT_UNKNOWN:
+    case POLKIT_RESULT_NO:
+        /* TODO: see if we're self-blocked */
+        if (pkAction != NULL &&
+                polkit_authorization_db_is_uid_blocked_by_self(authdb,
+                        pkAction,
+                        getuid(),
+                        NULL)) {
+            visible   = selfBlockedVisible && masterVisible;
+            enabled   = selfBlockedEnabled && masterEnabled;
+            whatsThis = selfBlockedWhatsThis;
+            text      = selfBlockedText;
+            toolTip   = selfBlockedToolTip;
+            icon      = selfBlockedIcon;
+        } else {
+            visible   = noVisible && masterVisible;
+            enabled   = noEnabled && masterEnabled;
+            whatsThis = noWhatsThis;
+            text      = noText;
+            toolTip   = noToolTip;
+            icon      = noIcon;
+        }
+        break;
 
-        case POLKIT_RESULT_ONLY_VIA_ADMIN_AUTH_ONE_SHOT:
-        case POLKIT_RESULT_ONLY_VIA_ADMIN_AUTH:
-        case POLKIT_RESULT_ONLY_VIA_ADMIN_AUTH_KEEP_SESSION:
-        case POLKIT_RESULT_ONLY_VIA_ADMIN_AUTH_KEEP_ALWAYS:
-        case POLKIT_RESULT_ONLY_VIA_SELF_AUTH_ONE_SHOT:
-        case POLKIT_RESULT_ONLY_VIA_SELF_AUTH:
-        case POLKIT_RESULT_ONLY_VIA_SELF_AUTH_KEEP_SESSION:
-        case POLKIT_RESULT_ONLY_VIA_SELF_AUTH_KEEP_ALWAYS:
-            visible   = authVisible && masterVisible;
-            enabled   = authEnabled && masterEnabled;
-            whatsThis = authWhatsThis;
-            text      = authText;
-            toolTip   = authToolTip;
-            icon      = authIcon;
-            break;
+    case POLKIT_RESULT_ONLY_VIA_ADMIN_AUTH_ONE_SHOT:
+    case POLKIT_RESULT_ONLY_VIA_ADMIN_AUTH:
+    case POLKIT_RESULT_ONLY_VIA_ADMIN_AUTH_KEEP_SESSION:
+    case POLKIT_RESULT_ONLY_VIA_ADMIN_AUTH_KEEP_ALWAYS:
+    case POLKIT_RESULT_ONLY_VIA_SELF_AUTH_ONE_SHOT:
+    case POLKIT_RESULT_ONLY_VIA_SELF_AUTH:
+    case POLKIT_RESULT_ONLY_VIA_SELF_AUTH_KEEP_SESSION:
+    case POLKIT_RESULT_ONLY_VIA_SELF_AUTH_KEEP_ALWAYS:
+        visible   = authVisible && masterVisible;
+        enabled   = authEnabled && masterEnabled;
+        whatsThis = authWhatsThis;
+        text      = authText;
+        toolTip   = authToolTip;
+        icon      = authIcon;
+        break;
 
-        case POLKIT_RESULT_YES:
-            visible   = yesVisible && masterVisible;
-            enabled   = yesEnabled && masterEnabled;
-            whatsThis = yesWhatsThis;
-            text      = yesText;
-            toolTip   = yesToolTip;
-            icon      = yesIcon;
-            break;
+    case POLKIT_RESULT_YES:
+        visible   = yesVisible && masterVisible;
+        enabled   = yesEnabled && masterEnabled;
+        whatsThis = yesWhatsThis;
+        text      = yesText;
+        toolTip   = yesToolTip;
+        icon      = yesIcon;
+        break;
     }
     emit parent->dataChanged();
 }
@@ -272,26 +272,26 @@ PolKitResult Action::computePkResultDirect(PolKitAction *action, pid_t pid)
     PolKitCaller *pk_caller;
     PolKitResult pk_result;
     DBusError dbus_error;
-    dbus_error_init (&dbus_error);
+    dbus_error_init(&dbus_error);
 
     if (Context::instance()->hasError())
         return pk_result = POLKIT_RESULT_UNKNOWN;
-    pk_caller = polkit_tracker_get_caller_from_pid (Context::instance()->getPolKitTracker(),
-                                                    pid,
-                                                    &dbus_error);
+    pk_caller = polkit_tracker_get_caller_from_pid(Context::instance()->getPolKitTracker(),
+                pid,
+                &dbus_error);
     if (pk_caller == NULL) {
         qWarning("Cannot get PolKitCaller object for target (pid=%d): %s: %s",
-                    pid, dbus_error.name, dbus_error.message);
-        dbus_error_free (&dbus_error);
+                 pid, dbus_error.name, dbus_error.message);
+        dbus_error_free(&dbus_error);
 
         /* this is bad so cop-out to UKNOWN */
         pk_result = POLKIT_RESULT_UNKNOWN;
     } else {
-        pk_result = polkit_context_is_caller_authorized (Context::instance()->getPolKitContext(),
-                                                            action,
-                                                            pk_caller,
-                                                            FALSE,
-                                                            NULL);
+        pk_result = polkit_context_is_caller_authorized(Context::instance()->getPolKitContext(),
+                    action,
+                    pk_caller,
+                    FALSE,
+                    NULL);
 //         TODO try to find out when this would be used.. :(
 //         if (pk_result != POLKIT_RESULT_YES) {
 //             GSList *i;
@@ -316,7 +316,7 @@ PolKitResult Action::computePkResultDirect(PolKitAction *action, pid_t pid)
     }
 
     if (pk_caller != NULL)
-            polkit_caller_unref (pk_caller);
+        polkit_caller_unref(pk_caller);
 
     return pk_result;
 }
@@ -352,9 +352,9 @@ void Action::setPolkitAction(const QString &actionId)
     if (!d->pkAction || d->pkAction != pkAction) {
 //         action->priv->polkit_action_set_once = TRUE;
         if (d->pkAction != NULL)
-                polkit_action_unref (d->pkAction);
+            polkit_action_unref(d->pkAction);
         if (pkAction != NULL) {
-            d->pkAction = polkit_action_ref (pkAction);
+            d->pkAction = polkit_action_ref(pkAction);
             d->actionId = actionId;
         } else {
             d->pkAction = NULL;

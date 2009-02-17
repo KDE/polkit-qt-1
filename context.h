@@ -35,7 +35,8 @@
 
 class QSocketNotifier;
 
-namespace QPolicyKit {
+namespace QPolicyKit
+{
 
 /**
  * \class Context polkit_qt_context.h Context
@@ -54,7 +55,7 @@ namespace QPolicyKit {
  */
 class POLKIT_QT_EXPORT Context : public QObject
 {
-Q_OBJECT
+    Q_OBJECT
 public:
     /**
      * \brief Returns an instance of Context
@@ -85,7 +86,7 @@ public:
     PolKitContext *getPolKitContext();
     PolKitTracker *getPolKitTracker();
 
-signals:
+Q_SIGNALS:
     /**
      * This signal will be emitted when some configuration
      * file is changed (e.g. /etc/PolicyKit/PolicyKit.conf or
@@ -110,7 +111,7 @@ signals:
      */
     void consoleKitDBChanged();
 
-private slots:
+private Q_SLOTS:
     void watchActivatedContext(int fd);
     void dbusFilter(const QDBusMessage &message);
 
@@ -118,7 +119,7 @@ private:
     Context(QObject *parent = 0);
 
     class Private;
-    Private *d;
+    Private * const d;
 };
 
 }

@@ -26,7 +26,8 @@
 #include <QtCore/QString>
 #include <QtCore/QCoreApplication>
 
-namespace QPolicyKit {
+namespace QPolicyKit
+{
 
 /**
  * \class Auth polkit_qt_auth.h Auth
@@ -40,9 +41,9 @@ namespace QPolicyKit {
  */
 class POLKIT_QT_EXPORT Auth : public QObject
 {
-Q_OBJECT
+    Q_OBJECT
 public:
-    Auth(QObject *parent = 0) : QObject(parent) {};
+    Auth(QObject *parent = 0);
 
     /**
      * Obtain authorization for the given action regardless of
@@ -71,6 +72,10 @@ public:
      * \return TRUE if the user is authorized otherwise FALSE
      */
     static bool obtainAuth(const QString &action_id, uint xid, uint pid = QCoreApplication::applicationPid());
+
+private:
+    class Private;
+    Private * const d;
 };
 
 }

@@ -49,6 +49,6 @@ install(FILES
 	includes/Context
 	includes/ActionButton
 	DESTINATION
-	${INCLUDE_INSTALL_DIR}/PolicyKit/polkit-qt)
+	${INCLUDE_INSTALL_DIR}/PolicyKit/polkit-qt COMPONENT Devel)
 
 add_subdirectory(cmake)

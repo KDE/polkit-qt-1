@@ -51,8 +51,8 @@ public:
 
 Q_SIGNALS:
     /**
-     * Emitted when PolicyKit the PolKitResult for
-     * the given action or the internal data changes
+     * Emitted when the PolicyKit result (PolKitResult)
+     * for the given action or the internal data changes
      * (ie the user called one of the set methods)
      * You should connect to this signal if you want
      * to track these changes.

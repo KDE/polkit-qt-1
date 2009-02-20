@@ -1,7 +1,7 @@
  
 ## install the cmake files
 
-file( GLOB cmakeFiles FindQPolicyKit.cmake )
+file( GLOB cmakeFiles FindPolkitQt.cmake )
 set(module_install_dir ${CMAKE_ROOT}/Modules )
 
 install( FILES ${cmakeFiles} 

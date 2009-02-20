@@ -32,7 +32,7 @@
 
 #include <polkit-dbus/polkit-dbus.h>
 
-using namespace QPolicyKit;
+using namespace PolkitQt;
 
 class ContextHelper
 {
@@ -259,6 +259,7 @@ void Context::dbusFilter(const QDBusMessage &message)
         dbus_message_iter_init_append(msg, &args);
         foreach(QVariant arg, message.arguments()) {
             char *argument = qstrdup(arg.toString().toAscii());
+            int numarg;
 
             switch (arg.type()) {
             case QVariant::String:
@@ -268,31 +269,35 @@ void Context::dbusFilter(const QDBusMessage &message)
                 }
                 break;
             case QVariant::Bool:
-                if (!dbus_message_iter_append_basic(&args, DBUS_TYPE_BOOLEAN, qstrdup(arg.toString().toAscii()))) {
+                if (!dbus_message_iter_append_basic(&args, DBUS_TYPE_BOOLEAN, argument)) {
+                    qFatal("Out Of Memory!");
+                    exit(1);
+                }
+                break;
+            case QVariant::Int:
+                numarg = arg.toInt();
+                if (!dbus_message_iter_append_basic(&args, DBUS_TYPE_INT32, &numarg)) {
+                    qFatal("Out Of Memory!");
+                    exit(1);
+                }
+                break;
+
+            // Don't try to understand this part, it's too weird for me too
+            case QVariant::UserType:
+                if (!dbus_message_iter_append_basic(&args, DBUS_TYPE_OBJECT_PATH, &argument)) {
                     qFatal("Out Of Memory!");
                     exit(1);
                 }
                 break;
             default:
-                qDebug() << "Crap!!";
+                qDebug() << "Crap!! It's an " << arg.type();
                 break;
             }
 
 
         }
-        qDebug() << "dbus_message_get_type() " <<  dbus_message_get_type(msg);
-        qDebug() << "dbus_message_get_interface() " << dbus_message_get_interface(msg);
-        qDebug() << "dbus_message_get_member() " << dbus_message_get_member(msg);
-        qDebug() << "dbus_message_get_signature() " << dbus_message_get_signature(msg);
-        qDebug() << "QT dbus_message_get_signature() " << message.signature();
 
-        // WE NEED TO set the msg signature to "s" quite simple but
-        // even QDbusMessage don't allow us to do that so...
-        // i guess we need to get back and use
-        // std DBus
         if (msg && polkit_tracker_dbus_func(d->pkTracker, msg)) {
-            //THIS is getting emmited but there's a warning... and i hate
-            // warnings :D
             qDebug() << "++++++++++++++++++++++ EMIT CONSOLE_KIT_DB_CHANGED";
             emit consoleKitDBChanged();
         }
@@ -330,8 +335,6 @@ void Context::watchActivatedContext(int fd)
 {
     Q_ASSERT(d->m_watches.contains(fd));
 
-//    kDebug() << "watchActivated" << fd;
-
     polkit_context_io_func(d->pkContext, fd);
 }
 
@@ -339,8 +342,9 @@ void Context::Private::io_remove_watch(PolKitContext *context, int id)
 {
     Q_ASSERT(id > 0);
     qDebug() << "remove_watch" << context << id;
-    if (!Context::instance()->d->m_watches.contains(id))
+    if (!Context::instance()->d->m_watches.contains(id)) {
         return; // policykit likes to do this more than once
+    }
 
     QSocketNotifier *notify = Context::instance()->d->m_watches.take(id);
     notify->deleteLater();

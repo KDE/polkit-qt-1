@@ -23,7 +23,7 @@
 
 #include <QtCore/QDebug>
 
-using namespace QPolicyKit;
+using namespace PolkitQt;
 
 class ActionButton::Private
 {

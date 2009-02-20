@@ -28,7 +28,7 @@
 #include <QtCore/QString>
 #include <QtGui/QAbstractButton>
 
-namespace QPolicyKit
+namespace PolkitQt
 {
 
 /**

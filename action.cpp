@@ -27,7 +27,7 @@
 
 #include <polkit-dbus/polkit-dbus.h>
 
-using namespace QPolicyKit;
+using namespace PolkitQt;
 
 class Action::Private
 {

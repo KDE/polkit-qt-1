@@ -35,7 +35,7 @@
 
 class QSocketNotifier;
 
-namespace QPolicyKit
+namespace PolkitQt
 {
 
 /**

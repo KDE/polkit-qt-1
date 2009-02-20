@@ -33,7 +33,7 @@
 #include <QtDBus/QDBusMessage>
 #include <QtDBus/QDBusConnection>
 
-using namespace QPolicyKit;
+using namespace PolkitQt;
 
 class Auth::Private
 {

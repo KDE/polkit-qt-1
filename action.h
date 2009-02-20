@@ -29,7 +29,7 @@
 
 #include <polkit/polkit.h>
 
-namespace QPolicyKit
+namespace PolkitQt
 {
 
 /**

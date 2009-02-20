@@ -26,7 +26,7 @@
 #include <QtCore/QString>
 #include <QtCore/QCoreApplication>
 
-namespace QPolicyKit
+namespace PolkitQt
 {
 
 /**

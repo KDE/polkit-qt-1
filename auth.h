@@ -43,35 +43,38 @@ class POLKIT_QT_EXPORT Auth : public QObject
 {
     Q_OBJECT
 public:
+    /**
+     * Creates a new Auth object
+     */
     Auth(QObject *parent = 0);
 
     /**
-     * Obtain authorization for the given action regardless of
-     * the Action Result
+     * Obtains authorization for the given action regardless of
+     * the Action Result.
      * This method is meant to be used if you don't want to have
      * a PkAction class that can handle all states, it will compute
      * the Polkit Result and if needed prompt for the password.
      *
-     * \p actionId is the action in question (ie org.freedesktop.policykit.read)
+     * \p action_id is the action in question (ie org.freedesktop.policykit.read)
      * \p winId the X window id for the request (use 0 if there's no window)
      * \p pid Process id of the application in question
-     * \return TRUE if the user is authorized otherwise FALSE
+     * \return true if the user is authorized otherwise false
      */
-    static bool computeAndObtainAuth(const QString &action_id, uint winId, uint pid = QCoreApplication::applicationPid());
+    static bool computeAndObtainAuth(const QString &action_id, uint winId = 0, uint pid = QCoreApplication::applicationPid());
 
     /**
      * Obtain authorization for the given action regardless of
-     * the Action Result
-     * This method was meant to be used only be PkAction but
+     * the Action Result.
+     * This method was meant to be used only by PkAction but
      * you can use it as long as you know what you're doing
-     * (ie. computing the Pokit Result for the given action first)
+     * (ie. computing the Polkit Result for the given action first)
      *
-     * \p actionId is the action in question (ie org.freedesktop.policykit.read)
+     * \p action_id is the action in question (ie org.freedesktop.policykit.read)
      * \p winId the X window id for the request (use 0 if there's no window)
      * \p pid Process id of the application in question
-     * \return TRUE if the user is authorized otherwise FALSE
+     * \return true if the user is authorized otherwise false
      */
-    static bool obtainAuth(const QString &action_id, uint xid, uint pid = QCoreApplication::applicationPid());
+    static bool obtainAuth(const QString &action_id, uint winId = 0, uint pid = QCoreApplication::applicationPid());
 
 private:
     class Private;

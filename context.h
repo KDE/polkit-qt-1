@@ -58,19 +58,20 @@ class POLKIT_QT_EXPORT Context : public QObject
     Q_OBJECT
 public:
     /**
-     * \brief Returns an instance of Context
+     * \brief Returns the instance of Context
      *
-     * The Context class is a singleton, you can call this method several times,
-     * a single Context object will exist.
+     * Context is a singleton. Memory is handled by polkit-qt, so you just
+     * need to call this function to get a working instance of Context.
+     * Don't delete the object after having used it.
      */
     static Context* instance();
 
     ~Context();
 
     /**
-     * You should always call first this method,
-     * if an error exist it'll try to reinitialize
-     * \return TRUE if not error has happened
+     * You should always call this method first, since if an error is detected,
+     * the library will retry to initialize itself.
+     * \return true if the library is ready, false if an error occurred
      */
     bool hasError();
 
@@ -100,14 +101,15 @@ Q_SIGNALS:
 
     /**
      * This signal is emitted when CconsoleKit configuration
-     * chages, this might happen when a session becomes active
+     * changes, this might happen when a session becomes active
      * or inactive.
-     * actions.
-     * If you want to track you actions directly you should
-     * connect to this signal as this might change the result
-     * PolicyKit will return.
+     *
+     * If you want to track your actions directly you should
+     * connect to this signal as this might change the return value
+     * PolicyKit will give you.
+     *
      * \note If you use PkAction you'll probably prefer to
-     * use the resultChanged() signal to track Actions changes.
+     * use the resultChanged() signal to track Action changes.
      */
     void consoleKitDBChanged();
 

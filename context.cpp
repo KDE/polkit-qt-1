@@ -58,8 +58,7 @@ Context *Context::instance()
 class Context::Private
 {
 public:
-    // I'm using null instead of 0 as polkit will return
-    // NULL on failures
+    // Polkit will return NULL on failures, hence we use it instead of 0
     Private() : pkContext(NULL)
             , pkTracker(NULL)
             , m_hasError(false) {};
@@ -89,7 +88,6 @@ Context::Context(QObject *parent)
     Q_ASSERT(!s_globalContext->q);
     s_globalContext->q = this;
 
-    qDebug() << "Context - Constructing singleton";
     d->init();
 }
 
@@ -111,9 +109,6 @@ void Context::Private::init()
     DBusError dbus_error;
     PolKitError *pk_error;
     dbus_error_init(&error);
-    //         if ((_singleton->priv->system_bus = dbus_g_bus_get (DBUS_BUS_SYSTEM, error)) == NULL) {
-    //                 goto error;
-    //         }
 
     if ((m_systemBus = dbus_bus_get(DBUS_BUS_SYSTEM, &error)) == NULL) {
         qWarning() << "Failed to initialize DBus";
@@ -141,30 +136,14 @@ void Context::Private::init()
      */
 
     dbus_error_init(&dbus_error);
-    //
+
     /* need to listen to NameOwnerChanged */
-    //         dbus_bus_add_match (m_systemBus,
-    //                             "type='signal'"
-    //                             ",interface='"DBUS_INTERFACE_DBUS"'"
-    //                             ",sender='"DBUS_SERVICE_DBUS"'"
-    //                             ",member='NameOwnerChanged'",
-    //                             &dbus_error);
+
     if (QDBusConnection::systemBus().connect(DBUS_SERVICE_DBUS, QString(), DBUS_INTERFACE_DBUS, "NameOwnerChanged",
             Context::instance(), SLOT(dbusFilter(const QDBusMessage &)))) {
-        qWarning() << "---------------------OK";
     } else {
         qWarning() << "---------------------not Ok";
     }
-
-    //         if (dbus_error_is_set (&dbus_error)) {
-    // //                 dbus_set_g_error (error, &dbus_error);
-    //                 dbus_error_free (&dbus_error);
-    //                 m_hasError  = true;
-    //                 qWarning() << "Failed to initialize NameOwnerChanged";
-    //                 return;
-    // //                 goto error;
-    //         }
-    //
 
     // Ok, let's get what we need here
 
@@ -178,41 +157,19 @@ void Context::Private::init()
 
         if (QDBusConnection::systemBus().connect("org.freedesktop.ConsoleKit", QString(), QString(),
                 sig, Context::instance(), SLOT(dbusFilter(const QDBusMessage &)))) {
-            qWarning() << "---------------------OK";
         } else {
             qWarning() << "---------------------not Ok";
         }
 
     }
-    /* need to listen to ConsoleKit signals */
-//         dbus_bus_add_match (m_systemBus,
-//                             "type='signal',sender='org.freedesktop.ConsoleKit'",
-//                             &dbus_error);
-//
+
     if (dbus_error_is_set(&dbus_error)) {
-//                 dbus_set_g_error (error, &dbus_error);
         dbus_error_free(&dbus_error);
         qWarning() << "Failed to initialize ConsoleKit";
         m_hasError  = true;
         return;
     }
-//
-//         if (!dbus_connection_add_filter (m_systemBus,
-//                                          filter,
-//                                          this,
-//                                          NULL)) {
-// //                 *error = g_error_new_literal (POLKIT_GNOME_CONTEXT_ERROR,
-// //                                               POLKIT_GNOME_CONTEXT_ERROR_FAILED,
-// //                                               "Cannot add D-Bus filter");
-// //                 goto error;
-// qWarning() << "Failed to dbus_connection_add_filter";
-//                 m_hasError  = true;
-//                 return;
-//         }
 
-//     DBusConnection *con;
-
-//     con = dbus_bus_get(DBUS_BUS_SYSTEM, &dbus_error);
     pkTracker = polkit_tracker_new();
     polkit_tracker_set_system_bus_connection(pkTracker, m_systemBus);
 
@@ -238,10 +195,6 @@ void Context::dbusFilter(const QDBusMessage &message)
 {
     qDebug() << "=============================================" << message.service();
 
-    qDebug() << message.path();
-    qDebug() << message.interface() << DBUS_INTERFACE_DBUS;
-    qDebug() << message.member();
-
     // forward only NameOwnerChanged and ConsoleKit signals to PolkitTracker
     if ((message.type() == QDBusMessage::SignalMessage &&
             message.interface() == "org.freedesktop.DBus" &&
@@ -250,7 +203,6 @@ void Context::dbusFilter(const QDBusMessage &message)
             (!message.interface().isEmpty() &&
              message.interface().startsWith(QLatin1String("org.freedesktop.ConsoleKit")))) {
 
-        qDebug() << "inside";
         DBusMessage *msg = 0;
         DBusMessageIter args;
         msg = dbus_message_new_signal(
@@ -282,7 +234,7 @@ void Context::dbusFilter(const QDBusMessage &message)
                 }
                 break;
 
-            // Don't try to understand this part, it's too weird for me too
+                // Don't try to understand this part, it's too weird for me too
             case QVariant::UserType:
                 if (!dbus_message_iter_append_basic(&args, DBUS_TYPE_OBJECT_PATH, &argument)) {
                     qFatal("Out Of Memory!");
@@ -320,10 +272,8 @@ QString Context::lastError() const
     return d->m_lastError;
 }
 
-int Context::Private::io_add_watch(PolKitContext *context, int fd)
+int Context::Private::io_add_watch(PolKitContext *, int fd)
 {
-    qDebug() << "add_watch" << context << fd;
-
     QSocketNotifier *notify = new QSocketNotifier(fd, QSocketNotifier::Read, Context::instance());
     Context::instance()->d->m_watches[fd] = notify;
     notify->connect(notify, SIGNAL(activated(int)), Context::instance(), SLOT(watchActivatedContext(int)));
@@ -338,10 +288,10 @@ void Context::watchActivatedContext(int fd)
     polkit_context_io_func(d->pkContext, fd);
 }
 
-void Context::Private::io_remove_watch(PolKitContext *context, int id)
+void Context::Private::io_remove_watch(PolKitContext *, int id)
 {
     Q_ASSERT(id > 0);
-    qDebug() << "remove_watch" << context << id;
+
     if (!Context::instance()->d->m_watches.contains(id)) {
         return; // policykit likes to do this more than once
     }
@@ -355,7 +305,6 @@ void Context::Private::pk_config_changed(PolKitContext *context, void *user_data
 {
     Q_UNUSED(context);
     Q_UNUSED(user_data);
-    qDebug() << "PolicyKit reports that the config have changed";
     emit Context::instance()->configChanged();
 }
 

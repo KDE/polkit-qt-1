@@ -54,14 +54,14 @@ public:
 
 public Q_SLOTS:
     /**
-     * Connect clicked() signals to this slot, this should be
-     * manually done by you as in some cases we might want
+     * Connect clicked() signals to this slot. This should be
+     * manually done as in some cases we might want
      * to manually call this. Calling this will emit activated().
      *
      * \note This slot is reentrant which is likely to only be a problem
      * if you are creating an interface to setup PolicyKit policies.
-     * \note If you have a check box connect to it's clicked() signal
-     * to avoid an infinite loop as we internally do setChecked().
+     * \note If you have a checkbox, connect to its' clicked() signal
+     * to avoid an infinite loop as this function internally calls setChecked().
      */
     bool activate();
 

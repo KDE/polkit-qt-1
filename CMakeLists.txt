@@ -1,5 +1,24 @@
 ## Polkit Qt Library
 
+cmake_minimum_required(VERSION 2.6)
+
+SET(QT_MIN_VERSION "4.4.0")
+
+FIND_PACKAGE(Qt4 REQUIRED)
+
+include (FindPkgConfig)
+
+pkg_check_modules (POLKIT REQUIRED polkit>=0.8)
+pkg_check_modules (POLKITDBUS REQUIRED polkit-dbus>=0.8)
+pkg_check_modules (POLKITGRANT REQUIRED polkit-grant>=0.8)
+
+MESSAGE(STATUS " ${POLKIT_INCLUDE_DIRS} ===========")
+
+include_directories(
+      ${POLKIT_INCLUDE_DIRS}
+      ${POLKITDBUS_INCLUDE_DIRS}
+)
+
 set(MAJOR_POLKIT_QT_VERSION "0")
 set(MINOR_POLKIT_QT_VERSION "9")
 set(PATCH_POLKIT_QT_VERSION "0")
@@ -37,7 +56,7 @@ set_target_properties(polkit-qt PROPERTIES VERSION ${MAJOR_POLKIT_QT_VERSION}.${
                                       SOVERSION ${MAJOR_POLKIT_QT_VERSION}
                       )
                       
-install(TARGETS polkit-qt  ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS polkit-qt DESTINATION lib)
 
 install(FILES
 	action.h
@@ -49,6 +68,6 @@ install(FILES
 	includes/Context
 	includes/ActionButton
 	DESTINATION
-	${INCLUDE_INSTALL_DIR}/PolicyKit/polkit-qt COMPONENT Devel)
+	include/PolicyKit/polkit-qt COMPONENT Devel)
 
 add_subdirectory(cmake)

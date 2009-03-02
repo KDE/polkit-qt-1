@@ -6,6 +6,7 @@ SET(QT_MIN_VERSION "4.4.0")
 
 FIND_PACKAGE(Qt4 REQUIRED)
 
+include (${QT_USE_FILE})
 include (FindPkgConfig)
 
 pkg_check_modules (POLKIT REQUIRED polkit>=0.8)

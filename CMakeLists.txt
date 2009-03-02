@@ -63,6 +63,7 @@ install(FILES
 	auth.h
 	context.h
 	actionbutton.h
+        export.h
 	includes/Action
 	includes/Auth
 	includes/Context

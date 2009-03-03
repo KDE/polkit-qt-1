@@ -1,0 +1,29 @@
+/**
+\mainpage Polkit-qt - Qt PolicyKit wrapper
+
+\section polkitqt_overview Overview
+
+Polkit-qt aims to make it easy for Qt developers to take advantage of
+PolicyKit API. It is a convenience wrapper around QAction and QAbstractButton
+that lets you integrate those two components easily with PolicyKit.
+
+\li A sample usage of polkit-qt can be found in \ref polkitqt_example
+\li <a href="classes.html">Alphabetical Class List</a>
+\li <a href="hierarchy.html">Class Hierarchy</a>
+
+
+
+
+\page polkitqt_exampl Polkit-qt usage example
+
+At the moment we are still creating some sample code. In the meanwhile,
+you can have a look at the PolicyKit-KDE source, that makes extensive
+use of this library.
+
+
+
+
+
+*/
+
+// DOXYGEN_REFERENCES = polkit-qt

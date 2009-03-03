@@ -1,0 +1,23 @@
+Polkit-qt
+========
+
+What is Polkit-qt?
+------------------
+Polkit-qt is a library that lets developers use the PolicyKit API through a nice
+Qt-styled API. It is mainly a wrapper around QAction and QAbstractButton that
+lets you integrate those two component easily with PolicyKit
+
+This directory contains the sources of the library.
+
+Structure
+----------
+
+  * cmake/
+      Contains the cmake checks that are needed to build the library,
+      and a FindPolkitQt.cmake module.
+
+  * .
+      Contains the sources of the library
+
+
+See INSTALL for installation instructions.

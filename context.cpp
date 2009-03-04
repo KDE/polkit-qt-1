@@ -21,14 +21,13 @@
 
 #include "context.h"
 
-#include "singleton.h"
-
 #include <QtCore/QSocketNotifier>
 #include <QtCore/QCoreApplication>
 #include <QtCore/QStringList>
 #include <QtDBus/QDBusInterface>
 #include <QtDBus/QDBusReply>
 #include <QtCore/QDebug>
+#include <QtCore/QGlobalStatic>
 
 #include <polkit-dbus/polkit-dbus.h>
 
@@ -44,15 +43,15 @@ public:
     Context *q;
 };
 
-POLKIT_QT_GLOBAL_STATIC(ContextHelper, s_globalContext)
+Q_GLOBAL_STATIC(ContextHelper, s_globalContext)
 
 Context *Context::instance()
 {
-    if (!s_globalContext->q) {
+    if (!s_globalContext()->q) {
         new Context;
     }
 
-    return s_globalContext->q;
+    return s_globalContext()->q;
 }
 
 class Context::Private
@@ -85,8 +84,8 @@ Context::Context(QObject *parent)
         : QObject(parent)
         , d(new Private())
 {
-    Q_ASSERT(!s_globalContext->q);
-    s_globalContext->q = this;
+    Q_ASSERT(!s_globalContext()->q);
+    s_globalContext()->q = this;
 
     d->init();
 }

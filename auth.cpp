@@ -80,7 +80,11 @@ bool Auth::computeAndObtainAuth(const QString &actionId, uint winId, uint pid)
 
 bool Auth::obtainAuth(const QString &actionId, uint winId, uint pid)
 {
-    QDBusMessage message = QDBusMessage::createMethodCall(PK_NAME, PK_PATH, PK_INTERFACE, QLatin1String("ObtainAuthorization"));
+    QDBusMessage message;
+    message = QDBusMessage::createMethodCall(PK_NAME,
+                                             PK_PATH,
+                                             PK_INTERFACE,
+                                             QLatin1String("ObtainAuthorization"));
     QList<QVariant> argumentList;
     argumentList << qVariantFromValue(actionId) << qVariantFromValue(winId) << qVariantFromValue(pid);
     message.setArguments(argumentList);

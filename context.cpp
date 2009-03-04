@@ -120,7 +120,8 @@ void Context::Private::init()
 
     pk_error = NULL;
     if (!polkit_context_init(pkContext, &pk_error)) {
-        qWarning() << "Failed to initialize PolicyKit context: " << polkit_error_get_error_message(pk_error);
+        qWarning() << "Failed to initialize PolicyKit context: "
+                   << polkit_error_get_error_message(pk_error);
         m_lastError = polkit_error_get_error_message(pk_error);
         m_hasError  = true;
         if (pkContext != NULL) {
@@ -129,24 +130,21 @@ void Context::Private::init()
         polkit_error_free(pk_error);
         return;
     }
-    /* TODO FIXME: I'm pretty sure dbus-glib blows in a way that
-     * we can't say we're interested in all signals from all
-     * members on all interfaces for a given service... So we do
-     * this..
-     */
 
+    // TODO FIXME: I'm pretty sure dbus-glib blows in a way that
+    // we can't say we're interested in all signals from all
+    // members on all interfaces for a given service... So we do
+    // this..
     dbus_error_init(&dbus_error);
 
-    /* need to listen to NameOwnerChanged */
-
+    // need to listen to NameOwnerChanged
     if (QDBusConnection::systemBus().connect(DBUS_SERVICE_DBUS, QString(), DBUS_INTERFACE_DBUS, "NameOwnerChanged",
             Context::instance(), SLOT(dbusFilter(const QDBusMessage &)))) {
     } else {
-        qWarning() << "---------------------not Ok";
+        qWarning() << "Could not connect to the service bus to listen to NameOwnerChanged";
     }
 
     // Ok, let's get what we need here
-
     QStringList sigs;
 
     sigs += getSignals(introspect("org.freedesktop.ConsoleKit", "/org/freedesktop/ConsoleKit/Manager", QDBusConnection::systemBus()));
@@ -155,10 +153,15 @@ void Context::Private::init()
 
     foreach(const QString &sig, sigs) {
 
-        if (QDBusConnection::systemBus().connect("org.freedesktop.ConsoleKit", QString(), QString(),
-                sig, Context::instance(), SLOT(dbusFilter(const QDBusMessage &)))) {
-        } else {
-            qWarning() << "---------------------not Ok";
+        if (!QDBusConnection::systemBus().connect("org.freedesktop.ConsoleKit",
+                                                  QString(),
+                                                  QString(),
+                                                  sig,
+                                                  Context::instance(),
+                                                  SLOT(dbusFilter(const QDBusMessage &)))) {
+            qWarning() << "Could not connect to the service bus to listen "
+                          "to the following signals:"
+                       << sigs;
         }
 
     }

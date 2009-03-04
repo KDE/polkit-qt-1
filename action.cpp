@@ -287,27 +287,6 @@ PolKitResult Action::computePkResultDirect(PolKitAction *action, pid_t pid)
                     pk_caller,
                     FALSE,
                     NULL);
-//         TODO try to find out when this would be used.. :(
-//         if (pk_result != POLKIT_RESULT_YES) {
-//             GSList *i;
-//
-//             /* no dice.. see if one if the sufficient actions, if any, yields a YES */
-//             for (i = action->priv->polkit_action_sufficient; i != NULL; i = g_slist_next (i)) {
-//                 PolKitResult r;
-//                 PolKitAction *a = (PolKitAction *) i->data;
-//
-//                 r = polkit_context_is_caller_authorized (action->priv->pk_g_context->pk_context,
-//                                                             a,
-//                                                             pk_caller,
-//                                                             FALSE,
-//                                                             NULL);
-//
-//                 if (r == POLKIT_RESULT_YES) {
-//                     pk_result = r;
-//                     break;
-//                 }
-//             }
-//         }
     }
 
     if (pk_caller != NULL)
@@ -344,7 +323,6 @@ void Action::setPolkitAction(const QString &actionId)
      * is alread NULL) because we need that initial update;
      */
     if (!d->pkAction || d->pkAction != pkAction) {
-//         action->priv->polkit_action_set_once = TRUE;
         if (d->pkAction != NULL)
             polkit_action_unref(d->pkAction);
         if (pkAction != NULL) {

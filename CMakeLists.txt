@@ -58,7 +58,8 @@ target_link_libraries(polkit-qt
 )
 
 set_target_properties(polkit-qt PROPERTIES VERSION ${MAJOR_POLKIT_QT_VERSION}.${MINOR_POLKIT_QT_VERSION}.${PATCH_POLKIT_QT_VERSION}
-                                      SOVERSION ${MAJOR_POLKIT_QT_VERSION}
+                                SOVERSION ${MAJOR_POLKIT_QT_VERSION}
+                                DEFINE_SYMBOL MAKE_POLKIT_QT_LIB
                       )
                       
 install(TARGETS polkit-qt ${INSTALL_TARGETS_DEFAULT_ARGS})

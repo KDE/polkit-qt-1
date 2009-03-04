@@ -22,6 +22,14 @@
 #ifndef POLKIT_QT_CONTEXT_H
 #define POLKIT_QT_CONTEXT_H
 
+/** @file
+ * This file is part of AnApplication and defines
+ * classes Ungulate and Moose.
+ *
+ * @author Mostly by me
+ */
+
+
 #include "export.h"
 
 #include <polkit-dbus/polkit-dbus.h>
@@ -35,6 +43,14 @@
 
 class QSocketNotifier;
 
+
+/**
+ * \namespace PolkitQt PolkitQt
+ *
+ * \brief Namespace wrapping PolkitQt classes
+ * 
+ * As above
+ */
 namespace PolkitQt
 {
 
@@ -63,6 +79,8 @@ public:
      * Context is a singleton. Memory is handled by polkit-qt, so you just
      * need to call this function to get a working instance of Context.
      * Don't delete the object after having used it.
+     *
+     * \return The current context instance
      */
     static Context* instance();
 

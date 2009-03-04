@@ -1,6 +1,7 @@
 /*
  * This file is part of the Polkit-qt project
  * Copyright (C) 2009 Dario Freddi <drf54321@gmail.com>
+ * Copyright (C) 2007 David Faure <faure@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -27,6 +28,16 @@
     This file contains macros needed for exporting/importing symbols
 */
 
-#define POLKIT_QT_EXPORT __attribute__ ((visibility("default")))
+#include <QtCore/QtGlobal>
+
+#ifndef POLKIT_QT_EXPORT
+# if defined(MAKE_POLKIT_QT_LIB)
+   /* We are building this library */
+#  define POLKIT_QT_EXPORT Q_DECL_EXPORT
+# else
+   /* We are using this library */
+#  define POLKIT_QT_EXPORT Q_DECL_IMPORT
+# endif
+#endif
 
 #endif /*POLKIT_QT_EXPORT_H*/

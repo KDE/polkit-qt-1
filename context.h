@@ -39,7 +39,7 @@ namespace PolkitQt
 {
 
 /**
- * \class Context polkit_qt_context.h Context
+ * \class Context context.h Context
  * \author Daniel Nicoletti <dantti85-pk@yahoo.com.br>
  *
  * \brief Convenience class for Qt/KDE aplications

@@ -21,7 +21,7 @@
 #ifndef POLKIT_QT_EXPORT_H
 #define POLKIT_QT_EXPORT_H
 
-/** \file polkit_qt_export.h
+/** \file export.h
     \brief Contains Macros for exporting symbols
 
     This file contains macros needed for exporting/importing symbols

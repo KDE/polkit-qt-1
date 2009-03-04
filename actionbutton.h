@@ -32,7 +32,7 @@ namespace PolkitQt
 {
 
 /**
- * \class ActionButton polkit_qt_auth.h ActionButton
+ * \class ActionButton actionbutton.h ActionButton
  * \author Daniel Nicoletti <dantti85-pk@yahoo.com.br>
  *
  * \brief Class used to hold and update a QAbstractButton

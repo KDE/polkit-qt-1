@@ -33,7 +33,7 @@ namespace PolkitQt
 {
 
 /**
- * \class Action polkit_qt_auth.h Action
+ * \class Action action.h Action
  * \author Daniel Nicoletti <dantti85-pk@yahoo.com.br>
  *
  * \brief Class used to manage actions

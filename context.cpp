@@ -25,10 +25,10 @@
 
 #include <QtCore/QSocketNotifier>
 #include <QtCore/QCoreApplication>
-#include <QtCore/QDebug>
 #include <QtCore/QStringList>
 #include <QtDBus/QDBusInterface>
 #include <QtDBus/QDBusReply>
+#include <QtCore/QDebug>
 
 #include <polkit-dbus/polkit-dbus.h>
 
@@ -193,8 +193,6 @@ void Context::Private::init()
 
 void Context::dbusFilter(const QDBusMessage &message)
 {
-    qDebug() << "=============================================" << message.service();
-
     // forward only NameOwnerChanged and ConsoleKit signals to PolkitTracker
     if ((message.type() == QDBusMessage::SignalMessage &&
             message.interface() == "org.freedesktop.DBus" &&
@@ -242,7 +240,7 @@ void Context::dbusFilter(const QDBusMessage &message)
                 }
                 break;
             default:
-                qDebug() << "Crap!! It's an " << arg.type();
+                qWarning() << "Type not handled in the switch. It should be a " << arg.type();
                 break;
             }
 
@@ -250,11 +248,9 @@ void Context::dbusFilter(const QDBusMessage &message)
         }
 
         if (msg && polkit_tracker_dbus_func(d->pkTracker, msg)) {
-            qDebug() << "++++++++++++++++++++++ EMIT CONSOLE_KIT_DB_CHANGED";
             emit consoleKitDBChanged();
         }
     }
-    qDebug() << "====================END======================" << message.service();
 }
 
 bool Context::hasError()
@@ -315,7 +311,7 @@ QDomDocument Context::Private::introspect(const QString &service, const QString 
     QDBusInterface iface(service, path, "org.freedesktop.DBus.Introspectable", c);
     if (!iface.isValid()) {
         QDBusError err(iface.lastError());
-        qDebug() << QString("Cannot introspect object %1 at %2:\n  %3 (%4)\n").arg(path).arg(
+        qWarning() << QString("Cannot introspect object %1 at %2:\n  %3 (%4)\n").arg(path).arg(
             service).arg(err.name()).arg(err.message());
         return doc;
     }
@@ -325,10 +321,10 @@ QDomDocument Context::Private::introspect(const QString &service, const QString 
     if (!xml.isValid()) {
         QDBusError err(xml.error());
         if (err.isValid()) {
-            qDebug() << QString("Call to object %1 at %2:\n  %3 (%4) failed\n").arg(
+            qWarning() << QString("Call to object %1 at %2:\n  %3 (%4) failed\n").arg(
                 path).arg(service).arg(err.name()).arg(err.message());
         } else {
-            qDebug() << QString("Invalid XML received from object %1 at %2\n").arg(
+            qWarning() << QString("Invalid XML received from object %1 at %2\n").arg(
                 path).arg(service);
         }
         return doc;
@@ -350,7 +346,6 @@ QStringList Context::Private::getSignals(const QDomDocument &doc)
             QDomElement iface = child.firstChildElement();
             while (!iface.isNull()) {
                 if (iface.tagName() == QLatin1String("signal")) {
-                    qDebug() << "Found signal: " << iface.attribute("name");
                     retlist.append(iface.attribute("name"));
                 }
                 iface = iface.nextSiblingElement();

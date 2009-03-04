@@ -28,10 +28,9 @@
 #include <limits.h>
 #include <polkit-dbus/polkit-dbus.h>
 
-#include <QtCore/QDebug>
-
 #include <QtDBus/QDBusMessage>
 #include <QtDBus/QDBusConnection>
+#include <QtCore/QDebug>
 
 using namespace PolkitQt;
 
@@ -81,7 +80,6 @@ bool Auth::computeAndObtainAuth(const QString &actionId, uint winId, uint pid)
 
 bool Auth::obtainAuth(const QString &actionId, uint winId, uint pid)
 {
-    qDebug() << "obtainAuth" << actionId << winId << pid;
     QDBusMessage message = QDBusMessage::createMethodCall(PK_NAME, PK_PATH, PK_INTERFACE, QLatin1String("ObtainAuthorization"));
     QList<QVariant> argumentList;
     argumentList << qVariantFromValue(actionId) << qVariantFromValue(winId) << qVariantFromValue(pid);
@@ -89,14 +87,6 @@ bool Auth::obtainAuth(const QString &actionId, uint winId, uint pid)
     // Do a session bus call with BlockWithGui to create an event loop
     // and INT_MAX to get the highier timeout
     QDBusMessage reply = QDBusConnection::sessionBus().call(message, QDBus::BlockWithGui, INT_MAX);
-    qDebug() << message.arguments();
-    qDebug() << message.errorName();
-    qDebug() << message.errorMessage();
-    qDebug() << message.type();
-    qDebug() << reply.arguments();
-    qDebug() << reply.errorName();
-    qDebug() << reply.errorMessage();
-    qDebug() << reply.type();
     if (reply.type() == QDBusMessage::ReplyMessage && reply.arguments().size() == 1) {
         return reply.arguments().first().toBool();
     } else if (reply.type() == QDBusMessage::MethodCallMessage) {

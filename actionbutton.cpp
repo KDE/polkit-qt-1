@@ -21,8 +21,6 @@
 
 #include "actionbutton.h"
 
-#include <QtCore/QDebug>
-
 using namespace PolkitQt;
 
 class ActionButton::Private
@@ -50,7 +48,6 @@ ActionButton::ActionButton(QAbstractButton *button, const QString &actionId, QWi
 
 void ActionButton::updateButton()
 {
-    qDebug() << "ActionButton::updateButton()";
     d->button->setVisible(visible());
     d->button->setEnabled(enabled());
     // We check for Null to see if the user

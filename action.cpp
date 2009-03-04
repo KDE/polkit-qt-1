@@ -23,8 +23,6 @@
 #include "context.h"
 #include "auth.h"
 
-#include <QtCore/QDebug>
-
 #include <polkit-dbus/polkit-dbus.h>
 
 using namespace PolkitQt;
@@ -130,7 +128,6 @@ Action::~Action()
 
 bool Action::activate(WId winId)
 {
-    qDebug() << "Action::activate()";
     switch (d->pkResult) {
     case POLKIT_RESULT_YES:
         // If PolicyKit says yes.. emit the 'activated' signal
@@ -267,8 +264,6 @@ bool Action::Private::computePkResult()
 
 PolKitResult Action::computePkResultDirect(PolKitAction *action, pid_t pid)
 {
-    qDebug() << "computePkResultDirect";
-
     PolKitCaller *pk_caller;
     PolKitResult pk_result;
     DBusError dbus_error;
@@ -339,7 +334,6 @@ void Action::setTargetPID(pid_t pid)
 
 void Action::setPolkitAction(const QString &actionId)
 {
-    qDebug() << "setPolkitAction" << actionId;
     PolKitAction *pkAction = polkit_action_new();
     polkit_action_set_action_id(pkAction, actionId.toAscii().data());
     /* Don't bother updating polkit_action if it's the same

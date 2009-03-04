@@ -72,7 +72,7 @@ Q_SIGNALS:
 
 public Q_SLOTS:
     /**
-     * Use this slot if you want to activate 
+     * Use this slot if you want to activate
      * the action. activated() will be emitted
      * if the action gets authorized.
      *
@@ -122,7 +122,7 @@ public:
 
     /**
      * This function allows you to override PolicyKit settings
-     * about visibility. You can set this to \c false to force 
+     * about visibility. You can set this to \c false to force
      * invisibility without caring about what PolicyKit reports.
      * 
      * \param value \c false if you want to force invisibility
@@ -141,13 +141,13 @@ public:
 
     /**
      * This function allows you to override PolicyKit settings
-     * about availability. You can set this to \c false to force 
+     * about availability. You can set this to \c false to force
      * the action being disabled without caring about what PolicyKit reports.
      * 
      * \param value \c false if you want to force the action to be disabled
      */
     void setMasterEnabled(bool value);
-    
+
     /**
      * \see setMasterEnabled
      */
@@ -181,7 +181,7 @@ public:
      * \param whatsThis set the whatsThis in all four states
      */
     void setWhatsThis(const QString &whatsThis);
-    
+
     /**
      * \see setWhatsThis
      */
@@ -227,7 +227,7 @@ public:
      * the user has a self-granted negative authorization, use this text
      */
     void setSelfBlockedText(const QString &text);
-    
+
     /**
      * \see setSelfBlockedText
      */
@@ -344,7 +344,7 @@ public:
      * If PolicyKit evaluates the result as 'auth', whether the action will be enabled
      */
     void setAuthEnabled(bool value);
-    
+
     /**
      * \see setAuthEnabled
      */
@@ -435,7 +435,7 @@ public:
      * If PolicyKit evaluates the result as 'yes', use this short-text
      */
     void setYesWhatsThis(const QString &whatsThis);
-    
+
     /**
      * \see setYesWhatsThis
      */
@@ -462,7 +462,7 @@ public:
     pid_t targetPID();
 
     /**
-     * This method can be used to compute the PolKitResult 
+     * This method can be used to compute the PolKitResult
      * of a given action
      * \param action the PolKitAction in question
      * \param pid the process id that the action can be requested for
@@ -470,7 +470,7 @@ public:
     static PolKitResult computePkResultDirect(PolKitAction *action, pid_t pid);
 
     /**
-     * This method can be used to check the if the given action 
+     * This method can be used to check the if the given action
      * can be performed (i.e. PolKitResult is YES).
      * \note This method does not call the authentication dialog, use
      *       activate() instead

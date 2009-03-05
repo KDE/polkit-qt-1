@@ -42,11 +42,24 @@ namespace PolkitQt
  * This class is an interface around PolicyKit Actions.
  * By using this class, you are able to track the result of a
  * given action.
+ *
+ * Most of the times, you would want to use this class combined
+ * with a QAbstractButton. In this case, you can use the more 
+ * comfortable ActionButton class that manages button's properties
+ * update for you.
+ * 
+ * \see ActionButton
  */
 class POLKIT_QT_EXPORT Action : public QObject
 {
     Q_OBJECT
 public:
+    /**
+     * Constructs a new Action item
+     *
+     * \param actionId the PolicyKit action Id (e.g.: org.freedesktop.policykit.read)
+     * \param parent the object parent
+     */
     Action(const QString &actionId, QObject *parent);
     ~Action();
 
@@ -166,8 +179,9 @@ public:
     QString text() const;
 
     /**
-     * The current Tool tip
-     * \param toolTip set the toolTip in all four states
+     * Sets the tooltip for the current action. This will
+     * be shown in all four states.
+     * \param toolTip the new tooltip for the action
      */
     void setToolTip(const QString &toolTip);
 
@@ -177,8 +191,9 @@ public:
     QString toolTip() const;
 
     /**
-     * The current What's this
-     * \param whatsThis set the whatsThis in all four states
+     * Sets the whatsthis for the current action. This will
+     * be shown in all four states.
+     * \param whatsThis the new whatsthis for the action
      */
     void setWhatsThis(const QString &whatsThis);
 
@@ -188,8 +203,11 @@ public:
     QString whatsThis() const;
 
     /**
-     * The current Icon Name
-     * \param icon set the icon in all four states
+     * Sets the icon for the current action. This will
+     * be shown in all four states.
+     * \note You need to pass a QIcon here. You can easily
+     *       create one from a Pixmap, or pass a KIcon
+     * \param icon the new icon for the action
      */
     void setIcon(const QIcon &icon);
 
@@ -199,9 +217,12 @@ public:
     QIcon icon() const;
 
     /**
-     * If PolicyKit evaluates the result as 'no' and the reason is that
-     * the user has a self-granted negative authorization, whether the
-     * action will be visible
+     * This function is used to modify the visibility of the
+     * action in case PolicyKit evaluates the result as 'no' 
+     * because the user has a self-granted negative authorization.
+     *
+     * \param value \c true if the action should be visible
+     *              \c false if the action shouldn't be visible
      */
     void setSelfBlockedVisible(bool value);
 
@@ -211,9 +232,12 @@ public:
     bool selfBlockedVisible() const;
 
     /**
-     * If PolicyKit evaluates the result as 'no' and the reason is that
-     * the user has a self-granted negative authorization, whether the
-     * action will be enabled
+     * This function is used to modify the availability of the
+     * action in case PolicyKit evaluates the result as 'no' 
+     * because the user has a self-granted negative authorization.
+     *
+     * \param value \c true if the action should be enabled
+     *              \c false if the action should be disabled
      */
     void setSelfBlockedEnabled(bool value);
 
@@ -223,8 +247,11 @@ public:
     bool selfBlockedEnabled() const;
 
     /**
-     * If PolicyKit evaluates the result as 'no' and the reason is that
-     * the user has a self-granted negative authorization, use this text
+     * This function is used to modify the text of the
+     * action in case PolicyKit evaluates the result as 'no' 
+     * because the user has a self-granted negative authorization.
+     *
+     * \param text the text the action should display in this case
      */
     void setSelfBlockedText(const QString &text);
 
@@ -234,8 +261,11 @@ public:
     QString selfBlockedText() const;
 
     /**
-     * If PolicyKit evaluates the result as 'no' and the reason is that
-     * the user has a self-granted negative authorization, use this tooltip
+     * This function is used to modify the tooltip of the
+     * action in case PolicyKit evaluates the result as 'no' 
+     * because the user has a self-granted negative authorization.
+     *
+     * \param toolTip the tooltip the action should display in this case
      */
     void setSelfBlockedToolTip(const QString &toolTip);
 
@@ -245,8 +275,11 @@ public:
     QString selfBlockedToolTip() const;
 
     /**
-     * If PolicyKit evaluates the result as 'no' and the reason is that
-     * the user has a self-granted negative authorization, use this short-text
+     * This function is used to modify the whatsthis of the
+     * action in case PolicyKit evaluates the result as 'no' 
+     * because the user has a self-granted negative authorization.
+     *
+     * \param whatsThis the whatsthis the action should display in this case
      */
     void setSelfBlockedWhatsThis(const QString &whatsThis);
 
@@ -256,8 +289,13 @@ public:
     QString selfBlockedWhatsThis() const;
 
     /**
-     * If PolicyKit evaluates the result as 'no' and the reason is that
-     * the user has a self-granted negative authorization, use this icon-name
+     * This function is used to modify the icon of the
+     * action in case PolicyKit evaluates the result as 'no' 
+     * because the user has a self-granted negative authorization.
+     *
+     * \see setIcon
+     *
+     * \param icon the icon the action should display in this case
      */
     void setSelfBlockedIcon(const QIcon &icon);
 
@@ -268,7 +306,11 @@ public:
 
 
     /**
-     * If PolicyKit evaluates the result as 'no', whether the action will be visible
+     * This function is used to modify the text of the
+     * action in case PolicyKit evaluates the result as 'no'
+     *
+     * \param value \c true if the action should be visible
+     *              \c false if the action shouldn't be visible
      */
     void setNoVisible(bool value);
 
@@ -278,9 +320,11 @@ public:
     bool noVisible() const;
 
     /**
-     * If PolicyKit evaluates the result as 'no', whether the action will be enabled
-     * \note if you set this to TRUE the activated() signal will be
-     * emitted even when the PolKitResult is POLKIT_RESULT_NO
+     * This function is used to modify the availability of the
+     * action in case PolicyKit evaluates the result as 'no'
+     *
+     * \param value \c true if the action should be enabled
+     *              \c false if the action should be disabled
      */
     void setNoEnabled(bool value);
 
@@ -290,7 +334,10 @@ public:
     bool noEnabled() const;
 
     /**
-     * If PolicyKit evaluates the result as 'no', use this text
+     * This function is used to modify the text of the
+     * action in case PolicyKit evaluates the result as 'no'
+     *
+     * \param text the text the action should display in this case
      */
     void setNoText(const QString &text);
 
@@ -300,7 +347,10 @@ public:
     QString noText() const;
 
     /**
-     * If PolicyKit evaluates the result as 'no', use this tooltip
+     * This function is used to modify the tooltip of the
+     * action in case PolicyKit evaluates the result as 'no'
+     *
+     * \param toolTip the tooltip the action should display in this case
      */
     void setNoToolTip(const QString &toolTip);
 
@@ -310,7 +360,10 @@ public:
     QString noToolTip() const;
 
     /**
-     * If PolicyKit evaluates the result as 'no', use this short-text
+     * This function is used to modify the whatsthis of the
+     * action in case PolicyKit evaluates the result as 'no'
+     *
+     * \param whatsThis the whatsthis the action should display in this case
      */
     void setNoWhatsThis(const QString &whatsThis);
 
@@ -320,7 +373,12 @@ public:
     QString noWhatsThis() const;
 
     /**
-     * If PolicyKit evaluates the result as 'no', use this icon-name
+     * This function is used to modify the icon of the
+     * action in case PolicyKit evaluates the result as 'no'
+     *
+     * \see setIcon
+     *
+     * \param icon the icon the action should display in this case
      */
     void setNoIcon(const QIcon &icon);
 
@@ -331,7 +389,11 @@ public:
 
 
     /**
-     * If PolicyKit evaluates the result as 'auth', whether the action will be visible
+     * This function is used to modify the text of the
+     * action in case PolicyKit evaluates the result as 'Auth'
+     *
+     * \param value \c true if the action should be visible
+     *              \c false if the action shouldn't be visible
      */
     void setAuthVisible(bool value);
 
@@ -341,7 +403,11 @@ public:
     bool authVisible() const;
 
     /**
-     * If PolicyKit evaluates the result as 'auth', whether the action will be enabled
+     * This function is used to modify the availability of the
+     * action in case PolicyKit evaluates the result as 'Auth'
+     *
+     * \param value \c true if the action should be enabled
+     *              \c false if the action should be disabled
      */
     void setAuthEnabled(bool value);
 
@@ -351,7 +417,10 @@ public:
     bool authEnabled() const;
 
     /**
-     * If PolicyKit evaluates the result as 'auth', use this text
+     * This function is used to modify the text of the
+     * action in case PolicyKit evaluates the result as 'Auth'
+     *
+     * \param text the text the action should display in this case
      */
     void setAuthText(const QString &text);
 
@@ -361,7 +430,10 @@ public:
     QString authText() const;
 
     /**
-     * If PolicyKit evaluates the result as 'auth', use this tooltip
+     * This function is used to modify the tooltip of the
+     * action in case PolicyKit evaluates the result as 'Auth'
+     *
+     * \param toolTip the tooltip the action should display in this case
      */
     void setAuthToolTip(const QString &toolTip);
 
@@ -371,7 +443,10 @@ public:
     QString authToolTip() const;
 
     /**
-     * If PolicyKit evaluates the result as 'auth', use this short-text
+     * This function is used to modify the whatsthis of the
+     * action in case PolicyKit evaluates the result as 'Auth'
+     *
+     * \param whatsThis the whatsthis the action should display in this case
      */
     void setAuthWhatsThis(const QString &whatsThis);
 
@@ -381,7 +456,12 @@ public:
     QString authWhatsThis() const;
 
     /**
-     * If PolicyKit evaluates the result as 'auth', use this icon-name
+     * This function is used to modify the icon of the
+     * action in case PolicyKit evaluates the result as 'Auth'
+     *
+     * \see setIcon
+     *
+     * \param icon the icon the action should display in this case
      */
     void setAuthIcon(const QIcon &icon);
 
@@ -392,7 +472,11 @@ public:
 
 
     /**
-     * If PolicyKit evaluates the result as 'yes', whether the action will be visible
+     * This function is used to modify the text of the
+     * action in case PolicyKit evaluates the result as 'Yes'
+     *
+     * \param value \c true if the action should be visible
+     *              \c false if the action shouldn't be visible
      */
     void setYesVisible(bool value);
 
@@ -402,7 +486,11 @@ public:
     bool yesVisible() const;
 
     /**
-     * If PolicyKit evaluates the result as 'yes', whether the action will be enabled
+     * This function is used to modify the availability of the
+     * action in case PolicyKit evaluates the result as 'Yes'
+     *
+     * \param value \c true if the action should be enabled
+     *              \c false if the action should be disabled
      */
     void setYesEnabled(bool value);
 
@@ -412,7 +500,10 @@ public:
     bool yesEnabled() const;
 
     /**
-     * If PolicyKit evaluates the result as 'yes', use this text
+     * This function is used to modify the text of the
+     * action in case PolicyKit evaluates the result as 'Yes'
+     *
+     * \param text the text the action should display in this case
      */
     void setYesText(const QString &text);
 
@@ -422,17 +513,23 @@ public:
     QString yesText() const;
 
     /**
-     * If PolicyKit evaluates the result as 'yes', use this tooltip
+     * This function is used to modify the tooltip of the
+     * action in case PolicyKit evaluates the result as 'Yes'
+     *
+     * \param toolTip the tooltip the action should display in this case
      */
     void setYesToolTip(const QString &toolTip);
 
-     /**
+    /**
      * \see setYesToolTip
      */
     QString yesToolTip() const;
 
     /**
-     * If PolicyKit evaluates the result as 'yes', use this short-text
+     * This function is used to modify the whatsthis of the
+     * action in case PolicyKit evaluates the result as 'Yes'
+     *
+     * \param whatsThis the whatsthis the action should display in this case
      */
     void setYesWhatsThis(const QString &whatsThis);
 
@@ -442,7 +539,12 @@ public:
     QString yesWhatsThis() const;
 
     /**
-     * If PolicyKit evaluates the result as 'yes', use this icon-name
+     * This function is used to modify the icon of the
+     * action in case PolicyKit evaluates the result as 'Yes'
+     *
+     * \see setIcon
+     *
+     * \param icon the icon the action should display in this case
      */
     void setYesIcon(const QIcon &icon);
 
@@ -452,7 +554,11 @@ public:
     QIcon yesIcon() const;
 
     /**
-     * The target process id to receive the authorization; if 0 it is the current process
+     * This function sets the process id of the target that
+     * should receive the authorization. Set this to 0 to set
+     * the current process as the target.
+     *
+     * \param pid The target process id; 0 if it is the current process
      */
     void setTargetPID(pid_t pid);
 
@@ -470,7 +576,7 @@ public:
     static PolKitResult computePkResultDirect(PolKitAction *action, pid_t pid);
 
     /**
-     * This method can be used to check the if the given action
+     * This method can be used to check the if the current action
      * can be performed (i.e. PolKitResult is YES).
      * \note This method does not call the authentication dialog, use
      *       activate() instead

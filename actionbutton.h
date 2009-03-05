@@ -34,28 +34,65 @@ namespace PolkitQt
 /**
  * \class ActionButton actionbutton.h ActionButton
  * \author Daniel Nicoletti <dantti85-pk@yahoo.com.br>
+ * \author Dario Freddi <drf54321@gmail.com>
  *
  * \brief Class used to hold and update a QAbstractButton
  *
  * This class allows you to associate QAbstractButtons
- * (ie QPushButton) to a PolicyKit Action. It will update the
- * button properties according to the PolicyKit Action on itself.
+ * (i.e. QPushButton) to a PolicyKit Action. It will update the
+ * button properties according to the PolicyKit Action automatically.
  *
  * \note You should connect the activated() signal to receive
- * a notification when the user clicked the button and he's
- * permitted to do the given action. If you set 'noEnabled'
- * to TRUE it will be emitted when PolKitResult is NO.
+ * a notification when the user clicked the button and gets
+ * permission to perform the given action. If you set 'noEnabled'
+ * to \c true it will be emitted when PolKitResult is NO.
  */
 class POLKIT_QT_EXPORT ActionButton : public Action
 {
     Q_OBJECT
 public:
-    ActionButton(QAbstractButton *button, const QString &actionId, QWidget *parent = 0);
+    /**
+     * Constructs a new ActionButton. You need to pass this
+     * constructor an existing QAbstractButton, whose properties
+     * will be modified according to the underlying Action
+     * object. As ActionButton inherits from Action, you can
+     * define your button behavior right through this wrapper.
+     *
+     * \see Action
+     *
+     * \param button the QAbstractButton to associate to this ActionButton
+     * \param actionId the action Id to create the underlying Action
+     * \param parent the parent object
+     */
+    ActionButton(QAbstractButton *button, const QString &actionId, QObject *parent = 0);
+
+    /**
+     * Sets the button associated to the underlying action.
+     *
+     * \note If you are calling this function, you're probably
+     *       changing the button the action is referring to. If this
+     *       is the case, please note that Polkit-Qt does not handle
+     *       the previous button's memory, so you should take care of
+     *       deleting it yourself (if needed). You can retrieve it by
+     *       using button()
+     *
+     * \see button
+     *
+     * \param button the new button associated with the underlying action
+     */
+    void setButton(QAbstractButton *button);
+
+    /**
+     * Returns the current button
+     *
+     * \return the button currently associated with the underlying action
+     */
+    QAbstractButton *button();
 
 public Q_SLOTS:
     /**
      * Connect clicked() signals to this slot. This should be
-     * manually done as in some cases we might want
+     * manually done, as in some cases we might want
      * to manually call this. Calling this will emit activated().
      *
      * \note This slot is reentrant which is likely to only be a problem

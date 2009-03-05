@@ -45,6 +45,8 @@ class POLKIT_QT_EXPORT Auth : public QObject
 public:
     /**
      * Creates a new Auth object
+     *
+     * \param parent the object parent
      */
     Auth(QObject *parent = 0);
 
@@ -52,27 +54,34 @@ public:
      * Obtains authorization for the given action regardless of
      * the Action Result.
      * This method is meant to be used if you don't want to have
-     * a PkAction class that can handle all states, it will compute
-     * the Polkit Result and if needed prompt for the password.
+     * an Action class that can handle all states. It will simply 
+     * compute the Polkit Result and prompt for password if needed.
      *
-     * \p action_id is the action in question (ie org.freedesktop.policykit.read)
-     * \p winId the X window id for the request (use 0 if there's no window)
-     * \p pid Process id of the application in question
-     * \return true if the user is authorized otherwise false
+     * \see Action
+     *
+     * \param action_id id of the action in question (i.e. org.freedesktop.policykit.read)
+     * \param winId the X window id for the request (use 0 if there's no window)
+     * \param pid Process id of the application in question
+     * \return \c true if the user is authorized 
+     *         \c false if the user is not authorized
      */
     static bool computeAndObtainAuth(const QString &action_id, uint winId = 0, uint pid = QCoreApplication::applicationPid());
 
     /**
      * Obtain authorization for the given action regardless of
      * the Action Result.
-     * This method was meant to be used only by PkAction but
-     * you can use it as long as you know what you're doing
-     * (ie. computing the Polkit Result for the given action first)
+     * This method was meant to be used only by Action,
+     * use it only if you know what you're doing (ie. computing 
+     * the Polkit Result for the given action first). If you are unsure,
+     * use computeAndObtainAuth instead
+     * 
+     * \see computeAndObtainAuth
      *
-     * \p action_id is the action in question (ie org.freedesktop.policykit.read)
-     * \p winId the X window id for the request (use 0 if there's no window)
-     * \p pid Process id of the application in question
-     * \return true if the user is authorized otherwise false
+     * \param action_id id of the action in question (i.e. org.freedesktop.policykit.read)
+     * \param winId the X window id for the request (use 0 if there's no window)
+     * \param pid Process id of the application in question
+     * \return \c true if the user is authorized 
+     *         \c false if the user is not authorized
      */
     static bool obtainAuth(const QString &action_id, uint winId = 0, uint pid = QCoreApplication::applicationPid());
 

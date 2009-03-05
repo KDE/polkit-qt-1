@@ -34,16 +34,12 @@ public:
     bool initiallyChecked;
 };
 
-ActionButton::ActionButton(QAbstractButton *button, const QString &actionId, QWidget *parent)
+ActionButton::ActionButton(QAbstractButton *button, const QString &actionId, QObject *parent)
         : Action(actionId, parent)
         , d(new Private(button))
 {
+    setButton(button);
     connect(this, SIGNAL(dataChanged()), SLOT(updateButton()));
-    if (d->button->isCheckable()) {
-        d->initiallyChecked = d->button->isChecked();
-    }
-    // call this after m_activateOnCheck receives the value
-    updateButton();
 }
 
 void ActionButton::updateButton()
@@ -93,4 +89,19 @@ bool ActionButton::activate()
     } else {
         return Action::activate(d->button->winId());
     }
+}
+
+void ActionButton::setButton(QAbstractButton *button)
+{
+    d->button = button;
+    if (d->button->isCheckable()) {
+        d->initiallyChecked = d->button->isChecked();
+    }
+    // call this after m_activateOnCheck receives the value
+    updateButton();
+}
+
+QAbstractButton *ActionButton::button()
+{
+    return d->button;
 }

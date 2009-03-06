@@ -1,17 +1,11 @@
-project (PolicyKit-example)
-cmake_minimum_required(VERSION 2.6.0)
 
-set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/../cmake/modules")
+configure_file(org.qt.policykit.examples.policy.in ${CMAKE_CURRENT_BINARY_DIR}/org.qt.policykit.examples.policy)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/org.qt.policykit.examples.policy DESTINATION ${SHARE_INSTALL_PREFIX}/PolicyKit/policy/)
 
-find_package(Qt4 REQUIRED)
-include( ${QT_USE_FILE} )
-find_package (PolkitQt)
-
-if (POLKITQT_FOUND)
-    include_directories(
-      ${POLKITQT_INCLUDE_DIR}
-      ${CMAKE_BINARY_DIR}
-    )
+include_directories(
+      ${CMAKE_CURRENT_SOURCE_DIR}
+      ${CMAKE_CURRENT_BINARY_DIR}
+)
 
     set(polkit_example_SRCS
         main.cpp
@@ -32,7 +26,5 @@ if (POLKITQT_FOUND)
         ${polkit_example_UI_SRCS}
     )
 
-    target_link_libraries(polkit-example ${QT_LIBRARIES} polkit-qt)
-
-endif (POLKITQT_FOUND)
+    target_link_libraries(polkit-example ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} polkit-qt)
 

@@ -20,7 +20,7 @@
 #ifndef PKEXAMPLE_H
 #define PKEXAMPLE_H
 
-#include <Action>
+#include "Action"
 
 #include "ui_PkExample.h"
 

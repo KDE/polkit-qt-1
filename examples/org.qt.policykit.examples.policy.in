@@ -75,7 +75,7 @@ NOTE: When you change this file, make sure to run polkit-policy-file-validate(1)
       <allow_inactive>no</allow_inactive>
       <allow_active>auth_self</allow_active>
     </defaults>
-    <annotate key="org.gnome.policykit.examples.shout">foo</annotate>
+    <annotate key="org.qt.policykit.examples.shout">foo</annotate>
   </action>
  
   <action id="org.qt.policykit.examples.push">
@@ -85,7 +85,7 @@ NOTE: When you change this file, make sure to run polkit-policy-file-validate(1)
       <allow_inactive>no</allow_inactive>
       <allow_active>auth_self</allow_active>
     </defaults>
-    <annotate key="org.gnome.policykit.examples.push">bar</annotate>
+    <annotate key="org.qt.policykit.examples.push">bar</annotate>
   </action>
  
   <action id="org.qt.policykit.examples.blow-up">
@@ -95,7 +95,7 @@ NOTE: When you change this file, make sure to run polkit-policy-file-validate(1)
       <allow_inactive>no</allow_inactive>
       <allow_active>auth_self</allow_active>
     </defaults>
-    <annotate key="org.gnome.policykit.examples.blow-up">booo</annotate>
+    <annotate key="org.qt.policykit.examples.blow-up">booo</annotate>
   </action>
  
 </policyconfig>

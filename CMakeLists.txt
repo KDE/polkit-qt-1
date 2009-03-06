@@ -21,6 +21,8 @@ MESSAGE(STATUS " ${POLKIT_INCLUDE_DIRS} ===========")
 include_directories(
       ${POLKIT_INCLUDE_DIRS}
       ${POLKITDBUS_INCLUDE_DIRS}
+      ${CMAKE_CURRENT_SOURCE_DIR}
+      ${CMAKE_CURRENT_SOURCE_DIR}/includes
 )
 
 set(MAJOR_POLKIT_QT_VERSION "0")
@@ -80,5 +82,9 @@ install(FILES
 # Pkgconfig
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/polkit-qt.pc.cmake ${CMAKE_CURRENT_BINARY_DIR}/polkit-qt.pc @ONLY)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/polkit-qt.pc DESTINATION ${LIB_INSTALL_DIR}/pkgconfig )
+
+if (BUILD_EXAMPLES)
+    add_subdirectory(examples)
+endif (BUILD_EXAMPLES)
 
 add_subdirectory(cmake)

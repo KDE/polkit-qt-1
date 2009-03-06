@@ -126,7 +126,7 @@ Q_SIGNALS:
      * actions.
      *
      * \note If you use Action you'll probably prefer to
-     * use the resultChanged() signal to track Actions changes.
+     * use the dataChanged() signal to track Actions changes.
      */
     void configChanged();
 
@@ -140,7 +140,7 @@ Q_SIGNALS:
      * PolicyKit will give you.
      *
      * \note If you use Action you'll probably prefer to
-     * use the resultChanged() signal to track Action changes.
+     * use the dataChanged() signal to track Action changes.
      */
     void consoleKitDBChanged();
 

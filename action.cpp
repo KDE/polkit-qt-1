@@ -112,6 +112,9 @@ Action::Action(const QString &actionId, QObject *parent)
     // track the config changes to update the action
     connect(Context::instance(), SIGNAL(configChanged()),
             this, SLOT(configChanged()));
+    // for now we call config changed..
+    connect(Context::instance(), SIGNAL(consoleKitDBChanged()),
+            this, SLOT(configChanged()));
 }
 
 Action::~Action()
@@ -127,11 +130,13 @@ bool Action::activate(WId winId)
 {
     switch (d->pkResult) {
     case POLKIT_RESULT_YES:
+        // If PolicyKit says yes.. emit the 'activated' signal
+        emit activated();
+        // lets revoke after so the user connected to activated()
+        // can do the right thing
         if (isCheckable()) {
             revoke();
         }
-        // If PolicyKit says yes.. emit the 'activated' signal
-        emit activated();
         return true;
         break;
 

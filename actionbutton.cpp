@@ -44,8 +44,8 @@ ActionButton::ActionButton(QAbstractButton *button, const QString &actionId, QOb
 
 void ActionButton::updateButton()
 {
-    d->button->setVisible(visible());
-    d->button->setEnabled(enabled());
+    d->button->setVisible(isVisible());
+    d->button->setEnabled(isEnabled());
     // We check for Null to see if the user
     // never set anything as "" is not NULL
     if (!text().isNull()) {

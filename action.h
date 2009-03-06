@@ -50,7 +50,7 @@ namespace PolkitQt
  * 
  * \see ActionButton
  */
-class POLKIT_QT_EXPORT Action : public QObject
+class POLKIT_QT_EXPORT Action : public QAction
 {
     Q_OBJECT
 public:
@@ -129,11 +129,6 @@ public:
     QString       actionId() const;
 
     /**
-     * \return Whether the Action should be visible
-     */
-    bool visible() const;
-
-    /**
      * This function allows you to override PolicyKit settings
      * about visibility. You can set this to \c false to force
      * invisibility without caring about what PolicyKit reports.
@@ -146,11 +141,6 @@ public:
      * \see setMasterVisible
      */
     bool masterVisible() const;
-
-    /**
-     * \return Whether the Action should be enabled
-     */
-    bool enabled() const;
 
     /**
      * This function allows you to override PolicyKit settings
@@ -174,21 +164,11 @@ public:
     void setText(const QString &text);
 
     /**
-     * \see setText
-     */
-    QString text() const;
-
-    /**
      * Sets the tooltip for the current action. This will
      * be shown in all four states.
      * \param toolTip the new tooltip for the action
      */
     void setToolTip(const QString &toolTip);
-
-    /**
-     * \see setToolTip
-     */
-    QString toolTip() const;
 
     /**
      * Sets the whatsthis for the current action. This will
@@ -198,11 +178,6 @@ public:
     void setWhatsThis(const QString &whatsThis);
 
     /**
-     * \see setWhatsThis
-     */
-    QString whatsThis() const;
-
-    /**
      * Sets the icon for the current action. This will
      * be shown in all four states.
      * \note You need to pass a QIcon here. You can easily
@@ -210,11 +185,6 @@ public:
      * \param icon the new icon for the action
      */
     void setIcon(const QIcon &icon);
-
-    /**
-     * \see setIcon
-     */
-    QIcon icon() const;
 
     /**
      * This function is used to modify the visibility of the

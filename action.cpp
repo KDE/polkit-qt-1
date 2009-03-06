@@ -42,14 +42,6 @@ public:
     void         updateAction();
     bool         computePkResult();
 
-    // current data
-    bool    visible;
-    bool    enabled;
-    QString text;
-    QString whatsThis;
-    QString toolTip;
-    QIcon   icon;
-
     // states data
     bool    selfBlockedVisible;
     bool    selfBlockedEnabled;
@@ -106,7 +98,7 @@ Action::Private::Private(Action *p)
 }
 
 Action::Action(const QString &actionId, QObject *parent)
-        : QObject(parent)
+        : QAction(parent)
         , d(new Private(this))
 {
     // this must be called AFTER the values initialization
@@ -193,19 +185,31 @@ void Action::Private::updateAction()
                         pkAction,
                         getuid(),
                         NULL)) {
-            visible   = selfBlockedVisible && masterVisible;
-            enabled   = selfBlockedEnabled && masterEnabled;
-            whatsThis = selfBlockedWhatsThis;
-            text      = selfBlockedText;
-            toolTip   = selfBlockedToolTip;
-            icon      = selfBlockedIcon;
+            parent->setVisible(selfBlockedVisible && masterVisible);
+            parent->setEnabled(selfBlockedEnabled && masterEnabled);
+            ((QAction *) parent)->setText(selfBlockedText);
+            if (!selfBlockedWhatsThis.isNull()) {
+                ((QAction *) parent)->setWhatsThis(selfBlockedWhatsThis);
+            }
+            if (!selfBlockedToolTip.isNull()) {
+                ((QAction *) parent)->setToolTip(selfBlockedToolTip);
+            }
+            if (!selfBlockedIcon.isNull()) {
+                ((QAction *) parent)->setIcon(selfBlockedIcon);
+            }
         } else {
-            visible   = noVisible && masterVisible;
-            enabled   = noEnabled && masterEnabled;
-            whatsThis = noWhatsThis;
-            text      = noText;
-            toolTip   = noToolTip;
-            icon      = noIcon;
+            parent->setVisible(noVisible && masterVisible);
+            parent->setEnabled(noEnabled && masterEnabled);
+            ((QAction *) parent)->setText(noText);
+            if (!noWhatsThis.isNull()) {
+                ((QAction *) parent)->setWhatsThis(noWhatsThis);
+            }
+            if (!noToolTip.isNull()) {
+                ((QAction *) parent)->setToolTip(noToolTip);
+            }
+            if (!noIcon.isNull()) {
+                ((QAction *) parent)->setIcon(noIcon);
+            }
         }
         break;
 
@@ -217,21 +221,33 @@ void Action::Private::updateAction()
     case POLKIT_RESULT_ONLY_VIA_SELF_AUTH:
     case POLKIT_RESULT_ONLY_VIA_SELF_AUTH_KEEP_SESSION:
     case POLKIT_RESULT_ONLY_VIA_SELF_AUTH_KEEP_ALWAYS:
-        visible   = authVisible && masterVisible;
-        enabled   = authEnabled && masterEnabled;
-        whatsThis = authWhatsThis;
-        text      = authText;
-        toolTip   = authToolTip;
-        icon      = authIcon;
+        parent->setVisible(authVisible && masterVisible);
+        parent->setEnabled(authEnabled && masterEnabled);
+        ((QAction *) parent)->setText(authText);
+        if (!authWhatsThis.isNull()) {
+            ((QAction *) parent)->setWhatsThis(authWhatsThis);
+        }
+        if (!authToolTip.isNull()) {
+            ((QAction *) parent)->setToolTip(authToolTip);
+        }
+        if (!authIcon.isNull()) {
+            ((QAction *) parent)->setIcon(authIcon);
+        }
         break;
 
     case POLKIT_RESULT_YES:
-        visible   = yesVisible && masterVisible;
-        enabled   = yesEnabled && masterEnabled;
-        whatsThis = yesWhatsThis;
-        text      = yesText;
-        toolTip   = yesToolTip;
-        icon      = yesIcon;
+        parent->setVisible(yesVisible && masterVisible);
+        parent->setEnabled(yesEnabled && masterEnabled);
+        ((QAction *) parent)->setText(yesText);
+        if (!yesWhatsThis.isNull()) {
+            ((QAction *) parent)->setWhatsThis(yesWhatsThis);
+        }
+        if (!yesToolTip.isNull()) {
+            ((QAction *) parent)->setToolTip(yesToolTip);
+        }
+        if (!yesIcon.isNull()) {
+            ((QAction *) parent)->setIcon(yesIcon);
+        }
         break;
     }
     emit parent->dataChanged();
@@ -342,16 +358,6 @@ bool Action::canDoAction() const
     return d->pkResult == POLKIT_RESULT_YES;
 }
 
-bool Action::visible() const
-{
-    return d->visible;
-}
-
-bool Action::enabled() const
-{
-    return d->enabled;
-}
-
 void Action::setText(const QString &text)
 {
     d->selfBlockedText = text;
@@ -359,11 +365,6 @@ void Action::setText(const QString &text)
     d->authText        = text;
     d->yesText         = text;
     d->updateAction();
-}
-
-QString Action::text() const
-{
-    return d->text;
 }
 
 void Action::setToolTip(const QString &toolTip)
@@ -375,11 +376,6 @@ void Action::setToolTip(const QString &toolTip)
     d->updateAction();
 }
 
-QString Action::toolTip() const
-{
-    return d->toolTip;
-}
-
 void Action::setWhatsThis(const QString &whatsThis)
 {
     d->selfBlockedWhatsThis = whatsThis;
@@ -387,11 +383,6 @@ void Action::setWhatsThis(const QString &whatsThis)
     d->authWhatsThis        = whatsThis;
     d->yesWhatsThis         = whatsThis;
     d->updateAction();
-}
-
-QString Action::whatsThis() const
-{
-    return d->whatsThis;
 }
 
 void Action::setIcon(const QIcon &icon)
@@ -403,10 +394,6 @@ void Action::setIcon(const QIcon &icon)
     d->updateAction();
 }
 
-QIcon Action::icon() const
-{
-    return d->icon;
-}
 //--------------------------------------------------
 PolKitAction* Action::polkitAction() const
 {

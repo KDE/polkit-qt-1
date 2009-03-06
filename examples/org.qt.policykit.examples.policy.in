@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+ 
+<!DOCTYPE policyconfig PUBLIC
+ "-//freedesktop//DTD PolicyKit Policy Configuration 1.0//EN"
+ "http://www.freedesktop.org/standards/PolicyKit/1.0/policyconfig.dtd">
+ 
+<!-- 
+Policy definitions for PolicyKit-Qt example program
+ 
+(C) 2009 Lukas Appelhans
+ 
+NOTE: When you change this file, make sure to run polkit-policy-file-validate(1).
+-->
+ 
+<policyconfig>
+ 
+  <action id="org.qt.policykit.examples.cry">
+    <_description>Cry</_description>
+    <_message>Prevents PolicyKit-Qt example from crying</_message>
+    <defaults>
+      <allow_inactive>no</allow_inactive>
+      <allow_active>auth_self_one_shot</allow_active>
+    </defaults>
+  </action>
+ 
+  <action id="org.qt.policykit.examples.play">
+    <_description>Play</_description>
+    <_message>Prevents PolicyKit-Qt example from playing</_message>
+    <defaults>
+      <allow_inactive>no</allow_inactive>
+      <allow_active>auth_self</allow_active>
+    </defaults>
+  </action>
+ 
+  <action id="org.qt.policykit.examples.kick">
+    <_description>Kick</_description>
+    <_message>Prevents PolicyKit-Qt example from kicking</_message>
+    <defaults>
+      <allow_inactive>no</allow_inactive>
+      <allow_active>auth_admin</allow_active>
+    </defaults>
+  </action>
+ 
+  <action id="org.qt.policykit.examples.delete">
+    <_description>Delete</_description>
+    <_message>Prevents PolicyKit-Qt example from deleting</_message>
+    <defaults>
+      <allow_inactive>no</allow_inactive>
+      <allow_active>auth_admin_keep_always</allow_active>
+    </defaults>
+  </action>
+ 
+  <action id="org.qt.policykit.examples.bleed">
+    <_description>Bleed</_description>
+    <_message>Prevents PolicyKit-Qt example from bleeding</_message>
+    <defaults>
+      <allow_inactive>no</allow_inactive>
+      <allow_active>auth_self_keep_session</allow_active>
+    </defaults>
+  </action>
+ 
+  <action id="org.qt.policykit.examples.listen">
+    <_description>Listen</_description>
+    <_message>Prevents PolicyKit-Qt example from listening</_message>
+    <defaults>
+      <allow_inactive>no</allow_inactive>
+      <allow_active>auth_admin_keep_always</allow_active>
+    </defaults>
+  </action>
+ 
+  <action id="org.qt.policykit.examples.shout">
+    <_description>Shout</_description>
+    <_message>Prevents PolicyKit-Qt example from shouting</_message>
+    <defaults>
+      <allow_inactive>no</allow_inactive>
+      <allow_active>auth_self</allow_active>
+    </defaults>
+    <annotate key="org.gnome.policykit.examples.shout">foo</annotate>
+  </action>
+ 
+  <action id="org.qt.policykit.examples.push">
+    <_description>Push</_description>
+    <_message>Prevents PolicyKit-Qt example from pushing</_message>
+    <defaults>
+      <allow_inactive>no</allow_inactive>
+      <allow_active>auth_self</allow_active>
+    </defaults>
+    <annotate key="org.gnome.policykit.examples.push">bar</annotate>
+  </action>
+ 
+  <action id="org.qt.policykit.examples.blow-up">
+    <_description>Blow Up</_description>
+    <_message>Prevents PolicyKit-Qt example from blowing up</_message>
+    <defaults>
+      <allow_inactive>no</allow_inactive>
+      <allow_active>auth_self</allow_active>
+    </defaults>
+    <annotate key="org.gnome.policykit.examples.blow-up">booo</annotate>
+  </action>
+ 
+</policyconfig>

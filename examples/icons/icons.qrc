@@ -1,0 +1,9 @@
+<RCC>
+  <qresource prefix="Icons" >
+    <file>action-locked-default.png</file>
+    <file>action-locked.png</file>
+    <file>action-unlocked.png</file>
+    <file>custom-no.png</file>
+    <file>custom-yes.png</file>
+  </qresource>
+</RCC>

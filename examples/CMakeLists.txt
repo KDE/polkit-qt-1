@@ -11,6 +11,10 @@ set(polkit_example_SRCS
     PkExample.cpp
 )
 
+SET(polkit_example_RESOUCES
+    icons/icons.qrc
+)
+
 QT4_WRAP_CPP(polkit_example_MOC_SRCS
     PkExample.h
 )
@@ -19,10 +23,13 @@ QT4_WRAP_UI(polkit_example_UI_SRCS
     PkExample.ui
 )
 
+QT4_ADD_RESOURCES (qtsourceview_RC_SRCS  ${polkit_example_RESOUCES})
+
 add_executable(polkit-example
     ${polkit_example_SRCS}
     ${polkit_example_MOC_SRCS}
     ${polkit_example_UI_SRCS}
+    ${qtsourceview_RC_SRCS}
 )
 
 target_link_libraries(polkit-example ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} polkit-qt)

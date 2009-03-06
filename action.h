@@ -102,9 +102,13 @@ public Q_SLOTS:
      */
     bool activate(WId winId = 0);
 
+    /**
+     * Defines the checked state, this implies that
+     * the opposite state needs the action authentication.
+     *
+     * \param checked the default checked state
+     */
     void setChecked(bool checked);
-
-    void trigger();
 
 public:
     /**
@@ -563,8 +567,18 @@ public:
      */
     bool canDoAction() const;
 
-    bool is(const QString &other) const;
+    /**
+     * This method can be used compare an action string
+     * with the internal string of this class.
+     * \see actionId()
+     * \param actionId the PolKitAction string in question
+     * \return \c true if the actionId is the same as ours
+     */
+    bool is(const QString &actionId) const;
 
+    /**
+     * This method can be used to revoke this action
+     */
     void revoke();
 
 private Q_SLOTS:

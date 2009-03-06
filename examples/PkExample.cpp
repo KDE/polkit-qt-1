@@ -82,7 +82,6 @@ PkExample::PkExample(QMainWindow *parent)
     listenA = new Action("org.qt.policykit.examples.listen", this);
     listenA->setText("Click to make changes...");
     listenA->setCheckable(true);
-    listenA->setChecked(true);
     menuActions->addAction(listenA);
     toolBar->addAction(listenA);
     connect(listenA, SIGNAL(triggered(bool)), this, SLOT(activateAction()));
@@ -110,7 +109,7 @@ void PkExample::actionActivated()
 
     if (action->is("org.qt.policykit.examples.listen")) {
         qDebug() <<"org.qt.policykit.examples.listen";
-        action->revoke();
+        return;
     }
 
     qDebug() << "pretending to be the mechanism for action:" << action->actionId();
@@ -126,15 +125,13 @@ void PkExample::actionActivated()
                       "(pid=" << getpid() << "): " << dbus_error.name << ": " << dbus_error.message;
         dbus_error_free (&dbus_error);
     } else {
-        /* note how we pass #TRUE to revoke_if_one_shot - this is because we're
-            * pretending to be the mechanism
-            */
+        // note how we pass true to revoke_if_one_shot - this is because we're
+        // pretending to be the mechanism
         pk_result = polkit_context_is_caller_authorized (Context::instance()->getPolKitContext(),
                                                             pk_action,
                                                             pk_caller,
-                                                            TRUE,
+                                                            true,
                                                             NULL);
-
         polkit_caller_unref (pk_caller);
     }
 

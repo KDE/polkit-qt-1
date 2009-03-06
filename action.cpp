@@ -127,6 +127,9 @@ bool Action::activate(WId winId)
 {
     switch (d->pkResult) {
     case POLKIT_RESULT_YES:
+        if (isCheckable()) {
+            revoke();
+        }
         // If PolicyKit says yes.. emit the 'activated' signal
         emit activated();
         return true;
@@ -176,11 +179,6 @@ bool Action::activate(WId winId)
         break;
     }
     return false;
-}
-
-void Action::trigger()
-{
-    qDebug() << "hello!";
 }
 
 void Action::setChecked(bool checked)
@@ -398,29 +396,6 @@ bool Action::is(const QString &other) const
 
 void Action::revoke()
 {
-//     PolKitCaller *pk_caller;
-//     PolKitResult pk_result;
-//     DBusError dbus_error;
-// 
-//     dbus_error_init (&dbus_error);
-//     pk_caller = polkit_tracker_get_caller_from_pid (Context::instance()->getPolKitTracker(),
-//                                                     d->targetPID,
-//                                                     &dbus_error);
-//     if (pk_caller == NULL) {
-//         qWarning() << "Cannot get PolKitCaller object for "
-//                       "(pid=" << d->targetPID << "): " << dbus_error.name << ": " << dbus_error.message;
-//         dbus_error_free (&dbus_error);
-//     } else {
-//         // We pass true to revoke the action
-//         pk_result = polkit_context_is_caller_authorized (Context::instance()->getPolKitContext(),
-//                                                          d->pkAction,
-//                                                          pk_caller,
-//                                                          true,
-//                                                          NULL);
-// 
-//         polkit_caller_unref (pk_caller);
-//     }
-
     PolKitError *pk_error;
     PolKitAuthorizationDB *authdb;
 
@@ -432,12 +407,12 @@ void Action::revoke()
 
             pk_error = NULL;
             num_auths_revoked = 0;
-            polkit_authorization_db_foreach_for_action_for_uid (authdb,
-                                                                d->pkAction,
-                                                                d->targetPID,
-                                                                auth_foreach_revoke,
-                                                                &num_auths_revoked,
-                                                                &pk_error);
+            polkit_authorization_db_foreach_for_action_for_uid(authdb,
+                                                               d->pkAction,
+                                                               getuid(),
+                                                               auth_foreach_revoke,
+                                                               &num_auths_revoked,
+                                                               &pk_error);
             if (pk_error != NULL) {
                 qWarning() << "Error removing authorizations: code="
                            << polkit_error_get_error_code(pk_error) << ": "
@@ -451,7 +426,7 @@ void Action::revoke()
                 if (!polkit_authorization_db_grant_negative_to_uid (
                             authdb,
                             d->pkAction,
-                            d->targetPID,
+                            getuid(),
                             NULL, /* no constraints */
                             &pk_error)) {
                     qWarning() << "Error granting negative auth: code="

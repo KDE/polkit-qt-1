@@ -27,11 +27,9 @@ class ActionButton::Private
 {
 public:
     Private(QAbstractButton *b)
-            : button(b)
-            , initiallyChecked(false) {};
+            : button(b) {};
 
     QAbstractButton *button;
-    bool initiallyChecked;
 };
 
 ActionButton::ActionButton(QAbstractButton *button, const QString &actionId, QObject *parent)
@@ -62,40 +60,36 @@ void ActionButton::updateButton()
     }
     // if the item cannot do the action anymore
     // lets revert to the initial state
-    if (d->button->isCheckable() && !canDoAction()) {
-        d->button->setChecked(d->initiallyChecked);
+    if (d->button->isCheckable()) {
+        d->button->setChecked(isChecked());
     }
 }
 
 bool ActionButton::activate()
 {
     if (d->button->isCheckable()) {
-        // We store the value cause it might create an
-        // event loop that can conflict with our desired
-        // value.
-        bool checked = d->button->isChecked();
-        // we set the the opposite option in case the activate fails
-        if (Action::activate(d->button->winId())) {
-            d->button->setChecked(checked);
-            return true;
-        } else {
-            // don't undo the checked before
-            // you call activate because the
-            // activated signal is emmited from there
-            // and the user will see the wrong checked state
-            d->button->setChecked(!checked);
-            return false;
-        }
-    } else {
-        return Action::activate(d->button->winId());
+        // we set the the current Action state
+        d->button->setChecked(isChecked());
+        // toggle the action cause we are not directly connected there..
+        toggle();
     }
+    return Action::activate(d->button->winId());
 }
 
 void ActionButton::setButton(QAbstractButton *button)
 {
+    if (d->button) {
+        disconnect(d->button, SIGNAL(clicked(bool)), this, SIGNAL(clicked(bool)));
+        disconnect(this, SIGNAL(toggled(bool)), d->button, SLOT(toggle()));
+    }
     d->button = button;
+    connect(d->button, SIGNAL(clicked(bool)), this, SIGNAL(clicked(bool)));
+    // set the checkable state of Action to store the initial state
+    setCheckable(d->button->isCheckable());
     if (d->button->isCheckable()) {
-        d->initiallyChecked = d->button->isChecked();
+        // store the checked state in Action
+        setChecked(d->button->isChecked());
+        connect(this, SIGNAL(toggled(bool)), d->button, SLOT(toggle()));
     }
     // call this after m_activateOnCheck receives the value
     updateButton();

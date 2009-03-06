@@ -131,12 +131,17 @@ bool Action::activate(WId winId)
     switch (d->pkResult) {
     case POLKIT_RESULT_YES:
         // If PolicyKit says yes.. emit the 'activated' signal
+//         if (isCheckable()) {
+//             toggle();
+//         }
         emit activated();
         // lets revoke after so the user connected to activated()
         // can do the right thing
-        if (isCheckable()) {
-            revoke();
-        }
+//         if (isCheckable()) {
+//             toggle();
+
+//             emit dataChanged();
+//         }
         return true;
         break;
 
@@ -152,15 +157,14 @@ bool Action::activate(WId winId)
          * and start auth process..
          */
         if (d->pkAction != NULL) {
+            // this is needed because we might be used as QActions
             if (isCheckable()) {
                 QAction::setChecked(d->initiallyChecked);
             }
             if (Auth::obtainAuth(d->actionId, winId, targetPID())) {
                 // Make sure our result is up to date
                 d->computePkResult();
-                if (isCheckable()) {
-                    QAction::setChecked(!d->initiallyChecked);
-                }
+
                 // emit activated as the obtain auth said it was ok
                 emit activated();
                 return true;
@@ -178,6 +182,9 @@ bool Action::activate(WId winId)
              * Hence, they probably have a good reason for doing
              * this so do let the 'activate' signal propagate..
              */
+//             if (isCheckable()) {
+//                 toggle();
+//             }
             emit activated();
             return true;
         }

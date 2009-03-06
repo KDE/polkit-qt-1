@@ -19,6 +19,7 @@
 
 #include "PkExample.h"
 
+#include <ActionButton>
 #include <Context>
 #include <QDebug>
 
@@ -29,63 +30,90 @@ PkExample::PkExample(QMainWindow *parent)
 {
     setupUi(this);
 
-    playA = new Action("org.qt.policykit.examples.play", this);
-    playA->setText("Play!");
-    menuActions->addAction(playA);
-    toolBar->addAction(playA);
-    connect(playA, SIGNAL(triggered(bool)), this, SLOT(activateAction()));
-    connect(playA, SIGNAL(activated()), this, SLOT(actionActivated()));
+    ActionButton *bt;
 
-    cryA = new Action("org.qt.policykit.examples.cry", this);
-    cryA->setText("Cry!");
-    menuActions->addAction(cryA);
-    toolBar->addAction(cryA);
-    connect(cryA, SIGNAL(triggered(bool)), this, SLOT(activateAction()));
-    connect(cryA, SIGNAL(activated()), this, SLOT(actionActivated()));
+    // Here we create an ActionButton that is a subclass of Action
+    // allways pass a QAbstractButton pointer and action id
+    // You can change the action id later if you want
+    bt = new ActionButton(playPB, "org.qt.policykit.examples.play", this);
+    // Here we are setting the text to all four states an action might have
+    bt->setText("Play!");
+    // As ActionButton is also an Action we cast it to add to menu
+    menuActions->addAction(qobject_cast<Action*>(bt));
+    toolBar->addAction(qobject_cast<Action*>(bt));
+    // this signal is emitted when the user click on the action,
+    // it will only happen if it was inserted in a QMenu or a QToolBar
+    connect(bt, SIGNAL(triggered(bool)), this, SLOT(activateAction()));
+    // This signal was propagated from the QAbstractButton just for
+    // convenience in this case we don't have any benefit but the code
+    // look cleaner
+    connect(bt, SIGNAL(clicked(bool)), bt, SLOT(activate()));
+    // this is the Action activated signal, it is always emmited whenever
+    // someone click and get authorized to do the action
+    connect(bt, SIGNAL(activated()), this, SLOT(actionActivated()));
 
-    kickA = new Action("org.qt.policykit.examples.kick", this);
-    kickA->setText("Kick... (long)");
-    kickA->setNoVisible(true);
-    kickA->setNoEnabled(true);
-    kickA->setNoText("Kick (long)");
-    kickA->setNoToolTip("If your admin wasn't annoying, you could do this");
+    bt = new ActionButton(cryPB, "org.qt.policykit.examples.cry", this);
+    bt->setText("Cry!");
+    menuActions->addAction(qobject_cast<Action*>(bt));
+    toolBar->addAction(qobject_cast<Action*>(bt));
+    connect(bt, SIGNAL(triggered(bool)), this, SLOT(activateAction()));
+    connect(bt, SIGNAL(clicked(bool)), bt, SLOT(activate()));
+    connect(bt, SIGNAL(activated()), this, SLOT(actionActivated()));
 
-    kickA->setAuthVisible(true);
-    kickA->setAuthEnabled(true);
-    kickA->setAuthText("Kick... (long)");
-    kickA->setAuthToolTip("Only card carrying tweakers can do this!");
+    // This action is more customized
+    bt = new ActionButton(kickPB, "org.qt.policykit.examples.kick", this);
+    bt->setText("Kick... (long)");
+    // here we set the behavior of PolKitResul = No
+    bt->setNoVisible(true);
+    bt->setNoEnabled(true);
+    bt->setNoText("Kick (long)");
+    bt->setNoToolTip("If your admin wasn't annoying, you could do this");
+    // here we set the behavior of PolKitResul = Auth
+    bt->setAuthVisible(true);
+    bt->setAuthEnabled(true);
+    bt->setAuthText("Kick... (long)");
+    bt->setAuthToolTip("Only card carrying tweakers can do this!");
+    // here we set the behavior of PolKitResul = Yes
+    bt->setYesVisible(true);
+    bt->setYesEnabled(true);
+    bt->setYesText("Kick! (long)");
+    bt->setYesToolTip("Go ahead, kick kick kick!");
 
-    kickA->setYesVisible(true);
-    kickA->setYesEnabled(true);
-    kickA->setYesText("Kick! (long)");
-    kickA->setYesToolTip("Go ahead, kick kick kick!");
+    menuActions->addAction(qobject_cast<Action*>(bt));
+    toolBar->addAction(qobject_cast<Action*>(bt));
+    connect(bt, SIGNAL(triggered(bool)), this, SLOT(activateAction()));
+    connect(bt, SIGNAL(clicked(bool)), bt, SLOT(activate()));
+    connect(bt, SIGNAL(activated()), this, SLOT(actionActivated()));
 
-    menuActions->addAction(kickA);
-    toolBar->addAction(kickA);
-    connect(kickA, SIGNAL(triggered(bool)), this, SLOT(activateAction()));
-    connect(kickA, SIGNAL(activated()), this, SLOT(actionActivated()));
+    bt = new ActionButton(deletePB, "org.qt.policykit.examples.delete", this);
+    bt->setText("Delete!");
+    menuActions->addAction(qobject_cast<Action*>(bt));
+    toolBar->addAction(qobject_cast<Action*>(bt));
+    connect(bt, SIGNAL(triggered(bool)), this, SLOT(activateAction()));
+    connect(bt, SIGNAL(clicked(bool)), bt, SLOT(activate()));
+    connect(bt, SIGNAL(activated()), this, SLOT(actionActivated()));
 
-    deleteA = new Action("org.qt.policykit.examples.delete", this);
-    deleteA->setText("Delete!");
-    menuActions->addAction(deleteA);
-    toolBar->addAction(deleteA);
-    connect(deleteA, SIGNAL(triggered(bool)), this, SLOT(activateAction()));
-    connect(deleteA, SIGNAL(activated()), this, SLOT(actionActivated()));
+    bt = new ActionButton(bleedPB, "org.qt.policykit.examples.bleed", this);
+    bt->setText("Bleed!");
+    menuActions->addAction(qobject_cast<Action*>(bt));
+    toolBar->addAction(qobject_cast<Action*>(bt));
+    connect(bt, SIGNAL(triggered(bool)), this, SLOT(activateAction()));
+    connect(bt, SIGNAL(clicked(bool)), bt, SLOT(activate()));
+    connect(bt, SIGNAL(activated()), this, SLOT(actionActivated()));
 
-    bleedA = new Action("org.qt.policykit.examples.bleed", this);
-    bleedA->setText("Bleed!");
-    menuActions->addAction(bleedA);
-    toolBar->addAction(bleedA);
-    connect(bleedA, SIGNAL(triggered(bool)), this, SLOT(activateAction()));
-    connect(bleedA, SIGNAL(activated()), this, SLOT(actionActivated()));
-
-    listenA = new Action("org.qt.policykit.examples.listen", this);
-    listenA->setText("Click to make changes...");
-    listenA->setCheckable(true);
-    menuActions->addAction(listenA);
-    toolBar->addAction(listenA);
-    connect(listenA, SIGNAL(triggered(bool)), this, SLOT(activateAction()));
-    connect(listenA, SIGNAL(activated()), this, SLOT(actionActivated()));
+    bt = new ActionButton(listenPB, "org.qt.policykit.examples.listen", this);
+    bt->setText("Click to make changes...");
+    // this example is pretty diferent, here we have a checkable
+    // QAbstractButton, the setCheckable(true) was set in the ui
+    // file so you can see that there is no need to call
+    // bt->setCheckable(true);
+    // if you want a simple Action checkable you can do as
+    // of above.
+    menuActions->addAction(qobject_cast<Action*>(bt));
+    toolBar->addAction(qobject_cast<Action*>(bt));
+    connect(bt, SIGNAL(triggered(bool)), this, SLOT(activateAction()));
+    connect(bt, SIGNAL(clicked(bool)), bt, SLOT(activate()));
+    connect(bt, SIGNAL(activated()), this, SLOT(actionActivated()));
 }
 
 PkExample::~PkExample()
@@ -94,13 +122,25 @@ PkExample::~PkExample()
 
 void PkExample::activateAction()
 {
-    Action *action = (Action *) sender(); 
+    // Here we cast the sender() to an Action and call activate()
+    // on it.
+    // Be careful in doing the same for ActionButton won't work as expected
+    // as action->activate() is calling Action::activate() and
+    // not ActionButton::activate which are different.
+    // You can cast then to ActionButton but be carefull
+    // an Action casted to ActionButton may crash you app
+    Action *action = qobject_cast<Action*>(sender());
+    // calling activate with winId() makes the auth dialog
+    // be correct parented with you application.
     action->activate(winId());
 }
 
 void PkExample::actionActivated()
 {
-    Action *action = (Action *) sender();
+    // This slot is called whenever an action is allowed
+    // here you will do your dirt job by calling a helper application
+    // that might erase your hardrive ;)
+    Action *action = qobject_cast<Action*>(sender());
 
     PolKitCaller *pk_caller;
     PolKitAction *pk_action;
@@ -108,7 +148,7 @@ void PkExample::actionActivated()
     DBusError dbus_error;
 
     if (action->is("org.qt.policykit.examples.listen")) {
-        qDebug() <<"org.qt.policykit.examples.listen";
+        qDebug() << "toggled for: org.qt.policykit.examples.listen";
         return;
     }
 

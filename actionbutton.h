@@ -99,8 +99,21 @@ public Q_SLOTS:
      * if you are creating an interface to setup PolicyKit policies.
      * \note If you have a checkbox, connect to its' clicked() signal
      * to avoid an infinite loop as this function internally calls setChecked().
+     * You can always use the clicked(bool) signal in this class to
+     * connect to here.
      */
     bool activate();
+
+Q_SIGNALS:
+    /**
+     * Emitted when the abstract button clicked(bool) signal
+     * is emited. This allows you to use qobject_cast<ActionButton*>(sender())
+     * in a slot connected to this signal and call activate() on it.
+     *
+     * \note you will normally want to connect this signal
+     * to the activate slot.
+     */
+    void clicked(bool checked = false);
 
 private Q_SLOTS:
     void updateButton();

@@ -20,8 +20,6 @@
 #ifndef PKEXAMPLE_H
 #define PKEXAMPLE_H
 
-#include <Action>
-
 #include "ui_PkExample.h"
 
 class PkExample : public QMainWindow, Ui::PkExample
@@ -31,14 +29,6 @@ class PkExample : public QMainWindow, Ui::PkExample
 public:
     PkExample(QMainWindow *parent = 0);
     ~PkExample();
-
-private:
-    PolkitQt::Action *cryA;
-    PolkitQt::Action *playA;
-    PolkitQt::Action *kickA;
-    PolkitQt::Action *deleteA;
-    PolkitQt::Action *bleedA;
-    PolkitQt::Action *listenA;
 
 private slots:
     void activateAction();

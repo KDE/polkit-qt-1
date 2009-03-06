@@ -211,32 +211,32 @@ void Action::Private::updateAction()
                         NULL)) {
             parent->setVisible(selfBlockedVisible && masterVisible);
             parent->setEnabled(selfBlockedEnabled && masterEnabled);
-            ((QAction *) parent)->setText(selfBlockedText);
+            qobject_cast<QAction*>(parent)->setText(selfBlockedText);
             if (!selfBlockedWhatsThis.isNull()) {
-                ((QAction *) parent)->setWhatsThis(selfBlockedWhatsThis);
+                qobject_cast<QAction*>(parent)->setWhatsThis(selfBlockedWhatsThis);
             }
             if (!selfBlockedToolTip.isNull()) {
-                ((QAction *) parent)->setToolTip(selfBlockedToolTip);
+                qobject_cast<QAction*>(parent)->setToolTip(selfBlockedToolTip);
             }
             if (!selfBlockedIcon.isNull()) {
-                ((QAction *) parent)->setIcon(selfBlockedIcon);
+                qobject_cast<QAction*>(parent)->setIcon(selfBlockedIcon);
             }
         } else {
             parent->setVisible(noVisible && masterVisible);
             parent->setEnabled(noEnabled && masterEnabled);
-            ((QAction *) parent)->setText(noText);
+            qobject_cast<QAction*>(parent)->setText(noText);
             if (!noWhatsThis.isNull()) {
-                ((QAction *) parent)->setWhatsThis(noWhatsThis);
+                qobject_cast<QAction*>(parent)->setWhatsThis(noWhatsThis);
             }
             if (!noToolTip.isNull()) {
-                ((QAction *) parent)->setToolTip(noToolTip);
+                qobject_cast<QAction*>(parent)->setToolTip(noToolTip);
             }
             if (!noIcon.isNull()) {
-                ((QAction *) parent)->setIcon(noIcon);
+                qobject_cast<QAction*>(parent)->setIcon(noIcon);
             }
         }
         if (parent->isCheckable()) {
-            ((QAction *) parent)->setChecked(initiallyChecked);
+            qobject_cast<QAction*>(parent)->setChecked(initiallyChecked);
         }
         break;
 
@@ -250,36 +250,36 @@ void Action::Private::updateAction()
     case POLKIT_RESULT_ONLY_VIA_SELF_AUTH_KEEP_ALWAYS:
         parent->setVisible(authVisible && masterVisible);
         parent->setEnabled(authEnabled && masterEnabled);
-        ((QAction *) parent)->setText(authText);
+        qobject_cast<QAction*>(parent)->setText(authText);
         if (!authWhatsThis.isNull()) {
-            ((QAction *) parent)->setWhatsThis(authWhatsThis);
+            qobject_cast<QAction*>(parent)->setWhatsThis(authWhatsThis);
         }
         if (!authToolTip.isNull()) {
-            ((QAction *) parent)->setToolTip(authToolTip);
+            qobject_cast<QAction*>(parent)->setToolTip(authToolTip);
         }
         if (!authIcon.isNull()) {
-            ((QAction *) parent)->setIcon(authIcon);
+            qobject_cast<QAction*>(parent)->setIcon(authIcon);
         }
         if (parent->isCheckable()) {
-            ((QAction *) parent)->setChecked(initiallyChecked);
+            qobject_cast<QAction*>(parent)->setChecked(initiallyChecked);
         }
         break;
 
     case POLKIT_RESULT_YES:
         parent->setVisible(yesVisible && masterVisible);
         parent->setEnabled(yesEnabled && masterEnabled);
-        ((QAction *) parent)->setText(yesText);
+        qobject_cast<QAction*>(parent)->setText(yesText);
         if (!yesWhatsThis.isNull()) {
-            ((QAction *) parent)->setWhatsThis(yesWhatsThis);
+            qobject_cast<QAction*>(parent)->setWhatsThis(yesWhatsThis);
         }
         if (!yesToolTip.isNull()) {
-            ((QAction *) parent)->setToolTip(yesToolTip);
+            qobject_cast<QAction*>(parent)->setToolTip(yesToolTip);
         }
         if (!yesIcon.isNull()) {
-            ((QAction *) parent)->setIcon(yesIcon);
+            qobject_cast<QAction*>(parent)->setIcon(yesIcon);
         }
         if (parent->isCheckable()) {
-            ((QAction *) parent)->setChecked(!initiallyChecked);
+            qobject_cast<QAction*>(parent)->setChecked(!initiallyChecked);
         }
         break;
     }

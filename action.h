@@ -102,6 +102,10 @@ public Q_SLOTS:
      */
     bool activate(WId winId = 0);
 
+    void setChecked(bool checked);
+
+    void trigger();
+
 public:
     /**
      * Changes the action being tracked
@@ -114,6 +118,11 @@ public:
      * Returns the PolKitAction pointer associated
      * with this Action. Use this only if you know
      * what you're doing
+     *
+     * \note Unref this pointer after usage with
+     * polkit_action_unref (), to avoid leaking.
+     * Also never use this directly otherwise you
+     * will not be able to unref it.
      *
      * \return The underlying PolKitAction item
      *
@@ -554,10 +563,17 @@ public:
      */
     bool canDoAction() const;
 
+    bool is(const QString &other) const;
+
+    void revoke();
+
 private Q_SLOTS:
     void configChanged();
 
 private:
+    static polkit_bool_t auth_foreach_revoke(PolKitAuthorizationDB *authdb,
+                                             PolKitAuthorization   *auth,
+                                             void                  *user_data);
     class Private;
     Private * const d;
 };

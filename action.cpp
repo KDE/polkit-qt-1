@@ -24,6 +24,7 @@
 #include "auth.h"
 
 #include <polkit-dbus/polkit-dbus.h>
+#include <QDebug>
 
 using namespace PolkitQt;
 
@@ -41,6 +42,8 @@ public:
 
     void         updateAction();
     bool         computePkResult();
+
+    bool    initiallyChecked;
 
     // states data
     bool    selfBlockedVisible;
@@ -78,8 +81,10 @@ public:
 Action::Private::Private(Action *p)
         : parent(p)
         , pkAction(NULL)
-        , targetPID(0)
+        , targetPID(getpid())
 {
+    initiallyChecked = false;
+
     // Set the default values
     selfBlockedVisible = true;
     selfBlockedEnabled = false;
@@ -139,9 +144,15 @@ bool Action::activate(WId winId)
          * and start auth process..
          */
         if (d->pkAction != NULL) {
+            if (isCheckable()) {
+                QAction::setChecked(d->initiallyChecked);
+            }
             if (Auth::obtainAuth(d->actionId, winId, targetPID())) {
                 // Make sure our result is up to date
                 d->computePkResult();
+                if (isCheckable()) {
+                    QAction::setChecked(!d->initiallyChecked);
+                }
                 // emit activated as the obtain auth said it was ok
                 emit activated();
                 return true;
@@ -165,6 +176,19 @@ bool Action::activate(WId winId)
         break;
     }
     return false;
+}
+
+void Action::trigger()
+{
+    qDebug() << "hello!";
+}
+
+void Action::setChecked(bool checked)
+{
+    // We store this as initiallyChecked
+    // to be able to undo changes in case the auth fails
+    d->initiallyChecked = checked;
+    QAction::setChecked(checked);
 }
 
 void Action::Private::updateAction()
@@ -211,6 +235,9 @@ void Action::Private::updateAction()
                 ((QAction *) parent)->setIcon(noIcon);
             }
         }
+        if (parent->isCheckable()) {
+            ((QAction *) parent)->setChecked(initiallyChecked);
+        }
         break;
 
     case POLKIT_RESULT_ONLY_VIA_ADMIN_AUTH_ONE_SHOT:
@@ -233,6 +260,9 @@ void Action::Private::updateAction()
         if (!authIcon.isNull()) {
             ((QAction *) parent)->setIcon(authIcon);
         }
+        if (parent->isCheckable()) {
+            ((QAction *) parent)->setChecked(initiallyChecked);
+        }
         break;
 
     case POLKIT_RESULT_YES:
@@ -247,6 +277,9 @@ void Action::Private::updateAction()
         }
         if (!yesIcon.isNull()) {
             ((QAction *) parent)->setIcon(yesIcon);
+        }
+        if (parent->isCheckable()) {
+            ((QAction *) parent)->setChecked(!initiallyChecked);
         }
         break;
     }
@@ -358,6 +391,102 @@ bool Action::canDoAction() const
     return d->pkResult == POLKIT_RESULT_YES;
 }
 
+bool Action::is(const QString &other) const
+{
+    return d->actionId == other;
+}
+
+void Action::revoke()
+{
+//     PolKitCaller *pk_caller;
+//     PolKitResult pk_result;
+//     DBusError dbus_error;
+// 
+//     dbus_error_init (&dbus_error);
+//     pk_caller = polkit_tracker_get_caller_from_pid (Context::instance()->getPolKitTracker(),
+//                                                     d->targetPID,
+//                                                     &dbus_error);
+//     if (pk_caller == NULL) {
+//         qWarning() << "Cannot get PolKitCaller object for "
+//                       "(pid=" << d->targetPID << "): " << dbus_error.name << ": " << dbus_error.message;
+//         dbus_error_free (&dbus_error);
+//     } else {
+//         // We pass true to revoke the action
+//         pk_result = polkit_context_is_caller_authorized (Context::instance()->getPolKitContext(),
+//                                                          d->pkAction,
+//                                                          pk_caller,
+//                                                          true,
+//                                                          NULL);
+// 
+//         polkit_caller_unref (pk_caller);
+//     }
+
+    PolKitError *pk_error;
+    PolKitAuthorizationDB *authdb;
+
+    if (d->pkResult == POLKIT_RESULT_YES) {
+        /* If we already got the authorization.. revoke it! */
+        authdb = polkit_context_get_authorization_db(Context::instance()->getPolKitContext());
+        if (d->pkAction != NULL && authdb != NULL) {
+            int num_auths_revoked;
+
+            pk_error = NULL;
+            num_auths_revoked = 0;
+            polkit_authorization_db_foreach_for_action_for_uid (authdb,
+                                                                d->pkAction,
+                                                                d->targetPID,
+                                                                auth_foreach_revoke,
+                                                                &num_auths_revoked,
+                                                                &pk_error);
+            if (pk_error != NULL) {
+                qWarning() << "Error removing authorizations: code="
+                           << polkit_error_get_error_code(pk_error) << ": "
+                           << polkit_error_get_error_message(pk_error);
+                polkit_error_free (pk_error);
+            }
+
+            if (pk_error == NULL && num_auths_revoked == 0) {
+                // no authorizations, yet we are authorized.. "grant" a
+                // negative authorization...
+                if (!polkit_authorization_db_grant_negative_to_uid (
+                            authdb,
+                            d->pkAction,
+                            d->targetPID,
+                            NULL, /* no constraints */
+                            &pk_error)) {
+                    qWarning() << "Error granting negative auth: code="
+                               << polkit_error_get_error_name(pk_error) << ": "
+                               << polkit_error_get_error_message(pk_error);
+                    polkit_error_free (pk_error);
+                }
+            }
+
+        }
+    }
+}
+
+polkit_bool_t Action::auth_foreach_revoke(PolKitAuthorizationDB *authdb,
+                                          PolKitAuthorization   *auth,
+                                          void                  *user_data)
+{
+    PolKitError *pk_error;
+    int *num_auths_revoked = (int *) user_data;
+
+    pk_error = NULL;
+    if (!polkit_authorization_db_revoke_entry(authdb, auth, &pk_error)) {
+        qWarning() << "Error revoking authorizations: "
+                    << polkit_error_get_error_name(pk_error) << ": "
+                    << polkit_error_get_error_message(pk_error);
+        polkit_error_free (pk_error);
+    }
+
+    if (num_auths_revoked != NULL) {
+        *num_auths_revoked += 1;
+    }
+
+    return false;
+}
+
 void Action::setText(const QString &text)
 {
     d->selfBlockedText = text;
@@ -397,6 +526,7 @@ void Action::setIcon(const QIcon &icon)
 //--------------------------------------------------
 PolKitAction* Action::polkitAction() const
 {
+    polkit_action_ref(d->pkAction);
     return d->pkAction;
 }
 

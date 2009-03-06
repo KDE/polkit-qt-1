@@ -19,6 +19,7 @@
 
 #include "PkExample.h"
 
+#include <Context>
 #include <QDebug>
 
 using namespace PolkitQt;
@@ -28,17 +29,19 @@ PkExample::PkExample(QMainWindow *parent)
 {
     setupUi(this);
 
-    cryA = new Action("org.qt.policykit.examples.cry", this);
-    cryA->setText("Cry!");
-    menuActions->addAction(cryA);
-    toolBar->addAction(cryA);
-    connect(cryA, SIGNAL(triggered(bool)), this, SLOT(activateAction()));
-
     playA = new Action("org.qt.policykit.examples.play", this);
     playA->setText("Play!");
     menuActions->addAction(playA);
     toolBar->addAction(playA);
     connect(playA, SIGNAL(triggered(bool)), this, SLOT(activateAction()));
+    connect(playA, SIGNAL(activated()), this, SLOT(actionActivated()));
+
+    cryA = new Action("org.qt.policykit.examples.cry", this);
+    cryA->setText("Cry!");
+    menuActions->addAction(cryA);
+    toolBar->addAction(cryA);
+    connect(cryA, SIGNAL(triggered(bool)), this, SLOT(activateAction()));
+    connect(cryA, SIGNAL(activated()), this, SLOT(actionActivated()));
 
     kickA = new Action("org.qt.policykit.examples.kick", this);
     kickA->setText("Kick... (long)");
@@ -60,24 +63,30 @@ PkExample::PkExample(QMainWindow *parent)
     menuActions->addAction(kickA);
     toolBar->addAction(kickA);
     connect(kickA, SIGNAL(triggered(bool)), this, SLOT(activateAction()));
+    connect(kickA, SIGNAL(activated()), this, SLOT(actionActivated()));
 
     deleteA = new Action("org.qt.policykit.examples.delete", this);
     deleteA->setText("Delete!");
     menuActions->addAction(deleteA);
     toolBar->addAction(deleteA);
     connect(deleteA, SIGNAL(triggered(bool)), this, SLOT(activateAction()));
+    connect(deleteA, SIGNAL(activated()), this, SLOT(actionActivated()));
 
     bleedA = new Action("org.qt.policykit.examples.bleed", this);
     bleedA->setText("Bleed!");
     menuActions->addAction(bleedA);
     toolBar->addAction(bleedA);
     connect(bleedA, SIGNAL(triggered(bool)), this, SLOT(activateAction()));
+    connect(bleedA, SIGNAL(activated()), this, SLOT(actionActivated()));
 
-    blowUpA = new Action("org.qt.policykit.examples.blow-up", this);
-    blowUpA->setText("Click to make changes...");
-    menuActions->addAction(blowUpA);
-    toolBar->addAction(blowUpA);
-    connect(blowUpA, SIGNAL(triggered(bool)), this, SLOT(activateAction()));
+    listenA = new Action("org.qt.policykit.examples.listen", this);
+    listenA->setText("Click to make changes...");
+    listenA->setCheckable(true);
+    listenA->setChecked(true);
+    menuActions->addAction(listenA);
+    toolBar->addAction(listenA);
+    connect(listenA, SIGNAL(triggered(bool)), this, SLOT(activateAction()));
+    connect(listenA, SIGNAL(activated()), this, SLOT(actionActivated()));
 }
 
 PkExample::~PkExample()
@@ -86,6 +95,48 @@ PkExample::~PkExample()
 
 void PkExample::activateAction()
 {
-    Action *action = (Action *) sender();
+    Action *action = (Action *) sender(); 
     action->activate(winId());
+}
+
+void PkExample::actionActivated()
+{
+    Action *action = (Action *) sender();
+
+    PolKitCaller *pk_caller;
+    PolKitAction *pk_action;
+    PolKitResult pk_result;
+    DBusError dbus_error;
+
+    if (action->is("org.qt.policykit.examples.listen")) {
+        qDebug() <<"org.qt.policykit.examples.listen";
+        action->revoke();
+    }
+
+    qDebug() << "pretending to be the mechanism for action:" << action->actionId();
+
+    pk_action = action->polkitAction();
+
+    dbus_error_init (&dbus_error);
+    pk_caller = polkit_tracker_get_caller_from_pid (Context::instance()->getPolKitTracker(),
+                                                    getpid (),
+                                                    &dbus_error);
+    if (pk_caller == NULL) {
+        qWarning() << "Cannot get PolKitCaller object for ourselves "
+                      "(pid=" << getpid() << "): " << dbus_error.name << ": " << dbus_error.message;
+        dbus_error_free (&dbus_error);
+    } else {
+        /* note how we pass #TRUE to revoke_if_one_shot - this is because we're
+            * pretending to be the mechanism
+            */
+        pk_result = polkit_context_is_caller_authorized (Context::instance()->getPolKitContext(),
+                                                            pk_action,
+                                                            pk_caller,
+                                                            TRUE,
+                                                            NULL);
+
+        polkit_caller_unref (pk_caller);
+    }
+
+    polkit_action_unref (pk_action);
 }

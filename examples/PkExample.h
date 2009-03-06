@@ -20,7 +20,7 @@
 #ifndef PKEXAMPLE_H
 #define PKEXAMPLE_H
 
-#include "Action"
+#include <Action>
 
 #include "ui_PkExample.h"
 
@@ -38,10 +38,11 @@ private:
     PolkitQt::Action *kickA;
     PolkitQt::Action *deleteA;
     PolkitQt::Action *bleedA;
-    PolkitQt::Action *blowUpA;
+    PolkitQt::Action *listenA;
 
 private slots:
     void activateAction();
+    void actionActivated();
 };
 
 

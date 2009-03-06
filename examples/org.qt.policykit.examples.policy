@@ -1,24 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <!DOCTYPE policyconfig PUBLIC
  "-//freedesktop//DTD PolicyKit Policy Configuration 1.0//EN"
  "http://www.freedesktop.org/standards/PolicyKit/1.0/policyconfig.dtd">
-
-<!--
-Policy definitions for PolicyKit-Qt example program
-
-(C) 2009 Lukas Appelhans
-
-NOTE: If you make changes to this file, make sure to validate the file
-using the polkit-policy-file-validate(1) tool. Changes made to this
-file are instantly applied.
--->
-
 <policyconfig>
 
   <action id="org.qt.policykit.examples.cry">
-    <_description>Cry</_description>
-    <_message>Prevents PolicyKit-Qt example from crying</_message>
+    <description>Cry</description>
+    <message>Prevents PolicyKit-Qt example from crying</message>
     <defaults>
       <allow_inactive>no</allow_inactive>
       <allow_active>auth_self_one_shot</allow_active>
@@ -26,8 +14,8 @@ file are instantly applied.
   </action>
 
   <action id="org.qt.policykit.examples.play">
-    <_description>Play</_description>
-    <_message>Prevents PolicyKit-Qt example from playing</_message>
+    <description>Play</description>
+    <message>Prevents PolicyKit-Qt example from playing</message>
     <defaults>
       <allow_inactive>no</allow_inactive>
       <allow_active>auth_self</allow_active>
@@ -35,8 +23,8 @@ file are instantly applied.
   </action>
 
   <action id="org.qt.policykit.examples.kick">
-    <_description>Kick</_description>
-    <_message>Prevents PolicyKit-Qt example from kicking</_message>
+    <description>Kick</description>
+    <message>Prevents PolicyKit-Qt example from kicking</message>
     <defaults>
       <allow_inactive>no</allow_inactive>
       <allow_active>auth_admin</allow_active>
@@ -44,8 +32,8 @@ file are instantly applied.
   </action>
 
   <action id="org.qt.policykit.examples.delete">
-    <_description>Delete</_description>
-    <_message>Prevents PolicyKit-Qt example from deleting</_message>
+    <description>Delete</description>
+    <message>Prevents PolicyKit-Qt example from deleting</message>
     <defaults>
       <allow_inactive>no</allow_inactive>
       <allow_active>auth_admin_keep_always</allow_active>
@@ -53,8 +41,8 @@ file are instantly applied.
   </action>
 
   <action id="org.qt.policykit.examples.bleed">
-    <_description>Bleed</_description>
-    <_message>Prevents PolicyKit-Qt example from bleeding</_message>
+    <description>Bleed</description>
+    <message>Prevents PolicyKit-Qt example from bleeding</message>
     <defaults>
       <allow_inactive>no</allow_inactive>
       <allow_active>auth_self_keep_session</allow_active>
@@ -62,8 +50,8 @@ file are instantly applied.
   </action>
 
   <action id="org.qt.policykit.examples.listen">
-    <_description>Listen</_description>
-    <_message>Prevents PolicyKit-Qt example from listening</_message>
+    <description>Listen</description>
+    <message>Prevents PolicyKit-Qt example from listening</message>
     <defaults>
       <allow_inactive>no</allow_inactive>
       <allow_active>auth_admin_keep_always</allow_active>
@@ -71,8 +59,8 @@ file are instantly applied.
   </action>
 
   <action id="org.qt.policykit.examples.shout">
-    <_description>Shout</_description>
-    <_message>Prevents PolicyKit-Qt example from shouting</_message>
+    <description>Shout</description>
+    <message>Prevents PolicyKit-Qt example from shouting</message>
     <defaults>
       <allow_inactive>no</allow_inactive>
       <allow_active>auth_self</allow_active>
@@ -81,8 +69,8 @@ file are instantly applied.
   </action>
 
   <action id="org.qt.policykit.examples.push">
-    <_description>Push</_description>
-    <_message>Prevents PolicyKit-Qt example from pushing</_message>
+    <description>Push</description>
+    <message>Prevents PolicyKit-Qt example from pushing</message>
     <defaults>
       <allow_inactive>no</allow_inactive>
       <allow_active>auth_self</allow_active>
@@ -91,8 +79,8 @@ file are instantly applied.
   </action>
 
   <action id="org.qt.policykit.examples.blow-up">
-    <_description>Blow Up</_description>
-    <_message>Prevents PolicyKit-Qt example from blowing up</_message>
+    <description>Blow Up</description>
+    <message>Prevents PolicyKit-Qt example from blowing up</message>
     <defaults>
       <allow_inactive>no</allow_inactive>
       <allow_active>auth_self</allow_active>

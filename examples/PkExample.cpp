@@ -38,6 +38,7 @@ PkExample::PkExample(QMainWindow *parent)
     bt = new ActionButton(playPB, "org.qt.policykit.examples.play", this);
     // Here we are setting the text to all four states an action might have
     bt->setText("Play!");
+    playPB->setIcon(QPixmap(":/Icons/action-locked-default.png"));
     // As ActionButton is also an Action we cast it to add to menu
     menuActions->addAction(qobject_cast<Action*>(bt));
     toolBar->addAction(qobject_cast<Action*>(bt));

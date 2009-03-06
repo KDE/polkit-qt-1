@@ -131,17 +131,7 @@ bool Action::activate(WId winId)
     switch (d->pkResult) {
     case POLKIT_RESULT_YES:
         // If PolicyKit says yes.. emit the 'activated' signal
-//         if (isCheckable()) {
-//             toggle();
-//         }
         emit activated();
-        // lets revoke after so the user connected to activated()
-        // can do the right thing
-//         if (isCheckable()) {
-//             toggle();
-
-//             emit dataChanged();
-//         }
         return true;
         break;
 
@@ -182,9 +172,6 @@ bool Action::activate(WId winId)
              * Hence, they probably have a good reason for doing
              * this so do let the 'activate' signal propagate..
              */
-//             if (isCheckable()) {
-//                 toggle();
-//             }
             emit activated();
             return true;
         }

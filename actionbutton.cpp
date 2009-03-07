@@ -44,20 +44,14 @@ void ActionButton::updateButton()
 {
     d->button->setVisible(isVisible());
     d->button->setEnabled(isEnabled());
-    // We check for Null to see if the user
-    // never set anything as "" is not NULL
-    if (!text().isNull()) {
-        d->button->setText(text());
-    }
+    d->button->setText(text());
     if (!toolTip().isNull()) {
         d->button->setToolTip(toolTip());
     }
     if (!whatsThis().isNull()) {
         d->button->setWhatsThis(whatsThis());
     }
-    if (!icon().isNull()) {
-        d->button->setIcon(icon());
-    }
+    d->button->setIcon(icon());
     // if the item cannot do the action anymore
     // lets revert to the initial state
     if (d->button->isCheckable()) {

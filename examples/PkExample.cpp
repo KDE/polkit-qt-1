@@ -38,7 +38,7 @@ PkExample::PkExample(QMainWindow *parent)
     bt = new ActionButton(playPB, "org.qt.policykit.examples.play", this);
     // Here we are setting the text to all four states an action might have
     bt->setText("Play!");
-    playPB->setIcon(QPixmap(":/Icons/action-locked-default.png"));
+    bt->setAuthIcon(QPixmap(":/Icons/action-locked-default.png"));
     // As ActionButton is also an Action we cast it to add to menu
     menuActions->addAction(qobject_cast<Action*>(bt));
     toolBar->addAction(qobject_cast<Action*>(bt));
@@ -55,6 +55,7 @@ PkExample::PkExample(QMainWindow *parent)
 
     bt = new ActionButton(cryPB, "org.qt.policykit.examples.cry", this);
     bt->setText("Cry!");
+    bt->setAuthIcon(QPixmap(":/Icons/action-locked-default.png"));
     menuActions->addAction(qobject_cast<Action*>(bt));
     toolBar->addAction(qobject_cast<Action*>(bt));
     connect(bt, SIGNAL(triggered(bool)), this, SLOT(activateAction()));
@@ -68,16 +69,19 @@ PkExample::PkExample(QMainWindow *parent)
     bt->setNoVisible(true);
     bt->setNoEnabled(true);
     bt->setNoText("Kick (long)");
+    bt->setNoIcon(QPixmap(":/Icons/custom-no.png"));
     bt->setNoToolTip("If your admin wasn't annoying, you could do this");
     // here we set the behavior of PolKitResul = Auth
     bt->setAuthVisible(true);
     bt->setAuthEnabled(true);
     bt->setAuthText("Kick... (long)");
+    bt->setAuthIcon(QPixmap(":/Icons/action-locked-default.png"));
     bt->setAuthToolTip("Only card carrying tweakers can do this!");
     // here we set the behavior of PolKitResul = Yes
     bt->setYesVisible(true);
     bt->setYesEnabled(true);
     bt->setYesText("Kick! (long)");
+    bt->setYesIcon(QPixmap(":/Icons/custom-yes.png"));
     bt->setYesToolTip("Go ahead, kick kick kick!");
 
     menuActions->addAction(qobject_cast<Action*>(bt));
@@ -88,6 +92,7 @@ PkExample::PkExample(QMainWindow *parent)
 
     bt = new ActionButton(deletePB, "org.qt.policykit.examples.delete", this);
     bt->setText("Delete!");
+    bt->setAuthIcon(QPixmap(":/Icons/action-locked-default.png"));
     menuActions->addAction(qobject_cast<Action*>(bt));
     toolBar->addAction(qobject_cast<Action*>(bt));
     connect(bt, SIGNAL(triggered(bool)), this, SLOT(activateAction()));
@@ -96,6 +101,7 @@ PkExample::PkExample(QMainWindow *parent)
 
     bt = new ActionButton(bleedPB, "org.qt.policykit.examples.bleed", this);
     bt->setText("Bleed!");
+    bt->setAuthIcon(QPixmap(":/Icons/action-locked-default.png"));
     menuActions->addAction(qobject_cast<Action*>(bt));
     toolBar->addAction(qobject_cast<Action*>(bt));
     connect(bt, SIGNAL(triggered(bool)), this, SLOT(activateAction()));
@@ -103,6 +109,8 @@ PkExample::PkExample(QMainWindow *parent)
     connect(bt, SIGNAL(activated()), this, SLOT(actionActivated()));
 
     bt = new ActionButton(listenPB, "org.qt.policykit.examples.listen", this);
+    bt->setIcon(QPixmap(":/Icons/action-locked.png"));
+    bt->setYesIcon(QPixmap(":/Icons/action-unlocked.png"));
     bt->setText("Click to make changes...");
     // this example is pretty diferent, here we have a checkable
     // QAbstractButton, the setCheckable(true) was set in the ui

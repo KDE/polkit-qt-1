@@ -217,6 +217,8 @@ void Action::Private::updateAction()
             }
             if (!selfBlockedIcon.isNull()) {
                 qobject_cast<QAction*>(parent)->setIcon(selfBlockedIcon);
+            } else {
+                qobject_cast<QAction*>(parent)->setIcon(noIcon);
             }
         } else {
             parent->setVisible(noVisible && masterVisible);
@@ -228,9 +230,7 @@ void Action::Private::updateAction()
             if (!noToolTip.isNull()) {
                 qobject_cast<QAction*>(parent)->setToolTip(noToolTip);
             }
-            if (!noIcon.isNull()) {
-                qobject_cast<QAction*>(parent)->setIcon(noIcon);
-            }
+            qobject_cast<QAction*>(parent)->setIcon(noIcon);
         }
         if (parent->isCheckable()) {
             qobject_cast<QAction*>(parent)->setChecked(initiallyChecked);
@@ -254,9 +254,7 @@ void Action::Private::updateAction()
         if (!authToolTip.isNull()) {
             qobject_cast<QAction*>(parent)->setToolTip(authToolTip);
         }
-        if (!authIcon.isNull()) {
-            qobject_cast<QAction*>(parent)->setIcon(authIcon);
-        }
+        qobject_cast<QAction*>(parent)->setIcon(authIcon);
         if (parent->isCheckable()) {
             qobject_cast<QAction*>(parent)->setChecked(initiallyChecked);
         }
@@ -272,9 +270,7 @@ void Action::Private::updateAction()
         if (!yesToolTip.isNull()) {
             qobject_cast<QAction*>(parent)->setToolTip(yesToolTip);
         }
-        if (!yesIcon.isNull()) {
-            qobject_cast<QAction*>(parent)->setIcon(yesIcon);
-        }
+        qobject_cast<QAction*>(parent)->setIcon(yesIcon);
         if (parent->isCheckable()) {
             qobject_cast<QAction*>(parent)->setChecked(!initiallyChecked);
         }

@@ -122,8 +122,8 @@ PkExample::PkExample(QMainWindow *parent)
     // of above.
     menuActions->addAction(qobject_cast<Action*>(bt));
     toolBar->addAction(qobject_cast<Action*>(bt));
-    connect(bt, SIGNAL(triggered(bool)), this, SLOT(activateAction()));
-    connect(bt, SIGNAL(clicked(QAbstractButton*,bool)), bt, SLOT(activate()));
+    connect(bt, SIGNAL(triggered(bool)), this, SLOT(activateAction(bool)));
+    connect(bt, SIGNAL(clicked(QAbstractButton*,bool)), this, SLOT(activateAction(QAbstractButton*,bool)));
     connect(bt, SIGNAL(activated()), this, SLOT(actionActivated()));
 }
 
@@ -144,6 +144,30 @@ void PkExample::activateAction()
     // calling activate with winId() makes the auth dialog
     // be correct parented with you application.
     action->activate(winId());
+}
+
+void PkExample::activateAction(bool checked)
+{
+    // Here we cast the sender() to an Action and call activate()
+    // on it.
+    // Be careful in doing the same for ActionButton won't work as expected
+    // as action->activate() is calling Action::activate() and
+    // not ActionButton::activate which are different.
+    // You can cast then to ActionButton but be careful:
+    // an Action casted to ActionButton may crash you app
+    Action *action = qobject_cast<Action*>(sender());
+    if (checked) {
+    // calling activate with winId() makes the auth dialog
+    // be correct parented with you application.
+        action->activate(winId());
+    } else {
+        action->revoke();
+    }
+}
+
+void PkExample::activateAction(QAbstractButton *, bool checked)
+{
+    activateAction(checked);
 }
 
 void PkExample::actionActivated()

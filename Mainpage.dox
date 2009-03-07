@@ -14,14 +14,66 @@ that lets you integrate those two components easily with PolicyKit.
 
 
 
-\page polkitqt_exampl Polkit-qt usage example
+\page polkitqt_example Polkit-qt usage example
 
-At the moment we are still creating some sample code. In the meanwhile,
-you can have a look at the PolicyKit-KDE source, that makes extensive
-use of this library.
+You can find an example usage of Polkit-qt in the examples/ dir. You can
+build it by passing \c -DBUILD_EXAMPLES=TRUE to your cmake line. The structure
+consists of a .ui file and a main class, to demonstrate how easy it is to integrate
+PolicyKit support in an existing application. Let's see some details about it:
 
+\code
+bt = new ActionButton(kickPB, "org.qt.policykit.examples.kick", this);
+bt->setText("Kick... (long)");
+// here we set the behavior of PolKitResul = No
+bt->setNoVisible(true);
+bt->setNoEnabled(true);
+bt->setNoText("Kick (long)");
+bt->setNoIcon(QPixmap(":/Icons/custom-no.png"));
+bt->setNoToolTip("If your admin wasn't annoying, you could do this");
+// here we set the behavior of PolKitResul = Auth
+bt->setAuthVisible(true);
+bt->setAuthEnabled(true);
+bt->setAuthText("Kick... (long)");
+bt->setAuthIcon(QPixmap(":/Icons/action-locked-default.png"));
+bt->setAuthToolTip("Only card carrying tweakers can do this!");
+// here we set the behavior of PolKitResul = Yes
+bt->setYesVisible(true);
+bt->setYesEnabled(true);
+bt->setYesText("Kick! (long)");
+bt->setYesIcon(QPixmap(":/Icons/custom-yes.png"));
+bt->setYesToolTip("Go ahead, kick kick kick!");
+\endcode
 
+This small paragraph sets up an action button using an existing button defined in the
+UI file, \c kickPB . As you can see, you can set custom properties on your button depending
+on the action status/result. The code is mostly self-explainatory
 
+\code
+bt = new ActionButtons(QList<QAbstractButton*>() << listenPB << listenCB,
+                           "org.qt.policykit.examples.listen", this);
+bt->setIcon(QPixmap(":/Icons/action-locked.png"));
+bt->setYesIcon(QPixmap(":/Icons/action-unlocked.png"));
+bt->setText("Click to make changes...");
+\endcode
+
+This demonstrates the use of ActionButtons, that lets you associate multiple buttons with a
+single action with extreme ease. \c listenPB and \c listenCB, both defined in the ui file,
+are kept in sync with the action.
+
+\code
+connect(bt, SIGNAL(triggered(bool)), this, SLOT(activateAction()));
+connect(bt, SIGNAL(clicked(QAbstractButton*,bool)), bt, SLOT(activate()));
+connect(bt, SIGNAL(activated()), this, SLOT(actionActivated()));
+\endcode
+
+Those three signals are all you need to control the action and the activation. Action::triggered()
+lets you start the activation/revoke when needed, ActionButton::clicked() lets you do the same thing
+with even more ease, just by manually connecting the signal to ActionButton::activate() (see the docs
+to understand why this connection doesn't happen automatically), and Action::activated() signal notifies
+you when PolicyKit has authorized you to perform the action.
+
+As you can see, usage of Polkit-Qt is extremely simple. Have a look at the complete example
+and to the API Docs for more details.
 
 
 */

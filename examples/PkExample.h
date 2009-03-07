@@ -32,6 +32,8 @@ public:
 
 private slots:
     void activateAction();
+    void activateAction(bool checked);
+    void activateAction(QAbstractButton *, bool checked);
     void actionActivated();
 };
 

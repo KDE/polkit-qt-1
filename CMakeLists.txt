@@ -35,6 +35,7 @@ set(polkit_qt_LIB_SRCS
     auth.cpp
     context.cpp
     actionbutton.cpp
+    actionbuttons.cpp
 )
 
 SET(polkit_qt_MOC_HDRS
@@ -42,6 +43,7 @@ SET(polkit_qt_MOC_HDRS
     auth.h
     context.h
     actionbutton.h
+    actionbuttons.h
 )
 
 QT4_WRAP_CPP(polkit_qt_MOC_SRCS ${polkit_qt_MOC_HDRS})
@@ -71,11 +73,13 @@ install(FILES
 	auth.h
 	context.h
 	actionbutton.h
-        export.h
+	actionbuttons.h
+    export.h
 	includes/Action
 	includes/Auth
 	includes/Context
 	includes/ActionButton
+	includes/ActionButtons
 	DESTINATION
 	${INCLUDE_INSTALL_DIR}/PolicyKit/polkit-qt COMPONENT Devel)
 

@@ -31,6 +31,7 @@
 namespace PolkitQt
 {
 
+class ActionButtonPrivate;
 /**
  * \class ActionButton actionbutton.h ActionButton
  * \author Daniel Nicoletti <dantti85-pk@yahoo.com.br>
@@ -50,13 +51,15 @@ namespace PolkitQt
 class POLKIT_QT_EXPORT ActionButton : public Action
 {
     Q_OBJECT
+    Q_DECLARE_PRIVATE(ActionButton)
+
 public:
     /**
      * Constructs a new ActionButton. You need to pass this
      * constructor an existing QAbstractButton, whose properties
      * will be modified according to the underlying Action
      * object. As ActionButton inherits from Action, you can
-     * define your button behavior right through this wrapper.
+     * define your button's behavior right through this wrapper.
      *
      * \see Action
      *
@@ -107,20 +110,30 @@ public Q_SLOTS:
 Q_SIGNALS:
     /**
      * Emitted when the abstract button clicked(bool) signal
-     * is emited. This allows you to use qobject_cast<ActionButton*>(sender())
+     * is emitted. This allows you to use qobject_cast<ActionButton*>(sender())
      * in a slot connected to this signal and call activate() on it.
      *
      * \note you will normally want to connect this signal
      * to the activate slot.
+     *
+     * \param button the button that has been clicked
+     * \param checked the checked state, if applicable. Otherwise \c false
+     *
      */
-    void clicked(bool checked = false);
+    void clicked(QAbstractButton *button, bool checked = false);
 
 private Q_SLOTS:
     void updateButton();
+    void streamClicked(bool);
 
-private:
-    class Private;
-    Private * const d;
+protected:
+    ActionButton(ActionButtonPrivate &dd, const QString &actionId, QObject *parent = 0);
+    // Public reimplementation in ActionButtons
+    void addButton(QAbstractButton *button);
+    void removeButton(QAbstractButton *button);
+
+protected:
+    ActionButtonPrivate * d_ptr;
 };
 
 

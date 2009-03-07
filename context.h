@@ -40,7 +40,7 @@ class QSocketNotifier;
  * \namespace PolkitQt PolkitQt
  *
  * \brief Namespace wrapping Polkit-Qt classes
- * 
+ *
  * This namespace wraps all Polkit-Qt classes.
  */
 namespace PolkitQt
@@ -71,7 +71,7 @@ public:
      *
      * Returns the current instance of Context. Call this function whenever
      * you need to access the Context class.
-     * 
+     *
      * \note Context is a singleton. Memory is handled by polkit-qt, so you just
      * need to call this function to get a working instance of Context.
      * Don't delete the object after having used it.
@@ -100,7 +100,7 @@ public:
      * it through Polkit-qt (which is quite likely, since you are calling
      * this function), DO NOT use any PolicyKit API's specific method that
      * modifies the instance on it, unless you're completely aware of what you're doing and
-     * of the possible consequencies. Use this instance only to gather informations.
+     * of the possible consequencies. Use this instance only to gather information.
      *
      * \return the current PolKitContext instance
      */
@@ -111,7 +111,7 @@ public:
      * it through Polkit-qt (which is quite likely, since you are calling
      * this function), DO NOT use any PolicyKit API's specific method that
      * modifies the instance on it, unless you're completely aware of what you're doing and
-     * of the possible consequencies. Use this instance only to gather informations.
+     * of the possible consequencies. Use this instance only to gather information.
      *
      * \return the current PolKitTracker instance
      */

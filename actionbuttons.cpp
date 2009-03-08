@@ -34,16 +34,16 @@ ActionButtons::~ActionButtons()
 {
 }
 
-void ActionButtons::setButtons(QList<QAbstractButton*> buttons)
+void ActionButtons::setButtons(const QList<QAbstractButton*> &buttons)
 {
     foreach (QAbstractButton *ent, buttons) {
         addButton(ent);
     }
 }
 
-QList<QAbstractButton*> ActionButtons::buttons()
+QList<QAbstractButton*> ActionButtons::buttons() const
 {
-    Q_D(ActionButtons);
+    Q_D(const ActionButtons);
 
     return d->buttons;
 }

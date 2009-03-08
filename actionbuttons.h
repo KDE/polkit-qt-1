@@ -76,14 +76,14 @@ class ActionButtons : public ActionButton
          *
          * \param buttons the new buttons associated with the underlying action
          */
-        void setButtons(QList<QAbstractButton*> buttons);
+        void setButtons(const QList<QAbstractButton*> &buttons);
 
         /**
          * Returns the current buttons list
          *
          * \return the buttons currently associated with the underlying action
          */
-        QList<QAbstractButton*> buttons();
+        QList<QAbstractButton*> buttons() const;
 
         /**
          * Adds a button to the current button list. The button's properties

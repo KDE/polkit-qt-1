@@ -65,6 +65,7 @@ namespace PolkitQt
 class POLKIT_QT_EXPORT Context : public QObject
 {
     Q_OBJECT
+    Q_DISABLE_COPY(Context)
 public:
     /**
      * \brief Returns the instance of Context

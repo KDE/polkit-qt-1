@@ -53,6 +53,7 @@ namespace PolkitQt
 class POLKIT_QT_EXPORT Action : public QAction
 {
     Q_OBJECT
+    Q_DISABLE_COPY(Action)
 public:
     /**
      * Constructs a new Action item

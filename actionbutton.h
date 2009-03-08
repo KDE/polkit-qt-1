@@ -52,6 +52,7 @@ class POLKIT_QT_EXPORT ActionButton : public Action
 {
     Q_OBJECT
     Q_DECLARE_PRIVATE(ActionButton)
+    Q_DISABLE_COPY(ActionButton)
 
 public:
     /**

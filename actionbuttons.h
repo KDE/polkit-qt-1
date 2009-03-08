@@ -44,6 +44,7 @@ class ActionButtons : public ActionButton
 {
     Q_OBJECT
     Q_DECLARE_PRIVATE(ActionButtons)
+    Q_DISABLE_COPY(ActionButtons)
 
     public:
         /**

@@ -32,5 +32,5 @@ add_executable(polkit-example
     ${qtsourceview_RC_SRCS}
 )
 
-target_link_libraries(polkit-example ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} polkit-qt)
+target_link_libraries(polkit-example ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} polkit-qt-gui polkit-qt-core)
 

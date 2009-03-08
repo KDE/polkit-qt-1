@@ -30,43 +30,67 @@ set(MINOR_POLKIT_QT_VERSION "9")
 set(PATCH_POLKIT_QT_VERSION "0")
 set(POLKIT_QT_VERSION_STRING "${MAJOR_POLKIT_QT_VERSION}.${MINOR_POLKIT_QT_VERSION}.${PATCH_POLKIT_QT_VERSION}")
 
-set(polkit_qt_LIB_SRCS
-    action.cpp
+set(polkit_qt_core_LIB_SRCS
     auth.cpp
     context.cpp
+)
+
+set(polkit_qt_gui_LIB_SRCS
+    action.cpp
     actionbutton.cpp
     actionbuttons.cpp
 )
 
-SET(polkit_qt_MOC_HDRS
-    action.h
+SET(polkit_qt_core_MOC_HDRS
     auth.h
     context.h
+)
+
+SET(polkit_qt_gui_MOC_HDRS
+    action.h
     actionbutton.h
     actionbuttons.h
 )
 
-QT4_WRAP_CPP(polkit_qt_MOC_SRCS ${polkit_qt_MOC_HDRS})
-QT4_AUTOMOC(${polkit_qt_SRCS})
+QT4_WRAP_CPP(polkit_qt_core_MOC_SRCS ${polkit_qt_core_MOC_HDRS})
+QT4_WRAP_CPP(polkit_qt_gui_MOC_SRCS ${polkit_qt_gui_MOC_HDRS})
+QT4_AUTOMOC(${polkit_qt_core_SRCS})
+QT4_AUTOMOC(${polkit_qt_gui_SRCS})
 
-add_library(polkit-qt SHARED ${polkit_qt_LIB_SRCS} ${polkit_qt_MOC_SRCS})
+add_library(polkit-qt-core SHARED ${polkit_qt_core_LIB_SRCS} ${polkit_qt_core_MOC_SRCS})
+add_library(polkit-qt-gui SHARED ${polkit_qt_gui_LIB_SRCS} ${polkit_qt_gui_MOC_SRCS})
 
-target_link_libraries(polkit-qt
+target_link_libraries(polkit-qt-core
  	${POLKITDBUS_LIBRARIES}
  	${POLKITGRANT_LIBRARIES}
 	${QT_QTCORE_LIBRARY}
-	${QT_QTGUI_LIBRARY}
 	${QT_QTDBUS_LIBRARY}
 	${QT_QTXML_LIBRARY}
 	${POLKIT_LIBRARIES}
 )
 
-set_target_properties(polkit-qt PROPERTIES VERSION ${MAJOR_POLKIT_QT_VERSION}.${MINOR_POLKIT_QT_VERSION}.${PATCH_POLKIT_QT_VERSION}
+target_link_libraries(polkit-qt-gui
+ 	${POLKITDBUS_LIBRARIES}
+ 	${POLKITGRANT_LIBRARIES}
+	${QT_QTCORE_LIBRARY}
+	${QT_QTGUI_LIBRARY}
+	${QT_QTDBUS_LIBRARY}
+	${POLKIT_LIBRARIES}
+)
+
+set_target_properties(polkit-qt-core PROPERTIES VERSION ${MAJOR_POLKIT_QT_VERSION}.${MINOR_POLKIT_QT_VERSION}.${PATCH_POLKIT_QT_VERSION}
                                 SOVERSION ${MAJOR_POLKIT_QT_VERSION}
                                 DEFINE_SYMBOL MAKE_POLKIT_QT_LIB
                       )
                       
-install(TARGETS polkit-qt ${INSTALL_TARGETS_DEFAULT_ARGS})
+set_target_properties(polkit-qt-gui PROPERTIES VERSION ${MAJOR_POLKIT_QT_VERSION}.${MINOR_POLKIT_QT_VERSION}.${PATCH_POLKIT_QT_VERSION}
+                                SOVERSION ${MAJOR_POLKIT_QT_VERSION}
+                                DEFINE_SYMBOL MAKE_POLKIT_QT_LIB
+                      )
+                      
+install(TARGETS polkit-qt-core ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS polkit-qt-gui ${INSTALL_TARGETS_DEFAULT_ARGS})
+
 
 install(FILES
 	action.h

@@ -153,6 +153,7 @@ private:
     Context(QObject *parent = 0);
 
     class Private;
+    friend class Private;
     Private * const d;
 };
 

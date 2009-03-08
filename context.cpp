@@ -58,12 +58,14 @@ class Context::Private
 {
 public:
     // Polkit will return NULL on failures, hence we use it instead of 0
-    Private() : pkContext(NULL)
+    Private(Context *qq) : q(qq)
+            , pkContext(NULL)
             , pkTracker(NULL)
             , m_hasError(false) {};
 
     void init();
 
+    Context *q;
     PolKitContext *pkContext;
     PolKitTracker *pkTracker;
     bool m_hasError;
@@ -82,7 +84,7 @@ public:
 
 Context::Context(QObject *parent)
         : QObject(parent)
-        , d(new Private())
+        , d(new Private(this))
 {
     Q_ASSERT(!s_globalContext()->q);
     s_globalContext()->q = this;

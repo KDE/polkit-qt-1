@@ -190,7 +190,7 @@ void PkExample::actionActivated()
 
     // As debug message says we are pretending to be the mechanism for the
     // following action, here you will actually call your DBus helper that
-    // will run as root (not setuid is needed see DBus docs).
+    // will run as root (setuid is not needed, see DBus docs).
     // In the helper application you will issue isCallerAuthorized,
     // passing the action id, the caller pid (which DBus will tell you) and
     // revokeIfOneShot = true as OneShot actions requires that the helper
@@ -201,7 +201,7 @@ void PkExample::actionActivated()
 
     // note how we pass true to revokeIfOneShot - this is because we're
     // pretending to be the mechanism
-    if (Auth::isCallerAuthorized(action->actionId(), (uint) QCoreApplication::applicationPid(), true)) {
+    if (Auth::isCallerAuthorized(action->actionId(), static_cast<uint>(QCoreApplication::applicationPid()), true)) {
         // in the helper you will do the action
         qDebug() << "caller is authorized to do:" << action->actionId();
     } else {

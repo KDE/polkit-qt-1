@@ -44,10 +44,10 @@ namespace PolkitQt
  * given action.
  *
  * Most of the times, you would want to use this class combined
- * with a QAbstractButton. In this case, you can use the more 
+ * with a QAbstractButton. In this case, you can use the more
  * comfortable ActionButton class that manages button's properties
  * update for you.
- * 
+ *
  * \see ActionButton
  */
 class POLKIT_QT_EXPORT Action : public QAction
@@ -153,7 +153,7 @@ public:
      * This function allows you to override PolicyKit settings
      * about visibility. You can set this to \c false to force
      * invisibility without caring about what PolicyKit reports.
-     * 
+     *
      * \param value \c false if you want to force invisibility
      */
     void setMasterVisible(bool value);
@@ -167,7 +167,7 @@ public:
      * This function allows you to override PolicyKit settings
      * about availability. You can set this to \c false to force
      * the action being disabled without caring about what PolicyKit reports.
-     * 
+     *
      * \param value \c false if you want to force the action to be disabled
      */
     void setMasterEnabled(bool value);
@@ -209,7 +209,7 @@ public:
 
     /**
      * This function is used to modify the visibility of the
-     * action in case PolicyKit evaluates the result as 'no' 
+     * action in case PolicyKit evaluates the result as 'no'
      * because the user has a self-granted negative authorization.
      *
      * \param value \c true if the action should be visible
@@ -224,7 +224,7 @@ public:
 
     /**
      * This function is used to modify the availability of the
-     * action in case PolicyKit evaluates the result as 'no' 
+     * action in case PolicyKit evaluates the result as 'no'
      * because the user has a self-granted negative authorization.
      *
      * \param value \c true if the action should be enabled
@@ -239,7 +239,7 @@ public:
 
     /**
      * This function is used to modify the text of the
-     * action in case PolicyKit evaluates the result as 'no' 
+     * action in case PolicyKit evaluates the result as 'no'
      * because the user has a self-granted negative authorization.
      *
      * \param text the text the action should display in this case
@@ -253,7 +253,7 @@ public:
 
     /**
      * This function is used to modify the tooltip of the
-     * action in case PolicyKit evaluates the result as 'no' 
+     * action in case PolicyKit evaluates the result as 'no'
      * because the user has a self-granted negative authorization.
      *
      * \param toolTip the tooltip the action should display in this case
@@ -267,7 +267,7 @@ public:
 
     /**
      * This function is used to modify the whatsthis of the
-     * action in case PolicyKit evaluates the result as 'no' 
+     * action in case PolicyKit evaluates the result as 'no'
      * because the user has a self-granted negative authorization.
      *
      * \param whatsThis the whatsthis the action should display in this case
@@ -281,7 +281,7 @@ public:
 
     /**
      * This function is used to modify the icon of the
-     * action in case PolicyKit evaluates the result as 'no' 
+     * action in case PolicyKit evaluates the result as 'no'
      * because the user has a self-granted negative authorization.
      *
      * \see setIcon
@@ -591,9 +591,6 @@ private Q_SLOTS:
     void configChanged();
 
 private:
-    static polkit_bool_t auth_foreach_revoke(PolKitAuthorizationDB *authdb,
-                                             PolKitAuthorization   *auth,
-                                             void                  *user_data);
     class Private;
     Private * const d;
 };

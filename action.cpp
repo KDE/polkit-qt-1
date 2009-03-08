@@ -40,8 +40,11 @@ public:
     PolKitResult  pkResult;
     uint          targetPID;
 
-    void         updateAction();
-    bool         computePkResult();
+    void                 updateAction();
+    bool                 computePkResult();
+    static polkit_bool_t auth_foreach_revoke(PolKitAuthorizationDB *authdb,
+                                                 PolKitAuthorization   *auth,
+                                                 void                  *user_data);
 
     bool    initiallyChecked;
 
@@ -405,7 +408,7 @@ void Action::revoke()
             polkit_authorization_db_foreach_for_action_for_uid(authdb,
                                                                d->pkAction,
                                                                getuid(),
-                                                               auth_foreach_revoke,
+                                                               Private::auth_foreach_revoke,
                                                                &num_auths_revoked,
                                                                &pk_error);
             if (pk_error != NULL) {
@@ -435,7 +438,7 @@ void Action::revoke()
     }
 }
 
-polkit_bool_t Action::auth_foreach_revoke(PolKitAuthorizationDB *authdb,
+polkit_bool_t Action::Private::auth_foreach_revoke(PolKitAuthorizationDB *authdb,
                                           PolKitAuthorization   *auth,
                                           void                  *user_data)
 {

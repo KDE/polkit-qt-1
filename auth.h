@@ -99,24 +99,6 @@ namespace Auth
      * \note The \c pid parameter refers to the caller. You can retrieve this through
      *              DBus.
      *
-     * \param actionId the Id of the action in question
-     * \param pid the pid of the caller we want to check authorization for
-     * \param revokeIfOneShot \c true  if we're carrying out the action, so we want the auth
-     *                                 to be revoked right after
-     *                        \c false if we're not carrying out the action, so we don't want
-     *                                 the auth to be revoked right after
-     *
-     * \return \c POLKIT_RESULT_YES if the caller is authorized and the action should be performed
-     *         \c otherwise if the caller was not authorized and the action should not be performed,
-     *                      or an error has occurred
-     *
-     */
-    POLKIT_QT_EXPORT PolKitResult isCallerAuthorized(const QString &actionId, uint pid, bool revokeIfOneShot);
-
-    /**
-     * Convenience overload. Lets you use isCallerAuthorized with a PolKitAction instead of a simple
-     * action Id.
-     *
      * \param action the PolKitAction in question
      * \param pid the pid of the caller we want to check authorization for
      * \param revokeIfOneShot \c true  if we're carrying out the action, so we want the auth
@@ -127,8 +109,59 @@ namespace Auth
      * \return \c POLKIT_RESULT_YES if the caller is authorized and the action should be performed
      *         \c otherwise if the caller was not authorized and the action should not be performed,
      *                      or an error has occurred
+     *
      */
     POLKIT_QT_EXPORT PolKitResult isCallerAuthorized(PolKitAction *action, pid_t pid, bool revokeIfOneShot);
+
+    /**
+     * Convenience overload. Lets you use isCallerAuthorized with a QString instead of a PolKitAction.
+     *
+     * \param actionId the Id of the action in question
+     * \param pid the pid of the caller we want to check authorization for
+     * \param revokeIfOneShot \c true  if we're carrying out the action, so we want the auth
+     *                                 to be revoked right after
+     *                        \c false if we're not carrying out the action, so we don't want
+     *                                 the auth to be revoked right after
+     *
+     * \return \c POLKIT_RESULT_YES if the caller is authorized and the action should be performed
+     *         \c otherwise if the caller was not authorized and the action should not be performed,
+     *                      or an error has occurred
+     */
+    POLKIT_QT_EXPORT PolKitResult isCallerAuthorized(const QString &actionId, uint pid, bool revokeIfOneShot);
+
+    /**
+     * Same as above. Lets you use isCallerAuthorized with a QString DBus name instead of the
+     * PID.
+     *
+     * \param actionId the Id of the action in question
+     * \param dbusName unique name on the system message bus
+     * \param revokeIfOneShot \c true  if we're carrying out the action, so we want the auth
+     *                                 to be revoked right after
+     *                        \c false if we're not carrying out the action, so we don't want
+     *                                 the auth to be revoked right after
+     *
+     * \return \c POLKIT_RESULT_YES if the caller is authorized and the action should be performed
+     *         \c otherwise if the caller was not authorized and the action should not be performed,
+     *                      or an error has occurred
+     */
+    POLKIT_QT_EXPORT PolKitResult isCallerAuthorized(const QString &actionId, const QString &dbusName, bool revokeIfOneShot);
+
+    /**
+     * Same as above. Lets you use isCallerAuthorized with a QString DBus name instead of the
+     * PID.
+     *
+     * \param action the PolKitAction in question
+     * \param dbusName unique name on the system message bus
+     * \param revokeIfOneShot \c true  if we're carrying out the action, so we want the auth
+     *                                 to be revoked right after
+     *                        \c false if we're not carrying out the action, so we don't want
+     *                                 the auth to be revoked right after
+     *
+     * \return \c POLKIT_RESULT_YES if the caller is authorized and the action should be performed
+     *         \c otherwise if the caller was not authorized and the action should not be performed,
+     *                      or an error has occurred
+     */
+    POLKIT_QT_EXPORT PolKitResult isCallerAuthorized(PolKitAction *action, const QString &dbusName, bool revokeIfOneShot);
 }
 
 }

@@ -135,3 +135,36 @@ PolKitResult Auth::isCallerAuthorized(PolKitAction *action, pid_t pid, bool revo
 
     return pk_result;
 }
+
+PolKitResult Auth::isCallerAuthorized(PolKitAction *action, const QString &dbusName, bool revokeIfOneShot)
+{
+    PolKitCaller *pk_caller;
+    PolKitResult pk_result;
+    DBusError dbus_error;
+
+    if (Context::instance()->hasError()) {
+        return pk_result = POLKIT_RESULT_UNKNOWN;
+    }
+
+    dbus_error_init (&dbus_error);
+    pk_caller = polkit_tracker_get_caller_from_dbus_name(Context::instance()->getPolKitTracker(),
+                                                         dbusName.toLatin1().data(),
+                                                         &dbus_error);
+    if (pk_caller == NULL) {
+        qWarning("Cannot get PolKitCaller object for DBus name (dbusName=%d): %s: %s",
+                 dbusName, dbus_error.name, dbus_error.message);
+        dbus_error_free(&dbus_error);
+
+        // this is bad so cop-out to UKNOWN
+        pk_result = POLKIT_RESULT_UNKNOWN;
+    } else {
+        pk_result = polkit_context_is_caller_authorized (Context::instance()->getPolKitContext(),
+                                                        action,
+                                                        pk_caller,
+                                                        revokeIfOneShot,
+                                                        NULL);
+        polkit_caller_unref (pk_caller);
+    }
+
+    return pk_result;
+}

@@ -29,6 +29,8 @@ ActionButton::ActionButton(QAbstractButton *button, const QString &actionId, QOb
         : Action(actionId, parent)
         , d_ptr(new ActionButtonPrivate(QList<QAbstractButton*>() << button))
 {
+    d_ptr->q_ptr = this;
+
     setButton(button);
     connect(this, SIGNAL(dataChanged()), SLOT(updateButton()));
 }
@@ -37,6 +39,8 @@ ActionButton::ActionButton(ActionButtonPrivate &dd, const QString &actionId, QOb
         : Action(actionId, parent)
         , d_ptr(&dd)
 {
+    d_ptr->q_ptr = this;
+
     connect(this, SIGNAL(dataChanged()), SLOT(updateButton()));
 }
 

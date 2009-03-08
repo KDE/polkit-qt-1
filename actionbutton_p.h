@@ -31,6 +31,9 @@ public:
             : buttons(b) {};
     virtual ~ActionButtonPrivate() {}
 
+    Q_DECLARE_PUBLIC(ActionButton)
+    ActionButton *q_ptr;
+
     QList<QAbstractButton*> buttons;
 };
 

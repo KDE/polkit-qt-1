@@ -42,6 +42,7 @@ public:
 
     void                 updateAction();
     bool                 computePkResult();
+    void                 configChanged();
     static polkit_bool_t auth_foreach_revoke(PolKitAuthorizationDB *authdb,
                                                  PolKitAuthorization   *auth,
                                                  void                  *user_data);
@@ -282,12 +283,12 @@ void Action::Private::updateAction()
     emit parent->dataChanged();
 }
 
-void Action::configChanged()
+void Action::Private::configChanged()
 {
     bool result_changed;
-    result_changed = d->computePkResult();
+    result_changed = computePkResult();
     if (result_changed) {
-        d->updateAction();
+        updateAction();
     }
 }
 
@@ -762,3 +763,5 @@ bool Action::masterEnabled() const
 {
     return d->masterEnabled;
 }
+
+#include "moc_action.cpp"

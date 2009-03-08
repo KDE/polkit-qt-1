@@ -7,6 +7,7 @@ set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules")
 SET(QT_MIN_VERSION "4.4.0")
 
 FIND_PACKAGE(Qt4 REQUIRED)
+find_package(Automoc4 REQUIRED)
 
 include (${QT_USE_FILE})
 include (FindPkgConfig)
@@ -19,6 +20,7 @@ pkg_check_modules (POLKITGRANT REQUIRED polkit-grant>=0.8)
 MESSAGE(STATUS " ${POLKIT_INCLUDE_DIRS} ===========")
 
 include_directories(
+      ${CMAKE_CURRENT_BINARY_DIR}
       ${POLKIT_INCLUDE_DIRS}
       ${POLKITDBUS_INCLUDE_DIRS}
       ${CMAKE_CURRENT_SOURCE_DIR}
@@ -30,35 +32,19 @@ set(MINOR_POLKIT_QT_VERSION "9")
 set(PATCH_POLKIT_QT_VERSION "0")
 set(POLKIT_QT_VERSION_STRING "${MAJOR_POLKIT_QT_VERSION}.${MINOR_POLKIT_QT_VERSION}.${PATCH_POLKIT_QT_VERSION}")
 
-set(polkit_qt_core_LIB_SRCS
+set(polkit_qt_core_SRCS
     auth.cpp
     context.cpp
 )
 
-set(polkit_qt_gui_LIB_SRCS
+set(polkit_qt_gui_SRCS
     action.cpp
     actionbutton.cpp
     actionbuttons.cpp
 )
 
-SET(polkit_qt_core_MOC_HDRS
-    auth.h
-    context.h
-)
-
-SET(polkit_qt_gui_MOC_HDRS
-    action.h
-    actionbutton.h
-    actionbuttons.h
-)
-
-QT4_WRAP_CPP(polkit_qt_core_MOC_SRCS ${polkit_qt_core_MOC_HDRS})
-QT4_WRAP_CPP(polkit_qt_gui_MOC_SRCS ${polkit_qt_gui_MOC_HDRS})
-QT4_AUTOMOC(${polkit_qt_core_SRCS})
-QT4_AUTOMOC(${polkit_qt_gui_SRCS})
-
-add_library(polkit-qt-core SHARED ${polkit_qt_core_LIB_SRCS} ${polkit_qt_core_MOC_SRCS})
-add_library(polkit-qt-gui SHARED ${polkit_qt_gui_LIB_SRCS} ${polkit_qt_gui_MOC_SRCS})
+automoc4_add_library(polkit-qt-core SHARED ${polkit_qt_core_SRCS})
+automoc4_add_library(polkit-qt-gui SHARED ${polkit_qt_gui_SRCS})
 
 target_link_libraries(polkit-qt-core
  	${POLKITDBUS_LIBRARIES}

@@ -35,7 +35,7 @@ PkExample::PkExample(QMainWindow *parent)
     ActionButton *bt;
 
     // Here we create an ActionButton that is a subclass of Action
-    // allways pass a QAbstractButton pointer and action id
+    // always pass a QAbstractButton pointer and action id
     // You can change the action id later if you want
     bt = new ActionButton(playPB, "org.qt.policykit.examples.play", this);
     // Here we are setting the text to all four states an action might have
@@ -202,7 +202,7 @@ void PkExample::actionActivated()
     // note how we pass true to revokeIfOneShot - this is because we're
     // pretending to be the mechanism
     PolKitResult result;
-    result == Auth::isCallerAuthorized(action->actionId(), static_cast<uint>(QCoreApplication::applicationPid()), true);
+    result = Auth::isCallerAuthorized(action->actionId(), static_cast<uint>(QCoreApplication::applicationPid()), true);
     if (result == POLKIT_RESULT_YES) {
         // in the helper you will do the action
         qDebug() << "caller is authorized to do:" << action->actionId();

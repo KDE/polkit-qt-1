@@ -19,8 +19,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef POLKIT_QT_ACTION_BUTTON_H
-#define POLKIT_QT_ACTION_BUTTON_H
+#ifndef POLKIT_QT_ACTIONBUTTON_H
+#define POLKIT_QT_ACTIONBUTTON_H
 
 #include "export.h"
 #include "action.h"

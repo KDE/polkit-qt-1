@@ -50,10 +50,14 @@ QList<QAbstractButton*> ActionButtons::buttons() const
 
 void ActionButtons::addButton(QAbstractButton *button)
 {
-    ActionButton::addButton(button);
+    Q_D(ActionButtons);
+
+    d->addButton(button);
 }
 
 void ActionButtons::removeButton(QAbstractButton *button)
 {
-    ActionButton::removeButton(button);
+    Q_D(ActionButtons);
+
+    d->removeButton(button);
 }

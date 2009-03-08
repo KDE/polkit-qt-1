@@ -130,9 +130,6 @@ private Q_SLOTS:
 
 protected:
     ActionButton(ActionButtonPrivate &dd, const QString &actionId, QObject *parent = 0);
-    // Public reimplementation in ActionButtons
-    void addButton(QAbstractButton *button);
-    void removeButton(QAbstractButton *button);
 
 protected:
     ActionButtonPrivate * d_ptr;

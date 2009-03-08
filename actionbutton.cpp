@@ -94,45 +94,45 @@ void ActionButton::setButton(QAbstractButton *button)
 
     // First, let's clear the list
     foreach (QAbstractButton *ent, d->buttons) {
-        removeButton(ent);
+        d->removeButton(ent);
     }
 
     // And then add it
-    addButton(button);
+    d->addButton(button);
 }
 
-void ActionButton::addButton(QAbstractButton *button)
+void ActionButtonPrivate::addButton(QAbstractButton *button)
 {
-    Q_D(ActionButton);
+    Q_Q(ActionButton);
 
-    d->buttons.append(button);
-    connect(button, SIGNAL(clicked(bool)), this, SLOT(streamClicked(bool)));
-    connect(this, SIGNAL(toggled(bool)), button, SLOT(toggle()));
-    if (isCheckable()) {
+    buttons.append(button);
+    QObject::connect(button, SIGNAL(clicked(bool)), q, SLOT(streamClicked(bool)));
+    QObject::connect(q, SIGNAL(toggled(bool)), button, SLOT(toggle()));
+    if (q->isCheckable()) {
         // the button should follow our first buttons
         button->setCheckable(true);
     } else if (button->isCheckable()) {
         // if we are not checkable BUT the button
         // is (eg a QCheckBox) we should set all buttons to
         // checkable.
-        foreach (QAbstractButton *ent, d->buttons) {
+        foreach (QAbstractButton *ent, buttons) {
             ent->setCheckable(true);
         }
         // set the checkable state of Action to store the initial state
-        setCheckable(true);
+        q->setCheckable(true);
     }
     // call this after m_activateOnCheck receives the value
-    updateButton();
+    q->updateButton();
 }
 
-void ActionButton::removeButton(QAbstractButton *button)
+void ActionButtonPrivate::removeButton(QAbstractButton *button)
 {
-    Q_D(ActionButton);
+    Q_Q(ActionButton);
 
-    if (d->buttons.contains(button)) {
-        disconnect(button, SIGNAL(clicked(bool)), this, SLOT(streamClicked(bool)));
-        disconnect(this, SIGNAL(toggled(bool)), button, SLOT(toggle()));
-        d->buttons.removeOne(button);
+    if (buttons.contains(button)) {
+        QObject::disconnect(button, SIGNAL(clicked(bool)), q, SLOT(streamClicked(bool)));
+        QObject::disconnect(q, SIGNAL(toggled(bool)), button, SLOT(toggle()));
+        buttons.removeOne(button);
     }
 }
 

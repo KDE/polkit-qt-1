@@ -31,6 +31,9 @@ public:
             : buttons(b) {};
     virtual ~ActionButtonPrivate() {}
 
+    void addButton(QAbstractButton *button);
+    void removeButton(QAbstractButton *button);
+
     Q_DECLARE_PUBLIC(ActionButton)
     ActionButton *q_ptr;
 

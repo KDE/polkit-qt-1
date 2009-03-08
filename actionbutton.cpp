@@ -132,9 +132,9 @@ void ActionButton::removeButton(QAbstractButton *button)
     }
 }
 
-QAbstractButton *ActionButton::button()
+QAbstractButton *ActionButton::button() const
 {
-    Q_D(ActionButton);
+    Q_D(const ActionButton);
 
     return d->buttons.first();
 }

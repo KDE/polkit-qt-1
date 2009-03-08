@@ -90,7 +90,7 @@ public:
      *
      * \return the button currently associated with the underlying action
      */
-    QAbstractButton *button();
+    QAbstractButton *button() const;
 
 public Q_SLOTS:
     /**

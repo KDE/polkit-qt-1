@@ -44,25 +44,25 @@ ActionButton::ActionButton(ActionButtonPrivate &dd, const QString &actionId, QOb
     connect(this, SIGNAL(dataChanged()), SLOT(updateButton()));
 }
 
-void ActionButton::updateButton()
+void ActionButtonPrivate::updateButton()
 {
-    Q_D(ActionButton);
+    Q_Q(ActionButton);
 
-    foreach (QAbstractButton *ent, d->buttons) {
-        ent->setVisible(isVisible());
-        ent->setEnabled(isEnabled());
-        ent->setText(text());
-        if (!toolTip().isNull()) {
-            ent->setToolTip(toolTip());
+    foreach (QAbstractButton *ent, buttons) {
+        ent->setVisible(q->isVisible());
+        ent->setEnabled(q->isEnabled());
+        ent->setText(q->text());
+        if (!q->toolTip().isNull()) {
+            ent->setToolTip(q->toolTip());
         }
-        if (!whatsThis().isNull()) {
-            ent->setWhatsThis(whatsThis());
+        if (!q->whatsThis().isNull()) {
+            ent->setWhatsThis(q->whatsThis());
         }
-        ent->setIcon(icon());
+        ent->setIcon(q->icon());
         // if the item cannot do the action anymore
         // lets revert to the initial state
         if (ent->isCheckable()) {
-            ent->setChecked(isChecked());
+            ent->setChecked(q->isChecked());
         }
     }
 }
@@ -122,7 +122,7 @@ void ActionButtonPrivate::addButton(QAbstractButton *button)
         q->setCheckable(true);
     }
     // call this after m_activateOnCheck receives the value
-    q->updateButton();
+    updateButton();
 }
 
 void ActionButtonPrivate::removeButton(QAbstractButton *button)
@@ -143,7 +143,11 @@ QAbstractButton *ActionButton::button() const
     return d->buttons.first();
 }
 
-void ActionButton::streamClicked(bool c)
+void ActionButtonPrivate::streamClicked(bool c)
 {
-    emit clicked(qobject_cast<QAbstractButton*>(sender()), c);
+    Q_Q(ActionButton);
+
+    emit q->clicked(qobject_cast<QAbstractButton*>(q->sender()), c);
 }
+
+#include "moc_actionbutton.cpp"

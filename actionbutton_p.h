@@ -33,6 +33,8 @@ public:
 
     void addButton(QAbstractButton *button);
     void removeButton(QAbstractButton *button);
+    void updateButton();
+    void streamClicked(bool);
 
     Q_DECLARE_PUBLIC(ActionButton)
     ActionButton *q_ptr;

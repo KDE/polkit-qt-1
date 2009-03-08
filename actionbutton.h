@@ -124,15 +124,15 @@ Q_SIGNALS:
      */
     void clicked(QAbstractButton *button, bool checked = false);
 
-private Q_SLOTS:
-    void updateButton();
-    void streamClicked(bool);
-
 protected:
     ActionButton(ActionButtonPrivate &dd, const QString &actionId, QObject *parent = 0);
 
 protected:
     ActionButtonPrivate * d_ptr;
+
+private:
+    Q_PRIVATE_SLOT(d_func(), void updateButton())
+    Q_PRIVATE_SLOT(d_func(), void streamClicked(bool))
 };
 
 

@@ -104,14 +104,20 @@ void ActionButton::addButton(QAbstractButton *button)
 
     d->buttons.append(button);
     connect(button, SIGNAL(clicked(bool)), this, SLOT(streamClicked(bool)));
-    // set the checkable state of Action to store the initial state
-    setCheckable(button->isCheckable());
-    if (button->isCheckable()) {
-        // store the checked state in Action
-        setChecked(button->isChecked());
-        connect(this, SIGNAL(toggled(bool)), button, SLOT(toggle()));
+    connect(this, SIGNAL(toggled(bool)), button, SLOT(toggle()));
+    if (isCheckable()) {
+        // the button should follow our first buttons
+        button->setCheckable(true);
+    } else if (button->isCheckable()) {
+        // if we are not checkable BUT the button
+        // is (eg a QCheckBox) we should set all buttons to
+        // checkable.
+        foreach (QAbstractButton *ent, d->buttons) {
+            ent->setCheckable(true);
+        }
+        // set the checkable state of Action to store the initial state
+        setCheckable(true);
     }
-
     // call this after m_activateOnCheck receives the value
     updateButton();
 }

@@ -124,7 +124,10 @@ void Context::Private::init()
         qWarning() << "Failed to initialize DBus";
     }
 
-    pkContext = polkit_context_new();
+    if (pkContext == NULL) {
+        pkContext = polkit_context_new();
+    }
+
     polkit_context_set_io_watch_functions(pkContext, io_add_watch, io_remove_watch);
     polkit_context_set_config_changed(pkContext, pk_config_changed, Context::instance());
 

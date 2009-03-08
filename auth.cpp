@@ -35,18 +35,6 @@
 
 using namespace PolkitQt;
 
-class Auth::Private
-{
-
-};
-
-Auth::Auth(QObject *parent)
-        : QObject(parent)
-        , d(new Private)
-{
-
-}
-
 bool Auth::computeAndObtainAuth(const QString &actionId, uint winId, uint pid)
 {
     PolKitAction *pkAction = polkit_action_new();

@@ -35,23 +35,14 @@ namespace PolkitQt
  * \class Auth auth.h Auth
  * \author Daniel Nicoletti <dantti85-pk@yahoo.com.br>
  *
- * \brief Class used to obtain authorizations
+ * \brief Functions used to obtain authorizations
  *
- * This class is a simple wrapper around the DBus interface
+ * This namespace contains class is a simple wrapper around the DBus interface
  * org.freedesktop.PolicyKit.AuthenticationAgent to make usage of
  * policykit easier in Qt/KDE worlds
  */
-class POLKIT_QT_EXPORT Auth : public QObject
+namespace Auth
 {
-    Q_OBJECT
-public:
-    /**
-     * Creates a new Auth object
-     *
-     * \param parent the object parent
-     */
-    Auth(QObject *parent = 0);
-
     /**
      * Obtains authorization for the given action regardless of
      * the Action Result.
@@ -67,7 +58,7 @@ public:
      * \return \c true if the user is authorized
      *         \c false if the user is not authorized
      */
-    static bool computeAndObtainAuth(const QString &actionId, uint winId = 0, uint pid = QCoreApplication::applicationPid());
+    POLKIT_QT_EXPORT bool computeAndObtainAuth(const QString &actionId, uint winId = 0, uint pid = QCoreApplication::applicationPid());
 
     /**
      * Obtain authorization for the given action regardless of
@@ -85,7 +76,7 @@ public:
      * \return \c true if the user is authorized
      *         \c false if the user is not authorized
      */
-    static bool obtainAuth(const QString &actionId, uint winId = 0, uint pid = QCoreApplication::applicationPid());
+    POLKIT_QT_EXPORT bool obtainAuth(const QString &actionId, uint winId = 0, uint pid = QCoreApplication::applicationPid());
 
     /**
      * This function should be used by mechanisms (e.g.: helper applications).
@@ -120,7 +111,7 @@ public:
      *                      or an error has occurred
      *
      */
-    static PolKitResult isCallerAuthorized(const QString &actionId, uint pid, bool revokeIfOneShot);
+    POLKIT_QT_EXPORT PolKitResult isCallerAuthorized(const QString &actionId, uint pid, bool revokeIfOneShot);
 
     /**
      * Convenience overload. Lets you use isCallerAuthorized with a PolKitAction instead of a simple
@@ -137,12 +128,8 @@ public:
      *         \c otherwise if the caller was not authorized and the action should not be performed,
      *                      or an error has occurred
      */
-    static PolKitResult isCallerAuthorized(PolKitAction *action, pid_t pid, bool revokeIfOneShot);
-
-private:
-    class Private;
-    Private * const d;
-};
+    POLKIT_QT_EXPORT PolKitResult isCallerAuthorized(PolKitAction *action, pid_t pid, bool revokeIfOneShot);
+}
 
 }
 

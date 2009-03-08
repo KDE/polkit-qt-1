@@ -152,7 +152,7 @@ PolKitResult Auth::isCallerAuthorized(PolKitAction *action, const QString &dbusN
                                                          &dbus_error);
     if (pk_caller == NULL) {
         qWarning("Cannot get PolKitCaller object for DBus name (dbusName=%d): %s: %s",
-                 dbusName, dbus_error.name, dbus_error.message);
+                 qPrintable(dbusName), dbus_error.name, dbus_error.message);
         dbus_error_free(&dbus_error);
 
         // this is bad so cop-out to UKNOWN

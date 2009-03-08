@@ -29,9 +29,6 @@
 #include <QtCore/QObject>
 #include <QtCore/QString>
 
-class QSocketNotifier;
-
-
 /**
  * \namespace PolkitQt PolkitQt
  *
@@ -101,7 +98,7 @@ public:
      *
      * \return the current PolKitContext instance
      */
-    PolKitContext *getPolKitContext();
+    PolKitContext *getPolKitContext() const;
 
     /**
      * Returns the current instance of PolKitTracker. If you are handling
@@ -112,7 +109,7 @@ public:
      *
      * \return the current PolKitTracker instance
      */
-    PolKitTracker *getPolKitTracker();
+    PolKitTracker *getPolKitTracker() const;
 
 Q_SIGNALS:
     /**

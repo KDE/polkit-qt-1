@@ -367,12 +367,12 @@ QStringList Context::Private::getSignals(const QDomDocument &doc)
     return retlist;
 }
 
-PolKitContext *Context::getPolKitContext()
+PolKitContext *Context::getPolKitContext() const
 {
     return d->pkContext;
 }
 
-PolKitTracker *Context::getPolKitTracker()
+PolKitTracker *Context::getPolKitTracker() const
 {
     return d->pkTracker;
 }

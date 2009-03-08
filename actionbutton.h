@@ -129,7 +129,6 @@ Q_SIGNALS:
 protected:
     ActionButton(ActionButtonPrivate &dd, const QString &actionId, QObject *parent = 0);
 
-protected:
     ActionButtonPrivate * d_ptr;
 
 private:

@@ -59,13 +59,13 @@ public:
      *
      * \see Action
      *
-     * \param action_id id of the action in question (i.e. org.freedesktop.policykit.read)
+     * \param actionId id of the action in question (i.e. org.freedesktop.policykit.read)
      * \param winId the X window id for the request (use 0 if there's no window)
      * \param pid Process id of the application in question
      * \return \c true if the user is authorized 
      *         \c false if the user is not authorized
      */
-    static bool computeAndObtainAuth(const QString &action_id, uint winId = 0, uint pid = QCoreApplication::applicationPid());
+    static bool computeAndObtainAuth(const QString &actionId, uint winId = 0, uint pid = QCoreApplication::applicationPid());
 
     /**
      * Obtain authorization for the given action regardless of
@@ -77,13 +77,15 @@ public:
      * 
      * \see computeAndObtainAuth
      *
-     * \param action_id id of the action in question (i.e. org.freedesktop.policykit.read)
+     * \param actionId id of the action in question (i.e. org.freedesktop.policykit.read)
      * \param winId the X window id for the request (use 0 if there's no window)
      * \param pid Process id of the application in question
      * \return \c true if the user is authorized 
      *         \c false if the user is not authorized
      */
-    static bool obtainAuth(const QString &action_id, uint winId = 0, uint pid = QCoreApplication::applicationPid());
+    static bool obtainAuth(const QString &actionId, uint winId = 0, uint pid = QCoreApplication::applicationPid());
+
+    static bool isCallerAuthorized(const QString &actionId, uint pid, bool revokeIfOneShot);
 
 private:
     class Private;

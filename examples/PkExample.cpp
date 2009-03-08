@@ -22,6 +22,7 @@
 #include <ActionButton>
 #include <ActionButtons>
 #include <Context>
+#include <Auth>
 #include <QDebug>
 
 using namespace PolkitQt;
@@ -181,39 +182,31 @@ void PkExample::actionActivated()
     // that might erase your hardrive ;)
     Action *action = qobject_cast<Action*>(sender());
 
-    // Here we have...
-    PolKitCaller *pk_caller;
-    PolKitAction *pk_action;
-    PolKitResult pk_result;
-    DBusError dbus_error;
-
+    // here we don't want to do nothing if the action is listen
     if (action->is("org.qt.policykit.examples.listen")) {
         qDebug() << "toggled for: org.qt.policykit.examples.listen";
         return;
     }
 
+    // As debug message says we are pretending to be the mechanism for the
+    // following action, here you will actually call your DBus helper that
+    // will run as root (not setuid is needed see DBus docs).
+    // In the helper application you will issue isCallerAuthorized,
+    // passing the action id, the caller pid (which DBus will tell you) and
+    // revokeIfOneShot = true as OneShot actions requires that the helper
+    // revoke it after it sees that it's possible to do it, otherwise it
+    // will work forever AND THAT IS NOT WHAT you want! If it's is simple
+    // don't use oneShot in you .policy file ;)
     qDebug() << "pretending to be the mechanism for action:" << action->actionId();
 
-    pk_action = action->polkitAction();
-
-    dbus_error_init (&dbus_error);
-    pk_caller = polkit_tracker_get_caller_from_pid (Context::instance()->getPolKitTracker(),
-                                                    getpid(),
-                                                    &dbus_error);
-    if (pk_caller == NULL) {
-        qWarning() << "Cannot get PolKitCaller object for ourselves "
-                      "(pid=" << getpid() << "): " << dbus_error.name << ": " << dbus_error.message;
-        dbus_error_free (&dbus_error);
+    // note how we pass true to revokeIfOneShot - this is because we're
+    // pretending to be the mechanism
+    if (Auth::isCallerAuthorized(action->actionId(), (uint) QCoreApplication::applicationPid(), true)) {
+        // in the helper you will do the action
+        qDebug() << "caller is authorized to do:" << action->actionId();
     } else {
-        // note how we pass true to revoke_if_one_shot - this is because we're
-        // pretending to be the mechanism
-        pk_result = polkit_context_is_caller_authorized (Context::instance()->getPolKitContext(),
-                                                            pk_action,
-                                                            pk_caller,
-                                                            true,
-                                                            NULL);
-        polkit_caller_unref (pk_caller);
+        // OR return false to the caller then the caller can ask for an auth dialog
+        // or do anything else
+        qDebug() << "caller is NOT authorized to do:" << action->actionId();
     }
-
-    polkit_action_unref (pk_action);
 }

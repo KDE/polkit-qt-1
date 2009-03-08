@@ -24,6 +24,7 @@
 
 #include "auth.h"
 #include "action.h"
+#include "context.h"
 
 #include <limits.h>
 #include <polkit-dbus/polkit-dbus.h>
@@ -49,7 +50,9 @@ Auth::Auth(QObject *parent)
 bool Auth::computeAndObtainAuth(const QString &actionId, uint winId, uint pid)
 {
     PolKitAction *pkAction = polkit_action_new();
-    polkit_action_set_action_id(pkAction, actionId.toAscii().data());
+    if (!polkit_action_set_action_id(pkAction, actionId.toAscii().data())) {
+        return false;
+    }
     PolKitResult result;
     result = Action::computePkResultDirect(pkAction, pid);
     switch (result) {
@@ -95,6 +98,37 @@ bool Auth::obtainAuth(const QString &actionId, uint winId, uint pid)
         return reply.arguments().first().toBool();
     } else if (reply.type() == QDBusMessage::MethodCallMessage) {
         qWarning() << "Message did not receive a reply (timeout by message bus)";
+    }
+    return false;
+}
+
+bool Auth::isCallerAuthorized(const QString &actionId, uint pid, bool revokeIfOneShot)
+{
+    PolKitCaller *pk_caller;
+    PolKitAction *pk_action = polkit_action_new();
+    PolKitResult pk_result;
+    DBusError dbus_error;
+
+    if (!polkit_action_set_action_id(pk_action, actionId.toAscii().data())) {
+        return false;
+    }
+
+    dbus_error_init (&dbus_error);
+    pk_caller = polkit_tracker_get_caller_from_pid(Context::instance()->getPolKitTracker(),
+                                                   pid,
+                                                   &dbus_error);
+    if (pk_caller == NULL) {
+        qWarning() << "Cannot get PolKitCaller object for ourselves "
+                      "(pid=" << getpid() << "): " << dbus_error.name << ": " << dbus_error.message;
+        dbus_error_free (&dbus_error);
+    } else {
+        pk_result = polkit_context_is_caller_authorized (Context::instance()->getPolKitContext(),
+                                                            pk_action,
+                                                            pk_caller,
+                                                            revokeIfOneShot,
+                                                            NULL);
+        polkit_caller_unref (pk_caller);
+        return pk_result == POLKIT_RESULT_YES;
     }
     return false;
 }

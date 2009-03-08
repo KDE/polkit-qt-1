@@ -327,7 +327,7 @@ PolKitResult Action::computePkResultDirect(PolKitAction *action, pid_t pid)
         pk_result = polkit_context_is_caller_authorized(Context::instance()->getPolKitContext(),
                     action,
                     pk_caller,
-                    FALSE,
+                    false, // if true we will revoke it and we just want to know if we are authorized
                     NULL);
     }
 

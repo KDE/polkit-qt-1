@@ -69,6 +69,7 @@ public:
      * \param parent the parent object
      */
     ActionButton(QAbstractButton *button, const QString &actionId, QObject *parent = 0);
+    virtual ~ActionButton();
 
     /**
      * Sets the button associated to the underlying action.

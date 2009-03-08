@@ -44,6 +44,11 @@ ActionButton::ActionButton(ActionButtonPrivate &dd, const QString &actionId, QOb
     connect(this, SIGNAL(dataChanged()), SLOT(updateButton()));
 }
 
+ActionButton::~ActionButton()
+{
+    delete d_ptr;
+}
+
 void ActionButtonPrivate::updateButton()
 {
     Q_Q(ActionButton);

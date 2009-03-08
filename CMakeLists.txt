@@ -110,6 +110,10 @@ install(FILES
 # Pkgconfig
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/polkit-qt.pc.cmake ${CMAKE_CURRENT_BINARY_DIR}/polkit-qt.pc @ONLY)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/polkit-qt.pc DESTINATION ${LIB_INSTALL_DIR}/pkgconfig )
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/polkit-qt-core.pc.cmake ${CMAKE_CURRENT_BINARY_DIR}/polkit-qt-core.pc @ONLY)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/polkit-qt-core.pc DESTINATION ${LIB_INSTALL_DIR}/pkgconfig )
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/polkit-qt-gui.pc.cmake ${CMAKE_CURRENT_BINARY_DIR}/polkit-qt-gui.pc @ONLY)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/polkit-qt-gui.pc DESTINATION ${LIB_INSTALL_DIR}/pkgconfig )
 
 if (BUILD_EXAMPLES)
     add_subdirectory(examples)

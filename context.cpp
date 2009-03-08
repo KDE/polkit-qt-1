@@ -48,10 +48,10 @@ public:
 
 Q_GLOBAL_STATIC(ContextHelper, s_globalContext)
 
-Context *Context::instance()
+Context *Context::instance(PolKitContext *context)
 {
     if (!s_globalContext()->q) {
-        new Context;
+        new Context(context);
     }
 
     return s_globalContext()->q;
@@ -87,12 +87,16 @@ public:
     QStringList getSignals(const QDomDocument &iface);
 };
 
-Context::Context(QObject *parent)
+Context::Context(PolKitContext *context, QObject *parent)
         : QObject(parent)
         , d(new Private(this))
 {
     Q_ASSERT(!s_globalContext()->q);
     s_globalContext()->q = this;
+
+    if (context) {
+        d->pkContext = context;
+    }
 
     d->init();
 }

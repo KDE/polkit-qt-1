@@ -70,9 +70,14 @@ public:
      * need to call this function to get a working instance of Context.
      * Don't delete the object after having used it.
      *
+     * \param context use this if you want to set an explicit PolKitContext. If you
+     *                don't know what this implies, simply ignore the parameter. In case
+     *                you want to use it, be sure of streaming it the first time you call
+     *                this function, otherwise it will have no effect.
+     *
      * \return The current context instance
      */
-    static Context* instance();
+    static Context* instance(PolKitContext *context = 0);
 
     ~Context();
 
@@ -139,7 +144,7 @@ Q_SIGNALS:
     void consoleKitDBChanged();
 
 private:
-    Context(QObject *parent = 0);
+    explicit Context(PolKitContext *context, QObject *parent = 0);
 
     class Private;
     friend class Private;

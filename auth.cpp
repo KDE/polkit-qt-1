@@ -54,7 +54,9 @@ bool Auth::computeAndObtainAuth(const QString &actionId, uint winId, uint pid)
         return false;
     }
     PolKitResult result;
-    result = Action::computePkResultDirect(pkAction, pid);
+    // set revokeIfOneShot to false as we only want to check it,
+    // otherwise we would be revoking one shot actions
+    result = isCallerAuthorized(pkAction, pid, false);
     switch (result) {
     case POLKIT_RESULT_YES:
         // If PolicyKit says yes.. emit the 'activated' signal
@@ -102,15 +104,25 @@ bool Auth::obtainAuth(const QString &actionId, uint winId, uint pid)
     return false;
 }
 
-bool Auth::isCallerAuthorized(const QString &actionId, uint pid, bool revokeIfOneShot)
+PolKitResult Auth::isCallerAuthorized(const QString &actionId, uint pid, bool revokeIfOneShot)
+{
+    PolKitAction *pk_action = polkit_action_new();
+
+    if (!polkit_action_set_action_id(pk_action, actionId.toAscii().data())) {
+        return POLKIT_RESULT_UNKNOWN;
+    }
+
+    return isCallerAuthorized(pk_action, pid, revokeIfOneShot);
+}
+
+PolKitResult Auth::isCallerAuthorized(PolKitAction *action, pid_t pid, bool revokeIfOneShot)
 {
     PolKitCaller *pk_caller;
-    PolKitAction *pk_action = polkit_action_new();
     PolKitResult pk_result;
     DBusError dbus_error;
 
-    if (!polkit_action_set_action_id(pk_action, actionId.toAscii().data())) {
-        return false;
+    if (Context::instance()->hasError()) {
+        return pk_result = POLKIT_RESULT_UNKNOWN;
     }
 
     dbus_error_init (&dbus_error);
@@ -118,17 +130,20 @@ bool Auth::isCallerAuthorized(const QString &actionId, uint pid, bool revokeIfOn
                                                    pid,
                                                    &dbus_error);
     if (pk_caller == NULL) {
-        qWarning() << "Cannot get PolKitCaller object for ourselves "
-                      "(pid=" << getpid() << "): " << dbus_error.name << ": " << dbus_error.message;
-        dbus_error_free (&dbus_error);
+        qWarning("Cannot get PolKitCaller object for target (pid=%d): %s: %s",
+                 pid, dbus_error.name, dbus_error.message);
+        dbus_error_free(&dbus_error);
+
+        // this is bad so cop-out to UKNOWN
+        pk_result = POLKIT_RESULT_UNKNOWN;
     } else {
         pk_result = polkit_context_is_caller_authorized (Context::instance()->getPolKitContext(),
-                                                            pk_action,
-                                                            pk_caller,
-                                                            revokeIfOneShot,
-                                                            NULL);
+                                                        action,
+                                                        pk_caller,
+                                                        revokeIfOneShot,
+                                                        NULL);
         polkit_caller_unref (pk_caller);
-        return pk_result == POLKIT_RESULT_YES;
     }
-    return false;
+
+    return pk_result;
 }

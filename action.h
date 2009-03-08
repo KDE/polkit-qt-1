@@ -559,14 +559,6 @@ public:
     pid_t targetPID();
 
     /**
-     * This method can be used to compute the PolKitResult
-     * of a given action
-     * \param action the PolKitAction in question
-     * \param pid the process id that the action can be requested for
-     */
-    static PolKitResult computePkResultDirect(PolKitAction *action, pid_t pid);
-
-    /**
      * This method can be used to check the if the current action
      * can be performed (i.e. PolKitResult is YES).
      * \note This method does not call the authentication dialog, use

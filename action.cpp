@@ -301,43 +301,12 @@ bool Action::Private::computePkResult()
     if (pkAction == NULL) {
         pkResult = POLKIT_RESULT_YES;
     } else {
-        pkResult = Action::computePkResultDirect(pkAction, parent->targetPID());
+        // set revokeIfOneShot to false as we only want to check it,
+        // otherwise we would be revoking one shot actions
+        pkResult = Auth::isCallerAuthorized(pkAction, parent->targetPID(), false);
     }
 
     return old_result != pkResult;
-}
-
-PolKitResult Action::computePkResultDirect(PolKitAction *action, pid_t pid)
-{
-    PolKitCaller *pk_caller;
-    PolKitResult pk_result;
-    DBusError dbus_error;
-    dbus_error_init(&dbus_error);
-
-    if (Context::instance()->hasError())
-        return pk_result = POLKIT_RESULT_UNKNOWN;
-    pk_caller = polkit_tracker_get_caller_from_pid(Context::instance()->getPolKitTracker(),
-                pid,
-                &dbus_error);
-    if (pk_caller == NULL) {
-        qWarning("Cannot get PolKitCaller object for target (pid=%d): %s: %s",
-                 pid, dbus_error.name, dbus_error.message);
-        dbus_error_free(&dbus_error);
-
-        /* this is bad so cop-out to UKNOWN */
-        pk_result = POLKIT_RESULT_UNKNOWN;
-    } else {
-        pk_result = polkit_context_is_caller_authorized(Context::instance()->getPolKitContext(),
-                    action,
-                    pk_caller,
-                    false, // if true we will revoke it and we just want to know if we are authorized
-                    NULL);
-    }
-
-    if (pk_caller != NULL)
-        polkit_caller_unref(pk_caller);
-
-    return pk_result;
 }
 
 pid_t Action::targetPID()

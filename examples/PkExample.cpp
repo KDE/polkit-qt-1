@@ -201,7 +201,9 @@ void PkExample::actionActivated()
 
     // note how we pass true to revokeIfOneShot - this is because we're
     // pretending to be the mechanism
-    if (Auth::isCallerAuthorized(action->actionId(), static_cast<uint>(QCoreApplication::applicationPid()), true)) {
+    PolKitResult result;
+    result == Auth::isCallerAuthorized(action->actionId(), static_cast<uint>(QCoreApplication::applicationPid()), true);
+    if (result == POLKIT_RESULT_YES) {
         // in the helper you will do the action
         qDebug() << "caller is authorized to do:" << action->actionId();
     } else {

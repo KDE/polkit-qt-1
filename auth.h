@@ -23,6 +23,8 @@
 
 #include "export.h"
 
+#include <polkit/polkit.h>
+
 #include <QtCore/QString>
 #include <QtCore/QCoreApplication>
 
@@ -108,11 +110,13 @@ public:
      *                        \c false if we're not carrying out the action, so we don't want
      *                                 the auth to be revoked right after
      *
-     * \return \c true  if the caller is authorized and the action should be performed
-     *         \c false if the caller was not authorized and the action should not be performed
+     * \return \c POLKIT_RESULT_YES if the caller is authorized and the action should be performed
+     *         \c otherwise if the caller was not authorized and the action should not be performed
      *
      */
-    static bool isCallerAuthorized(const QString &actionId, uint pid, bool revokeIfOneShot);
+    static PolKitResult isCallerAuthorized(const QString &actionId, uint pid, bool revokeIfOneShot);
+
+    static PolKitResult isCallerAuthorized(PolKitAction *action, pid_t pid, bool revokeIfOneShot);
 
 private:
     class Private;

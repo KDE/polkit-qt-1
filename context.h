@@ -28,10 +28,6 @@
 
 #include <QtCore/QObject>
 #include <QtCore/QString>
-#include <QtDBus/QDBusMessage>
-#include <QtDBus/QDBusConnection>
-#include <QtCore/QMap>
-#include <QtXml/QDomDocument>
 
 class QSocketNotifier;
 

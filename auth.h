@@ -89,8 +89,13 @@ public:
 
     /**
      * This function should be used by mechanisms (e.g.: helper applications).
-     * It returns whether the action should be carried out, so if the caller was
-     * actually authorized to perform it. It is CRITICAL that you call this function
+     * It returns the action should be carried out, so if the caller was
+     * actually authorized to perform it. The result is in form of a PolKitResult, so that
+     * you can have more control over the whole process, and detect an eventual error.
+     * Most of the times you simply want to check if the result is == to \c POLKIT_RESULT_YES,
+     * if you don't have specific needs.
+     *
+     * It is CRITICAL that you call this function
      * and check what it returns before doing anything in your helper, since otherwise
      * you could be actually performing an action from an unknown or unauthorized caller.
      *
@@ -111,11 +116,27 @@ public:
      *                                 the auth to be revoked right after
      *
      * \return \c POLKIT_RESULT_YES if the caller is authorized and the action should be performed
-     *         \c otherwise if the caller was not authorized and the action should not be performed
+     *         \c otherwise if the caller was not authorized and the action should not be performed,
+     *                      or an error has occurred
      *
      */
     static PolKitResult isCallerAuthorized(const QString &actionId, uint pid, bool revokeIfOneShot);
 
+    /**
+     * Convenience overload. Lets you use isCallerAuthorized with a PolKitAction instead of a simple
+     * action Id.
+     *
+     * \param action the PolKitAction in question
+     * \param pid the pid of the caller we want to check authorization for
+     * \param revokeIfOneShot \c true  if we're carrying out the action, so we want the auth
+     *                                 to be revoked right after
+     *                        \c false if we're not carrying out the action, so we don't want
+     *                                 the auth to be revoked right after
+     *
+     * \return \c POLKIT_RESULT_YES if the caller is authorized and the action should be performed
+     *         \c otherwise if the caller was not authorized and the action should not be performed,
+     *                      or an error has occurred
+     */
     static PolKitResult isCallerAuthorized(PolKitAction *action, pid_t pid, bool revokeIfOneShot);
 
 private:

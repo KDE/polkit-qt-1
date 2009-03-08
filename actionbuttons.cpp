@@ -24,7 +24,7 @@
 
 using namespace PolkitQt;
 
-ActionButtons::ActionButtons(QList<QAbstractButton*> buttons, const QString &actionId, QObject *parent)
+ActionButtons::ActionButtons(const QList<QAbstractButton*> &buttons, const QString &actionId, QObject *parent)
      : ActionButton(*new ActionButtonsPrivate(buttons), actionId, parent)
 {
     setButtons(buttons);

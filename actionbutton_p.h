@@ -27,7 +27,7 @@
 class PolkitQt::ActionButtonPrivate
 {
 public:
-    ActionButtonPrivate(QList<QAbstractButton*> b)
+    ActionButtonPrivate(const QList<QAbstractButton*> &b)
             : buttons(b) {};
 
     QList<QAbstractButton*> buttons;

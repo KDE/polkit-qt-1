@@ -259,7 +259,7 @@ void Context::Private::dbusFilter(const QDBusMessage &message)
     }
 }
 
-bool Context::hasError()
+bool Context::hasError() const
 {
     if (d->m_hasError) {
         // try init again maybe something get

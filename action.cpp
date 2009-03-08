@@ -310,7 +310,7 @@ bool Action::Private::computePkResult()
     return old_result != pkResult;
 }
 
-pid_t Action::targetPID()
+pid_t Action::targetPID() const
 {
     if (d->targetPID != 0)
         return d->targetPID;

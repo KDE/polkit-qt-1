@@ -557,7 +557,7 @@ public:
     /**
      * \see setTargetPID
      */
-    pid_t targetPID();
+    pid_t targetPID() const;
 
     /**
      * This method can be used to check the if the current action

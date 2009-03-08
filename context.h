@@ -89,7 +89,7 @@ public:
      *
      * \return true if the library is ready, false if an error occurred
      */
-    bool hasError();
+    bool hasError() const;
 
     /**
      * \return the last error message

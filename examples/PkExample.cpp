@@ -122,9 +122,17 @@ PkExample::PkExample(QMainWindow *parent)
     // of above.
     menuActions->addAction(qobject_cast<Action*>(bt));
     toolBar->addAction(qobject_cast<Action*>(bt));
-    connect(bt, SIGNAL(triggered(bool)), this, SLOT(activateAction(bool)));
-    connect(bt, SIGNAL(clicked(QAbstractButton*,bool)), this, SLOT(activateAction(QAbstractButton*,bool)));
-    connect(bt, SIGNAL(activated()), this, SLOT(actionActivated()));
+    connect(bt, SIGNAL(triggered(bool)),
+            this, SLOT(activateCheckableAction()));
+    // We have here a separated slot cause we want to revoke the
+    // action.
+    // Be sure not to cast sender to Action if you do so
+    // you will call the wrong activate slot and it won't work
+    // well with checkable actions
+    connect(bt, SIGNAL(clicked(QAbstractButton*, bool)),
+            this, SLOT(activateCheckableAction()));
+    connect(bt, SIGNAL(activated()),
+            this, SLOT(actionActivated()));
 }
 
 PkExample::~PkExample()
@@ -142,32 +150,28 @@ void PkExample::activateAction()
     // an Action casted to ActionButton may crash you app
     Action *action = qobject_cast<Action*>(sender());
     // calling activate with winId() makes the auth dialog
-    // be correct parented with you application.
+    // be correct parented with your application.
     action->activate(winId());
 }
 
-void PkExample::activateAction(bool checked)
+// activateCheckableAction is only here to revoke the action
+// As the slot above you might not need both of them, just
+// connect to the activat slot of an Action or ActionButton
+void PkExample::activateCheckableAction()
 {
-    // Here we cast the sender() to an Action and call activate()
+    // Here we cast the sender() to an ActionButton and call activate()
     // on it.
-    // Be careful in doing the same for ActionButton won't work as expected
-    // as action->activate() is calling Action::activate() and
-    // not ActionButton::activate which are different.
-    // You can cast then to ActionButton but be careful:
-    // an Action casted to ActionButton may crash you app
-    Action *action = qobject_cast<Action*>(sender());
-    if (checked) {
-    // calling activate with winId() makes the auth dialog
-    // be correct parented with you application.
-        action->activate(winId());
-    } else {
+    // You will probable want to connect it derectly to your app,
+    // here we do this way since we want to revoke the action
+    // if we are granted it
+    ActionButton *action = qobject_cast<ActionButton*>(sender());
+    if (action->isAllowed()) {
         action->revoke();
+    } else {
+        // calling activate with winId() makes the auth dialog
+        // be correct parented with your application.
+        action->activate();
     }
-}
-
-void PkExample::activateAction(QAbstractButton *, bool checked)
-{
-    activateAction(checked);
 }
 
 void PkExample::actionActivated()
@@ -177,6 +181,7 @@ void PkExample::actionActivated()
     // that might erase your hardrive ;)
     Action *action = qobject_cast<Action*>(sender());
 
+    // Here we have...
     PolKitCaller *pk_caller;
     PolKitAction *pk_action;
     PolKitResult pk_result;
@@ -193,7 +198,7 @@ void PkExample::actionActivated()
 
     dbus_error_init (&dbus_error);
     pk_caller = polkit_tracker_get_caller_from_pid (Context::instance()->getPolKitTracker(),
-                                                    getpid (),
+                                                    getpid(),
                                                     &dbus_error);
     if (pk_caller == NULL) {
         qWarning() << "Cannot get PolKitCaller object for ourselves "

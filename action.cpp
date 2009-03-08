@@ -379,7 +379,7 @@ void Action::setPolkitAction(const QString &actionId)
     }
 }
 
-bool Action::canDoAction() const
+bool Action::isAllowed() const
 {
     return d->pkResult == POLKIT_RESULT_YES;
 }

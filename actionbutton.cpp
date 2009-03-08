@@ -68,7 +68,6 @@ bool ActionButton::activate()
     Q_D(ActionButton);
 
     bool tg = false;
-
     foreach (QAbstractButton *ent, d->buttons) {
         if (ent->isCheckable()) {
             // we set the the current Action state

@@ -573,7 +573,7 @@ public:
      *       activate() instead
      * \return \c true if the action can be performed
      */
-    bool canDoAction() const;
+    bool isAllowed() const;
 
     /**
      * This method compares a PolicyKit action Id with the

@@ -104,6 +104,8 @@ public Q_SLOTS:
      * to avoid an infinite loop as this function internally calls setChecked().
      * You can always use the clicked(bool) signal in this class to
      * connect to here.
+     * \warning if you use this class take care to not call Action::activate
+     * otherwise your checkable buttons won't be properly updated.
      */
     bool activate();
 

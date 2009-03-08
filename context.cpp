@@ -64,6 +64,8 @@ public:
             , m_hasError(false) {};
 
     void init();
+    void watchActivatedContext(int fd);
+    void dbusFilter(const QDBusMessage &message);
 
     Context *q;
     PolKitContext *pkContext;
@@ -195,7 +197,7 @@ void Context::Private::init()
     m_hasError = false;
 }
 
-void Context::dbusFilter(const QDBusMessage &message)
+void Context::Private::dbusFilter(const QDBusMessage &message)
 {
     // forward only NameOwnerChanged and ConsoleKit signals to PolkitTracker
     if ((message.type() == QDBusMessage::SignalMessage &&
@@ -251,8 +253,8 @@ void Context::dbusFilter(const QDBusMessage &message)
 
         }
 
-        if (msg && polkit_tracker_dbus_func(d->pkTracker, msg)) {
-            emit consoleKitDBChanged();
+        if (msg && polkit_tracker_dbus_func(pkTracker, msg)) {
+            emit q->consoleKitDBChanged();
         }
     }
 }
@@ -281,11 +283,11 @@ int Context::Private::io_add_watch(PolKitContext *, int fd)
     return fd; // use simply the fd as the unique id for the watch
 }
 
-void Context::watchActivatedContext(int fd)
+void Context::Private::watchActivatedContext(int fd)
 {
-    Q_ASSERT(d->m_watches.contains(fd));
+    Q_ASSERT(m_watches.contains(fd));
 
-    polkit_context_io_func(d->pkContext, fd);
+    polkit_context_io_func(pkContext, fd);
 }
 
 void Context::Private::io_remove_watch(PolKitContext *, int id)
@@ -371,3 +373,5 @@ PolKitTracker *Context::getPolKitTracker()
 {
     return d->pkTracker;
 }
+
+#include "moc_context.cpp"

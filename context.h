@@ -145,16 +145,15 @@ Q_SIGNALS:
      */
     void consoleKitDBChanged();
 
-private Q_SLOTS:
-    void watchActivatedContext(int fd);
-    void dbusFilter(const QDBusMessage &message);
-
 private:
     Context(QObject *parent = 0);
 
     class Private;
     friend class Private;
     Private * const d;
+
+    Q_PRIVATE_SLOT(d, void watchActivatedContext(int fd))
+    Q_PRIVATE_SLOT(d, void dbusFilter(const QDBusMessage &message))
 };
 
 }

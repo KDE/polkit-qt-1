@@ -32,7 +32,7 @@ namespace PolkitQt
 {
 
 /**
- * \class Auth auth.h Auth
+ * \namespace
  * \author Daniel Nicoletti <dantti85-pk@yahoo.com.br>
  *
  * \brief Functions used to obtain authorizations

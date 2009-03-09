@@ -1,0 +1,5 @@
+[D-BUS Service]
+Name=org.qt.policykit.examples
+Exec=@BIN_INSTALL_DIR@/polkit-example-helper
+User=root
+

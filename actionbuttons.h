@@ -56,7 +56,7 @@ class ActionButtons : public ActionButton
          *
          * \see Action
          *
-         * \param button the QAbstractButton to associate to this ActionButton
+         * \param buttons the QAbstractButton to associate to this ActionButton
          * \param actionId the action Id to create the underlying Action
          * \param parent the parent object
          */

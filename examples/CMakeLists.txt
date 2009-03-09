@@ -40,6 +40,20 @@ target_link_libraries(polkit-example
 )
 
 #--------Helper Application
+
+# This macro is defined in FindPolkitQt.cmake
+macro(dbus_add_activation_system_service _sources)
+    #PKGCONFIG_GETVAR(dbus-1 session_bus_services_dir _install_dir)
+    foreach (_i ${_sources})
+        get_filename_component(_service_file ${_i} ABSOLUTE)
+        string(REGEX REPLACE "\\.service.*$" ".service" _output_file ${_i})
+        set(_target ${CMAKE_CURRENT_BINARY_DIR}/${_output_file})
+        configure_file(${_service_file} ${_target})
+        install(FILES ${_target} DESTINATION ${SHARE_INSTALL_PREFIX}/dbus-1/system-services )
+        #install(FILES ${_target} DESTINATION ${_install_dir})
+    endforeach (_i ${ARGN})
+endmacro(dbus_add_activation_system_service _sources)
+
 set(polkit_example_helper_SRCS
     PkExampleHelper.cpp
     mainHelper.cpp
@@ -66,5 +80,9 @@ target_link_libraries(polkit-example-helper
     polkit-qt-core
 )
 
-install(TARGETS polkit-example-helper DESTINATION ${LIBEXEC_INSTALL_DIR})
+install(TARGETS polkit-example-helper DESTINATION ${BIN_INSTALL_DIR})
+
+dbus_add_activation_system_service(org.qt.policykit.examples.service.in)
+
+install(FILES org.qt.policykit.examples.conf DESTINATION ${SYSCONF_INSTALL_DIR}/dbus-1/system.d)
 

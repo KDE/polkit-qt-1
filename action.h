@@ -125,7 +125,7 @@ public:
      *
      * \param actionId The new action ID
      */
-    void setPolkitAction(const QString &actionId);
+    void setPolkitAction(const QString &actionId = QString());
 
     /**
      * Returns the PolKitAction pointer associated
@@ -148,7 +148,7 @@ public:
      * \return The action ID
      *
      */
-    QString       actionId() const;
+    QString actionId() const;
 
     /**
      * This function allows you to override PolicyKit settings

@@ -329,17 +329,24 @@ void Action::setTargetPID(pid_t pid)
 void Action::setPolkitAction(const QString &actionId)
 {
     PolKitAction *pkAction = polkit_action_new();
-    polkit_action_set_action_id(pkAction, actionId.toAscii().data());
-    /* Don't bother updating polkit_action if it's the same
-     * value.. it will just cause a lot of unnecessary work as
-     * we'll recompute the answer via PolicyKit..
-     *
-     * unless it's on the initial call (where priv->polkit_action
-     * is alread NULL) because we need that initial update;
-     */
-    if (!d->pkAction || d->pkAction != pkAction) {
-        if (d->pkAction != NULL)
+    if (actionId.isEmpty() ||
+        !polkit_action_set_action_id(pkAction, actionId.toAscii().data())) {
+        if (d->pkAction != NULL) {
             polkit_action_unref(d->pkAction);
+            d->pkAction = NULL;
+            d->computePkResult();
+            d->updateAction();
+        }
+    // Don't bother updating d->actionId if it's the same
+    // value.. it will just cause a lot of unnecessary work as
+    // we'll recompute the answer via PolicyKit..
+    //
+    // unless it's on the initial call (where d->pkAction
+    // is alread NULL) because we need that initial update;
+    } else if (!d->pkAction || d->actionId != actionId) {
+        if (d->pkAction != NULL) {
+            polkit_action_unref(d->pkAction);
+        }
         if (pkAction != NULL) {
             d->pkAction = polkit_action_ref(pkAction);
             d->actionId = actionId;

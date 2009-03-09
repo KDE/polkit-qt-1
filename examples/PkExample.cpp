@@ -25,6 +25,9 @@
 #include <Auth>
 #include <QDebug>
 
+#include <QtDBus/QDBusMessage>
+#include <QtDBus/QDBusConnection>
+
 using namespace PolkitQt;
 
 PkExample::PkExample(QMainWindow *parent)
@@ -185,6 +188,30 @@ void PkExample::actionActivated()
     // here we don't want to do nothing if the action is listen
     if (action->is("org.qt.policykit.examples.listen")) {
         qDebug() << "toggled for: org.qt.policykit.examples.listen";
+        return;
+    }
+
+    // this is our Special Action that after allowed will call the method
+    if (action->is("org.qt.policykit.examples.play")) {
+        qDebug() << "toggled for: org.qt.policykit.examples.play";
+
+        QDBusMessage message;
+        message = QDBusMessage::createMethodCall("org.qt.policykit.examples",
+                                                 "/",
+                                                 "org.qt.policykit.examples",
+                                                 QLatin1String("play"));
+        QList<QVariant> argumentList;
+        argumentList << qVariantFromValue(QString("Daniel Nicoletti"));
+        message.setArguments(argumentList);
+        // notice the systemBus here..
+        QDBusMessage reply = QDBusConnection::systemBus().call(message);
+        if (reply.type() == QDBusMessage::ReplyMessage
+            && reply.arguments().size() == 1) {
+            // the reply can be anything, here we receive a string
+            qDebug() << reply.arguments().first().toString();
+        } else if (reply.type() == QDBusMessage::MethodCallMessage) {
+            qWarning() << "Message did not receive a reply (timeout by message bus)";
+        }
         return;
     }
 

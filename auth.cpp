@@ -136,7 +136,9 @@ PolKitResult Auth::isCallerAuthorized(PolKitAction *action, pid_t pid, bool revo
     return pk_result;
 }
 
-PolKitResult Auth::isCallerAuthorized(PolKitAction *action, const QString &dbusName, bool revokeIfOneShot)
+PolKitResult Auth::isCallerAuthorized(PolKitAction *action,
+                                      const QString &dbusName,
+                                      bool revokeIfOneShot)
 {
     PolKitCaller *pk_caller;
     PolKitResult pk_result;
@@ -167,4 +169,17 @@ PolKitResult Auth::isCallerAuthorized(PolKitAction *action, const QString &dbusN
     }
 
     return pk_result;
+}
+
+PolKitResult Auth::isCallerAuthorized(const QString &actionId,
+                                      const QString &dbusName,
+                                      bool revokeIfOneShot)
+{
+    PolKitAction *pk_action = polkit_action_new();
+
+    if (!polkit_action_set_action_id(pk_action, actionId.toAscii().data())) {
+        return POLKIT_RESULT_UNKNOWN;
+    }
+
+    return isCallerAuthorized(pk_action, dbusName, revokeIfOneShot);
 }

@@ -1,0 +1,11 @@
+<!DOCTYPE node PUBLIC "-//freedesktop//DTD D-BUS Object Introspection 1.0//EN" "http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd">
+<node>
+   <interface name="org.qt.policykit.examples">
+       <method name="play" >
+           <!-- IN: system user -->
+           <arg direction="in" type="s" name="user" />
+           <!-- OUT: whether the user gained the authorization -->
+           <arg direction="out" type="s" name="shadow_line">
+       </method>
+   </interface>
+</node>

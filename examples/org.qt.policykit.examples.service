@@ -1,0 +1,5 @@
+[D-BUS Service]
+Name=org.qt.policykit.examples
+Exec=/home/daniel/code/packagekit/kde/polkit-qt/build/examples/polkit-example-helper
+User=root
+

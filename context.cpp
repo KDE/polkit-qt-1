@@ -134,7 +134,7 @@ void Context::Private::init()
     pk_error = NULL;
     if (!polkit_context_init(pkContext, &pk_error)) {
         qWarning() << "Failed to initialize PolicyKit context: "
-                   << polkit_error_get_error_message(pk_error);
+        << polkit_error_get_error_message(pk_error);
         m_lastError = polkit_error_get_error_message(pk_error);
         m_hasError  = true;
         if (pkContext != NULL) {
@@ -167,14 +167,14 @@ void Context::Private::init()
     foreach(const QString &sig, sigs) {
 
         if (!QDBusConnection::systemBus().connect("org.freedesktop.ConsoleKit",
-                                                  QString(),
-                                                  QString(),
-                                                  sig,
-                                                  Context::instance(),
-                                                  SLOT(dbusFilter(const QDBusMessage &)))) {
+                QString(),
+                QString(),
+                sig,
+                Context::instance(),
+                SLOT(dbusFilter(const QDBusMessage &)))) {
             qWarning() << "Could not connect to the service bus to listen "
-                          "to the following signals:"
-                       << sigs;
+            "to the following signals:"
+            << sigs;
         }
 
     }

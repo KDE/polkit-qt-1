@@ -44,8 +44,8 @@ public:
     bool                 computePkResult();
     void                 configChanged();
     static polkit_bool_t auth_foreach_revoke(PolKitAuthorizationDB *authdb,
-                                                 PolKitAuthorization   *auth,
-                                                 void                  *user_data);
+            PolKitAuthorization   *auth,
+            void                  *user_data);
 
     bool    initiallyChecked;
 
@@ -330,19 +330,19 @@ void Action::setPolkitAction(const QString &actionId)
 {
     PolKitAction *pkAction = polkit_action_new();
     if (actionId.isEmpty() ||
-        !polkit_action_set_action_id(pkAction, actionId.toAscii().data())) {
+            !polkit_action_set_action_id(pkAction, actionId.toAscii().data())) {
         if (d->pkAction != NULL) {
             polkit_action_unref(d->pkAction);
             d->pkAction = NULL;
             d->computePkResult();
             d->updateAction();
         }
-    // Don't bother updating d->actionId if it's the same
-    // value.. it will just cause a lot of unnecessary work as
-    // we'll recompute the answer via PolicyKit..
-    //
-    // unless it's on the initial call (where d->pkAction
-    // is alread NULL) because we need that initial update;
+        // Don't bother updating d->actionId if it's the same
+        // value.. it will just cause a lot of unnecessary work as
+        // we'll recompute the answer via PolicyKit..
+        //
+        // unless it's on the initial call (where d->pkAction
+        // is alread NULL) because we need that initial update;
     } else if (!d->pkAction || d->actionId != actionId) {
         if (d->pkAction != NULL) {
             polkit_action_unref(d->pkAction);
@@ -383,31 +383,31 @@ void Action::revoke()
             pk_error = NULL;
             num_auths_revoked = 0;
             polkit_authorization_db_foreach_for_action_for_uid(authdb,
-                                                               d->pkAction,
-                                                               getuid(),
-                                                               Private::auth_foreach_revoke,
-                                                               &num_auths_revoked,
-                                                               &pk_error);
+                    d->pkAction,
+                    getuid(),
+                    Private::auth_foreach_revoke,
+                    &num_auths_revoked,
+                    &pk_error);
             if (pk_error != NULL) {
                 qWarning() << "Error removing authorizations: code="
-                           << polkit_error_get_error_code(pk_error) << ": "
-                           << polkit_error_get_error_message(pk_error);
-                polkit_error_free (pk_error);
+                << polkit_error_get_error_code(pk_error) << ": "
+                << polkit_error_get_error_message(pk_error);
+                polkit_error_free(pk_error);
             }
 
             if (pk_error == NULL && num_auths_revoked == 0) {
                 // no authorizations, yet we are authorized.. "grant" a
                 // negative authorization...
-                if (!polkit_authorization_db_grant_negative_to_uid (
+                if (!polkit_authorization_db_grant_negative_to_uid(
                             authdb,
                             d->pkAction,
                             getuid(),
                             NULL, /* no constraints */
                             &pk_error)) {
                     qWarning() << "Error granting negative auth: code="
-                               << polkit_error_get_error_name(pk_error) << ": "
-                               << polkit_error_get_error_message(pk_error);
-                    polkit_error_free (pk_error);
+                    << polkit_error_get_error_name(pk_error) << ": "
+                    << polkit_error_get_error_message(pk_error);
+                    polkit_error_free(pk_error);
                 }
             }
 
@@ -416,8 +416,8 @@ void Action::revoke()
 }
 
 polkit_bool_t Action::Private::auth_foreach_revoke(PolKitAuthorizationDB *authdb,
-                                          PolKitAuthorization   *auth,
-                                          void                  *user_data)
+        PolKitAuthorization   *auth,
+        void                  *user_data)
 {
     PolKitError *pk_error;
     int *num_auths_revoked = (int *) user_data;
@@ -425,9 +425,9 @@ polkit_bool_t Action::Private::auth_foreach_revoke(PolKitAuthorizationDB *authdb
     pk_error = NULL;
     if (!polkit_authorization_db_revoke_entry(authdb, auth, &pk_error)) {
         qWarning() << "Error revoking authorizations: "
-                    << polkit_error_get_error_name(pk_error) << ": "
-                    << polkit_error_get_error_message(pk_error);
-        polkit_error_free (pk_error);
+        << polkit_error_get_error_name(pk_error) << ": "
+        << polkit_error_get_error_message(pk_error);
+        polkit_error_free(pk_error);
     }
 
     if (num_auths_revoked != NULL) {

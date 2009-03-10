@@ -75,9 +75,9 @@ bool Auth::obtainAuth(const QString &actionId, uint winId, uint pid)
 {
     QDBusMessage message;
     message = QDBusMessage::createMethodCall(PK_NAME,
-                                             PK_PATH,
-                                             PK_INTERFACE,
-                                             QLatin1String("ObtainAuthorization"));
+              PK_PATH,
+              PK_INTERFACE,
+              QLatin1String("ObtainAuthorization"));
     QList<QVariant> argumentList;
     argumentList << qVariantFromValue(actionId) << qVariantFromValue(winId) << qVariantFromValue(pid);
     message.setArguments(argumentList);
@@ -113,10 +113,10 @@ PolKitResult Auth::isCallerAuthorized(PolKitAction *action, pid_t pid, bool revo
         return pk_result = POLKIT_RESULT_UNKNOWN;
     }
 
-    dbus_error_init (&dbus_error);
+    dbus_error_init(&dbus_error);
     pk_caller = polkit_tracker_get_caller_from_pid(Context::instance()->getPolKitTracker(),
-                                                   pid,
-                                                   &dbus_error);
+                pid,
+                &dbus_error);
     if (pk_caller == NULL) {
         qWarning("Cannot get PolKitCaller object for target (pid=%d): %s: %s",
                  pid, dbus_error.name, dbus_error.message);
@@ -125,12 +125,12 @@ PolKitResult Auth::isCallerAuthorized(PolKitAction *action, pid_t pid, bool revo
         // this is bad so cop-out to UKNOWN
         pk_result = POLKIT_RESULT_UNKNOWN;
     } else {
-        pk_result = polkit_context_is_caller_authorized (Context::instance()->getPolKitContext(),
-                                                        action,
-                                                        pk_caller,
-                                                        revokeIfOneShot,
-                                                        NULL);
-        polkit_caller_unref (pk_caller);
+        pk_result = polkit_context_is_caller_authorized(Context::instance()->getPolKitContext(),
+                    action,
+                    pk_caller,
+                    revokeIfOneShot,
+                    NULL);
+        polkit_caller_unref(pk_caller);
     }
 
     return pk_result;
@@ -148,10 +148,10 @@ PolKitResult Auth::isCallerAuthorized(PolKitAction *action,
         return pk_result = POLKIT_RESULT_UNKNOWN;
     }
 
-    dbus_error_init (&dbus_error);
+    dbus_error_init(&dbus_error);
     pk_caller = polkit_tracker_get_caller_from_dbus_name(Context::instance()->getPolKitTracker(),
-                                                         dbusName.toLatin1().data(),
-                                                         &dbus_error);
+                dbusName.toLatin1().data(),
+                &dbus_error);
     if (pk_caller == NULL) {
         qWarning("Cannot get PolKitCaller object for DBus name (dbusName=%d): %s: %s",
                  qPrintable(dbusName), dbus_error.name, dbus_error.message);
@@ -160,12 +160,12 @@ PolKitResult Auth::isCallerAuthorized(PolKitAction *action,
         // this is bad so cop-out to UKNOWN
         pk_result = POLKIT_RESULT_UNKNOWN;
     } else {
-        pk_result = polkit_context_is_caller_authorized (Context::instance()->getPolKitContext(),
-                                                        action,
-                                                        pk_caller,
-                                                        revokeIfOneShot,
-                                                        NULL);
-        polkit_caller_unref (pk_caller);
+        pk_result = polkit_context_is_caller_authorized(Context::instance()->getPolKitContext(),
+                    action,
+                    pk_caller,
+                    revokeIfOneShot,
+                    NULL);
+        polkit_caller_unref(pk_caller);
     }
 
     return pk_result;

@@ -25,7 +25,7 @@
 using namespace PolkitQt;
 
 ActionButtons::ActionButtons(const QList<QAbstractButton*> &buttons, const QString &actionId, QObject *parent)
-     : ActionButton(*new ActionButtonsPrivate(buttons), actionId, parent)
+        : ActionButton(*new ActionButtonsPrivate(buttons), actionId, parent)
 {
     setButtons(buttons);
 }
@@ -36,7 +36,7 @@ ActionButtons::~ActionButtons()
 
 void ActionButtons::setButtons(const QList<QAbstractButton*> &buttons)
 {
-    foreach (QAbstractButton *ent, buttons) {
+    foreach(QAbstractButton *ent, buttons) {
         addButton(ent);
     }
 }

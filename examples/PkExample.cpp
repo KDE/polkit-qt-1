@@ -53,7 +53,7 @@ PkExample::PkExample(QMainWindow *parent)
     // This signal was propagated from the QAbstractButton just for
     // convenience in this case we don't have any benefit but the code
     // look cleaner
-    connect(bt, SIGNAL(clicked(QAbstractButton*,bool)), bt, SLOT(activate()));
+    connect(bt, SIGNAL(clicked(QAbstractButton*, bool)), bt, SLOT(activate()));
     // this is the Action activated signal, it is always emmited whenever
     // someone click and get authorized to do the action
     connect(bt, SIGNAL(activated()), this, SLOT(actionActivated()));
@@ -64,7 +64,7 @@ PkExample::PkExample(QMainWindow *parent)
     menuActions->addAction(qobject_cast<Action*>(bt));
     toolBar->addAction(qobject_cast<Action*>(bt));
     connect(bt, SIGNAL(triggered(bool)), this, SLOT(activateAction()));
-    connect(bt, SIGNAL(clicked(QAbstractButton*,bool)), bt, SLOT(activate()));
+    connect(bt, SIGNAL(clicked(QAbstractButton*, bool)), bt, SLOT(activate()));
     connect(bt, SIGNAL(activated()), this, SLOT(actionActivated()));
 
     // This action is more customized
@@ -92,7 +92,7 @@ PkExample::PkExample(QMainWindow *parent)
     menuActions->addAction(qobject_cast<Action*>(bt));
     toolBar->addAction(qobject_cast<Action*>(bt));
     connect(bt, SIGNAL(triggered(bool)), this, SLOT(activateAction()));
-    connect(bt, SIGNAL(clicked(QAbstractButton*,bool)), bt, SLOT(activate()));
+    connect(bt, SIGNAL(clicked(QAbstractButton*, bool)), bt, SLOT(activate()));
     connect(bt, SIGNAL(activated()), this, SLOT(actionActivated()));
 
     bt = new ActionButton(deletePB, "org.qt.policykit.examples.delete", this);
@@ -101,7 +101,7 @@ PkExample::PkExample(QMainWindow *parent)
     menuActions->addAction(qobject_cast<Action*>(bt));
     toolBar->addAction(qobject_cast<Action*>(bt));
     connect(bt, SIGNAL(triggered(bool)), this, SLOT(activateAction()));
-    connect(bt, SIGNAL(clicked(QAbstractButton*,bool)), bt, SLOT(activate()));
+    connect(bt, SIGNAL(clicked(QAbstractButton*, bool)), bt, SLOT(activate()));
     connect(bt, SIGNAL(activated()), this, SLOT(actionActivated()));
 
     bt = new ActionButton(bleedPB, "org.qt.policykit.examples.bleed", this);
@@ -110,7 +110,7 @@ PkExample::PkExample(QMainWindow *parent)
     menuActions->addAction(qobject_cast<Action*>(bt));
     toolBar->addAction(qobject_cast<Action*>(bt));
     connect(bt, SIGNAL(triggered(bool)), this, SLOT(activateAction()));
-    connect(bt, SIGNAL(clicked(QAbstractButton*,bool)), bt, SLOT(activate()));
+    connect(bt, SIGNAL(clicked(QAbstractButton*, bool)), bt, SLOT(activate()));
     connect(bt, SIGNAL(activated()), this, SLOT(actionActivated()));
 
     bt = new ActionButtons(QList<QAbstractButton*>() << listenPB << listenCB,
@@ -197,16 +197,16 @@ void PkExample::actionActivated()
 
         QDBusMessage message;
         message = QDBusMessage::createMethodCall("org.qt.policykit.examples",
-                                                 "/",
-                                                 "org.qt.policykit.examples",
-                                                 QLatin1String("play"));
+                  "/",
+                  "org.qt.policykit.examples",
+                  QLatin1String("play"));
         QList<QVariant> argumentList;
         argumentList << qVariantFromValue(QString("Daniel Nicoletti"));
         message.setArguments(argumentList);
         // notice the systemBus here..
         QDBusMessage reply = QDBusConnection::systemBus().call(message);
         if (reply.type() == QDBusMessage::ReplyMessage
-            && reply.arguments().size() == 1) {
+                && reply.arguments().size() == 1) {
             // the reply can be anything, here we receive a string
             qDebug() << reply.arguments().first().toString();
         } else if (reply.type() == QDBusMessage::MethodCallMessage) {

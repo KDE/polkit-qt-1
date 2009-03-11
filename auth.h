@@ -28,6 +28,7 @@
 #include <QtCore/QString>
 #include <QtCore/QCoreApplication>
 #include <QProcess>
+#include <qwindowdefs.h>
 
 namespace PolkitQt
 {
@@ -59,7 +60,7 @@ namespace Auth
  * \return \c true if the user is authorized
  *         \c false if the user is not authorized
  */
-POLKIT_QT_EXPORT bool computeAndObtainAuth(const QString &actionId, uint winId = 0, Q_PID pid = QCoreApplication::applicationPid());
+POLKIT_QT_EXPORT bool computeAndObtainAuth(const QString &actionId, WId winId = 0, Q_PID pid = QCoreApplication::applicationPid());
 
 /**
  * Obtain authorization for the given action regardless of
@@ -77,7 +78,7 @@ POLKIT_QT_EXPORT bool computeAndObtainAuth(const QString &actionId, uint winId =
  * \return \c true if the user is authorized
  *         \c false if the user is not authorized
  */
-POLKIT_QT_EXPORT bool obtainAuth(const QString &actionId, uint winId = 0, Q_PID pid = QCoreApplication::applicationPid());
+POLKIT_QT_EXPORT bool obtainAuth(const QString &actionId, WId winId = 0, Q_PID pid = QCoreApplication::applicationPid());
 
 /**
  * This function should be used by mechanisms (e.g.: helper applications).

@@ -35,7 +35,7 @@
 
 using namespace PolkitQt;
 
-bool Auth::computeAndObtainAuth(const QString &actionId, uint winId, Q_PID pid)
+bool Auth::computeAndObtainAuth(const QString &actionId, WId winId, Q_PID pid)
 {
     PolKitAction *pkAction = polkit_action_new();
     if (!polkit_action_set_action_id(pkAction, actionId.toAscii().data())) {
@@ -71,7 +71,7 @@ bool Auth::computeAndObtainAuth(const QString &actionId, uint winId, Q_PID pid)
     }
 }
 
-bool Auth::obtainAuth(const QString &actionId, uint winId, Q_PID pid)
+bool Auth::obtainAuth(const QString &actionId, WId winId, Q_PID pid)
 {
     QDBusMessage message;
     message = QDBusMessage::createMethodCall(PK_NAME,
@@ -79,7 +79,7 @@ bool Auth::obtainAuth(const QString &actionId, uint winId, Q_PID pid)
               PK_INTERFACE,
               QLatin1String("ObtainAuthorization"));
     QList<QVariant> argumentList;
-    argumentList << qVariantFromValue(actionId) << qVariantFromValue(winId) << qVariantFromValue(pid);
+    argumentList << qVariantFromValue(actionId) << qVariantFromValue(uint(winId)) << qVariantFromValue(uint(pid));
     message.setArguments(argumentList);
     // Do a session bus call with BlockWithGui to create an event loop
     // and INT_MAX to get the highier timeout

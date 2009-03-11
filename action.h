@@ -553,12 +553,12 @@ public:
      *
      * \param pid The target process id; 0 if it is the current process
      */
-    void setTargetPID(Q_PID pid);
+    void setTargetPID(qint64 pid);
 
     /**
      * \see setTargetPID
      */
-    Q_PID targetPID() const;
+    qint64 targetPID() const;
 
     /**
      * This method can be used to check the if the current action

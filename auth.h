@@ -60,7 +60,7 @@ namespace Auth
  * \return \c true if the user is authorized
  *         \c false if the user is not authorized
  */
-POLKIT_QT_EXPORT bool computeAndObtainAuth(const QString &actionId, WId winId = 0, Q_PID pid = QCoreApplication::applicationPid());
+POLKIT_QT_EXPORT bool computeAndObtainAuth(const QString &actionId, WId winId = 0, qint64 pid = QCoreApplication::applicationPid());
 
 /**
  * Obtain authorization for the given action regardless of
@@ -78,7 +78,7 @@ POLKIT_QT_EXPORT bool computeAndObtainAuth(const QString &actionId, WId winId = 
  * \return \c true if the user is authorized
  *         \c false if the user is not authorized
  */
-POLKIT_QT_EXPORT bool obtainAuth(const QString &actionId, WId winId = 0, Q_PID pid = QCoreApplication::applicationPid());
+POLKIT_QT_EXPORT bool obtainAuth(const QString &actionId, WId winId = 0, qint64 pid = QCoreApplication::applicationPid());
 
 /**
  * This function should be used by mechanisms (e.g.: helper applications).
@@ -113,7 +113,7 @@ POLKIT_QT_EXPORT bool obtainAuth(const QString &actionId, WId winId = 0, Q_PID p
  *                      or an error has occurred
  *
  */
-POLKIT_QT_EXPORT PolKitResult isCallerAuthorized(PolKitAction *action, Q_PID pid, bool revokeIfOneShot);
+POLKIT_QT_EXPORT PolKitResult isCallerAuthorized(PolKitAction *action, qint64 pid, bool revokeIfOneShot);
 
 /**
  * Convenience overload. Lets you use isCallerAuthorized with a QString instead of a PolKitAction.
@@ -129,7 +129,7 @@ POLKIT_QT_EXPORT PolKitResult isCallerAuthorized(PolKitAction *action, Q_PID pid
  *         \c otherwise if the caller was not authorized and the action should not be performed,
  *                      or an error has occurred
  */
-POLKIT_QT_EXPORT PolKitResult isCallerAuthorized(const QString &actionId, Q_PID pid, bool revokeIfOneShot);
+POLKIT_QT_EXPORT PolKitResult isCallerAuthorized(const QString &actionId, qint64 pid, bool revokeIfOneShot);
 
 /**
  * Same as above. Lets you use isCallerAuthorized with a QString DBus name instead of the

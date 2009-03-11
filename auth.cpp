@@ -35,7 +35,7 @@
 
 using namespace PolkitQt;
 
-bool Auth::computeAndObtainAuth(const QString &actionId, WId winId, Q_PID pid)
+bool Auth::computeAndObtainAuth(const QString &actionId, WId winId, qint64 pid)
 {
     PolKitAction *pkAction = polkit_action_new();
     if (!polkit_action_set_action_id(pkAction, actionId.toAscii().data())) {
@@ -71,7 +71,7 @@ bool Auth::computeAndObtainAuth(const QString &actionId, WId winId, Q_PID pid)
     }
 }
 
-bool Auth::obtainAuth(const QString &actionId, WId winId, Q_PID pid)
+bool Auth::obtainAuth(const QString &actionId, WId winId, qint64 pid)
 {
     QDBusMessage message;
     message = QDBusMessage::createMethodCall(PK_NAME,
@@ -92,7 +92,7 @@ bool Auth::obtainAuth(const QString &actionId, WId winId, Q_PID pid)
     return false;
 }
 
-PolKitResult Auth::isCallerAuthorized(const QString &actionId, Q_PID pid, bool revokeIfOneShot)
+PolKitResult Auth::isCallerAuthorized(const QString &actionId, qint64 pid, bool revokeIfOneShot)
 {
     PolKitAction *pk_action = polkit_action_new();
 
@@ -103,7 +103,7 @@ PolKitResult Auth::isCallerAuthorized(const QString &actionId, Q_PID pid, bool r
     return isCallerAuthorized(pk_action, pid, revokeIfOneShot);
 }
 
-PolKitResult Auth::isCallerAuthorized(PolKitAction *action, Q_PID pid, bool revokeIfOneShot)
+PolKitResult Auth::isCallerAuthorized(PolKitAction *action, qint64 pid, bool revokeIfOneShot)
 {
     PolKitCaller *pk_caller;
     PolKitResult pk_result;

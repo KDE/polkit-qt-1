@@ -38,7 +38,7 @@ public:
     QString       actionId;
     PolKitAction *pkAction;
     PolKitResult  pkResult;
-    uint          targetPID;
+    Q_PID         targetPID;
 
     void                 updateAction();
     bool                 computePkResult();
@@ -310,7 +310,7 @@ bool Action::Private::computePkResult()
     return old_result != pkResult;
 }
 
-pid_t Action::targetPID() const
+Q_PID Action::targetPID() const
 {
     if (d->targetPID != 0)
         return d->targetPID;
@@ -318,7 +318,7 @@ pid_t Action::targetPID() const
         return QCoreApplication::applicationPid();
 }
 
-void Action::setTargetPID(pid_t pid)
+void Action::setTargetPID(Q_PID pid)
 {
     d->targetPID = pid;
 

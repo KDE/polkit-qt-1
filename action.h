@@ -26,6 +26,7 @@
 
 #include <QtGui/QAction>
 #include <QtCore/QString>
+#include <QProcess>
 
 #include <polkit/polkit.h>
 
@@ -552,12 +553,12 @@ public:
      *
      * \param pid The target process id; 0 if it is the current process
      */
-    void setTargetPID(pid_t pid);
+    void setTargetPID(Q_PID pid);
 
     /**
      * \see setTargetPID
      */
-    pid_t targetPID() const;
+    Q_PID targetPID() const;
 
     /**
      * This method can be used to check the if the current action

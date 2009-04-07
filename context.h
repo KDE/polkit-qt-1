@@ -24,10 +24,11 @@
 
 #include "export.h"
 
-#include <polkit-dbus/polkit-dbus.h>
-
 #include <QtCore/QObject>
 #include <QtCore/QString>
+
+typedef struct _PolKitTracker PolKitTracker;
+typedef struct _PolKitContext PolKitContext;
 
 /**
  * \namespace PolkitQt PolkitQt
@@ -74,6 +75,9 @@ public:
      *                don't know what this implies, simply ignore the parameter. In case
      *                you want to use it, be sure of streaming it the first time you call
      *                this function, otherwise it will have no effect.
+     *                DEPRECATION WARNING: This function uses a type that will be removed in
+     *                PolicyKit 1.0. Please don't use this function in your application unless strictly
+     *                needed, or you will have to update it when polkit-qt 1.0 will come out
      *
      * \return The current context instance
      */
@@ -101,6 +105,10 @@ public:
      * modifies the instance on it, unless you're completely aware of what you're doing and
      * of the possible consequencies. Use this instance only to gather information.
      *
+     * DEPRECATION WARNING: This function uses a type that will be removed in
+     * PolicyKit 1.0. Please don't use this function in your application unless strictly
+     * needed, or you will have to update it when polkit-qt 1.0 will come out
+     *
      * \return the current PolKitContext instance
      */
     PolKitContext *getPolKitContext() const;
@@ -111,6 +119,10 @@ public:
      * this function), DO NOT use any PolicyKit API's specific method that
      * modifies the instance on it, unless you're completely aware of what you're doing and
      * of the possible consequencies. Use this instance only to gather information.
+     *
+     * DEPRECATION WARNING: This function uses a type that will be removed in
+     * PolicyKit 1.0. Please don't use this function in your application unless strictly
+     * needed, or you will have to update it when polkit-qt 1.0 will come out
      *
      * \return the current PolKitTracker instance
      */

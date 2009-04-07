@@ -69,11 +69,11 @@ const QString PkExampleHelper::play(const QString &user)
     //     one shot actions can be properly revoked, use "true" even
     //     if your action aren't one shot, since they can easyly changed
     //     by any PolicyKit Authorization application.
-    PolKitResult result;
+    Auth::Result result;
     result = Auth::isCallerAuthorized("org.qt.policykit.examples.play",
                                       message().service(),
                                       true);
-    if (result == POLKIT_RESULT_YES) {
+    if (result == Auth::Yes) {
         qDebug() << message().service() << QString(user + " can play");
         return QString(user + " can play");
     } else {

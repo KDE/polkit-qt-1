@@ -37,7 +37,7 @@ public:
 
     QString       actionId;
     PolKitAction *pkAction;
-    PolKitResult  pkResult;
+    Auth::Result  pkResult;
     qint64        targetPID;
 
     void                 updateAction();
@@ -133,20 +133,20 @@ Action::~Action()
 bool Action::activate(WId winId)
 {
     switch (d->pkResult) {
-    case POLKIT_RESULT_YES:
+    case Auth::Yes:
         // If PolicyKit says yes.. emit the 'activated' signal
         emit activated();
         return true;
         break;
 
-    case POLKIT_RESULT_ONLY_VIA_ADMIN_AUTH_ONE_SHOT:
-    case POLKIT_RESULT_ONLY_VIA_ADMIN_AUTH:
-    case POLKIT_RESULT_ONLY_VIA_ADMIN_AUTH_KEEP_SESSION:
-    case POLKIT_RESULT_ONLY_VIA_ADMIN_AUTH_KEEP_ALWAYS:
-    case POLKIT_RESULT_ONLY_VIA_SELF_AUTH_ONE_SHOT:
-    case POLKIT_RESULT_ONLY_VIA_SELF_AUTH:
-    case POLKIT_RESULT_ONLY_VIA_SELF_AUTH_KEEP_SESSION:
-    case POLKIT_RESULT_ONLY_VIA_SELF_AUTH_KEEP_ALWAYS:
+    case Auth::AdminAuthOneShot:
+    case Auth::AdminAuth:
+    case Auth::AdminAuthKeepAlways:
+    case Auth::AdminAuthKeepSession:
+    case Auth::SelfAuthOneShot:
+    case Auth::SelfAuth:
+    case Auth::SelfAuthKeepAlways:
+    case Auth::SelfAuthKeepSession:
         /* Otherwise, if the action needs auth..  stop the emission
          * and start auth process..
          */
@@ -167,7 +167,7 @@ bool Action::activate(WId winId)
         break;
 
     default:
-    case POLKIT_RESULT_NO:
+    case Auth::No:
         if (d->noEnabled) {
             /* If PolicyKit says no... and we got here.. it means
              * that the user set the property "no-enabled" to
@@ -202,8 +202,8 @@ void Action::Private::updateAction()
 
     switch (pkResult) {
     default:
-    case POLKIT_RESULT_UNKNOWN:
-    case POLKIT_RESULT_NO:
+    case Auth::Unknown:
+    case Auth::No:
         /* TODO: see if we're self-blocked */
         if (pkAction != NULL &&
                 polkit_authorization_db_is_uid_blocked_by_self(authdb,
@@ -241,14 +241,14 @@ void Action::Private::updateAction()
         }
         break;
 
-    case POLKIT_RESULT_ONLY_VIA_ADMIN_AUTH_ONE_SHOT:
-    case POLKIT_RESULT_ONLY_VIA_ADMIN_AUTH:
-    case POLKIT_RESULT_ONLY_VIA_ADMIN_AUTH_KEEP_SESSION:
-    case POLKIT_RESULT_ONLY_VIA_ADMIN_AUTH_KEEP_ALWAYS:
-    case POLKIT_RESULT_ONLY_VIA_SELF_AUTH_ONE_SHOT:
-    case POLKIT_RESULT_ONLY_VIA_SELF_AUTH:
-    case POLKIT_RESULT_ONLY_VIA_SELF_AUTH_KEEP_SESSION:
-    case POLKIT_RESULT_ONLY_VIA_SELF_AUTH_KEEP_ALWAYS:
+    case Auth::AdminAuthOneShot:
+    case Auth::AdminAuth:
+    case Auth::AdminAuthKeepAlways:
+    case Auth::AdminAuthKeepSession:
+    case Auth::SelfAuthOneShot:
+    case Auth::SelfAuth:
+    case Auth::SelfAuthKeepAlways:
+    case Auth::SelfAuthKeepSession:
         parent->setVisible(authVisible && masterVisible);
         parent->setEnabled(authEnabled && masterEnabled);
         qobject_cast<QAction*>(parent)->setText(authText);
@@ -264,7 +264,7 @@ void Action::Private::updateAction()
         }
         break;
 
-    case POLKIT_RESULT_YES:
+    case Auth::Yes:
         parent->setVisible(yesVisible && masterVisible);
         parent->setEnabled(yesEnabled && masterEnabled);
         qobject_cast<QAction*>(parent)->setText(yesText);
@@ -294,13 +294,13 @@ void Action::Private::configChanged()
 
 bool Action::Private::computePkResult()
 {
-    PolKitResult old_result;
+    Auth::Result old_result;
 
     old_result = pkResult;
-    pkResult = POLKIT_RESULT_UNKNOWN;
+    pkResult = Auth::Unknown;
 
     if (pkAction == NULL) {
-        pkResult = POLKIT_RESULT_YES;
+        pkResult = Auth::Yes;
     } else {
         // set revokeIfOneShot to false as we only want to check it,
         // otherwise we would be revoking one shot actions
@@ -361,7 +361,7 @@ void Action::setPolkitAction(const QString &actionId)
 
 bool Action::isAllowed() const
 {
-    return d->pkResult == POLKIT_RESULT_YES;
+    return d->pkResult == Auth::Yes;
 }
 
 bool Action::is(const QString &other) const
@@ -374,7 +374,7 @@ void Action::revoke()
     PolKitError *pk_error;
     PolKitAuthorizationDB *authdb;
 
-    if (d->pkResult == POLKIT_RESULT_YES) {
+    if (d->pkResult == Auth::Yes) {
         /* If we already got the authorization.. revoke it! */
         authdb = polkit_context_get_authorization_db(Context::instance()->getPolKitContext());
         if (d->pkAction != NULL && authdb != NULL) {

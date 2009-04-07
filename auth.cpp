@@ -35,36 +35,43 @@
 
 using namespace PolkitQt;
 
+namespace PolkitQt {
+namespace Auth {
+
+    Result polkitResultToResult(PolKitResult res);
+};
+};
+
 bool Auth::computeAndObtainAuth(const QString &actionId, WId winId, qint64 pid)
 {
     PolKitAction *pkAction = polkit_action_new();
     if (!polkit_action_set_action_id(pkAction, actionId.toAscii().data())) {
         return false;
     }
-    PolKitResult result;
+    Result result;
     // set revokeIfOneShot to false as we only want to check it,
     // otherwise we would be revoking one shot actions
     result = isCallerAuthorized(pkAction, pid, false);
     switch (result) {
-    case POLKIT_RESULT_YES:
+    case Yes:
         // If PolicyKit says yes.. emit the 'activated' signal
         return true;
         break;
-    case POLKIT_RESULT_ONLY_VIA_ADMIN_AUTH_ONE_SHOT:
-    case POLKIT_RESULT_ONLY_VIA_ADMIN_AUTH:
-    case POLKIT_RESULT_ONLY_VIA_ADMIN_AUTH_KEEP_SESSION:
-    case POLKIT_RESULT_ONLY_VIA_ADMIN_AUTH_KEEP_ALWAYS:
-    case POLKIT_RESULT_ONLY_VIA_SELF_AUTH_ONE_SHOT:
-    case POLKIT_RESULT_ONLY_VIA_SELF_AUTH:
-    case POLKIT_RESULT_ONLY_VIA_SELF_AUTH_KEEP_SESSION:
-    case POLKIT_RESULT_ONLY_VIA_SELF_AUTH_KEEP_ALWAYS:
+    case AdminAuthOneShot:
+    case AdminAuth:
+    case AdminAuthKeepAlways:
+    case AdminAuthKeepSession:
+    case SelfAuthOneShot:
+    case SelfAuth:
+    case SelfAuthKeepAlways:
+    case SelfAuthKeepSession:
         // Otherwise, the action needs auth..
         // we now issue the obtain auth dialog
         if (pkAction != 0) {
             return obtainAuth(actionId, winId, pid);
         }
     default:
-    case POLKIT_RESULT_NO:
+    case No:
         // if result is no then the user cannot even try to auth
         return false;
         break;
@@ -92,25 +99,25 @@ bool Auth::obtainAuth(const QString &actionId, WId winId, qint64 pid)
     return false;
 }
 
-PolKitResult Auth::isCallerAuthorized(const QString &actionId, qint64 pid, bool revokeIfOneShot)
+Auth::Result Auth::isCallerAuthorized(const QString &actionId, qint64 pid, bool revokeIfOneShot)
 {
     PolKitAction *pk_action = polkit_action_new();
 
     if (!polkit_action_set_action_id(pk_action, actionId.toAscii().data())) {
-        return POLKIT_RESULT_UNKNOWN;
+        return Unknown;
     }
 
     return isCallerAuthorized(pk_action, pid, revokeIfOneShot);
 }
 
-PolKitResult Auth::isCallerAuthorized(PolKitAction *action, qint64 pid, bool revokeIfOneShot)
+Auth::Result Auth::isCallerAuthorized(PolKitAction *action, qint64 pid, bool revokeIfOneShot)
 {
     PolKitCaller *pk_caller;
     PolKitResult pk_result;
     DBusError dbus_error;
 
     if (Context::instance()->hasError()) {
-        return pk_result = POLKIT_RESULT_UNKNOWN;
+        return Unknown;
     }
 
     dbus_error_init(&dbus_error);
@@ -133,10 +140,10 @@ PolKitResult Auth::isCallerAuthorized(PolKitAction *action, qint64 pid, bool rev
         polkit_caller_unref(pk_caller);
     }
 
-    return pk_result;
+    return polkitResultToResult(pk_result);
 }
 
-PolKitResult Auth::isCallerAuthorized(PolKitAction *action,
+Auth::Result Auth::isCallerAuthorized(PolKitAction *action,
                                       const QString &dbusName,
                                       bool revokeIfOneShot)
 {
@@ -145,7 +152,7 @@ PolKitResult Auth::isCallerAuthorized(PolKitAction *action,
     DBusError dbus_error;
 
     if (Context::instance()->hasError()) {
-        return pk_result = POLKIT_RESULT_UNKNOWN;
+        return Unknown;
     }
 
     dbus_error_init(&dbus_error);
@@ -168,18 +175,56 @@ PolKitResult Auth::isCallerAuthorized(PolKitAction *action,
         polkit_caller_unref(pk_caller);
     }
 
-    return pk_result;
+    return polkitResultToResult(pk_result);
 }
 
-PolKitResult Auth::isCallerAuthorized(const QString &actionId,
+Auth::Result Auth::isCallerAuthorized(const QString &actionId,
                                       const QString &dbusName,
                                       bool revokeIfOneShot)
 {
     PolKitAction *pk_action = polkit_action_new();
 
     if (!polkit_action_set_action_id(pk_action, actionId.toAscii().data())) {
-        return POLKIT_RESULT_UNKNOWN;
+        return Unknown;
     }
 
     return isCallerAuthorized(pk_action, dbusName, revokeIfOneShot);
+}
+
+Auth::Result Auth::polkitResultToResult(PolKitResult result) {
+    switch (result) {
+        case POLKIT_RESULT_YES:
+            return Auth::Yes;
+            break;
+        case POLKIT_RESULT_ONLY_VIA_ADMIN_AUTH_ONE_SHOT:
+            return Auth::AdminAuthOneShot;
+            break;
+        case POLKIT_RESULT_ONLY_VIA_ADMIN_AUTH:
+            return Auth::AdminAuth;
+            break;
+        case POLKIT_RESULT_ONLY_VIA_ADMIN_AUTH_KEEP_SESSION:
+            return Auth::AdminAuthKeepSession;
+            break;
+        case POLKIT_RESULT_ONLY_VIA_ADMIN_AUTH_KEEP_ALWAYS:
+            return Auth::AdminAuthKeepAlways;
+            break;
+        case POLKIT_RESULT_ONLY_VIA_SELF_AUTH_ONE_SHOT:
+            return Auth::SelfAuthOneShot;
+            break;
+        case POLKIT_RESULT_ONLY_VIA_SELF_AUTH:
+            return Auth::SelfAuth;
+            break;
+        case POLKIT_RESULT_ONLY_VIA_SELF_AUTH_KEEP_SESSION:
+            return Auth::SelfAuthKeepSession;
+            break;
+        case POLKIT_RESULT_ONLY_VIA_SELF_AUTH_KEEP_ALWAYS:
+            return Auth::SelfAuthKeepAlways;
+            break;
+        case POLKIT_RESULT_NO:
+            return Auth::No;
+            break;
+        default:
+            return Auth::Unknown;
+            break;
+    }
 }

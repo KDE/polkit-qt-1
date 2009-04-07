@@ -1,6 +1,7 @@
 /*
  * This file is part of the Polkit-qt project
  * Copyright (C) 2009 Daniel Nicoletti <dantti85-pk@yahoo.com.br>
+ * Copyright (C) 2009 Dario Freddi <drf54321@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -23,12 +24,12 @@
 
 #include "export.h"
 
-#include <polkit/polkit.h>
-
 #include <QtCore/QString>
 #include <QtCore/QCoreApplication>
 #include <QProcess>
 #include <qwindowdefs.h>
+
+typedef struct _PolKitAction PolKitAction;
 
 namespace PolkitQt
 {
@@ -45,6 +46,21 @@ namespace PolkitQt
  */
 namespace Auth
 {
+
+enum Result {
+    Unknown = 0x00,
+    Yes = 0x01,
+    AdminAuthOneShot = 0x02,
+    AdminAuth = 0x03,
+    AdminAuthKeepSession = 0x04,
+    AdminAuthKeepAlways = 0x5,
+    SelfAuthOneShot = 0x6,
+    SelfAuth = 0x7,
+    SelfAuthKeepSession = 0x8,
+    SelfAuthKeepAlways = 0x9,
+    No = 0x10
+};
+
 /**
  * Obtains authorization for the given action regardless of
  * the Action Result.
@@ -98,6 +114,11 @@ POLKIT_QT_EXPORT bool obtainAuth(const QString &actionId, WId winId = 0, qint64 
  * (so you're actually carrying out the action), to false if you're not (for example,
  * if you only want to check if the caller is authorized but not perform the action).
  *
+ * DEPRECATION WARNING: This function uses a type that will be removed in
+ * PolicyKit 1.0. Please don't use this function in your application unless strictly
+ * needed, or you will have to update it when polkit-qt 1.0 will come out. Please use
+ * the equivalent without PolKit* types.
+ *
  * \note The \c pid parameter refers to the caller. You can retrieve this through
  *              DBus.
  *
@@ -113,7 +134,7 @@ POLKIT_QT_EXPORT bool obtainAuth(const QString &actionId, WId winId = 0, qint64 
  *                      or an error has occurred
  *
  */
-POLKIT_QT_EXPORT PolKitResult isCallerAuthorized(PolKitAction *action, qint64 pid, bool revokeIfOneShot);
+POLKIT_QT_EXPORT Result isCallerAuthorized(PolKitAction *action, qint64 pid, bool revokeIfOneShot);
 
 /**
  * Convenience overload. Lets you use isCallerAuthorized with a QString instead of a PolKitAction.
@@ -129,7 +150,7 @@ POLKIT_QT_EXPORT PolKitResult isCallerAuthorized(PolKitAction *action, qint64 pi
  *         \c otherwise if the caller was not authorized and the action should not be performed,
  *                      or an error has occurred
  */
-POLKIT_QT_EXPORT PolKitResult isCallerAuthorized(const QString &actionId, qint64 pid, bool revokeIfOneShot);
+POLKIT_QT_EXPORT Result isCallerAuthorized(const QString &actionId, qint64 pid, bool revokeIfOneShot);
 
 /**
  * Same as above. Lets you use isCallerAuthorized with a QString DBus name instead of the
@@ -146,11 +167,16 @@ POLKIT_QT_EXPORT PolKitResult isCallerAuthorized(const QString &actionId, qint64
  *         \c otherwise if the caller was not authorized and the action should not be performed,
  *                      or an error has occurred
  */
-POLKIT_QT_EXPORT PolKitResult isCallerAuthorized(const QString &actionId, const QString &dbusName, bool revokeIfOneShot);
+POLKIT_QT_EXPORT Result isCallerAuthorized(const QString &actionId, const QString &dbusName, bool revokeIfOneShot);
 
 /**
  * Same as above. Lets you use isCallerAuthorized with a QString DBus name instead of the
  * PID.
+ *
+ * DEPRECATION WARNING: This function uses a type that will be removed in
+ * PolicyKit 1.0. Please don't use this function in your application unless strictly
+ * needed, or you will have to update it when polkit-qt 1.0 will come out. Please use
+ * the equivalent without PolKit* types.
  *
  * \param action the PolKitAction in question
  * \param dbusName unique name on the system message bus
@@ -163,7 +189,7 @@ POLKIT_QT_EXPORT PolKitResult isCallerAuthorized(const QString &actionId, const 
  *         \c otherwise if the caller was not authorized and the action should not be performed,
  *                      or an error has occurred
  */
-POLKIT_QT_EXPORT PolKitResult isCallerAuthorized(PolKitAction *action, const QString &dbusName, bool revokeIfOneShot);
+POLKIT_QT_EXPORT Result isCallerAuthorized(PolKitAction *action, const QString &dbusName, bool revokeIfOneShot);
 }
 
 }

@@ -28,7 +28,7 @@
 #include <QtCore/QString>
 #include <QProcess>
 
-#include <polkit/polkit.h>
+typedef struct _PolKitAction PolKitAction;
 
 namespace PolkitQt
 {

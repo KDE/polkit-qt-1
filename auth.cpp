@@ -39,8 +39,8 @@ namespace PolkitQt {
 namespace Auth {
 
     Result polkitResultToResult(PolKitResult res);
-};
-};
+}
+}
 
 bool Auth::computeAndObtainAuth(const QString &actionId, WId winId, qint64 pid)
 {
@@ -125,7 +125,7 @@ Auth::Result Auth::isCallerAuthorized(PolKitAction *action, qint64 pid, bool rev
                 pid,
                 &dbus_error);
     if (pk_caller == NULL) {
-        qWarning("Cannot get PolKitCaller object for target (pid=%d): %s: %s",
+        qWarning("Cannot get PolKitCaller object for target (pid=%lld): %s: %s",
                  pid, dbus_error.name, dbus_error.message);
         dbus_error_free(&dbus_error);
 
@@ -160,7 +160,7 @@ Auth::Result Auth::isCallerAuthorized(PolKitAction *action,
                 dbusName.toLatin1().data(),
                 &dbus_error);
     if (pk_caller == NULL) {
-        qWarning("Cannot get PolKitCaller object for DBus name (dbusName=%d): %s: %s",
+        qWarning("Cannot get PolKitCaller object for DBus name (dbusName=%s): %s: %s",
                  qPrintable(dbusName), dbus_error.name, dbus_error.message);
         dbus_error_free(&dbus_error);
 

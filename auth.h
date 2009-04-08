@@ -47,17 +47,31 @@ namespace PolkitQt
 namespace Auth
 {
 
+/**
+ * Defines the result given by an action
+ */
 enum Result {
+    /** Result unknown */
     Unknown = 0x00,
+    /** The action can be performed */
     Yes = 0x01,
+    /** The user needs to authenticate as admin */
     AdminAuthOneShot = 0x02,
+    /** The user needs to authenticate as admin */
     AdminAuth = 0x03,
+    /** The user needs to authenticate as admin */
     AdminAuthKeepSession = 0x04,
+    /** The user needs to authenticate as admin */
     AdminAuthKeepAlways = 0x5,
+    /** The user needs to authenticate as himself */
     SelfAuthOneShot = 0x6,
+    /** The user needs to authenticate as admin */
     SelfAuth = 0x7,
+    /** The user needs to authenticate as admin */
     SelfAuthKeepSession = 0x8,
+    /** The user needs to authenticate as admin */
     SelfAuthKeepAlways = 0x9,
+    /** The action can't be performed */
     No = 0x10
 };
 
@@ -101,7 +115,7 @@ POLKIT_QT_EXPORT bool obtainAuth(const QString &actionId, WId winId = 0, qint64 
  * It returns the action should be carried out, so if the caller was
  * actually authorized to perform it. The result is in form of a PolKitResult, so that
  * you can have more control over the whole process, and detect an eventual error.
- * Most of the times you simply want to check if the result is == to \c POLKIT_RESULT_YES,
+ * Most of the times you simply want to check if the result is == to \c Result::Yes,
  * if you don't have specific needs.
  *
  * It is CRITICAL that you call this function
@@ -129,7 +143,7 @@ POLKIT_QT_EXPORT bool obtainAuth(const QString &actionId, WId winId = 0, qint64 
  *                        \c false if we're not carrying out the action, so we don't want
  *                                 the auth to be revoked right after
  *
- * \return \c POLKIT_RESULT_YES if the caller is authorized and the action should be performed
+ * \return \c Result::Yes if the caller is authorized and the action should be performed
  *         \c otherwise if the caller was not authorized and the action should not be performed,
  *                      or an error has occurred
  *
@@ -146,7 +160,7 @@ POLKIT_QT_EXPORT Result isCallerAuthorized(PolKitAction *action, qint64 pid, boo
  *                        \c false if we're not carrying out the action, so we don't want
  *                                 the auth to be revoked right after
  *
- * \return \c POLKIT_RESULT_YES if the caller is authorized and the action should be performed
+ * \return \c Result::Yes if the caller is authorized and the action should be performed
  *         \c otherwise if the caller was not authorized and the action should not be performed,
  *                      or an error has occurred
  */
@@ -163,7 +177,7 @@ POLKIT_QT_EXPORT Result isCallerAuthorized(const QString &actionId, qint64 pid, 
  *                        \c false if we're not carrying out the action, so we don't want
  *                                 the auth to be revoked right after
  *
- * \return \c POLKIT_RESULT_YES if the caller is authorized and the action should be performed
+ * \return \c Result::Yes if the caller is authorized and the action should be performed
  *         \c otherwise if the caller was not authorized and the action should not be performed,
  *                      or an error has occurred
  */
@@ -185,7 +199,7 @@ POLKIT_QT_EXPORT Result isCallerAuthorized(const QString &actionId, const QStrin
  *                        \c false if we're not carrying out the action, so we don't want
  *                                 the auth to be revoked right after
  *
- * \return \c POLKIT_RESULT_YES if the caller is authorized and the action should be performed
+ * \return \c Result::Yes if the caller is authorized and the action should be performed
  *         \c otherwise if the caller was not authorized and the action should not be performed,
  *                      or an error has occurred
  */

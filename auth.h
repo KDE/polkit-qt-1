@@ -55,21 +55,33 @@ enum Result {
     Unknown = 0x00,
     /** The action can be performed */
     Yes = 0x01,
-    /** The user needs to authenticate as admin */
+    /** The user needs to authenticate as admin.
+     *  The authentication will be immediately released.
+     */
     AdminAuthOneShot = 0x02,
     /** The user needs to authenticate as admin */
     AdminAuth = 0x03,
-    /** The user needs to authenticate as admin */
+    /** The user needs to authenticate as admin.
+     *  The authentication will be kept during this session.
+     */
     AdminAuthKeepSession = 0x04,
-    /** The user needs to authenticate as admin */
+    /** The user needs to authenticate as admin.
+     *  The authentication will be kept indefinitely.
+     */
     AdminAuthKeepAlways = 0x5,
-    /** The user needs to authenticate as himself */
+    /** The user needs to authenticate as himself.
+     *  The authentication will be immediately released.
+     */
     SelfAuthOneShot = 0x6,
-    /** The user needs to authenticate as admin */
+    /** The user needs to authenticate as himself */
     SelfAuth = 0x7,
-    /** The user needs to authenticate as admin */
+    /** The user needs to authenticate as himself.
+     *  The authentication will be kept during this session.
+     */
     SelfAuthKeepSession = 0x8,
-    /** The user needs to authenticate as admin */
+    /** The user needs to authenticate as himself.
+     *  The authentication will be kept indefinitely.
+     */
     SelfAuthKeepAlways = 0x9,
     /** The action can't be performed */
     No = 0x10

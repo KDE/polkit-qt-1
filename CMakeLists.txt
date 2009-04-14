@@ -11,7 +11,6 @@ find_package(Automoc4 REQUIRED)
 
 include (${QT_USE_FILE})
 include (FindPkgConfig)
-include (PkgConfigGetVar)
 include (InstallSettings)
 
 pkg_check_modules (POLKIT REQUIRED polkit>=0.8)

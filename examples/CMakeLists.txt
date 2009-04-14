@@ -43,7 +43,6 @@ target_link_libraries(polkit-example
 
 # This macro is defined in FindPolkitQt.cmake
 macro(dbus_add_activation_system_service _sources)
-    #PKGCONFIG_GETVAR(dbus-1 session_bus_services_dir _install_dir)
     foreach (_i ${_sources})
         get_filename_component(_service_file ${_i} ABSOLUTE)
         string(REGEX REPLACE "\\.service.*$" ".service" _output_file ${_i})

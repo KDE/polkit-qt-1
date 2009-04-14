@@ -76,10 +76,7 @@ ENDIF (POLKITQT_FOUND)
 
 MARK_AS_ADVANCED(POLKITQT_INCLUDE_DIR POLKITQT_LIB)
 
-include (PkgConfigGetVar)
-
 macro(dbus_add_activation_system_service _sources)
-    #PKGCONFIG_GETVAR(dbus-1 session_bus_services_dir _install_dir)
     foreach (_i ${_sources})
         get_filename_component(_service_file ${_i} ABSOLUTE)
         string(REGEX REPLACE "\\.service.*$" ".service" _output_file ${_i})

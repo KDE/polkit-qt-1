@@ -15,8 +15,6 @@
 #
 # Redistribution and use is allowed according to the terms of the GPLv2+ license.
 
-include(InstallSettings)
-
 if (POLKITQT_INCLUDE_DIR AND POLKITQT_LIB)
     set(POLKITQT_FIND_QUIETLY TRUE)
 endif (POLKITQT_INCLUDE_DIR AND POLKITQT_LIB)

@@ -56,6 +56,7 @@ target_link_libraries(polkit-qt-core
 )
 
 target_link_libraries(polkit-qt-gui
+	polkit-qt-core
  	${POLKITDBUS_LIBRARIES}
  	${POLKITGRANT_LIBRARIES}
 	${QT_QTCORE_LIBRARY}

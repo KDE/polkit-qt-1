@@ -223,7 +223,7 @@ void Context::Private::dbusFilter(const QDBusMessage &message)
                   message.path().toUtf8().data(), message.interface().toUtf8().data(),
                   message.member().toUtf8().data());
         dbus_message_iter_init_append(msg, &args);
-        foreach(QVariant arg, message.arguments()) {
+        foreach(const QVariant &arg, message.arguments()) {
             char *argument = qstrdup(arg.toString().toAscii());
             int numarg;
 

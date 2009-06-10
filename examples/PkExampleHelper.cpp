@@ -1,3 +1,5 @@
+// This is an example not a library
+//krazy:exclude=license
 /***************************************************************************
  *   Copyright (C) 2008 Daniel Nicoletti <dantti85-pk@yahoo.com.br>        *
  *                                                                         *
@@ -65,7 +67,7 @@ const QString PkExampleHelper::play(const QString &user)
     //     with it we can check if the caller is authorized to
     //     do the following action
     // 2nd the "true" parameter, this is REALLY important, you MUST
-    //     allways set it to true if you are in the helper. This way
+    //     always set it to true if you are in the helper. This way
     //     one shot actions can be properly revoked, use "true" even
     //     if your action aren't one shot, since they can easyly changed
     //     by any PolicyKit Authorization application.

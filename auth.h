@@ -26,8 +26,8 @@
 
 #include <QtCore/QString>
 #include <QtCore/QCoreApplication>
-#include <QProcess>
-#include <qwindowdefs.h>
+#include <QtCore/QProcess>
+#include <QtGui/qwindowdefs.h>
 
 typedef struct _PolKitAction PolKitAction;
 

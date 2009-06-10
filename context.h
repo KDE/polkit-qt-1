@@ -45,7 +45,7 @@ namespace PolkitQt
  * \author Daniel Nicoletti <dantti85-pk@yahoo.com.br>
  * \author Dario Freddi <drf54321@gmail.com>
  *
- * \brief Convenience class for Qt/KDE aplications
+ * \brief Convenience class for Qt/KDE applications
  *
  * This class is a singleton that provides makes easy the usage
  * of PolKitContext and PolKitTracker. It emits configChanged()

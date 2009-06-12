@@ -1,5 +1,4 @@
 // This is an example not a library
-//krazy:exclude=license
 /***************************************************************************
  *   Copyright (C) 2009 by Daniel Nicoletti                                *
  *   dantti85-pk@yahoo.com.br                                              *

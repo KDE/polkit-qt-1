@@ -21,7 +21,7 @@
 #include "PkExampleHelper.h"
 #include "examplesadaptor.h"
 
-#include <Context>
+#include <Authority>
 #include <Auth>
 
 #include <QtDBus/QDBusConnection>
@@ -38,7 +38,7 @@ PkExampleHelper::PkExampleHelper(int &argc, char **argv)
     qDebug() << "Creating Helper";
     (void) new ExamplesAdaptor(this);
     if (!QDBusConnection::systemBus().registerService("org.qt.policykit.examples")) {
-        qDebug() << "another helper is already running";
+        qDebug() << QDBusConnection::systemBus().lastError().message();;
         QTimer::singleShot(0, this, SLOT(quit()));
         return;
     }
@@ -65,15 +65,9 @@ const QString PkExampleHelper::play(const QString &user)
     // 1st message().service() is the service name of the caller
     //     with it we can check if the caller is authorized to
     //     do the following action
-    // 2nd the "true" parameter, this is REALLY important, you MUST
-    //     always set it to true if you are in the helper. This way
-    //     one shot actions can be properly revoked, use "true" even
-    //     if your action aren't one shot, since they can easyly changed
-    //     by any PolicyKit Authorization application.
     Auth::Result result;
     result = Auth::isCallerAuthorized("org.qt.policykit.examples.play",
-                                      message().service(),
-                                      true);
+                                      message().service());
     if (result == Auth::Yes) {
         qDebug() << message().service() << QString(user + " can play");
         return QString(user + " can play");

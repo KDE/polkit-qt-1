@@ -1,5 +1,5 @@
 
-install(FILES org.qt.policykit.examples.policy DESTINATION ${SHARE_INSTALL_PREFIX}/PolicyKit/policy/)
+install(FILES org.qt.policykit.examples.policy DESTINATION ${SHARE_INSTALL_PREFIX}/polkit-1/actions/)
 
 include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}

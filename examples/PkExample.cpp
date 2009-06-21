@@ -22,7 +22,7 @@
 
 #include <ActionButton>
 #include <ActionButtons>
-#include <Context>
+#include <Authority>
 #include <Auth>
 #include <QDebug>
 
@@ -156,7 +156,7 @@ void PkExample::activateAction()
     Action *action = qobject_cast<Action*>(sender());
     // calling activate with winId() makes the auth dialog
     // be correct parented with your application.
-    action->activate(winId());
+    action->activate();
 }
 
 // activateCheckableAction is only here to revoke the action
@@ -230,7 +230,9 @@ void PkExample::actionActivated()
     // note how we pass true to revokeIfOneShot - this is because we're
     // pretending to be the mechanism
     Auth::Result result;
-    result = Auth::isCallerAuthorized(action->actionId(), static_cast<uint>(QCoreApplication::applicationPid()), true);
+    
+    result = Auth::isCallerAuthorized("org.qt.policykit.examples.kick", static_cast<uint>(QCoreApplication::applicationPid()));
+    //result = Auth::isCallerAuthorized(action->actionId(), static_cast<uint>(QCoreApplication::applicationPid()));
     if (result == Auth::Yes) {
         // in the helper you will do the action
         qDebug() << "caller is authorized to do:" << action->actionId();

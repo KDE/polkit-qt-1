@@ -28,8 +28,6 @@
 #include <QtCore/QString>
 #include <QtCore/QProcess>
 
-typedef struct _PolKitAction PolKitAction;
-
 namespace PolkitQt
 {
 
@@ -102,7 +100,7 @@ public Q_SLOTS:
      *
      * \see activated()
      */
-    bool activate(WId winId = 0);
+    bool activate();
 
     /**
      * Defines the checked state. The opposite state will
@@ -121,28 +119,6 @@ public Q_SLOTS:
     void revoke();
 
 public:
-    /**
-     * Changes the action being tracked
-     *
-     * \param actionId The new action ID
-     */
-    void setPolkitAction(const QString &actionId = QString());
-
-    /**
-     * Returns the PolKitAction pointer associated
-     * with this Action. Use this only if you know
-     * what you're doing
-     *
-     * \note Unref this pointer after usage with
-     * polkit_action_unref (), to avoid leaking.
-     * Also never use this directly otherwise you
-     * will not be able to unref it.
-     *
-     * \return The underlying PolKitAction item
-     *
-     */
-    PolKitAction* polkitAction() const;
-
     /**
      * Returns the current action ID.
      *

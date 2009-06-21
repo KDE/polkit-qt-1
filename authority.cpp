@@ -2,6 +2,7 @@
  * This file is part of the Polkit-qt project
  * Copyright (C) 2009 Daniel Nicoletti <dantti85-pk@yahoo.com.br>
  * Copyright (C) 2009 Dario Freddi <drf54321@gmail.com>
+ * Copyright (C) 2009 Jaroslav Reznik <jreznik@redhat.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -19,7 +20,7 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "context.h"
+#include "authority.h"
 
 #include <QtCore/QMap>
 #include <QtCore/QSocketNotifier>
@@ -32,130 +33,112 @@
 #include <QtCore/QGlobalStatic>
 #include <QtXml/QDomDocument>
 
-#include <polkit-dbus/polkit-dbus.h>
+#include <polkit/polkit.h>
+#include <glib-object.h>
 
 using namespace PolkitQt;
 
-class ContextHelper
+class AuthorityHelper
 {
 public:
-    ContextHelper() : q(0) {}
-    ~ContextHelper() {
+    AuthorityHelper() : q(0) {}
+    ~AuthorityHelper() {
         delete q;
     }
-    Context *q;
+    Authority *q;
 };
 
-Q_GLOBAL_STATIC(ContextHelper, s_globalContext)
+Q_GLOBAL_STATIC(AuthorityHelper, s_globalAuthority)
 
-Context *Context::instance(PolKitContext *context)
+Authority *Authority::instance(PolkitAuthority *authority)
 {
-    if (!s_globalContext()->q) {
-        new Context(context);
+    if (!s_globalAuthority()->q) {
+        new Authority(authority);
     }
 
-    return s_globalContext()->q;
+    return s_globalAuthority()->q;
 }
 
-class Context::Private
+class Authority::Private
 {
 public:
     // Polkit will return NULL on failures, hence we use it instead of 0
-    Private(Context *qq) : q(qq)
-            , pkContext(NULL)
-            , pkTracker(NULL)
+    Private(Authority *qq) : q(qq)
+            , pkAuthority(NULL)
             , m_hasError(false) {};
 
     void init();
-    void watchActivatedContext(int fd);
     void dbusFilter(const QDBusMessage &message);
 
-    Context *q;
-    PolKitContext *pkContext;
-    PolKitTracker *pkTracker;
+    Authority *q;
+    PolkitAuthority *pkAuthority;
     bool m_hasError;
     QString m_lastError;
-    DBusConnection *m_systemBus;
+    QDBusConnection *m_systemBus;
 
-    QMap<int, QSocketNotifier*> m_watches;
-
-    static int  io_add_watch(PolKitContext *context, int fd);
-    static void io_remove_watch(PolKitContext *context, int fd);
-    static void pk_config_changed(PolKitContext *context, void *user_data);
+    static void pk_config_changed();
 
     QDomDocument introspect(const QString &service, const QString &path, const QDBusConnection &c);
     QStringList getSignals(const QDomDocument &iface);
 };
 
-Context::Context(PolKitContext *context, QObject *parent)
+Authority::Authority(PolkitAuthority *authority, QObject *parent)
         : QObject(parent)
         , d(new Private(this))
 {
-    Q_ASSERT(!s_globalContext()->q);
-    s_globalContext()->q = this;
+    Q_ASSERT(!s_globalAuthority()->q);
+    s_globalAuthority()->q = this;
 
-    if (context) {
-        d->pkContext = context;
+    if (authority) {
+        d->pkAuthority = authority;
     }
 
     d->init();
 }
 
-Context::~Context()
+Authority::~Authority()
 {
-    if (d->pkContext != NULL) {
-        polkit_context_unref(d->pkContext);
-    }
-    if (d->pkTracker != NULL) {
-        polkit_tracker_unref(d->pkTracker);
+    if (d->pkAuthority != NULL) {
+        g_object_unref(d->pkAuthority);
     }
 
     delete d;
 }
 
-void Context::Private::init()
+void Authority::Private::init()
 {
-    DBusError error;
-    DBusError dbus_error;
-    PolKitError *pk_error;
-    dbus_error_init(&error);
+    QDBusError error;
+    QDBusError dbus_error;
+
+/*    dbus_error_init(&error);
 
     if ((m_systemBus = dbus_bus_get(DBUS_BUS_SYSTEM, &error)) == NULL) {
         qWarning() << "Failed to initialize DBus";
+    }*/
+
+    g_type_init();
+
+    if (pkAuthority == NULL) {
+        pkAuthority = polkit_authority_get();
     }
 
-    if (pkContext == NULL) {
-        pkContext = polkit_context_new();
-    }
+    if (pkAuthority == NULL)
+        qWarning("Can't get authority authority!");
 
-    polkit_context_set_io_watch_functions(pkContext, io_add_watch, io_remove_watch);
-    polkit_context_set_config_changed(pkContext, pk_config_changed, Context::instance());
-
-    pk_error = NULL;
-    if (!polkit_context_init(pkContext, &pk_error)) {
-        qWarning() << "Failed to initialize PolicyKit context: "
-        << polkit_error_get_error_message(pk_error);
-        m_lastError = polkit_error_get_error_message(pk_error);
-        m_hasError  = true;
-        if (pkContext != NULL) {
-            polkit_context_unref(pkContext);
-        }
-        polkit_error_free(pk_error);
-        return;
-    }
-
+    g_signal_connect(G_OBJECT(pkAuthority), "changed", G_CALLBACK(pk_config_changed), NULL);
+    
     // TODO FIXME: I'm pretty sure dbus-glib blows in a way that
     // we can't say we're interested in all signals from all
     // members on all interfaces for a given service... So we do
     // this..
-    dbus_error_init(&dbus_error);
+    //dbus_error_init(&dbus_error);
 
     // need to listen to NameOwnerChanged
-    if (QDBusConnection::systemBus().connect(DBUS_SERVICE_DBUS, QString(), DBUS_INTERFACE_DBUS, "NameOwnerChanged",
-            Context::instance(), SLOT(dbusFilter(const QDBusMessage &)))) {
+    /*if (QDBusConnection::systemBus().connect(DBUS_SERVICE_DBUS, QString(), DBUS_INTERFACE_DBUS, "NameOwnerChanged",
+            Authority::instance(), SLOT(dbusFilter(const QDBusMessage &)))) {
     } else {
         qWarning() << "Could not connect to the service bus to listen to NameOwnerChanged";
-    }
+    }*/
 
     // Ok, let's get what we need here
     QStringList sigs;
@@ -170,7 +153,7 @@ void Context::Private::init()
                 QString(),
                 QString(),
                 sig,
-                Context::instance(),
+                Authority::instance(),
                 SLOT(dbusFilter(const QDBusMessage &)))) {
             qWarning() << "Could not connect to the service bus to listen "
             "to the following signals:"
@@ -179,38 +162,21 @@ void Context::Private::init()
 
     }
 
-    if (dbus_error_is_set(&dbus_error)) {
+    /*if (dbus_error_is_set(&dbus_error)) {
         dbus_error_free(&dbus_error);
         qWarning() << "Failed to initialize ConsoleKit";
         m_hasError  = true;
         return;
-    }
+    }*/
 
-    pkTracker = polkit_tracker_new();
-    polkit_tracker_set_system_bus_connection(pkTracker, m_systemBus);
-
-    if (dbus_error_is_set(&dbus_error)) {
-        m_hasError  = true;
-        m_lastError = QString("DBus error name: %1. message: %2").arg(dbus_error.name).arg(dbus_error.message);
-        if (pkContext != NULL) {
-            polkit_context_unref(pkContext);
-        }
-        if (pkTracker != NULL) {
-            polkit_tracker_unref(pkTracker);
-        }
-
-        dbus_error_free(&dbus_error);
-        return;
-    }
-    polkit_tracker_init(pkTracker);
     m_lastError.clear();
     m_hasError = false;
 }
 
-void Context::Private::dbusFilter(const QDBusMessage &message)
+void Authority::Private::dbusFilter(const QDBusMessage &message)
 {
     // forward only NameOwnerChanged and ConsoleKit signals to PolkitTracker
-    if ((message.type() == QDBusMessage::SignalMessage &&
+    /*if ((message.type() == QDBusMessage::SignalMessage &&
             message.interface() == "org.freedesktop.DBus" &&
             message.member()    == "NameOwnerChanged")
             ||
@@ -223,7 +189,7 @@ void Context::Private::dbusFilter(const QDBusMessage &message)
                   message.path().toUtf8().data(), message.interface().toUtf8().data(),
                   message.member().toUtf8().data());
         dbus_message_iter_init_append(msg, &args);
-        foreach(const QVariant &arg, message.arguments()) {
+        foreach(QVariant arg, message.arguments()) {
             char *argument = qstrdup(arg.toString().toAscii());
             int numarg;
 
@@ -263,13 +229,14 @@ void Context::Private::dbusFilter(const QDBusMessage &message)
 
         }
 
-        if (msg && polkit_tracker_dbus_func(pkTracker, msg)) {
+        if (msg) {
             emit q->consoleKitDBChanged();
         }
-    }
+
+    }*/
 }
 
-bool Context::hasError() const
+bool Authority::hasError() const
 {
     if (d->m_hasError) {
         // try init again maybe something get
@@ -279,48 +246,17 @@ bool Context::hasError() const
     return d->m_hasError;
 }
 
-QString Context::lastError() const
+QString Authority::lastError() const
 {
     return d->m_lastError;
 }
 
-int Context::Private::io_add_watch(PolKitContext *, int fd)
+void Authority::Private::pk_config_changed()
 {
-    QSocketNotifier *notify = new QSocketNotifier(fd, QSocketNotifier::Read, Context::instance());
-    Context::instance()->d->m_watches[fd] = notify;
-    notify->connect(notify, SIGNAL(activated(int)), Context::instance(), SLOT(watchActivatedContext(int)));
-
-    return fd; // use simply the fd as the unique id for the watch
+    emit Authority::instance()->configChanged();
 }
 
-void Context::Private::watchActivatedContext(int fd)
-{
-    Q_ASSERT(m_watches.contains(fd));
-
-    polkit_context_io_func(pkContext, fd);
-}
-
-void Context::Private::io_remove_watch(PolKitContext *, int id)
-{
-    Q_ASSERT(id > 0);
-
-    if (!Context::instance()->d->m_watches.contains(id)) {
-        return; // policykit likes to do this more than once
-    }
-
-    QSocketNotifier *notify = Context::instance()->d->m_watches.take(id);
-    notify->deleteLater();
-    notify->setEnabled(false);
-}
-
-void Context::Private::pk_config_changed(PolKitContext *context, void *user_data)
-{
-    Q_UNUSED(context);
-    Q_UNUSED(user_data);
-    emit Context::instance()->configChanged();
-}
-
-QDomDocument Context::Private::introspect(const QString &service, const QString &path, const QDBusConnection &c)
+QDomDocument Authority::Private::introspect(const QString &service, const QString &path, const QDBusConnection &c)
 {
     QDomDocument doc;
 
@@ -350,7 +286,7 @@ QDomDocument Context::Private::introspect(const QString &service, const QString 
     return doc;
 }
 
-QStringList Context::Private::getSignals(const QDomDocument &doc)
+QStringList Authority::Private::getSignals(const QDomDocument &doc)
 {
     QStringList retlist;
 
@@ -374,14 +310,9 @@ QStringList Context::Private::getSignals(const QDomDocument &doc)
     return retlist;
 }
 
-PolKitContext *Context::getPolKitContext() const
+PolkitAuthority *Authority::getPolkitAuthority() const
 {
-    return d->pkContext;
+    return d->pkAuthority;
 }
 
-PolKitTracker *Context::getPolKitTracker() const
-{
-    return d->pkTracker;
-}
-
-#include "moc_context.cpp"
+#include "moc_authority.cpp"

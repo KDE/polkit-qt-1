@@ -13,9 +13,8 @@ include (${QT_USE_FILE})
 include (FindPkgConfig)
 include (InstallSettings)
 
-pkg_check_modules (POLKIT REQUIRED polkit>=0.8)
-pkg_check_modules (POLKITDBUS REQUIRED polkit-dbus>=0.8)
-pkg_check_modules (POLKITGRANT REQUIRED polkit-grant>=0.8)
+pkg_check_modules (POLKIT REQUIRED polkit-agent>=0.92)
+#pkg_check_modules (POLKIT REQUIRED polkit-gobject-1>=0.92)
 
 MESSAGE(STATUS " ${POLKIT_INCLUDE_DIRS} ===========")
 
@@ -28,13 +27,13 @@ include_directories(
 )
 
 set(MAJOR_POLKIT_QT_VERSION "0")
-set(MINOR_POLKIT_QT_VERSION "9")
-set(PATCH_POLKIT_QT_VERSION "2")
+set(MINOR_POLKIT_QT_VERSION "92")
+set(PATCH_POLKIT_QT_VERSION "1")
 set(POLKIT_QT_VERSION_STRING "${MAJOR_POLKIT_QT_VERSION}.${MINOR_POLKIT_QT_VERSION}.${PATCH_POLKIT_QT_VERSION}")
 
 set(polkit_qt_core_SRCS
     auth.cpp
-    context.cpp
+    authority.cpp
 )
 
 set(polkit_qt_gui_SRCS
@@ -82,13 +81,13 @@ install(TARGETS polkit-qt-gui ${INSTALL_TARGETS_DEFAULT_ARGS})
 install(FILES
 	action.h
 	auth.h
-	context.h
+	authority.h
 	actionbutton.h
 	actionbuttons.h
     export.h
 	includes/Action
 	includes/Auth
-	includes/Context
+	includes/Authority
 	includes/ActionButton
 	includes/ActionButtons
 	DESTINATION

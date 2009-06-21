@@ -3,13 +3,15 @@
  "-//freedesktop//DTD PolicyKit Policy Configuration 1.0//EN"
  "http://www.freedesktop.org/standards/PolicyKit/1.0/policyconfig.dtd">
 <policyconfig>
+  <vendor>KDE</vendor>
+  <vendor_url>http://www.kde.org</vendor_url>
 
   <action id="org.qt.policykit.examples.cry">
     <description>Cry</description>
     <message>Prevents PolicyKit-Qt example from crying</message>
     <defaults>
       <allow_inactive>no</allow_inactive>
-      <allow_active>auth_self_one_shot</allow_active>
+      <allow_active>yes</allow_active>
     </defaults>
   </action>
 
@@ -18,7 +20,7 @@
     <message>Prevents PolicyKit-Qt example from playing</message>
     <defaults>
       <allow_inactive>no</allow_inactive>
-      <allow_active>auth_self</allow_active>
+      <allow_active>yes</allow_active>
     </defaults>
   </action>
 
@@ -27,7 +29,7 @@
     <message>Prevents PolicyKit-Qt example from kicking</message>
     <defaults>
       <allow_inactive>no</allow_inactive>
-      <allow_active>auth_admin</allow_active>
+      <allow_active>auth_admin_keep</allow_active>
     </defaults>
   </action>
 
@@ -45,7 +47,7 @@
     <message>Prevents PolicyKit-Qt example from bleeding</message>
     <defaults>
       <allow_inactive>no</allow_inactive>
-      <allow_active>auth_self_keep_session</allow_active>
+      <allow_active>yes</allow_active>
     </defaults>
   </action>
 
@@ -63,7 +65,7 @@
     <message>Prevents PolicyKit-Qt example from shouting</message>
     <defaults>
       <allow_inactive>no</allow_inactive>
-      <allow_active>auth_self</allow_active>
+      <allow_active>yes</allow_active>
     </defaults>
     <annotate key="org.qt.policykit.examples.shout">foo</annotate>
   </action>
@@ -73,7 +75,7 @@
     <message>Prevents PolicyKit-Qt example from pushing</message>
     <defaults>
       <allow_inactive>no</allow_inactive>
-      <allow_active>auth_self</allow_active>
+      <allow_active>yes</allow_active>
     </defaults>
     <annotate key="org.qt.policykit.examples.push">bar</annotate>
   </action>
@@ -83,7 +85,7 @@
     <message>Prevents PolicyKit-Qt example from blowing up</message>
     <defaults>
       <allow_inactive>no</allow_inactive>
-      <allow_active>auth_self</allow_active>
+      <allow_active>yes</allow_active>
     </defaults>
     <annotate key="org.qt.policykit.examples.blow-up">booo</annotate>
   </action>

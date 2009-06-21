@@ -21,7 +21,7 @@ file are instantly applied.
     <_message>Prevents PolicyKit-Qt example from crying</_message>
     <defaults>
       <allow_inactive>no</allow_inactive>
-      <allow_active>auth_self_one_shot</allow_active>
+      <allow_active>yes</allow_active>
     </defaults>
   </action>
 

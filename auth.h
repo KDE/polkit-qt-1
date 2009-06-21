@@ -2,6 +2,7 @@
  * This file is part of the Polkit-qt project
  * Copyright (C) 2009 Daniel Nicoletti <dantti85-pk@yahoo.com.br>
  * Copyright (C) 2009 Dario Freddi <drf54321@gmail.com>
+ * Copyright (C) 2009 Jaroslav Reznik <jreznik@redhat.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -27,9 +28,7 @@
 #include <QtCore/QString>
 #include <QtCore/QCoreApplication>
 #include <QtCore/QProcess>
-#include <QtGui/qwindowdefs.h>
-
-typedef struct _PolKitAction PolKitAction;
+#include <polkit/polkit.h>
 
 namespace PolkitQt
 {
@@ -37,6 +36,7 @@ namespace PolkitQt
 /**
  * \namespace
  * \author Daniel Nicoletti <dantti85-pk@yahoo.com.br>
+ * \author Jaroslav Reznik <jreznik@redhat.com>
  *
  * \brief Functions used to obtain authorizations
  *
@@ -53,74 +53,24 @@ namespace Auth
 enum Result {
     /** Result unknown */
     Unknown = 0x00,
-    /** The action can be performed */
+    /** The subject is authorized for the specified action  */
     Yes = 0x01,
-    /** The user needs to authenticate as admin.
-     *  The authentication will be immediately released.
-     */
-    AdminAuthOneShot = 0x02,
-    /** The user needs to authenticate as admin */
-    AdminAuth = 0x03,
-    /** The user needs to authenticate as admin.
-     *  The authentication will be kept during this session.
-     */
-    AdminAuthKeepSession = 0x04,
-    /** The user needs to authenticate as admin.
-     *  The authentication will be kept indefinitely.
-     */
-    AdminAuthKeepAlways = 0x5,
-    /** The user needs to authenticate as himself.
-     *  The authentication will be immediately released.
-     */
-    SelfAuthOneShot = 0x6,
-    /** The user needs to authenticate as himself */
-    SelfAuth = 0x7,
-    /** The user needs to authenticate as himself.
-     *  The authentication will be kept during this session.
-     */
-    SelfAuthKeepSession = 0x8,
-    /** The user needs to authenticate as himself.
-     *  The authentication will be kept indefinitely.
-     */
-    SelfAuthKeepAlways = 0x9,
-    /** The action can't be performed */
-    No = 0x10
+    /** The subject is authorized for the specified action  */
+    No = 0x02,
+    /** The subject is authorized if more information is provided */
+    Challenge = 0x03
 };
 
 /**
- * Obtains authorization for the given action regardless of
- * the Action Result.
- * This method is meant to be used if you don't want to have
- * an Action class that can handle all states. It will simply
- * compute the Polkit Result and prompt for password if needed.
- *
+ * TODO: description
  * \see Action
  *
  * \param actionId id of the action in question (i.e. org.freedesktop.policykit.read)
- * \param winId the X window id for the request (use 0 if there's no window)
  * \param pid Process id of the application in question
  * \return \c true if the user is authorized
  *         \c false if the user is not authorized
  */
-POLKIT_QT_EXPORT bool computeAndObtainAuth(const QString &actionId, WId winId = 0, qint64 pid = QCoreApplication::applicationPid());
-
-/**
- * Obtain authorization for the given action regardless of
- * the Action Result.
- * This method was meant to be used only by Action,
- * use it only if you know what you're doing (ie. computing
- * the Polkit Result for the given action first). If you are unsure,
- * use computeAndObtainAuth instead
- *
- * \see computeAndObtainAuth
- *
- * \param actionId id of the action in question (i.e. org.freedesktop.policykit.read)
- * \param winId the X window id for the request (use 0 if there's no window)
- * \param pid Process id of the application in question
- * \return \c true if the user is authorized
- *         \c false if the user is not authorized
- */
-POLKIT_QT_EXPORT bool obtainAuth(const QString &actionId, WId winId = 0, qint64 pid = QCoreApplication::applicationPid());
+POLKIT_QT_EXPORT bool computeAuth(const QString &actionId, qint64 pid = QCoreApplication::applicationPid());
 
 /**
  * This function should be used by mechanisms (e.g.: helper applications).
@@ -140,43 +90,19 @@ POLKIT_QT_EXPORT bool obtainAuth(const QString &actionId, WId winId = 0, qint64 
  * (so you're actually carrying out the action), to false if you're not (for example,
  * if you only want to check if the caller is authorized but not perform the action).
  *
- * DEPRECATION WARNING: This function uses a type that will be removed in
- * PolicyKit 1.0. Please don't use this function in your application unless strictly
- * needed, or you will have to update it when polkit-qt 1.0 will come out. Please use
- * the equivalent without PolKit* types.
  *
  * \note The \c pid parameter refers to the caller. You can retrieve this through
  *              DBus.
  *
- * \param action the PolKitAction in question
- * \param pid the pid of the caller we want to check authorization for
- * \param revokeIfOneShot \c true  if we're carrying out the action, so we want the auth
- *                                 to be revoked right after
- *                        \c false if we're not carrying out the action, so we don't want
- *                                 the auth to be revoked right after
- *
- * \return \c Result::Yes if the caller is authorized and the action should be performed
- *         \c otherwise if the caller was not authorized and the action should not be performed,
- *                      or an error has occurred
- *
- */
-POLKIT_QT_EXPORT Result isCallerAuthorized(PolKitAction *action, qint64 pid, bool revokeIfOneShot);
-
-/**
- * Convenience overload. Lets you use isCallerAuthorized with a QString instead of a PolKitAction.
- *
  * \param actionId the Id of the action in question
  * \param pid the pid of the caller we want to check authorization for
- * \param revokeIfOneShot \c true  if we're carrying out the action, so we want the auth
- *                                 to be revoked right after
- *                        \c false if we're not carrying out the action, so we don't want
- *                                 the auth to be revoked right after
  *
  * \return \c Result::Yes if the caller is authorized and the action should be performed
  *         \c otherwise if the caller was not authorized and the action should not be performed,
  *                      or an error has occurred
+ *
  */
-POLKIT_QT_EXPORT Result isCallerAuthorized(const QString &actionId, qint64 pid, bool revokeIfOneShot);
+POLKIT_QT_EXPORT Result isCallerAuthorized(const QString &actionId, qint64 pid);
 
 /**
  * Same as above. Lets you use isCallerAuthorized with a QString DBus name instead of the
@@ -184,40 +110,26 @@ POLKIT_QT_EXPORT Result isCallerAuthorized(const QString &actionId, qint64 pid, 
  *
  * \param actionId the Id of the action in question
  * \param dbusName unique name on the system message bus
- * \param revokeIfOneShot \c true  if we're carrying out the action, so we want the auth
- *                                 to be revoked right after
- *                        \c false if we're not carrying out the action, so we don't want
- *                                 the auth to be revoked right after
  *
  * \return \c Result::Yes if the caller is authorized and the action should be performed
  *         \c otherwise if the caller was not authorized and the action should not be performed,
  *                      or an error has occurred
  */
-POLKIT_QT_EXPORT Result isCallerAuthorized(const QString &actionId, const QString &dbusName, bool revokeIfOneShot);
+POLKIT_QT_EXPORT Result isCallerAuthorized(const QString &actionId, const QString &dbusName);
 
 /**
- * Same as above. Lets you use isCallerAuthorized with a QString DBus name instead of the
- * PID.
+ * Same is other isCallerAuthorized but instead PID/DBus name requires caller subject.
  *
- * DEPRECATION WARNING: This function uses a type that will be removed in
- * PolicyKit 1.0. Please don't use this function in your application unless strictly
- * needed, or you will have to update it when polkit-qt 1.0 will come out. Please use
- * the equivalent without PolKit* types.
- *
- * \param action the PolKitAction in question
- * \param dbusName unique name on the system message bus
- * \param revokeIfOneShot \c true  if we're carrying out the action, so we want the auth
- *                                 to be revoked right after
- *                        \c false if we're not carrying out the action, so we don't want
- *                                 the auth to be revoked right after
+ * \param actionId the Id of the action in question
+ * \param subject caller subject
  *
  * \return \c Result::Yes if the caller is authorized and the action should be performed
  *         \c otherwise if the caller was not authorized and the action should not be performed,
  *                      or an error has occurred
  */
-POLKIT_QT_EXPORT Result isCallerAuthorized(PolKitAction *action, const QString &dbusName, bool revokeIfOneShot);
+POLKIT_QT_EXPORT Result isCallerAuthorized(const QString &actionId, PolkitSubject *subject);
 }
 
-}
-
+} 
+ 
 #endif

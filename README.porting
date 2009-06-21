@@ -1,0 +1,21 @@
+Policy Kit 1 support for polkit-qt
+==================================
+
+This is initial port to PK1.
+
+What's working?
+---------------
+core polkit-qt but some parts are still missing
+
+What's not working yet
+----------------------
+polkit-qt-gui
+
+Documentation
+-------------
+http://fedoraproject.org/wiki/Features/PolicyKitOne
+http://people.freedesktop.org/~david/polkit-0.92-newdocs
+
+Porting guide
+-------------
+http://cgit.freedesktop.org/PolicyKit/tree/docs/PORTING-GUIDE

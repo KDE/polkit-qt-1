@@ -90,7 +90,7 @@ bool ActionButton::activate()
         toggle();
     }
 
-    return Action::activate(d->buttons.first()->winId());
+    return Action::activate();
 }
 
 void ActionButton::setButton(QAbstractButton *button)

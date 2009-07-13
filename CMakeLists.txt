@@ -13,7 +13,7 @@ include (${QT_USE_FILE})
 include (FindPkgConfig)
 include (InstallSettings)
 
-pkg_check_modules (POLKIT REQUIRED polkit-agent>=0.92)
+pkg_check_modules (POLKIT REQUIRED polkit-agent-1>=0.93)
 #pkg_check_modules (POLKIT REQUIRED polkit-gobject-1>=0.92)
 
 MESSAGE(STATUS " ${POLKIT_INCLUDE_DIRS} ===========")

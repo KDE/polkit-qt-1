@@ -22,7 +22,7 @@ endif (POLKITQT_INCLUDE_DIR AND POLKITQT_LIB)
 include(FindPkgConfig)
 
 if (NOT POLKITQT_MIN_VERSION)
-  set(POLKITQT_MIN_VERSION "0.9.0")
+  set(POLKITQT_MIN_VERSION "0.94.0")
 endif (NOT POLKITQT_MIN_VERSION)
 
 pkg_search_module( POLKITQT polkit-qt )

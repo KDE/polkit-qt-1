@@ -106,6 +106,9 @@ Action::Action(const QString &actionId, QObject *parent)
         : QAction(parent)
         , d(new Private(this))
 {
+    // this must be called AFTER the values initialization	 
+    setPolkitAction(actionId);
+     
     // track the config changes to update the action
     connect(Authority::instance(), SIGNAL(configChanged()),
             this, SLOT(configChanged()));
@@ -128,34 +131,9 @@ bool Action::activate()
         return true;
         break;
 
-    case Auth::Challenge:
-        /* Otherwise, if the action needs auth..  stop the emission
-         * and start auth process..
-         */
-        // this is needed because we might be used as QActions
-        if (isCheckable()) {
-            QAction::setChecked(d->initiallyChecked);
-        }
-/*        if (Auth::obtainAuth(d->actionId, targetPID())) {
-            // Make sure our result is up to date
-            d->computePkResult();
-
-            // emit activated as the obtain auth said it was ok
-            emit activated();
-            return true;
-        }*/
-        break;
-
     default:
     case Auth::No:
         if (d->noEnabled) {
-            /* If PolicyKit says no... and we got here.. it means
-             * that the user set the property "no-enabled" to
-             * TRUE..
-             *
-             * Hence, they probably have a good reason for doing
-             * this so do let the 'activate' signal propagate..
-             */
             emit activated();
             return true;
         }
@@ -193,22 +171,6 @@ void Action::Private::updateAction()
             qobject_cast<QAction*>(parent)->setToolTip(noToolTip);
         }
         qobject_cast<QAction*>(parent)->setIcon(noIcon);
-        break;
-
-    case Auth::Challenge:
-        parent->setVisible(authVisible && masterVisible);
-        parent->setEnabled(authEnabled && masterEnabled);
-        qobject_cast<QAction*>(parent)->setText(authText);
-        if (!authWhatsThis.isNull()) {
-            qobject_cast<QAction*>(parent)->setWhatsThis(authWhatsThis);
-        }
-        if (!authToolTip.isNull()) {
-            qobject_cast<QAction*>(parent)->setToolTip(authToolTip);
-        }
-        qobject_cast<QAction*>(parent)->setIcon(authIcon);
-        if (parent->isCheckable()) {
-            qobject_cast<QAction*>(parent)->setChecked(initiallyChecked);
-        }
         break;
 
     case Auth::Yes:
@@ -315,6 +277,15 @@ void Action::setIcon(const QIcon &icon)
     d->noIcon          = icon;
     d->authIcon        = icon;
     d->yesIcon         = icon;
+    d->updateAction();
+}
+
+void Action::setPolkitAction(const QString &actionId)	 
+{
+    //TODO:
+    d->actionId = actionId; 
+    
+    d->computePkResult();	 
     d->updateAction();
 }
 

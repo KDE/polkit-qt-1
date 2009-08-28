@@ -119,6 +119,13 @@ public Q_SLOTS:
     void revoke();
 
 public:
+    /**	     
+      * Changes the action being tracked	 
+      *	 
+      * \param actionId The new action ID	 
+      */
+    void setPolkitAction(const QString &actionId);
+	
     /**
      * Returns the current action ID.
      *
@@ -556,7 +563,7 @@ public:
      * \return \c true if the actionId is the same as this object's one
      */
     bool is(const QString &actionId) const;
-
+    
 private:
     class Private;
     Private * const d;

@@ -128,6 +128,18 @@ POLKIT_QT_EXPORT Result isCallerAuthorized(const QString &actionId, const QStrin
  *                      or an error has occurred
  */
 POLKIT_QT_EXPORT Result isCallerAuthorized(const QString &actionId, PolkitSubject *subject);
+
+/**
+ * Registers an authentication agent.
+ *
+ * \param subject caller subject
+ * \param locale the locale of the authentication agent
+ * \param objectPath the object path for the authentication agent
+ */
+POLKIT_QT_EXPORT void registerAuthenticationAgent(PolkitSubject *subject, const QString &locale, 
+						  const QString &objectPath);
+
+void registerAuthenticationAgentCallback(GObject *source_object, GAsyncResult *res, gpointer user_data);
 }
 
 } 

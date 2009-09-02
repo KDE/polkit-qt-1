@@ -67,7 +67,7 @@ const QString PkExampleHelper::play(const QString &user)
     //     do the following action
     Auth::Result result;
     result = Auth::isCallerAuthorized("org.qt.policykit.examples.play",
-                                      message().service());
+                                      message().service(), Auth::AllowUserInteraction);
     if (result == Auth::Yes) {
         qDebug() << message().service() << QString(user + " can play");
         return QString(user + " can play");

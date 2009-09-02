@@ -28,6 +28,7 @@
 #include <QtCore/QString>
 #include <QtCore/QCoreApplication>
 #include <QtCore/QProcess>
+#include <QtCore/QFlags>
 #include <polkit/polkit.h>
 
 namespace PolkitQt
@@ -36,13 +37,13 @@ namespace PolkitQt
 /**
  * \namespace
  * \author Daniel Nicoletti <dantti85-pk@yahoo.com.br>
+ * \author Dario Freddi <drf54321@gmail.com>
  * \author Jaroslav Reznik <jreznik@redhat.com>
  *
  * \brief Functions used to obtain authorizations
  *
- * This namespace contains class is a simple wrapper around the DBus interface
- * org.freedesktop.PolicyKit.AuthenticationAgent to make usage of
- * policykit easier in Qt/KDE worlds
+ * This namespace contains class is a simple wrapper around...
+ * TODO:
  */
 namespace Auth
 {
@@ -61,16 +62,19 @@ enum Result {
     Challenge = 0x03
 };
 
-/**
- * TODO: description
- * \see Action
- *
- * \param actionId id of the action in question (i.e. org.freedesktop.policykit.read)
- * \param pid Process id of the application in question
- * \return \c true if the user is authorized
- *         \c false if the user is not authorized
- */
-POLKIT_QT_EXPORT bool computeAuth(const QString &actionId, qint64 pid = QCoreApplication::applicationPid());
+enum AuthorizationFlag {
+    /** No flags set **/
+    None = 0x00,
+    /** If the subject can obtain the authorization through authentication, 
+    * and an authentication agent is available, then attempt to do so. 
+    * 
+    * Note, this means that the method used for checking authorization is likely 
+    * to block for a long time. **/
+    AllowUserInteraction = 0x01
+};
+
+Q_DECLARE_FLAGS(AuthorizationFlags, AuthorizationFlag);
+Q_DECLARE_OPERATORS_FOR_FLAGS(AuthorizationFlags);
 
 /**
  * This function should be used by mechanisms (e.g.: helper applications).
@@ -84,13 +88,6 @@ POLKIT_QT_EXPORT bool computeAuth(const QString &actionId, qint64 pid = QCoreApp
  * and check what it returns before doing anything in your helper, since otherwise
  * you could be actually performing an action from an unknown or unauthorized caller.
  *
- * The revokeIfOneShot parameter is very important: if it is set to true, if the authorization
- * was a OneShot authorization, it will be revoked right after calling this function.
- * To the bottom line, you should set this parameter to true if you're the mechanism
- * (so you're actually carrying out the action), to false if you're not (for example,
- * if you only want to check if the caller is authorized but not perform the action).
- *
- *
  * \note The \c pid parameter refers to the caller. You can retrieve this through
  *              DBus.
  *
@@ -102,7 +99,8 @@ POLKIT_QT_EXPORT bool computeAuth(const QString &actionId, qint64 pid = QCoreApp
  *                      or an error has occurred
  *
  */
-POLKIT_QT_EXPORT Result isCallerAuthorized(const QString &actionId, qint64 pid);
+POLKIT_QT_EXPORT Result isCallerAuthorized(const QString &actionId, qint64 pid, 
+					   AuthorizationFlags flags);
 
 /**
  * Same as above. Lets you use isCallerAuthorized with a QString DBus name instead of the
@@ -115,10 +113,11 @@ POLKIT_QT_EXPORT Result isCallerAuthorized(const QString &actionId, qint64 pid);
  *         \c otherwise if the caller was not authorized and the action should not be performed,
  *                      or an error has occurred
  */
-POLKIT_QT_EXPORT Result isCallerAuthorized(const QString &actionId, const QString &dbusName);
+POLKIT_QT_EXPORT Result isCallerAuthorized(const QString &actionId, const QString &dbusName,
+					   AuthorizationFlags flags);
 
 /**
- * Same is other isCallerAuthorized but instead PID/DBus name requires caller subject.
+ * Same as above but instead PID/DBus name requires caller PolicyKit subject.
  *
  * \param actionId the Id of the action in question
  * \param subject caller subject
@@ -127,7 +126,22 @@ POLKIT_QT_EXPORT Result isCallerAuthorized(const QString &actionId, const QStrin
  *         \c otherwise if the caller was not authorized and the action should not be performed,
  *                      or an error has occurred
  */
-POLKIT_QT_EXPORT Result isCallerAuthorized(const QString &actionId, PolkitSubject *subject);
+POLKIT_QT_EXPORT Result isCallerAuthorized(const QString &actionId, PolkitSubject *subject,
+					   AuthorizationFlags flags);
+
+
+/**
+ * Registers an Authentication agent.
+ *
+ * \param pid caller subject
+ * \param locale the locale of the Authentication agent
+ * \param objectPath the object path for the Authentication agent
+ *
+ * \return \c true if the Authentication agent has been successfully registered
+ *         \c false if the Authentication agent registration failed
+*/
+POLKIT_QT_EXPORT bool registerAuthenticationAgent(qint64 pid, const QString &locale, 
+						  const QString &objectPath);
 
 /**
  * Registers an authentication agent.
@@ -135,11 +149,13 @@ POLKIT_QT_EXPORT Result isCallerAuthorized(const QString &actionId, PolkitSubjec
  * \param subject caller subject
  * \param locale the locale of the authentication agent
  * \param objectPath the object path for the authentication agent
- */
-POLKIT_QT_EXPORT void registerAuthenticationAgent(PolkitSubject *subject, const QString &locale, 
+ *
+ * \return \c true if the Authentication agent has been successfully registered
+ *         \c false if the Authentication agent registration failed
+*/
+POLKIT_QT_EXPORT bool registerAuthenticationAgent(PolkitSubject *subject, const QString &locale, 
 						  const QString &objectPath);
 
-void registerAuthenticationAgentCallback(GObject *source_object, GAsyncResult *res, gpointer user_data);
 }
 
 } 

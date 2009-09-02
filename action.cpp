@@ -126,14 +126,21 @@ bool Action::activate()
 {
     switch (d->pkResult) {
     case Auth::Yes:
-        // If PolicyKit says yes.. emit the 'activated' signal
+    case Auth::Challenge:
+        // just emit the 'activated' signal
         emit activated();
         return true;
         break;
-
     default:
-    case Auth::No:
+    case Auth::No: 
         if (d->noEnabled) {
+	    /* If PolicyKit says no... and we got here.. it means
+             * that the user set the property "no-enabled" to
+             * TRUE..
+             *
+             * Hence, they probably have a good reason for doing
+             * this so do let the 'activate' signal propagate..
+             */
             emit activated();
             return true;
         }
@@ -160,7 +167,6 @@ void Action::Private::updateAction()
     default:
     case Auth::Unknown:
     case Auth::No:
-        /* TODO: rewrite! */
         parent->setVisible(noVisible && masterVisible);
         parent->setEnabled(noEnabled && masterEnabled);
         qobject_cast<QAction*>(parent)->setText(noText);
@@ -173,6 +179,7 @@ void Action::Private::updateAction()
         qobject_cast<QAction*>(parent)->setIcon(noIcon);
         break;
 
+    case Auth::Challenge:
     case Auth::Yes:
         parent->setVisible(yesVisible && masterVisible);
         parent->setEnabled(yesEnabled && masterEnabled);
@@ -204,11 +211,11 @@ void Action::Private::configChanged()
 bool Action::Private::computePkResult()
 {
     Auth::Result old_result;
-
+  
     old_result = pkResult;
     pkResult = Auth::Unknown;
 
-    pkResult = Auth::isCallerAuthorized(actionId, parent->targetPID());
+    pkResult = Auth::isCallerAuthorized(actionId, parent->targetPID(), Auth::None);
 
     return old_result != pkResult;
 }

@@ -110,12 +110,6 @@ void Authority::Private::init()
     QDBusError error;
     QDBusError dbus_error;
 
-/*    dbus_error_init(&error);
-
-    if ((m_systemBus = dbus_bus_get(DBUS_BUS_SYSTEM, &error)) == NULL) {
-        qWarning() << "Failed to initialize DBus";
-    }*/
-
     g_type_init();
 
     if (pkAuthority == NULL) {
@@ -125,20 +119,18 @@ void Authority::Private::init()
     if (pkAuthority == NULL)
         qWarning("Can't get authority authority!");
 
+    // connect changed signal
+    // TODO: test it first!
     g_signal_connect(G_OBJECT(pkAuthority), "changed", G_CALLBACK(pk_config_changed), NULL);
     
-    // TODO FIXME: I'm pretty sure dbus-glib blows in a way that
-    // we can't say we're interested in all signals from all
-    // members on all interfaces for a given service... So we do
-    // this..
-    //dbus_error_init(&dbus_error);
 
+    /*
     // need to listen to NameOwnerChanged
-    /*if (QDBusConnection::systemBus().connect(DBUS_SERVICE_DBUS, QString(), DBUS_INTERFACE_DBUS, "NameOwnerChanged",
+    if (QDBusConnection::systemBus().connect(DBUS_SERVICE_DBUS, QString(), DBUS_INTERFACE_DBUS, "NameOwnerChanged",
             Authority::instance(), SLOT(dbusFilter(const QDBusMessage &)))) {
     } else {
         qWarning() << "Could not connect to the service bus to listen to NameOwnerChanged";
-    }*/
+    }
 
     // Ok, let's get what we need here
     QStringList sigs;
@@ -161,7 +153,7 @@ void Authority::Private::init()
         }
 
     }
-
+*/
     /*if (dbus_error_is_set(&dbus_error)) {
         dbus_error_free(&dbus_error);
         qWarning() << "Failed to initialize ConsoleKit";

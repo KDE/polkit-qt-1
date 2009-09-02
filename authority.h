@@ -42,7 +42,7 @@ namespace PolkitQt
 {
 
 /**
- * \class Authority context.h Authority
+ * \class Authority authority.h Authority
  * \author Daniel Nicoletti <dantti85-pk@yahoo.com.br>
  * \author Dario Freddi <drf54321@gmail.com>
  * \author Jaroslav Reznik <jreznik@redhat.com>
@@ -73,17 +73,14 @@ public:
      * need to call this function to get a working instance of Authority.
      * Don't delete the object after having used it.
      *
-     * \param context use this if you want to set an explicit PolkitAuthority. If you
+     * \param authority use this if you want to set an explicit PolkitAuthority. If you
      *                don't know what this implies, simply ignore the parameter. In case
      *                you want to use it, be sure of streaming it the first time you call
      *                this function, otherwise it will have no effect.
-     *                DEPRECATION WARNING: This function uses a type that will be removed in
-     *                PolicyKit 1.0. Please don't use this function in your application unless strictly
-     *                needed, or you will have to update it when polkit-qt 1.0 will come out
      *
-     * \return The current context instance
+     * \return The current authority instance
      */
-    static Authority* instance(PolkitAuthority *context = 0);
+    static Authority* instance(PolkitAuthority *authority = 0);
 
     ~Authority();
 

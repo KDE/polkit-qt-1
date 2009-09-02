@@ -38,68 +38,68 @@ namespace Auth {
 }
 }
 
-bool Auth::computeAuth(const QString &actionId, qint64 pid)
-{
-    if (isCallerAuthorized(actionId, pid) == Yes)
-        return true;
-    else
-        return false;
-}
-
-Auth::Result Auth::isCallerAuthorized(const QString &actionId, qint64 pid)
+Auth::Result Auth::isCallerAuthorized(const QString &actionId, qint64 pid, AuthorizationFlags flags)
 {
     PolkitSubject *subject;
+    Result result;
 
-    qDebug("Auth::isCallerAuthorized(%s, %lld)", actionId.toAscii().data(), pid);
-
+    // should be in polkit library!!! but for strange reason it's neccesary to have it here
     g_type_init();
 
     subject = polkit_unix_process_new(pid);
 
-    return Auth::isCallerAuthorized(actionId, subject);
+    result = Auth::isCallerAuthorized(actionId, subject, flags);
+    
+    g_object_unref(subject);
+    
+    return result;
 }
 
-Auth::Result Auth::isCallerAuthorized(const QString &actionId, const QString &dbusName)
+Auth::Result Auth::isCallerAuthorized(const QString &actionId, const QString &dbusName, AuthorizationFlags flags)
 {
     PolkitSubject *subject;
+    Result result;
 
-    qDebug("Auth::isCallerAuthorized(%s, %s)", actionId.toAscii().data(), dbusName.toAscii().data());
-
-    // wtf? should be in polkit library!!!
+    // should be in polkit library!!! but for strange reason it's neccesary to have it here
     g_type_init();
 
     subject = polkit_system_bus_name_new(dbusName.toAscii().data());
 
-    return Auth::isCallerAuthorized(actionId, subject);
+    result = Auth::isCallerAuthorized(actionId, subject, flags);
+    
+    g_object_unref(subject);
+    
+    return result;
 }
 
-Auth::Result Auth::isCallerAuthorized(const QString &actionId, PolkitSubject *subject)
+Auth::Result Auth::isCallerAuthorized(const QString &actionId, PolkitSubject *subject, AuthorizationFlags flags)
 {
     PolkitAuthorizationResult *pk_result;
     GError *error = NULL;
-
+    
     if (Authority::instance()->hasError()) {
         return Auth::Unknown;
     }
 
     if (!subject) {
-        qWarning("Cannot get PolkitSubject for this target");
+        qWarning("No subject given for this target.");
         return Auth::Unknown;
     }
 
     qDebug("Subject: %s, actionId: %s", polkit_subject_to_string(subject), actionId.toAscii().data());
 
+    // FIXME: flags handling
     pk_result = polkit_authority_check_authorization_sync(Authority::instance()->getPolkitAuthority(),
                 subject, 
                 actionId.toAscii().data(), 
                 NULL,
-                POLKIT_CHECK_AUTHORIZATION_FLAGS_NONE,
+                (PolkitCheckAuthorizationFlags)(int)flags,
                 NULL,
                 &error);
 
-    if (error) {
+    if (error != NULL) {
         qWarning("Authority checking failed with message: %s", error->message);
-        g_error_free (error);
+        g_error_free(error);
         return Auth::Unknown;
     }
 
@@ -119,33 +119,31 @@ Auth::Result Auth::polkitResultToResult(PolkitAuthorizationResult *result) {
         return Auth::No;
 }
 
-void Auth::registerAuthenticationAgent(PolkitSubject *subject, const QString &locale, const QString &objectPath) 
+bool Auth::registerAuthenticationAgent(PolkitSubject *subject, const QString &locale, const QString &objectPath) 
 {
+    gboolean result;
+    GError *error = NULL;
+    
     if (Authority::instance()->hasError()) {
-        return;
+        return false;
     }
 
     if (!subject) {
-        qWarning("No PolkitSubject subject given for this target.");
-        return;
+        qWarning("No subject given for this target.");
+        return false;
     }
 
     qDebug("Subject: %s, objectPath: %s", polkit_subject_to_string(subject), objectPath.toAscii().data());
     
-    polkit_authority_register_authentication_agent(Authority::instance()->getPolkitAuthority(),
+    result = polkit_authority_register_authentication_agent_sync(Authority::instance()->getPolkitAuthority(),
 						   subject, locale.toAscii().data(),
-						   objectPath.toAscii().data(), NULL,
-						   registerAuthenticationAgentCallback, NULL);
-}
-
-void Auth::registerAuthenticationAgentCallback(GObject *source_object, GAsyncResult *res, gpointer user_data)
-{
-    bool success = FALSE;
+						   objectPath.toAscii().data(), NULL, &error);
+						   
+     if (error) {
+        qWarning("Authentication agent registration failed with message: %s", error->message);
+        g_error_free (error);
+        return false;
+    }
     
-    success = polkit_authority_register_authentication_agent_finish(Authority::instance()->getPolkitAuthority(),
-							            res, NULL);							    
-    if (success)
-	qDebug("Authentication Agent registered successfully!");
-    else
-	qDebug("Authentication Agent registration failed.");
+    return result;
 }

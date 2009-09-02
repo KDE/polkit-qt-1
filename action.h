@@ -89,13 +89,6 @@ public Q_SLOTS:
      * the action. activated() will be emitted
      * if the action gets authorized.
      *
-     * \note This will call the auth dialog
-     * if needed. Only use the return value if
-     * you want a sync behavior.
-     *
-     * \param winId The window id of the parent window,
-     *              used for the dialog.
-     *
      * \return \c true if the caller can do the action
      *
      * \see activated()

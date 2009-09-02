@@ -231,8 +231,8 @@ void PkExample::actionActivated()
     // pretending to be the mechanism
     Auth::Result result;
     
-    result = Auth::isCallerAuthorized("org.qt.policykit.examples.kick", static_cast<uint>(QCoreApplication::applicationPid()));
-    //result = Auth::isCallerAuthorized(action->actionId(), static_cast<uint>(QCoreApplication::applicationPid()));
+    result = Auth::isCallerAuthorized(action->actionId(), static_cast<uint>(QCoreApplication::applicationPid()),
+				      Auth::AllowUserInteraction);
     if (result == Auth::Yes) {
         // in the helper you will do the action
         qDebug() << "caller is authorized to do:" << action->actionId();

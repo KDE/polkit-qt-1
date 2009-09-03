@@ -163,6 +163,39 @@ POLKIT_QT_EXPORT bool registerAuthenticationAgent(qint64 pid, const QString &loc
 POLKIT_QT_EXPORT bool registerAuthenticationAgent(PolkitSubject *subject, const QString &locale, 
 						  const QString &objectPath);
 
+
+/**
+ * Unregisters an Authentication agent.
+ *
+ * \param pid caller subject
+ * \param objectPath the object path for the Authentication agent
+ *
+ * \return \c true if the Authentication agent has been successfully unregistered
+ *         \c false if the Authentication agent unregistration failed
+*/
+POLKIT_QT_EXPORT bool unregisterAuthenticationAgent(qint64 pid, const QString &objectPath);
+
+/**
+ * Unregisters an Authentication agent.
+ *
+ * \param dbusName unique name on the system message bus
+ * \param objectPath the object path for the Authentication agent
+ *
+ * \return \c true if the Authentication agent has been successfully unregistered
+ *         \c false if the Authentication agent unregistration failed
+*/
+POLKIT_QT_EXPORT bool unregisterAuthenticationAgent(const QString &dbusName, const QString &objectPath);
+
+/**
+ * Unregisters an Authentication agent.
+ *
+ * \param subject caller subject
+ * \param objectPath the object path for the Authentication agent
+ *
+ * \return \c true if the Authentication agent has been successfully unregistered
+ *         \c false if the Authentication agent unregistration failed
+*/
+POLKIT_QT_EXPORT bool unregisterAuthenticationAgent(PolkitSubject *subject, const QString &objectPath);
 }
 
 } 

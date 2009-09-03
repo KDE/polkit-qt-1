@@ -129,6 +129,13 @@ POLKIT_QT_EXPORT Result isCallerAuthorized(const QString &actionId, const QStrin
 POLKIT_QT_EXPORT Result isCallerAuthorized(const QString &actionId, PolkitSubject *subject,
 					   AuthorizationFlags flags);
 
+/**
+  * Synchronously retrieves all registered actions.
+  *
+  * \return a list of Action IDs
+  */
+POLKIT_QT_EXPORT QStringList enumerateActions() const;
+
 
 /**
  * Registers an Authentication agent.

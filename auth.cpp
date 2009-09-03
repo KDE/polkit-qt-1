@@ -119,6 +119,37 @@ Auth::Result Auth::polkitResultToResult(PolkitAuthorizationResult *result) {
         return Auth::No;
 }
 
+QStringList enumerateActions() const
+{
+    if (Authority::instance()->hasError())
+        return QStringList();
+
+    GError *error = NULL;
+
+    GList * glist = polkit_authority_enumerate_actions_sync(Authority::instance()->getPolkitAuthority(),
+                                                            NULL,
+                                                            &error);
+
+    if (error != NULL)
+    {
+        qWarning("Enumerating actions failed with message: %s", error->message);
+        g_error_free(error);
+        return QStringList();
+    }
+
+    QStringList result;
+    GList * glist2 = glist;
+    for (i = glist->data; i; glist = g_list_next(glist))
+    {
+        result.append(QString::fromUtf8(polkit_action_description_get_action_id(i)));
+        g_object_unref(i);
+    }
+
+    g_list_free(glist2);
+
+    return result;
+}
+
 bool Auth::registerAuthenticationAgent(PolkitSubject *subject, const QString &locale, const QString &objectPath) 
 {
     gboolean result;

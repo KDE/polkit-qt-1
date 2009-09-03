@@ -73,8 +73,8 @@ enum AuthorizationFlag {
     AllowUserInteraction = 0x01
 };
 
-Q_DECLARE_FLAGS(AuthorizationFlags, AuthorizationFlag);
-Q_DECLARE_OPERATORS_FOR_FLAGS(AuthorizationFlags);
+Q_DECLARE_FLAGS(AuthorizationFlags, AuthorizationFlag)
+Q_DECLARE_OPERATORS_FOR_FLAGS(AuthorizationFlags)
 
 /**
  * This function should be used by mechanisms (e.g.: helper applications).

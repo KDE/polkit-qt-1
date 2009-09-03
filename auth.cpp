@@ -139,7 +139,7 @@ bool Auth::registerAuthenticationAgent(PolkitSubject *subject, const QString &lo
 						   subject, locale.toAscii().data(),
 						   objectPath.toAscii().data(), NULL, &error);
 						   
-     if (error) {
+    if (error) {
         qWarning("Authentication agent registration failed with message: %s", error->message);
         g_error_free (error);
         return false;

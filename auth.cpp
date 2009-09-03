@@ -119,7 +119,7 @@ Auth::Result Auth::polkitResultToResult(PolkitAuthorizationResult *result) {
         return Auth::No;
 }
 
-QStringList enumerateActions()
+QStringList Auth::enumerateActions()
 {
     if (Authority::instance()->hasError())
         return QStringList();

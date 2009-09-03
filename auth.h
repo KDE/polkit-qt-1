@@ -134,7 +134,7 @@ POLKIT_QT_EXPORT Result isCallerAuthorized(const QString &actionId, PolkitSubjec
   *
   * \return a list of Action IDs
   */
-POLKIT_QT_EXPORT QStringList enumerateActions() const;
+POLKIT_QT_EXPORT QStringList enumerateActions();
 
 
 /**

@@ -119,7 +119,7 @@ Auth::Result Auth::polkitResultToResult(PolkitAuthorizationResult *result) {
         return Auth::No;
 }
 
-QStringList enumerateActions() const
+QStringList enumerateActions()
 {
     if (Authority::instance()->hasError())
         return QStringList();
@@ -139,7 +139,7 @@ QStringList enumerateActions() const
 
     QStringList result;
     GList * glist2 = glist;
-    for (i = glist->data; i; glist = g_list_next(glist))
+    for (int i = glist->data; i; glist = g_list_next(glist))
     {
         result.append(QString::fromUtf8(polkit_action_description_get_action_id(i)));
         g_object_unref(i);

@@ -139,9 +139,9 @@ QStringList enumerateActions()
 
     QStringList result;
     GList * glist2 = glist;
-    for (int i = glist->data; i; glist = g_list_next(glist))
+    for (gpointer i = glist->data; i; glist = g_list_next(glist))
     {
-        result.append(QString::fromUtf8(polkit_action_description_get_action_id(i)));
+        result.append(QString::fromUtf8(polkit_action_description_get_action_id((PolkitActionDescription*)i)));
         g_object_unref(i);
     }
 

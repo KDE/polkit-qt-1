@@ -65,7 +65,7 @@ public:
     // Polkit will return NULL on failures, hence we use it instead of 0
     Private(Authority *qq) : q(qq)
             , pkAuthority(NULL)
-            , m_hasError(false) {};
+            , m_hasError(false) {}
 
     void init();
     void dbusFilter(const QDBusMessage &message);

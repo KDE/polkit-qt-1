@@ -180,6 +180,17 @@ void Action::Private::updateAction()
         break;
 
     case Auth::Challenge:
+        parent->setVisible(authVisible && masterVisible);
+        parent->setEnabled(authEnabled && masterEnabled);
+        qobject_cast<QAction*>(parent)->setText(authText);
+        if (!authWhatsThis.isNull()) {
+            qobject_cast<QAction*>(parent)->setWhatsThis(authWhatsThis);
+        }
+        if (!authToolTip.isNull()) {
+            qobject_cast<QAction*>(parent)->setToolTip(authToolTip);
+        }
+        qobject_cast<QAction*>(parent)->setIcon(authIcon);
+        break;
     case Auth::Yes:
         parent->setVisible(yesVisible && masterVisible);
         parent->setEnabled(yesEnabled && masterEnabled);

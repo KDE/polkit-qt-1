@@ -196,6 +196,16 @@ POLKIT_QT_EXPORT bool unregisterAuthenticationAgent(const QString &dbusName, con
  *         \c false if the Authentication agent unregistration failed
 */
 POLKIT_QT_EXPORT bool unregisterAuthenticationAgent(PolkitSubject *subject, const QString &objectPath);
+
+/**
+  * Provide response that \p identity successfully authenticated for the authentication request identified by \p cookie.
+  * \param cookie The cookie passed to the authentication agent from the authority.
+  * \param identity The identity that was authenticated.
+  *
+  * \return \c true if authority acknowledged the call, \c false if error is set.
+  *
+*/
+POLKIT_QT_EXPORT bool authenticationAgentResponse(const QString & cookie, Identity * identity);
 }
 
 } 

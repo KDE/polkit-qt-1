@@ -239,3 +239,33 @@ bool Auth::unregisterAuthenticationAgent(PolkitSubject *subject, const QString &
 
     return result;
 }
+
+bool Auth::authenticationAgentResponse(const QString & cookie, Identity * identity)
+{
+    if (Authority::instance()->hasError())
+        return false;
+
+    if (cookie.isEmpty() || !identity)
+    {
+        qWarning("Cookie or identity is empty!");
+        return false;
+    }
+
+    GError *error = NULL;
+
+    qDebug() << "Auth agent response, cookie: " << cookie << ", identity:" << identity->toString();
+
+    bool result = polkit_authority_authentication_agent_response_sync(Authority::instance()->getPolkitAuthority(),
+                                                                      cookie.toUtf8().data(),
+                                                                      identity->identity(),
+                                                                      NULL,
+                                                                      &error);
+    if (error != NULL)
+    {
+        qWarning("Auth agent response failed with: %s", error->message);
+        g_error_free(error);
+        return false;
+    }
+
+    return result;
+}

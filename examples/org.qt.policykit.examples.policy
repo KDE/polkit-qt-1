@@ -6,6 +6,15 @@
   <vendor>KDE</vendor>
   <vendor_url>http://www.kde.org</vendor_url>
 
+  <action id="org.qt.policykit.examples.kick">
+    <description>Kick</description>
+    <message>Prevents PolicyKit-Qt example from kicking</message>
+    <defaults>
+      <allow_inactive>no</allow_inactive>
+      <allow_active>no</allow_active>
+    </defaults>
+  </action>
+
   <action id="org.qt.policykit.examples.cry">
     <description>Cry</description>
     <message>Prevents PolicyKit-Qt example from crying</message>
@@ -15,39 +24,21 @@
     </defaults>
   </action>
 
-  <action id="org.qt.policykit.examples.play">
-    <description>Play</description>
-    <message>Prevents PolicyKit-Qt example from playing</message>
-    <defaults>
-      <allow_inactive>no</allow_inactive>
-      <allow_active>yes</allow_active>
-    </defaults>
-  </action>
-
-  <action id="org.qt.policykit.examples.kick">
-    <description>Kick</description>
-    <message>Prevents PolicyKit-Qt example from kicking</message>
-    <defaults>
-      <allow_inactive>no</allow_inactive>
-      <allow_active>auth_admin_keep</allow_active>
-    </defaults>
-  </action>
-
-  <action id="org.qt.policykit.examples.delete">
-    <description>Delete</description>
-    <message>Prevents PolicyKit-Qt example from deleting</message>
-    <defaults>
-      <allow_inactive>no</allow_inactive>
-      <allow_active>auth_admin_keep_always</allow_active>
-    </defaults>
-  </action>
-
   <action id="org.qt.policykit.examples.bleed">
     <description>Bleed</description>
     <message>Prevents PolicyKit-Qt example from bleeding</message>
     <defaults>
       <allow_inactive>no</allow_inactive>
-      <allow_active>yes</allow_active>
+      <allow_active>auth_self</allow_active>
+    </defaults>
+  </action>
+
+  <action id="org.qt.policykit.examples.play">
+    <description>Play</description>
+    <message>Prevents PolicyKit-Qt example from playing</message>
+    <defaults>
+      <allow_inactive>no</allow_inactive>
+      <allow_active>auth_admin</allow_active>
     </defaults>
   </action>
 
@@ -56,7 +47,25 @@
     <message>Prevents PolicyKit-Qt example from listening</message>
     <defaults>
       <allow_inactive>no</allow_inactive>
-      <allow_active>auth_admin_keep_always</allow_active>
+      <allow_active>auth_self_keep</allow_active>
+    </defaults>
+  </action>
+
+  <action id="org.qt.policykit.examples.delete">
+    <description>Delete</description>
+    <message>Prevents PolicyKit-Qt example from deleting</message>
+    <defaults>
+      <allow_inactive>no</allow_inactive>
+      <allow_active>auth_admin_keep</allow_active>
+    </defaults>
+  </action>
+
+  <action id="org.qt.policykit.examples.set">
+    <description>Push</description>
+    <message>Prevents PolicyKit-Qt example from setting permissions for the shout action</message>
+    <defaults>
+      <allow_inactive>no</allow_inactive>
+      <allow_active>auth_admin_keep</allow_active>
     </defaults>
   </action>
 
@@ -69,25 +78,4 @@
     </defaults>
     <annotate key="org.qt.policykit.examples.shout">foo</annotate>
   </action>
-
-  <action id="org.qt.policykit.examples.push">
-    <description>Push</description>
-    <message>Prevents PolicyKit-Qt example from pushing</message>
-    <defaults>
-      <allow_inactive>no</allow_inactive>
-      <allow_active>yes</allow_active>
-    </defaults>
-    <annotate key="org.qt.policykit.examples.push">bar</annotate>
-  </action>
-
-  <action id="org.qt.policykit.examples.blow-up">
-    <description>Blow Up</description>
-    <message>Prevents PolicyKit-Qt example from blowing up</message>
-    <defaults>
-      <allow_inactive>no</allow_inactive>
-      <allow_active>yes</allow_active>
-    </defaults>
-    <annotate key="org.qt.policykit.examples.blow-up">booo</annotate>
-  </action>
-
 </policyconfig>

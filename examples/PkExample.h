@@ -1,6 +1,7 @@
 // This is an example not a library
 /***************************************************************************
  *   Copyright (C) 2008 Daniel Nicoletti <dantti85-pk@yahoo.com.br>        *
+ *   Copyright (C) 2009 Radek Novacek    <rnovacek@redhat.com>             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -33,7 +34,6 @@ public:
 
 private slots:
     void activateAction();
-    void activateCheckableAction();
     void actionActivated();
 };
 

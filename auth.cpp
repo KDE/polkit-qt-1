@@ -38,7 +38,7 @@ namespace Auth {
 }
 }
 
-Auth::Result Auth::isCallerAuthorized(const QString &actionId, qint64 pid, AuthorizationFlags flags)
+Auth::Result Auth::checkAuthorization(const QString &actionId, qint64 pid, AuthorizationFlags flags)
 {
     PolkitSubject *subject;
     Result result;
@@ -48,14 +48,14 @@ Auth::Result Auth::isCallerAuthorized(const QString &actionId, qint64 pid, Autho
 
     subject = polkit_unix_process_new(pid);
 
-    result = Auth::isCallerAuthorized(actionId, subject, flags);
+    result = Auth::checkAuthorization(actionId, subject, flags);
     
     g_object_unref(subject);
     
     return result;
 }
 
-Auth::Result Auth::isCallerAuthorized(const QString &actionId, const QString &dbusName, AuthorizationFlags flags)
+Auth::Result Auth::checkAuthorization(const QString &actionId, const QString &dbusName, AuthorizationFlags flags)
 {
     PolkitSubject *subject;
     Result result;
@@ -65,14 +65,14 @@ Auth::Result Auth::isCallerAuthorized(const QString &actionId, const QString &db
 
     subject = polkit_system_bus_name_new(dbusName.toAscii().data());
 
-    result = Auth::isCallerAuthorized(actionId, subject, flags);
+    result = Auth::checkAuthorization(actionId, subject, flags);
     
     g_object_unref(subject);
     
     return result;
 }
 
-Auth::Result Auth::isCallerAuthorized(const QString &actionId, PolkitSubject *subject, AuthorizationFlags flags)
+Auth::Result Auth::checkAuthorization(const QString &actionId, PolkitSubject *subject, AuthorizationFlags flags)
 {
     PolkitAuthorizationResult *pk_result;
     GError *error = NULL;
@@ -137,6 +137,7 @@ QStringList Auth::enumerateActions()
         return QStringList();
     }
 
+    //FIXME: g_object_unref!
     QStringList result;
     GList * glist2 = glist;
     for (gpointer i = glist->data; glist; glist = g_list_next(glist))

@@ -79,7 +79,7 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(AuthorizationFlags)
 /**
  * This function should be used by mechanisms (e.g.: helper applications).
  * It returns the action should be carried out, so if the caller was
- * actually authorized to perform it. The result is in form of a PolKitResult, so that
+ * actually authorized to perform it. The result is in form of a Result, so that
  * you can have more control over the whole process, and detect an eventual error.
  * Most of the times you simply want to check if the result is == to \c Result::Yes,
  * if you don't have specific needs.
@@ -99,11 +99,11 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(AuthorizationFlags)
  *                      or an error has occurred
  *
  */
-POLKIT_QT_EXPORT Result isCallerAuthorized(const QString &actionId, qint64 pid, 
+POLKIT_QT_EXPORT Result checkAuthorization(const QString &actionId, qint64 pid, 
 					   AuthorizationFlags flags);
 
 /**
- * Same as above. Lets you use isCallerAuthorized with a QString DBus name instead of the
+ * Same as above. Lets you use checkAuthorization with a QString DBus name instead of the
  * PID.
  *
  * \param actionId the Id of the action in question
@@ -113,7 +113,7 @@ POLKIT_QT_EXPORT Result isCallerAuthorized(const QString &actionId, qint64 pid,
  *         \c otherwise if the caller was not authorized and the action should not be performed,
  *                      or an error has occurred
  */
-POLKIT_QT_EXPORT Result isCallerAuthorized(const QString &actionId, const QString &dbusName,
+POLKIT_QT_EXPORT Result checkAuthorization(const QString &actionId, const QString &dbusName,
 					   AuthorizationFlags flags);
 
 /**
@@ -126,7 +126,7 @@ POLKIT_QT_EXPORT Result isCallerAuthorized(const QString &actionId, const QStrin
  *         \c otherwise if the caller was not authorized and the action should not be performed,
  *                      or an error has occurred
  */
-POLKIT_QT_EXPORT Result isCallerAuthorized(const QString &actionId, PolkitSubject *subject,
+POLKIT_QT_EXPORT Result checkAuthorization(const QString &actionId, PolkitSubject *subject,
 					   AuthorizationFlags flags);
 
 /**

@@ -226,7 +226,7 @@ bool Action::Private::computePkResult()
     old_result = pkResult;
     pkResult = Auth::Unknown;
 
-    pkResult = Auth::isCallerAuthorized(actionId, parent->targetPID(), Auth::None);
+    pkResult = Auth::checkAuthorization(actionId, parent->targetPID(), Auth::None);
 
     return old_result != pkResult;
 }

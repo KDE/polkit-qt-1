@@ -58,7 +58,6 @@ public:
     PolkitIdentity * identity();
 protected:
     PolkitIdentity * m_identity;
-private:
     explicit Identity(QObject *parent = 0);
 };
 

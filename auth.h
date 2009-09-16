@@ -24,6 +24,7 @@
 #define POLKIT_QT_AUTH_H
 
 #include "export.h"
+#include "identity.h"
 
 #include <QtCore/QString>
 #include <QtCore/QCoreApplication>

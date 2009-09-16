@@ -49,13 +49,15 @@ QString Identity::toString() const
 
 Identity * Identity::fromString(const QString & string)
 {
-    return polkit_identity_from_string(string.toUtf8().data(), NULL);
+    m_identity = polkit_identity_from_string(string.toUtf8().data(), NULL);
+    return this;
 }
 
 UnixUser::UnixUser(const QString & name, QObject * parent)
     : Identity(parent)
 {
-    m_identity = polkit_unix_user_new_for_name(name.toUtf8().data());
+    GError *error;
+    m_identity = polkit_unix_user_new_for_name(name.toUtf8().data(), &error);
 }
 
 UnixUser::UnixUser(uid_t uid, QObject * parent)
@@ -66,18 +68,19 @@ UnixUser::UnixUser(uid_t uid, QObject * parent)
 
 uid_t UnixUser::uid() const
 {
-    return polkit_unix_user_get_uid(m_identity);
+    return polkit_unix_user_get_uid((PolkitUnixUser *) m_identity);
 }
 
 void UnixUser::setUid(uid_t uid)
 {
-    polkit_unix_user_set_uid(m_identity, uid);
+    polkit_unix_user_set_uid((PolkitUnixUser *) m_identity, uid);
 }
 
 UnixGroup::UnixGroup(const QString & name, QObject * parent)
     : Identity(parent)
 {
-    m_identity = polkit_unix_group_new_for_name(name.toUtf8().data());
+    GError *error;
+    m_identity = polkit_unix_group_new_for_name(name.toUtf8().data(), &error);
 }
 
 UnixGroup::UnixGroup(gid_t gid, QObject * parent)
@@ -88,10 +91,10 @@ UnixGroup::UnixGroup(gid_t gid, QObject * parent)
 
 gid_t UnixGroup::gid() const
 {
-    return polkit_unix_group_get_gid(m_identity);
+    return polkit_unix_group_get_gid((PolkitUnixGroup *) m_identity);
 }
 
 void UnixGroup::setGid(gid_t gid)
 {
-    polkit_unix_group_set_gid(m_identity, gid);
+    polkit_unix_group_set_gid((PolkitUnixGroup *) m_identity, gid);
 }

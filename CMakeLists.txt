@@ -34,6 +34,8 @@ set(POLKIT_QT_VERSION_STRING "${MAJOR_POLKIT_QT_VERSION}.${MINOR_POLKIT_QT_VERSI
 set(polkit_qt_core_SRCS
     auth.cpp
     authority.cpp
+    identity.cpp
+    subject.cpp
 )
 
 set(polkit_qt_gui_SRCS

@@ -5,11 +5,15 @@ This is initial port to PK1.
 
 What's working?
 ---------------
-core polkit-qt but some parts are still missing
-
-What's not working yet
-----------------------
+polkit-qt-core
 polkit-qt-gui
+
+TO-DO
+-----
+* polkit-qt-core
+  - temporary authorization handling functions
+  - move from Auth namespace to Authority class?
+  - tests
 
 Documentation
 -------------

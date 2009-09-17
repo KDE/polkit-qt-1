@@ -23,6 +23,7 @@
 #include "action.h"
 #include "authority.h"
 #include "auth.h"
+#include "subject.h"
 
 #include <polkit/polkit.h>
 #include <QDebug>
@@ -222,11 +223,14 @@ void Action::Private::configChanged()
 bool Action::Private::computePkResult()
 {
     Auth::Result old_result;
+    UnixProcess *subject;
   
+    subject = new UnixProcess(parent->targetPID());
+    
     old_result = pkResult;
     pkResult = Auth::Unknown;
 
-    pkResult = Auth::checkAuthorization(actionId, parent->targetPID(), Auth::None);
+    pkResult = Auth::checkAuthorization(actionId, subject, Auth::None);
 
     return old_result != pkResult;
 }

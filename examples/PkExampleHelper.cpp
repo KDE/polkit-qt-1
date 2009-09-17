@@ -67,8 +67,12 @@ bool PkExampleHelper::set(const QString &action)
     // message().service() is the service name of the caller
     // We can check if the caller is authorized to the following action
     Auth::Result result;
+    SystemBusName *subject;
+    
+    subject = new SystemBusName(message().service());
+    
     result = Auth::checkAuthorization("org.qt.policykit.examples.set",
-                                      message().service(), Auth::AllowUserInteraction);
+                                      subject , Auth::AllowUserInteraction);
     if (result == Auth::Yes) {
         qDebug() << message().service() << QString("Implicit authorization set to") << action;
         // Caller is authorized so we can perform the action

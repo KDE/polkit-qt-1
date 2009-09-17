@@ -38,41 +38,7 @@ namespace Auth {
 }
 }
 
-Auth::Result Auth::checkAuthorization(const QString &actionId, qint64 pid, AuthorizationFlags flags)
-{
-    PolkitSubject *subject;
-    Result result;
-
-    // should be in polkit library!!! but for strange reason it's neccesary to have it here
-    g_type_init();
-
-    subject = polkit_unix_process_new(pid);
-
-    result = Auth::checkAuthorization(actionId, subject, flags);
-    
-    g_object_unref(subject);
-    
-    return result;
-}
-
-Auth::Result Auth::checkAuthorization(const QString &actionId, const QString &dbusName, AuthorizationFlags flags)
-{
-    PolkitSubject *subject;
-    Result result;
-
-    // should be in polkit library!!! but for strange reason it's neccesary to have it here
-    g_type_init();
-
-    subject = polkit_system_bus_name_new(dbusName.toAscii().data());
-
-    result = Auth::checkAuthorization(actionId, subject, flags);
-    
-    g_object_unref(subject);
-    
-    return result;
-}
-
-Auth::Result Auth::checkAuthorization(const QString &actionId, PolkitSubject *subject, AuthorizationFlags flags)
+Auth::Result Auth::checkAuthorization(const QString &actionId, Subject *subject, AuthorizationFlags flags)
 {
     PolkitAuthorizationResult *pk_result;
     GError *error = NULL;
@@ -80,17 +46,11 @@ Auth::Result Auth::checkAuthorization(const QString &actionId, PolkitSubject *su
     if (Authority::instance()->hasError()) {
         return Auth::Unknown;
     }
+    
+    // TODO: subject check
 
-    if (!subject) {
-        qWarning("No subject given for this target.");
-        return Auth::Unknown;
-    }
-
-    qDebug("Subject: %s, actionId: %s", polkit_subject_to_string(subject), actionId.toAscii().data());
-
-    // FIXME: flags handling
     pk_result = polkit_authority_check_authorization_sync(Authority::instance()->getPolkitAuthority(),
-                subject, 
+                subject->subject(), 
                 actionId.toAscii().data(), 
                 NULL,
                 (PolkitCheckAuthorizationFlags)(int)flags,
@@ -151,7 +111,7 @@ QStringList Auth::enumerateActions()
     return result;
 }
 
-bool Auth::registerAuthenticationAgent(PolkitSubject *subject, const QString &locale, const QString &objectPath) 
+bool Auth::registerAuthenticationAgent(Subject *subject, const QString &locale, const QString &objectPath) 
 {
     gboolean result;
     GError *error = NULL;
@@ -165,10 +125,10 @@ bool Auth::registerAuthenticationAgent(PolkitSubject *subject, const QString &lo
         return false;
     }
 
-    qDebug("Subject: %s, objectPath: %s", polkit_subject_to_string(subject), objectPath.toAscii().data());
+    qDebug("Subject: %s, objectPath: %s", subject->toString().toAscii().data(), objectPath.toAscii().data());
     
     result = polkit_authority_register_authentication_agent_sync(Authority::instance()->getPolkitAuthority(),
-						   subject, locale.toAscii().data(),
+						   subject->subject(), locale.toAscii().data(),
 						   objectPath.toAscii().data(), NULL, &error);
 						   
     if (error) {
@@ -180,37 +140,7 @@ bool Auth::registerAuthenticationAgent(PolkitSubject *subject, const QString &lo
     return result;
 }
 
-bool Auth::unregisterAuthenticationAgent(qint64 pid, const QString &objectPath)
-{
-    PolkitSubject *subject;
-    // should be in polkit library!!! but for strange reason it's neccesary to have it here
-    g_type_init();
-
-    subject = polkit_unix_process_new(pid);
-
-    bool result = Auth::unregisterAuthenticationAgent(subject, objectPath);
-
-    g_object_unref(subject);
-
-    return result;
-}
-
-bool Auth::unregisterAuthenticationAgent(const QString &dbusName, const QString &objectPath)
-{
-    PolkitSubject *subject;
-    // should be in polkit library!!! but for strange reason it's neccesary to have it here
-    g_type_init();
-
-    subject = polkit_system_bus_name_new(dbusName.toUtf8().data());
-
-    bool result = Auth::unregisterAuthenticationAgent(subject, objectPath);
-
-    g_object_unref(subject);
-
-    return result;
-}
-
-bool Auth::unregisterAuthenticationAgent(PolkitSubject *subject, const QString &objectPath)
+bool Auth::unregisterAuthenticationAgent(Subject *subject, const QString &objectPath)
 {
     if (Authority::instance()->hasError())
         return false;
@@ -223,10 +153,10 @@ bool Auth::unregisterAuthenticationAgent(PolkitSubject *subject, const QString &
 
     GError *error = NULL;
 
-    qDebug("Unregistering agent, subject: %s", polkit_subject_to_string(subject));
+    qDebug("Unregistering agent, subject: %s", subject->toString().toAscii().data());
 
     bool result = polkit_authority_unregister_authentication_agent_sync(Authority::instance()->getPolkitAuthority(),
-                                                                        subject,
+                                                                        subject->subject(),
                                                                         objectPath.toUtf8().data(),
                                                                         NULL,
                                                                         &error);

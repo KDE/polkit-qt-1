@@ -25,6 +25,7 @@
 
 #include "export.h"
 #include "identity.h"
+#include "subject.h"
 
 #include <QtCore/QString>
 #include <QtCore/QCoreApplication>
@@ -78,6 +79,7 @@ Q_DECLARE_FLAGS(AuthorizationFlags, AuthorizationFlag)
 Q_DECLARE_OPERATORS_FOR_FLAGS(AuthorizationFlags)
 
 /**
+ * TODO: rewrite, finish!
  * This function should be used by mechanisms (e.g.: helper applications).
  * It returns the action should be carried out, so if the caller was
  * actually authorized to perform it. The result is in form of a Result, so that
@@ -89,67 +91,23 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(AuthorizationFlags)
  * and check what it returns before doing anything in your helper, since otherwise
  * you could be actually performing an action from an unknown or unauthorized caller.
  *
- * \note The \c pid parameter refers to the caller. You can retrieve this through
- *              DBus.
- *
  * \param actionId the Id of the action in question
- * \param pid the pid of the caller we want to check authorization for
+ * \param subject ...
+ * \param flags
  *
  * \return \c Result::Yes if the caller is authorized and the action should be performed
  *         \c otherwise if the caller was not authorized and the action should not be performed,
  *                      or an error has occurred
  *
  */
-POLKIT_QT_EXPORT Result checkAuthorization(const QString &actionId, qint64 pid, 
+POLKIT_QT_EXPORT Result checkAuthorization(const QString &actionId, Subject *subject,
 					   AuthorizationFlags flags);
-
-/**
- * Same as above. Lets you use checkAuthorization with a QString DBus name instead of the
- * PID.
- *
- * \param actionId the Id of the action in question
- * \param dbusName unique name on the system message bus
- *
- * \return \c Result::Yes if the caller is authorized and the action should be performed
- *         \c otherwise if the caller was not authorized and the action should not be performed,
- *                      or an error has occurred
- */
-POLKIT_QT_EXPORT Result checkAuthorization(const QString &actionId, const QString &dbusName,
-					   AuthorizationFlags flags);
-
-/**
- * Same as above but instead PID/DBus name requires caller PolicyKit subject.
- *
- * \param actionId the Id of the action in question
- * \param subject caller subject
- *
- * \return \c Result::Yes if the caller is authorized and the action should be performed
- *         \c otherwise if the caller was not authorized and the action should not be performed,
- *                      or an error has occurred
- */
-POLKIT_QT_EXPORT Result checkAuthorization(const QString &actionId, PolkitSubject *subject,
-					   AuthorizationFlags flags);
-
 /**
   * Synchronously retrieves all registered actions.
   *
   * \return a list of Action IDs
   */
 POLKIT_QT_EXPORT QStringList enumerateActions();
-
-
-/**
- * Registers an Authentication agent.
- *
- * \param pid caller subject
- * \param locale the locale of the Authentication agent
- * \param objectPath the object path for the Authentication agent
- *
- * \return \c true if the Authentication agent has been successfully registered
- *         \c false if the Authentication agent registration failed
-*/
-POLKIT_QT_EXPORT bool registerAuthenticationAgent(qint64 pid, const QString &locale, 
-						  const QString &objectPath);
 
 /**
  * Registers an authentication agent.
@@ -161,31 +119,9 @@ POLKIT_QT_EXPORT bool registerAuthenticationAgent(qint64 pid, const QString &loc
  * \return \c true if the Authentication agent has been successfully registered
  *         \c false if the Authentication agent registration failed
 */
-POLKIT_QT_EXPORT bool registerAuthenticationAgent(PolkitSubject *subject, const QString &locale, 
+POLKIT_QT_EXPORT bool registerAuthenticationAgent(Subject *subject, const QString &locale, 
 						  const QString &objectPath);
 
-
-/**
- * Unregisters an Authentication agent.
- *
- * \param pid caller subject
- * \param objectPath the object path for the Authentication agent
- *
- * \return \c true if the Authentication agent has been successfully unregistered
- *         \c false if the Authentication agent unregistration failed
-*/
-POLKIT_QT_EXPORT bool unregisterAuthenticationAgent(qint64 pid, const QString &objectPath);
-
-/**
- * Unregisters an Authentication agent.
- *
- * \param dbusName unique name on the system message bus
- * \param objectPath the object path for the Authentication agent
- *
- * \return \c true if the Authentication agent has been successfully unregistered
- *         \c false if the Authentication agent unregistration failed
-*/
-POLKIT_QT_EXPORT bool unregisterAuthenticationAgent(const QString &dbusName, const QString &objectPath);
 
 /**
  * Unregisters an Authentication agent.
@@ -196,7 +132,7 @@ POLKIT_QT_EXPORT bool unregisterAuthenticationAgent(const QString &dbusName, con
  * \return \c true if the Authentication agent has been successfully unregistered
  *         \c false if the Authentication agent unregistration failed
 */
-POLKIT_QT_EXPORT bool unregisterAuthenticationAgent(PolkitSubject *subject, const QString &objectPath);
+POLKIT_QT_EXPORT bool unregisterAuthenticationAgent(Subject *subject, const QString &objectPath);
 
 /**
   * Provide response that \p identity successfully authenticated for the authentication request identified by \p cookie.

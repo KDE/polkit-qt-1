@@ -226,8 +226,11 @@ void PkExample::actionActivated()
     qDebug() << "pretending to be the mechanism for action:" << action->actionId();
 
     Auth::Result result;
+    UnixProcess *subject;
     
-    result = Auth::checkAuthorization(action->actionId(), static_cast<uint>(QCoreApplication::applicationPid()),
+    subject = new UnixProcess(static_cast<uint>(QCoreApplication::applicationPid()));
+    
+    result = Auth::checkAuthorization(action->actionId(), subject,
 				      Auth::AllowUserInteraction);
     if (result == Auth::Yes) {
         // in the helper you will do the action

@@ -6,8 +6,6 @@ actionbutton_p.h
 actionbuttons.cpp
 actionbuttons.h
 actionbuttons_p.h
-auth.cpp
-auth.h
 authority.cpp
 authority.h
 cmake/CMakeLists.txt
@@ -28,6 +26,8 @@ identity.cpp
 identity.h
 subject.cpp
 subject.h
+session.cpp
+session.h
 temporaryauthorization.h
 temporaryauthorization.cpp
 test/CMakeLists.txt

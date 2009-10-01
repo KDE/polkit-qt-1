@@ -1,3 +1,23 @@
+/*
+ * This file is part of the PolKit1-qt project
+ * Copyright (C) 2009 Radek Novacek <rnovacek@redhat.com>
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Library General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Library General Public License for more details.
+ *
+ * You should have received a copy of the GNU Library General Public License
+ * along with this library; see the file COPYING.LIB. If not, write to
+ * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+ * Boston, MA 02110-1301, USA.
+ */
+
 #ifndef TEMPORARYAUTHORIZATION_H
 #define TEMPORARYAUTHORIZATION_H
 
@@ -27,12 +47,9 @@ namespace PolkitQt
 class POLKIT_QT_EXPORT TemporaryAuthorization : public QObject
 {
     Q_OBJECT
-private:
-    PolkitTemporaryAuthorization *m_temporaryAuthorization;
-    QString m_id, m_actionId;
-    Subject *m_subject;
-    QDateTime m_timeObtained, m_timeExpires;
 public:
+    TemporaryAuthorization(PolkitTemporaryAuthorization *tempAuth);
+
     /**
      * \brief Gets the identifier for the authorization.
      *
@@ -40,14 +57,14 @@ public:
      *
      * \return Unique identifier for the authorization
      */
-    QString id();
+    QString id() const;
 
     /**
      * \brief Gets the identifier of the action that authorization is for
      *
      * \return String that identifies the action
      */
-    QString actionId();
+    QString actionId() const;
 
     /**
      * \brief Gets the subject that authorization is for
@@ -61,16 +78,14 @@ public:
      *
      * \return Time of obtaining the authorization
      */
-    QDateTime timeObtained();
+    QDateTime timeObtained() const;
 
     /**
      * \brief Gets the time when authorizaton will expire
      *
      * \return Time of expiration
      */
-    QDateTime timeExpires();
-
-    TemporaryAuthorization(PolkitTemporaryAuthorization *tempAuth);
+    QDateTime timeExpires() const;
 
     /**
      * \brief Revoke temporary authorization
@@ -79,6 +94,12 @@ public:
      *         \c false Revoking authorization failed
      */
     bool revoke();
+
+private:
+    PolkitTemporaryAuthorization *m_temporaryAuthorization;
+    QString m_id, m_actionId;
+    Subject *m_subject;
+    QDateTime m_timeObtained, m_timeExpires;
 };
 }
 

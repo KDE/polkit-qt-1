@@ -116,7 +116,7 @@ public:
 };
 
 /**
- * \class SystemBusName subject.h UnixProcess
+ * \class SystemBusName subject.h SystemBusName
  * \author Jaroslav Reznik <jreznik@redhat.com>
  *
  * \brief A class for representing a process owning a unique name on the system bus. 
@@ -150,7 +150,7 @@ public:
 };
 
 /**
- * \class UnixSession subject.h UnixProcess
+ * \class UnixSession subject.h UnixSession
  * \author Jaroslav Reznik <jreznik@redhat.com>
  *
  * \brief A class for representing unix session.

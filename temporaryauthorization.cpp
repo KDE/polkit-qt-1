@@ -1,3 +1,23 @@
+/*
+ * This file is part of the PolKit1-qt project
+ * Copyright (C) 2009 Radek Novacek <rnovacek@redhat.com>
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Library General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Library General Public License for more details.
+ *
+ * You should have received a copy of the GNU Library General Public License
+ * along with this library; see the file COPYING.LIB. If not, write to
+ * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+ * Boston, MA 02110-1301, USA.
+ */
+
 #include "temporaryauthorization.h"
 #include "authority.h"
 
@@ -13,12 +33,12 @@ TemporaryAuthorization::TemporaryAuthorization(PolkitTemporaryAuthorization *tem
     m_timeExpires = QDateTime::fromTime_t(polkit_temporary_authorization_get_time_expires(tempAuth));
 }
 
-QString TemporaryAuthorization::id()
+QString TemporaryAuthorization::id() const
 {
     return m_id;
 }
 
-QString TemporaryAuthorization::actionId()
+QString TemporaryAuthorization::actionId() const
 {
     return m_actionId;
 }
@@ -29,12 +49,12 @@ Subject *TemporaryAuthorization::subject()
     return m_subject;//Subject::fromString(polkit_subject_to_string(m_subject));
 }
 
-QDateTime TemporaryAuthorization::timeObtained()
+QDateTime TemporaryAuthorization::timeObtained() const
 {
     return m_timeObtained;
 }
 
-QDateTime TemporaryAuthorization::timeExpires()
+QDateTime TemporaryAuthorization::timeExpires() const
 {
     return m_timeExpires;
 }

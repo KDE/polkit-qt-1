@@ -24,6 +24,9 @@
 #define POLKIT_QT_AUTHORITY_H
 
 #include "export.h"
+#include "identity.h"
+#include "subject.h"
+#include "temporaryauthorization.h"
 
 #include <QtCore/QObject>
 #include <QtCore/QString>
@@ -63,6 +66,29 @@ class POLKIT_QT_EXPORT Authority : public QObject
     Q_OBJECT
     Q_DISABLE_COPY(Authority)
 public:
+    enum Result {
+        /** Result unknown */
+        Unknown = 0x00,
+        /** The subject is authorized for the specified action  */
+        Yes = 0x01,
+        /** The subject is authorized for the specified action  */
+        No = 0x02,
+        /** The subject is authorized if more information is provided */
+        Challenge = 0x03
+    };
+
+    enum AuthorizationFlag {
+        /** No flags set **/
+        None = 0x00,
+        /** If the subject can obtain the authorization through authentication,
+        * and an authentication agent is available, then attempt to do so.
+        *
+        * Note, this means that the method used for checking authorization is likely
+        * to block for a long time. **/
+        AllowUserInteraction = 0x01
+    };
+    Q_DECLARE_FLAGS(AuthorizationFlags, AuthorizationFlag)
+
     /**
      * \brief Returns the instance of Authority
      *
@@ -108,6 +134,102 @@ public:
      */
     PolkitAuthority *getPolkitAuthority() const;
 
+    /**
+     * TODO: rewrite, finish!
+     * This function should be used by mechanisms (e.g.: helper applications).
+     * It returns the action should be carried out, so if the caller was
+     * actually authorized to perform it. The result is in form of a Result, so that
+     * you can have more control over the whole process, and detect an eventual error.
+     * Most of the times you simply want to check if the result is == to \c Result::Yes,
+     * if you don't have specific needs.
+     *
+     * It is CRITICAL that you call this function
+     * and check what it returns before doing anything in your helper, since otherwise
+     * you could be actually performing an action from an unknown or unauthorized caller.
+     *
+     * \param actionId the Id of the action in question
+     * \param subject ...
+     * \param flags
+     *
+     * \return \c Result::Yes if the caller is authorized and the action should be performed
+     *         \c otherwise if the caller was not authorized and the action should not be performed,
+     *                      or an error has occurred
+     *
+     */
+    Result checkAuthorization(const QString &actionId, Subject *subject,
+                              AuthorizationFlags flags);
+
+    /**
+      * Synchronously retrieves all registered actions.
+      *
+      * \return a list of Action IDs
+      */
+    QStringList enumerateActions();
+
+    /**
+     * Registers an authentication agent.
+     *
+     * \param subject caller subject
+     * \param locale the locale of the authentication agent
+     * \param objectPath the object path for the authentication agent
+     *
+     * \return \c true if the Authentication agent has been successfully registered
+     *         \c false if the Authentication agent registration failed
+    */
+    bool registerAuthenticationAgent(Subject *subject, const QString &locale,
+                                     const QString &objectPath);
+
+
+    /**
+     * Unregisters an Authentication agent.
+     *
+     * \param subject caller subject
+     * \param objectPath the object path for the Authentication agent
+     *
+     * \return \c true if the Authentication agent has been successfully unregistered
+     *         \c false if the Authentication agent unregistration failed
+    */
+    bool unregisterAuthenticationAgent(Subject *subject, const QString &objectPath);
+
+    /**
+      * Provide response that \p identity successfully authenticated for the authentication request identified by \p cookie.
+      * \param cookie The cookie passed to the authentication agent from the authority.
+      * \param identity The identity that was authenticated.
+      *
+      * \return \c true if authority acknowledged the call, \c false if error is set.
+      *
+    */
+    bool authenticationAgentResponse(const QString & cookie, Identity * identity);
+
+    /**
+     * Retrieves all temporary action that applies to \p subject
+     *
+     * \param subject the subject to get temporary authorizations for
+     *
+     * \return List of all temporary authorizations
+    */
+    QList<TemporaryAuthorization *> enumerateTemporaryAuthorizations(Subject *subject);
+
+    /**
+     * Revokes all temporary authorizations that applies to \p subject
+     *
+     * \param subject the subject to revoke temporary authorizations from
+     *
+     * \return \c true if all temporary authorization were revoked
+     *         \c false if the revoking failed
+    */
+    bool revokeTemporaryAuthorizations(Subject *subject);
+
+    /**
+     * Revokes temporary authorization by \p id
+     *
+     * \param id the identifier of the temporary authorization
+     *
+     * \return \c true if the temporary authorization was revoked
+     *         \c false if the revoking failed
+    */
+    bool revokeTemporaryAuthorization(const QString &id);
+
 Q_SIGNALS:
     /**
      * This signal will be emitted when a configuration
@@ -141,6 +263,8 @@ private:
 
     Q_PRIVATE_SLOT(d, void dbusFilter(const QDBusMessage &message))
 };
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(Authority::AuthorizationFlags)
 
 }
 

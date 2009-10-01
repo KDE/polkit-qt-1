@@ -32,10 +32,10 @@ set(PATCH_POLKIT_QT_VERSION "1")
 set(POLKIT_QT_VERSION_STRING "${MAJOR_POLKIT_QT_VERSION}.${MINOR_POLKIT_QT_VERSION}.${PATCH_POLKIT_QT_VERSION}")
 
 set(polkit_qt_core_SRCS
-    auth.cpp
     authority.cpp
     identity.cpp
     subject.cpp
+    temporaryauthorization.cpp
 )
 
 set(polkit_qt_gui_SRCS
@@ -82,16 +82,17 @@ install(TARGETS polkit-qt-gui ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 install(FILES
 	action.h
-	auth.h
 	authority.h
 	actionbutton.h
 	actionbuttons.h
-    export.h
+	export.h
 	includes/Action
-	includes/Auth
 	includes/Authority
 	includes/ActionButton
 	includes/ActionButtons
+	identity.h
+	subject.h
+	temporaryauthorization.h
 	DESTINATION
 	${INCLUDE_INSTALL_DIR}/PolicyKit/polkit-qt COMPONENT Devel)
 
@@ -108,3 +109,8 @@ if (BUILD_EXAMPLES)
 endif (BUILD_EXAMPLES)
 
 add_subdirectory(cmake)
+
+if (BUILD_TEST)
+    add_subdirectory(test)
+endif (BUILD_TEST)
+

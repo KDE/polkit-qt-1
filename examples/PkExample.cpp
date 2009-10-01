@@ -21,10 +21,9 @@
 
 #include "PkExample.h"
 
-#include <ActionButton>
-#include <ActionButtons>
-#include <Authority>
-#include <Auth>
+#include "actionbutton.h"
+#include "actionbuttons.h"
+#include "authority.h"
 #include <QDebug>
 
 #include <QtDBus/QDBusMessage>
@@ -225,14 +224,14 @@ void PkExample::actionActivated()
     // passing the action id and the caller pid (which DBus will tell you).
     qDebug() << "pretending to be the mechanism for action:" << action->actionId();
 
-    Auth::Result result;
+    Authority::Result result;
     UnixProcess *subject;
     
     subject = new UnixProcess(static_cast<uint>(QCoreApplication::applicationPid()));
     
-    result = Auth::checkAuthorization(action->actionId(), subject,
-				      Auth::AllowUserInteraction);
-    if (result == Auth::Yes) {
+    result = Authority::instance()->checkAuthorization(action->actionId(), subject,
+                      Authority::AllowUserInteraction);
+    if (result == Authority::Yes) {
         // in the helper you will do the action
         qDebug() << "caller is authorized to do:" << action->actionId();
         QListWidgetItem *item = new QListWidgetItem(QPixmap(":/Icons/custom-yes.png"), action->actionId());

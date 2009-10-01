@@ -54,7 +54,7 @@ class POLKIT_QT_EXPORT Subject : public QObject
 public:
     ~Subject();
     QString toString() const;
-    Subject * fromString(const QString & string);
+    static Subject * fromString(const QString & string);
     PolkitSubject * subject();
 protected:
     PolkitSubject * m_subject;

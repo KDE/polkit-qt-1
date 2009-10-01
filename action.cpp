@@ -22,11 +22,11 @@
 
 #include "action.h"
 #include "authority.h"
-#include "auth.h"
 #include "subject.h"
 
 #include <polkit/polkit.h>
 #include <QDebug>
+#include <QtCore/QCoreApplication>
 
 using namespace PolkitQt;
 
@@ -38,7 +38,7 @@ public:
     Action *parent;
 
     QString       actionId;
-    Auth::Result  pkResult;
+    Authority::Result  pkResult;
     qint64        targetPID;
 
     void                 updateAction();
@@ -126,14 +126,14 @@ Action::~Action()
 bool Action::activate()
 {
     switch (d->pkResult) {
-    case Auth::Yes:
-    case Auth::Challenge:
+    case Authority::Yes:
+    case Authority::Challenge:
         // just emit the 'activated' signal
         emit activated();
         return true;
         break;
     default:
-    case Auth::No: 
+    case Authority::No:
         if (d->noEnabled) {
 	    /* If PolicyKit says no... and we got here.. it means
              * that the user set the property "no-enabled" to
@@ -166,8 +166,8 @@ void Action::Private::updateAction()
 
     switch (pkResult) {
     default:
-    case Auth::Unknown:
-    case Auth::No:
+    case Authority::Unknown:
+    case Authority::No:
         parent->setVisible(noVisible && masterVisible);
         parent->setEnabled(noEnabled && masterEnabled);
         qobject_cast<QAction*>(parent)->setText(noText);
@@ -180,7 +180,7 @@ void Action::Private::updateAction()
         qobject_cast<QAction*>(parent)->setIcon(noIcon);
         break;
 
-    case Auth::Challenge:
+    case Authority::Challenge:
         parent->setVisible(authVisible && masterVisible);
         parent->setEnabled(authEnabled && masterEnabled);
         qobject_cast<QAction*>(parent)->setText(authText);
@@ -192,7 +192,7 @@ void Action::Private::updateAction()
         }
         qobject_cast<QAction*>(parent)->setIcon(authIcon);
         break;
-    case Auth::Yes:
+    case Authority::Yes:
         parent->setVisible(yesVisible && masterVisible);
         parent->setEnabled(yesEnabled && masterEnabled);
         qobject_cast<QAction*>(parent)->setText(yesText);
@@ -222,15 +222,15 @@ void Action::Private::configChanged()
 
 bool Action::Private::computePkResult()
 {
-    Auth::Result old_result;
+    Authority::Result old_result;
     UnixProcess *subject;
   
     subject = new UnixProcess(parent->targetPID());
     
     old_result = pkResult;
-    pkResult = Auth::Unknown;
+    pkResult = Authority::Unknown;
 
-    pkResult = Auth::checkAuthorization(actionId, subject, Auth::None);
+    pkResult = Authority::instance()->checkAuthorization(actionId, subject, Authority::None);
 
     return old_result != pkResult;
 }
@@ -253,7 +253,7 @@ void Action::setTargetPID(qint64 pid)
 
 bool Action::isAllowed() const
 {
-    return d->pkResult == Auth::Yes;
+    return d->pkResult == Authority::Yes;
 }
 
 bool Action::is(const QString &other) const

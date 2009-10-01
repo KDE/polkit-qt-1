@@ -41,3 +41,4 @@
 #endif
 
 #endif /*POLKIT_QT_EXPORT_H*/
+

@@ -49,14 +49,15 @@ QString Identity::toString() const
 
 Identity * Identity::fromString(const QString & string)
 {
-    m_identity = polkit_identity_from_string(string.toUtf8().data(), NULL);
-    return this;
+    Identity *identity = new Identity();
+    identity->m_identity = polkit_identity_from_string(string.toUtf8().data(), NULL);
+    return identity;
 }
 
 UnixUser::UnixUser(const QString & name, QObject * parent)
     : Identity(parent)
 {
-    GError *error;
+    GError *error = NULL;
     m_identity = polkit_unix_user_new_for_name(name.toUtf8().data(), &error);
 }
 
@@ -79,7 +80,7 @@ void UnixUser::setUid(uid_t uid)
 UnixGroup::UnixGroup(const QString & name, QObject * parent)
     : Identity(parent)
 {
-    GError *error;
+    GError *error = NULL;
     m_identity = polkit_unix_group_new_for_name(name.toUtf8().data(), &error);
 }
 

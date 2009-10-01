@@ -21,7 +21,6 @@
 #include "subject.h"
 
 #include <polkit/polkit.h>
-#include <glib-object.h>
 
 using namespace PolkitQt;
 
@@ -49,8 +48,17 @@ QString Subject::toString() const
 
 Subject * Subject::fromString(const QString & string)
 {
-    m_subject = polkit_subject_from_string(string.toUtf8().data(), NULL);
-    return this;
+   // should be in polkit library!!! but for strange reason it's neccesary to have it here
+    g_type_init();
+    
+    Subject *subject = new Subject();
+    GError *error = NULL;
+    subject->m_subject = polkit_subject_from_string(string.toUtf8().data(), &error);
+    if (error != NULL)
+    {
+        return NULL;
+    }
+    return subject;
 }
 
 UnixProcess::UnixProcess(qint64 pid, QObject * parent) : Subject(parent)

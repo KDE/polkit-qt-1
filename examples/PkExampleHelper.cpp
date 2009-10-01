@@ -22,8 +22,7 @@
 #include "PkExampleHelper.h"
 #include "examplesadaptor.h"
 
-#include <Authority>
-#include <Auth>
+#include "authority.h"
 
 #include <QtDBus/QDBusConnection>
 #include <QTimer>
@@ -66,14 +65,14 @@ bool PkExampleHelper::set(const QString &action)
     qDebug() << "PkExampleHelper::set" << action;
     // message().service() is the service name of the caller
     // We can check if the caller is authorized to the following action
-    Auth::Result result;
+    Authority::Result result;
     SystemBusName *subject;
     
     subject = new SystemBusName(message().service());
     
-    result = Auth::checkAuthorization("org.qt.policykit.examples.set",
-                                      subject , Auth::AllowUserInteraction);
-    if (result == Auth::Yes) {
+    result = Authority::instance()->checkAuthorization("org.qt.policykit.examples.set",
+                                           subject , Authority::AllowUserInteraction);
+    if (result == Authority::Yes) {
         qDebug() << message().service() << QString("Implicit authorization set to") << action;
         // Caller is authorized so we can perform the action
         return setValue(action);

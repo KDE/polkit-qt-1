@@ -54,7 +54,7 @@ class POLKIT_QT_EXPORT Identity: public QObject
 public:
     ~Identity();
     QString toString() const;
-    Identity * fromString(const QString & string);
+    static Identity * fromString(const QString & string);
     PolkitIdentity * identity();
 protected:
     PolkitIdentity * m_identity;

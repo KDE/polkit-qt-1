@@ -24,3 +24,13 @@ examples/PkExample.ui
 examples/PkExampleHelper.cpp
 examples/PkExampleHelper.h
 export.h
+identity.cpp
+identity.h
+subject.cpp
+subject.h
+temporaryauthorization.h
+temporaryauthorization.cpp
+test/CMakeLists.txt
+test/test.cpp
+test/test.h
+

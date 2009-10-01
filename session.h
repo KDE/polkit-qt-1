@@ -45,7 +45,7 @@ namespace PolkitQtAgent
  * authentication system for obtaining authorizations.
  *
  */
-class Session : public QObject
+class POLKIT_QT_EXPORT Session : public QObject
 {
     Q_OBJECT
 public:

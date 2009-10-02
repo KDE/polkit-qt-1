@@ -44,8 +44,16 @@ set(polkit_qt_gui_SRCS
     actionbuttons.cpp
 )
 
+set(polkit_qt_agent_SRCS
+    session.cpp
+    listener.cpp
+    listeneradapter.cpp
+    polkitqtlistener.cpp
+)
+
 automoc4_add_library(polkit-qt-core SHARED ${polkit_qt_core_SRCS})
 automoc4_add_library(polkit-qt-gui SHARED ${polkit_qt_gui_SRCS})
+automoc4_add_library(polkit-qt-agent SHARED ${polkit_qt_agent_SRCS})
 
 target_link_libraries(polkit-qt-core
  	${POLKITDBUS_LIBRARIES}
@@ -66,6 +74,13 @@ target_link_libraries(polkit-qt-gui
 	${POLKIT_LIBRARIES}
 )
 
+# FIXME polkit-agent-1
+target_link_libraries(polkit-qt-agent
+	${POLKIT_LIBRARIES}
+        ${QT_QTCORE_LIBRARY}
+        -lpolkit-agent-1
+)
+
 set_target_properties(polkit-qt-core PROPERTIES VERSION ${MAJOR_POLKIT_QT_VERSION}.${MINOR_POLKIT_QT_VERSION}.${PATCH_POLKIT_QT_VERSION}
                                 SOVERSION ${MAJOR_POLKIT_QT_VERSION}
                                 DEFINE_SYMBOL MAKE_POLKIT_QT_LIB
@@ -75,11 +90,18 @@ set_target_properties(polkit-qt-gui PROPERTIES VERSION ${MAJOR_POLKIT_QT_VERSION
                                 SOVERSION ${MAJOR_POLKIT_QT_VERSION}
                                 DEFINE_SYMBOL MAKE_POLKIT_QT_LIB
                       )
-                      
+                    
+set_target_properties(polkit-qt-agent PROPERTIES VERSION ${MAJOR_POLKIT_QT_VERSION}.${MINOR_POLKIT_QT_VERSION}.${PATCH_POLKIT_QT_VERSION}
+                                SOVERSION ${MAJOR_POLKIT_QT_VERSION}
+                                DEFINE_SYMBOL MAKE_POLKIT_QT_LIB
+                      )
+  
 install(TARGETS polkit-qt-core ${INSTALL_TARGETS_DEFAULT_ARGS})
 install(TARGETS polkit-qt-gui ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS polkit-qt-agent ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 
+# FIXME all installable files
 install(FILES
 	action.h
 	authority.h
@@ -103,6 +125,8 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/polkit-qt-core.pc.cmake ${CMAKE_CURRE
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/polkit-qt-core.pc DESTINATION ${LIB_INSTALL_DIR}/pkgconfig )
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/polkit-qt-gui.pc.cmake ${CMAKE_CURRENT_BINARY_DIR}/polkit-qt-gui.pc @ONLY)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/polkit-qt-gui.pc DESTINATION ${LIB_INSTALL_DIR}/pkgconfig )
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/polkit-qt-agent.pc.cmake ${CMAKE_CURRENT_BINARY_DIR}/polkit-qt-agent.pc @ONLY)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/polkit-qt-agent.pc DESTINATION ${LIB_INSTALL_DIR}/pkgconfig )
 
 if (BUILD_EXAMPLES)
     add_subdirectory(examples)

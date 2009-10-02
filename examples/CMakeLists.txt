@@ -85,3 +85,4 @@ dbus_add_activation_system_service(org.qt.policykit.examples.service.in)
 
 install(FILES org.qt.policykit.examples.conf DESTINATION ${SYSCONF_INSTALL_DIR}/dbus-1/system.d)
 
+add_subdirectory(agent)

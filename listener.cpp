@@ -28,6 +28,8 @@ using namespace PolkitQtAgent;
 Listener::Listener(QObject *parent)
         : QObject(parent)
 {
+    g_type_init();
+    
     m_listener = polkit_qt_listener_new ();
     
     qDebug() << "New PolkitAgentListener " << m_listener;
@@ -42,18 +44,14 @@ Listener::~Listener()
     ListenerAdapter::instance()->removeListener(this);
 }
 
-bool Listener::registerListener(const QString &objectPath)
+bool Listener::registerListener(Subject *subject, const QString &objectPath)
 {
-    GError *error;
-
-    PolkitSubject *session = NULL;
-
-    session = polkit_unix_session_new_for_process_sync (getpid (), NULL, &error);
-    
+    GError *error = NULL;
+   
     polkit_agent_register_listener (m_listener,
-				    session,
-                                       objectPath.toAscii().data(),
-                                       &error);
+				    subject->subject(),
+                                    objectPath.toAscii().data(),
+                                    &error);
     
 }
 

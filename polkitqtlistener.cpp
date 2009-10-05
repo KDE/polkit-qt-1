@@ -62,6 +62,7 @@ G_DEFINE_TYPE (PolkitQtListener, polkit_qt_listener, POLKIT_AGENT_TYPE_LISTENER)
 
 static void polkit_qt_listener_init (PolkitQtListener *listener)
 {
+  g_type_init();
 }
 
 static void polkit_qt_listener_finalize (GObject *object)
@@ -95,6 +96,7 @@ PolkitAgentListener * polkit_qt_listener_new (void)
 
 static void cancelled_cb (GCancellable *cancellable, gpointer user_data)
 {
+    ListenerAdapter::instance()->cancelled_cb((PolkitAgentListener *)user_data);
 }
 
 static void polkit_qt_listener_initiate_authentication (PolkitAgentListener  *agent_listener,
@@ -123,11 +125,11 @@ static void polkit_qt_listener_initiate_authentication (PolkitAgentListener  *ag
 
     if (cancellable != NULL)
     {
-        /*      data->cancel_id = g_signal_connect (cancellable,
-                        "cancelled",
-                        G_CALLBACK (cancelled_cb),
-                        data);
-    */  }
+	g_signal_connect (cancellable,
+                          "cancelled",
+                          G_CALLBACK (cancelled_cb),
+                          agent_listener);
+    }
 
 }
 
@@ -139,9 +141,9 @@ static gboolean polkit_qt_listener_initiate_authentication_finish (PolkitAgentLi
 
     g_warn_if_fail (g_simple_async_result_get_source_tag (simple) == polkit_qt_listener_initiate_authentication);
 
-    if (g_simple_async_result_propagate_error (simple, error))
-        return FALSE;
-
-    return TRUE;
+    return ListenerAdapter::instance()->polkit_qt_listener_initiate_authentication_finish(listener,
+											  res,
+											  error);
+									                 
 }
 

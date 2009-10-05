@@ -71,7 +71,7 @@ void ListenerAdapter::polkit_qt_listener_initiate_authentication (PolkitAgentLis
     foreach (listItem, m_listeners)
     {
 	//Q_ASSERT(!listItem);
-	if (listItem->listener() == listener)
+	if (listItem && (listItem->listener() == listener))
 	{
 	    qDebug() << "Listener has been found.";
 	        
@@ -97,6 +97,13 @@ gboolean ListenerAdapter::polkit_qt_listener_initiate_authentication_finish (Pol
                                                                       GError              **error)
 {
     qDebug() << "polkit_qt_listener_initiate_authentication_finish callback for " << listener;
+}
+
+void ListenerAdapter::cancelled_cb(PolkitAgentListener *listener)
+{
+    qDebug() << "cancelled_cb for " << listener;
+    
+    // TODO: call cancelAuthentication method 
 }
 
 void ListenerAdapter::addListener(Listener *listener)

@@ -30,6 +30,10 @@ session.cpp
 session.h
 temporaryauthorization.h
 temporaryauthorization.cpp
+listener.cpp
+listener.h
+polkitqtlistener.cpp
+polkitqtlistener.h
 test/CMakeLists.txt
 test/test.cpp
 test/test.h

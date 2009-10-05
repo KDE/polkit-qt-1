@@ -29,122 +29,113 @@ using namespace PolkitQtAgent;
 
 struct _PolkitQtListener
 {
-  PolkitAgentListener parent_instance;
-
+    PolkitAgentListener parent_instance;
 };
 
 struct _PolkitQtListenerClass
 {
-  PolkitAgentListenerClass parent_class;
+    PolkitAgentListenerClass parent_class;
 };
 
 static void polkit_qt_listener_initiate_authentication (PolkitAgentListener  *listener,
-                                                           const gchar          *action_id,
-                                                           const gchar          *message,
-                                                           const gchar          *icon_name,
-                                                           PolkitDetails        *details,
-                                                           const gchar          *cookie,
-                                                           GList                *identities,
-                                                           GCancellable         *cancellable,
-                                                           GAsyncReadyCallback   callback,
-                                                           gpointer              user_data);
+                                                        const gchar          *action_id,
+                                                        const gchar          *message,
+                                                        const gchar          *icon_name,
+                                                        PolkitDetails        *details,
+                                                        const gchar          *cookie,
+                                                        GList                *identities,
+                                                        GCancellable         *cancellable,
+                                                        GAsyncReadyCallback   callback,
+                                                        gpointer              user_data);
 
 static gboolean polkit_qt_listener_initiate_authentication_finish (PolkitAgentListener  *listener,
-                                                                      GAsyncResult         *res,
-                                                                      GError              **error);
+                                                                   GAsyncResult         *res,
+                                                                   GError              **error);
 
 G_DEFINE_TYPE (PolkitQtListener, polkit_qt_listener, POLKIT_AGENT_TYPE_LISTENER);
 
-static void
-polkit_qt_listener_init (PolkitQtListener *listener)
+static void polkit_qt_listener_init (PolkitQtListener *listener)
 {
 }
 
-static void
-polkit_qt_listener_finalize (GObject *object)
+static void polkit_qt_listener_finalize (GObject *object)
 {
-  PolkitQtListener *listener;
+    PolkitQtListener *listener;
 
-  listener = POLKIT_QT_LISTENER (object);
+    listener = POLKIT_QT_LISTENER (object);
 
-  if (G_OBJECT_CLASS (polkit_qt_listener_parent_class)->finalize != NULL)
-    G_OBJECT_CLASS (polkit_qt_listener_parent_class)->finalize (object);
+    if (G_OBJECT_CLASS (polkit_qt_listener_parent_class)->finalize != NULL)
+        G_OBJECT_CLASS (polkit_qt_listener_parent_class)->finalize (object);
 }
 
-static void
-polkit_qt_listener_class_init (PolkitQtListenerClass *klass)
+static void polkit_qt_listener_class_init (PolkitQtListenerClass *klass)
 {
-  GObjectClass *gobject_class;
-  PolkitAgentListenerClass *listener_class;
+    GObjectClass *gobject_class;
+    PolkitAgentListenerClass *listener_class;
 
-  gobject_class = G_OBJECT_CLASS (klass);
-  listener_class = POLKIT_AGENT_LISTENER_CLASS (klass);
+    gobject_class = G_OBJECT_CLASS (klass);
+    listener_class = POLKIT_AGENT_LISTENER_CLASS (klass);
 
-  gobject_class->finalize = polkit_qt_listener_finalize;
+    gobject_class->finalize = polkit_qt_listener_finalize;
 
-  listener_class->initiate_authentication          = polkit_qt_listener_initiate_authentication;
-  listener_class->initiate_authentication_finish   = polkit_qt_listener_initiate_authentication_finish;
+    listener_class->initiate_authentication          = polkit_qt_listener_initiate_authentication;
+    listener_class->initiate_authentication_finish   = polkit_qt_listener_initiate_authentication_finish;
 }
 
-PolkitAgentListener *
-polkit_qt_listener_new (void)
+PolkitAgentListener * polkit_qt_listener_new (void)
 {
-  return POLKIT_AGENT_LISTENER (g_object_new (POLKIT_QT_TYPE_LISTENER, NULL));
+    return POLKIT_AGENT_LISTENER (g_object_new (POLKIT_QT_TYPE_LISTENER, NULL));
 }
 
-static void
-cancelled_cb (GCancellable *cancellable,
-              gpointer user_data)
+static void cancelled_cb (GCancellable *cancellable, gpointer user_data)
 {
 }
 
-static void
-polkit_qt_listener_initiate_authentication (PolkitAgentListener  *agent_listener,
-                                               const gchar          *action_id,
-                                               const gchar          *message,
-                                               const gchar          *icon_name,
-                                               PolkitDetails        *details,
-                                               const gchar          *cookie,
-                                               GList                *identities,
-                                               GCancellable         *cancellable,
-                                               GAsyncReadyCallback   callback,
-                                               gpointer              user_data)
+static void polkit_qt_listener_initiate_authentication (PolkitAgentListener  *agent_listener,
+                                                        const gchar          *action_id,
+                                                        const gchar          *message,
+                                                        const gchar          *icon_name,
+                                                        PolkitDetails        *details,
+                                                        const gchar          *cookie,
+                                                        GList                *identities,
+                                                        GCancellable         *cancellable,
+                                                        GAsyncReadyCallback   callback,
+                                                        gpointer              user_data)
 {
     PolkitQtListener *listener = POLKIT_QT_LISTENER (agent_listener);
 
     ListenerAdapter::instance()->polkit_qt_listener_initiate_authentication(agent_listener,
-									    action_id,
-									    message,
-									    icon_name,
-									    details,
-									    cookie,
-									    identities,
-									    cancellable,
-									    callback,
-									    user_data);
-  
+                                                                            action_id,
+                                                                            message,
+                                                                            icon_name,
+                                                                            details,
+                                                                            cookie,
+                                                                            identities,
+                                                                            cancellable,
+                                                                            callback,
+                                                                            user_data);
+
     if (cancellable != NULL)
-	{
-    /*      data->cancel_id = g_signal_connect (cancellable,
-					    "cancelled",
-					    G_CALLBACK (cancelled_cb),
-					    data);
+    {
+        /*      data->cancel_id = g_signal_connect (cancellable,
+                        "cancelled",
+                        G_CALLBACK (cancelled_cb),
+                        data);
     */  }
 
 }
 
-static gboolean
-polkit_qt_listener_initiate_authentication_finish (PolkitAgentListener  *listener,
-                                                      GAsyncResult         *res,
-                                                      GError              **error)
+static gboolean polkit_qt_listener_initiate_authentication_finish (PolkitAgentListener  *listener,
+                                                                   GAsyncResult         *res,
+                                                                   GError              **error)
 {
-  GSimpleAsyncResult *simple = G_SIMPLE_ASYNC_RESULT (res);
+    GSimpleAsyncResult *simple = G_SIMPLE_ASYNC_RESULT (res);
 
-  g_warn_if_fail (g_simple_async_result_get_source_tag (simple) == polkit_qt_listener_initiate_authentication);
+    g_warn_if_fail (g_simple_async_result_get_source_tag (simple) == polkit_qt_listener_initiate_authentication);
 
-  if (g_simple_async_result_propagate_error (simple, error))
-    return FALSE;
+    if (g_simple_async_result_propagate_error (simple, error))
+        return FALSE;
 
-  return TRUE;
+    return TRUE;
 }
 

@@ -47,9 +47,9 @@ Listener::~Listener()
 bool Listener::registerListener(Subject *subject, const QString &objectPath)
 {
     GError *error = NULL;
-   
+
     polkit_agent_register_listener (m_listener,
-				    subject->subject(),
+                                    subject->subject(),
                                     objectPath.toAscii().data(),
                                     &error);
     

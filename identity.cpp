@@ -31,6 +31,12 @@ Identity::Identity(QObject * parent)
     g_type_init();
 }
 
+Identity::Identity(PolkitIdentity * polkitIdentity, QObject * parent)
+    : QObject(parent), m_identity(polkitIdentity)
+{
+    g_type_init();
+}
+
 Identity::~Identity()
 {
     g_object_unref(m_identity);

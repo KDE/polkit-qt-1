@@ -269,7 +269,7 @@ Authority::Result Authority::checkAuthorization(const QString &actionId, Subject
 
     // TODO: subject check
 
-    pk_result = polkit_authority_check_authorization_sync(Authority::instance()->getPolkitAuthority(),
+    pk_result = polkit_authority_check_authorization_sync(d->pkAuthority,
                 subject->subject(),
                 actionId.toAscii().data(),
                 NULL,
@@ -295,13 +295,13 @@ void Authority::checkAuthorizationAsync(const QString &actionId, Subject *subjec
         return;
     }
 
-    polkit_authority_check_authorization(Authority::instance()->getPolkitAuthority(),
+    polkit_authority_check_authorization(d->pkAuthority,
                 subject->subject(),
                 actionId.toAscii().data(),
                 NULL,
                 (PolkitCheckAuthorizationFlags)(int)flags,
                 d->m_checkAuthorizationCancellable,
-                d->checkAuthorizationCallback, Authority::instance());
+                d->checkAuthorizationCallback, this);
 }
 
 void Authority::Private::checkAuthorizationCallback(GObject *object, GAsyncResult *result, gpointer user_data)
@@ -337,7 +337,7 @@ QStringList Authority::enumerateActions()
 
     GError *error = NULL;
 
-    GList * glist = polkit_authority_enumerate_actions_sync(Authority::instance()->getPolkitAuthority(),
+    GList * glist = polkit_authority_enumerate_actions_sync(d->pkAuthority,
                                                             NULL,
                                                             &error);
 
@@ -358,7 +358,7 @@ void Authority::enumerateActionsAsync()
 
     GError *error = NULL;
 
-    polkit_authority_enumerate_actions(Authority::instance()->getPolkitAuthority(),
+    polkit_authority_enumerate_actions(d->pkAuthority,
                                        d->m_enumerateActionsCancellable,
                                        d->enumerateActionsCallback,
                                        Authority::instance());
@@ -406,7 +406,7 @@ bool Authority::registerAuthenticationAgent(Subject *subject, const QString &loc
 
     qDebug("Subject: %s, objectPath: %s", subject->toString().toAscii().data(), objectPath.toAscii().data());
 
-    result = polkit_authority_register_authentication_agent_sync(Authority::instance()->getPolkitAuthority(),
+    result = polkit_authority_register_authentication_agent_sync(d->pkAuthority,
                            subject->subject(), locale.toAscii().data(),
                            objectPath.toAscii().data(), NULL, &error);
 
@@ -430,13 +430,13 @@ void Authority::registerAuthenticationAgentAsync(Subject *subject, const QString
         return;
     }
 
-    polkit_authority_register_authentication_agent(Authority::instance()->getPolkitAuthority(),
+    polkit_authority_register_authentication_agent(d->pkAuthority,
                                                    subject->subject(),
                                                    locale.toAscii().data(),
                                                    objectPath.toAscii().data(),
                                                    d->m_registerAuthenticationAgentCancellable,
                                                    d->registerAuthenticationAgentCallback,
-                                                   Authority::instance());
+                                                   this);
 }
 
 void Authority::Private::registerAuthenticationAgentCallback(GObject *object, GAsyncResult *result, gpointer user_data)
@@ -466,7 +466,7 @@ void Authority::registerAuthenticationAgentCancel()
 
 bool Authority::unregisterAuthenticationAgent(Subject *subject, const QString &objectPath)
 {
-    if (Authority::instance()->hasError())
+    if (d->pkAuthority)
         return false;
 
     if (!subject)
@@ -479,7 +479,7 @@ bool Authority::unregisterAuthenticationAgent(Subject *subject, const QString &o
 
     qDebug("Unregistering agent, subject: %s", subject->toString().toAscii().data());
 
-    bool result = polkit_authority_unregister_authentication_agent_sync(Authority::instance()->getPolkitAuthority(),
+    bool result = polkit_authority_unregister_authentication_agent_sync(d->pkAuthority,
                                                                         subject->subject(),
                                                                         objectPath.toUtf8().data(),
                                                                         NULL,
@@ -506,12 +506,12 @@ void Authority::unregisterAuthenticationAgentAsync(Subject *subject, const QStri
         return;
     }
 
-    polkit_authority_unregister_authentication_agent(Authority::instance()->getPolkitAuthority(),
+    polkit_authority_unregister_authentication_agent(d->pkAuthority,
                                                      subject->subject(),
                                                      objectPath.toUtf8().data(),
                                                      d->m_unregisterAuthenticationAgentCancellable,
                                                      d->unregisterAuthenticationAgentCallback,
-                                                     Authority::instance());
+                                                     this);
 }
 
 void Authority::Private::unregisterAuthenticationAgentCallback(GObject *object, GAsyncResult *result, gpointer user_data)
@@ -554,7 +554,7 @@ bool Authority::authenticationAgentResponse(const QString & cookie, Identity * i
 
     qDebug() << "Auth agent response, cookie: " << cookie << ", identity:" << identity->toString();
 
-    bool result = polkit_authority_authentication_agent_response_sync(Authority::instance()->getPolkitAuthority(),
+    bool result = polkit_authority_authentication_agent_response_sync(d->pkAuthority,
                                                                       cookie.toUtf8().data(),
                                                                       identity->identity(),
                                                                       NULL,
@@ -580,12 +580,12 @@ void Authority::authenticationAgentResponseAsync(const QString & cookie, Identit
         return;
     }
 
-    polkit_authority_authentication_agent_response(Authority::instance()->getPolkitAuthority(),
+    polkit_authority_authentication_agent_response(d->pkAuthority,
                                                    cookie.toUtf8().data(),
                                                    identity->identity(),
                                                    d->m_authenticationAgentResponseCancellable,
                                                    d->authenticationAgentResponseCallback,
-                                                   Authority::instance());
+                                                   this);
 }
 
 void Authority::Private::authenticationAgentResponseCallback(GObject *object, GAsyncResult *result, gpointer user_data)
@@ -617,11 +617,9 @@ void Authority::authenticationAgentResponseCancel()
 QList<TemporaryAuthorization *> Authority::enumerateTemporaryAuthorizations(Subject *subject)
 {
     QList<TemporaryAuthorization *> result;
-    if (Authority::instance()->hasError())
-        return result;
 
     GError *error = NULL;
-    GList *glist = polkit_authority_enumerate_temporary_authorizations_sync(Authority::instance()->getPolkitAuthority(),
+    GList *glist = polkit_authority_enumerate_temporary_authorizations_sync(d->pkAuthority,
                                                                             subject->subject(),
                                                                             NULL,
                                                                             &error);
@@ -687,7 +685,7 @@ bool Authority::revokeTemporaryAuthorizations(Subject *subject)
         return false;
 
     GError *error = NULL;
-    result = polkit_authority_revoke_temporary_authorizations_sync(Authority::instance()->getPolkitAuthority(),
+    result = polkit_authority_revoke_temporary_authorizations_sync(d->pkAuthority,
                                                                    subject->subject(),
                                                                    NULL,
                                                                    &error);
@@ -705,11 +703,11 @@ void Authority::revokeTemporaryAuthorizationsAsync(Subject *subject)
     if (Authority::instance()->hasError())
         return;
 
-    polkit_authority_revoke_temporary_authorizations(Authority::instance()->getPolkitAuthority(),
+    polkit_authority_revoke_temporary_authorizations(d->pkAuthority,
                                                      subject->subject(),
                                                      d->m_revokeTemporaryAuthorizationsCancellable,
                                                      d->revokeTemporaryAuthorizationsCallback,
-                                                     Authority::instance());
+                                                     this);
 }
 
 void Authority::Private::revokeTemporaryAuthorizationsCallback(GObject *object, GAsyncResult *result, gpointer user_data)
@@ -742,11 +740,9 @@ void Authority::revokeTemporaryAuthorizationsCancel()
 bool Authority::revokeTemporaryAuthorization(const QString &id)
 {
     bool result;
-    if (Authority::instance()->hasError())
-        return false;
 
     GError *error = NULL;
-    result =  polkit_authority_revoke_temporary_authorization_by_id_sync(Authority::instance()->getPolkitAuthority(),
+    result =  polkit_authority_revoke_temporary_authorization_by_id_sync(d->pkAuthority,
                                                                          id.toUtf8().data(),
                                                                          NULL,
                                                                          &error);
@@ -764,11 +760,11 @@ void Authority::revokeTemporaryAuthorizationAsync(const QString &id)
     if (Authority::instance()->hasError())
         return;
 
-    polkit_authority_revoke_temporary_authorization_by_id(Authority::instance()->getPolkitAuthority(),
+    polkit_authority_revoke_temporary_authorization_by_id(d->pkAuthority,
                                                           id.toUtf8().data(),
                                                           d->m_revokeTemporaryAuthorizationCancellable,
                                                           d->revokeTemporaryAuthorizationCallback,
-                                                          Authority::instance());
+                                                          this);
 }
 
 void Authority::Private::revokeTemporaryAuthorizationCallback(GObject *object, GAsyncResult *result, gpointer user_data)

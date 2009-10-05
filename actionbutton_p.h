@@ -24,6 +24,9 @@
 #include <QtCore/QList>
 #include <QtGui/QAbstractButton>
 
+/**
+  * \internal
+  */
 class PolkitQt::ActionButtonPrivate
 {
 public:

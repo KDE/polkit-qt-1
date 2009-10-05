@@ -72,7 +72,7 @@ public:
         Unknown = 0x00,
         /** The subject is authorized for the specified action  */
         Yes = 0x01,
-        /** The subject is authorized for the specified action  */
+        /** The subject is not authorized for the specified action  */
         No = 0x02,
         /** The subject is authorized if more information is provided */
         Challenge = 0x03

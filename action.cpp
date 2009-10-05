@@ -30,6 +30,9 @@
 
 using namespace PolkitQt;
 
+/**
+  * \internal
+  */
 class Action::Private
 {
 public:

@@ -27,11 +27,17 @@
 
 using namespace PolkitQtAgent;
 
+/**
+  * \internal
+  */
 struct _PolkitQtListener
 {
     PolkitAgentListener parent_instance;
 };
 
+/**
+  * \internal
+  */
 struct _PolkitQtListenerClass
 {
     PolkitAgentListenerClass parent_class;

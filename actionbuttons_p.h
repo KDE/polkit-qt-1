@@ -23,6 +23,9 @@
 
 #include "actionbutton_p.h"
 
+/**
+  * \internal
+  */
 class PolkitQt::ActionButtonsPrivate : public ActionButtonPrivate
 {
 public:

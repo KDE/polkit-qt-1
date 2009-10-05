@@ -69,6 +69,21 @@ Authority::Result polkitResultToResult(PolkitAuthorizationResult *result)
         return Authority::No;
 }
 
+QStringList actionsToStringListAndFree(GList *glist)
+{
+    QStringList result;
+    GList * glist2;
+    for (glist2 = glist; glist2; glist2 = g_list_next(glist2))
+    {
+        gpointer i = glist2->data;
+        result.append(QString::fromUtf8(polkit_action_description_get_action_id((PolkitActionDescription*)i)));
+        g_object_unref(i);
+    }
+
+    g_list_free(glist);
+    return result;
+}
+
 class Authority::Private
 {
 public:
@@ -87,14 +102,33 @@ public:
     bool m_hasError;
     QString m_lastError;
     QDBusConnection *m_systemBus;
+    GCancellable *m_checkAuthorizationCancellable,
+                 *m_enumerateActionsCancellable,
+                 *m_registerAuthenticationAgentCancellable,
+                 *m_unregisterAuthenticationAgentCancellable,
+                 *m_authenticationAgentResponseCancellable,
+                 *m_enumerateTemporaryAuthorizationsCancellable,
+                 *m_revokeTemporaryAuthorizationsCancellable,
+                 *m_revokeTemporaryAuthorizationCancellable;
+
 
     static void pk_config_changed();
+    static void checkAuthorizationCallback(GObject *object, GAsyncResult *result, gpointer user_data);
+    static void enumerateActionsCallback(GObject *object, GAsyncResult *result, gpointer user_data);
+    static void registerAuthenticationAgentCallback(GObject *object, GAsyncResult *result, gpointer user_data);
+    static void unregisterAuthenticationAgentCallback(GObject *object, GAsyncResult *result, gpointer user_data);
+    static void authenticationAgentResponseCallback(GObject *object, GAsyncResult *result, gpointer user_data);
+    static void enumerateTemporaryAuthorizationsCallback(GObject *object, GAsyncResult *result, gpointer user_data);
+    static void revokeTemporaryAuthorizationsCallback(GObject *object, GAsyncResult *result, gpointer user_data);
+    static void revokeTemporaryAuthorizationCallback(GObject *object, GAsyncResult *result, gpointer user_data);
 };
 
 Authority::Authority(PolkitAuthority *authority, QObject *parent)
         : QObject(parent)
         , d(new Private(this))
 {
+    qRegisterMetaType<PolkitQt::Authority::Result> ();
+
     Q_ASSERT(!s_globalAuthority()->q);
     s_globalAuthority()->q = this;
 
@@ -120,6 +154,12 @@ void Authority::Private::init()
     QDBusError dbus_error;
 
     g_type_init();
+
+    m_checkAuthorizationCancellable = g_cancellable_new();
+    m_enumerateActionsCancellable = g_cancellable_new();
+    m_registerAuthenticationAgentCancellable = g_cancellable_new();
+    m_unregisterAuthenticationAgentCancellable = g_cancellable_new();
+    m_authenticationAgentResponseCancellable = g_cancellable_new();
 
     if (pkAuthority == NULL) {
         pkAuthority = polkit_authority_get();
@@ -214,6 +254,10 @@ PolkitAuthority *Authority::getPolkitAuthority() const
     return d->pkAuthority;
 }
 
+// ---------------------------------------------------------------------------
+// Authority::checkAuthorization
+// ---------------------------------------------------------------------------
+
 Authority::Result Authority::checkAuthorization(const QString &actionId, Subject *subject, AuthorizationFlags flags)
 {
     PolkitAuthorizationResult *pk_result;
@@ -245,6 +289,47 @@ Authority::Result Authority::checkAuthorization(const QString &actionId, Subject
         return polkitResultToResult(pk_result);
 }
 
+void Authority::checkAuthorizationAsync(const QString &actionId, Subject *subject, AuthorizationFlags flags)
+{
+    if (Authority::instance()->hasError()) {
+        return;
+    }
+
+    polkit_authority_check_authorization(Authority::instance()->getPolkitAuthority(),
+                subject->subject(),
+                actionId.toAscii().data(),
+                NULL,
+                (PolkitCheckAuthorizationFlags)(int)flags,
+                d->m_checkAuthorizationCancellable,
+                d->checkAuthorizationCallback, Authority::instance());
+}
+
+void Authority::Private::checkAuthorizationCallback(GObject *object, GAsyncResult *result, gpointer user_data)
+{
+    Authority *authority = (Authority *) user_data;
+    //GAsyncResult *res;
+    GError *error = NULL;
+    PolkitAuthorizationResult *pkResult = polkit_authority_check_authorization_finish((PolkitAuthority *) object, result, &error);
+    if (error != NULL)
+    {
+        qWarning("Authorization checking failed with message: %s", error->message);
+        g_error_free(error);
+        return;
+    }
+    if (pkResult != NULL)
+        emit authority->checkAuthorizationFinished(polkitResultToResult(pkResult));
+}
+
+void Authority::checkAuthorizationCancel()
+{
+    if (!g_cancellable_is_cancelled(d->m_checkAuthorizationCancellable))
+        g_cancellable_cancel(d->m_checkAuthorizationCancellable);
+}
+
+// ---------------------------------------------------------------------------
+// Authority::enumerateActions
+// ---------------------------------------------------------------------------
+
 QStringList Authority::enumerateActions()
 {
     if (Authority::instance()->hasError())
@@ -263,19 +348,47 @@ QStringList Authority::enumerateActions()
         return QStringList();
     }
 
-    QStringList result;
-    GList * glist2;
-    for (glist2 = glist; glist2; glist2 = g_list_next(glist2))
+    return actionsToStringListAndFree(glist);
+}
+
+void Authority::enumerateActionsAsync()
+{
+    if (Authority::instance()->hasError())
+        return;
+
+    GError *error = NULL;
+
+    polkit_authority_enumerate_actions(Authority::instance()->getPolkitAuthority(),
+                                       d->m_enumerateActionsCancellable,
+                                       d->enumerateActionsCallback,
+                                       Authority::instance());
+}
+
+void Authority::Private::enumerateActionsCallback(GObject *object, GAsyncResult *result, gpointer user_data)
+{
+    Authority *authority = (Authority *) user_data;
+    GError *error = NULL;
+    GList *list = polkit_authority_enumerate_actions_finish((PolkitAuthority *) object, result, &error);
+    if (error != NULL)
     {
-        gpointer i = glist2->data;
-        result.append(QString::fromUtf8(polkit_action_description_get_action_id((PolkitActionDescription*)i)));
-        g_object_unref(i);
+        qWarning("Enumeration of the actions failed with message: %s", error->message);
+        g_error_free(error);
+        return;
     }
 
-    g_list_free(glist);
-
-    return result;
+    emit authority->enumerateActionsFinished(actionsToStringListAndFree(list));
 }
+
+void Authority::enumerateActionsCancel()
+{
+    if (!g_cancellable_is_cancelled(d->m_enumerateActionsCancellable))
+        g_cancellable_cancel(d->m_enumerateActionsCancellable);
+}
+
+// ---------------------------------------------------------------------------
+// Authority::registerAuthenticationAgent
+// ---------------------------------------------------------------------------
+
 
 bool Authority::registerAuthenticationAgent(Subject *subject, const QString &locale, const QString &objectPath)
 {
@@ -305,6 +418,51 @@ bool Authority::registerAuthenticationAgent(Subject *subject, const QString &loc
 
     return result;
 }
+
+void Authority::registerAuthenticationAgentAsync(Subject *subject, const QString &locale, const QString &objectPath)
+{
+    if (Authority::instance()->hasError()) {
+        return;
+    }
+
+    if (!subject) {
+        qWarning("No subject given for this target.");
+        return;
+    }
+
+    polkit_authority_register_authentication_agent(Authority::instance()->getPolkitAuthority(),
+                                                   subject->subject(),
+                                                   locale.toAscii().data(),
+                                                   objectPath.toAscii().data(),
+                                                   d->m_registerAuthenticationAgentCancellable,
+                                                   d->registerAuthenticationAgentCallback,
+                                                   Authority::instance());
+}
+
+void Authority::Private::registerAuthenticationAgentCallback(GObject *object, GAsyncResult *result, gpointer user_data)
+{
+    Authority *authority = (Authority *) user_data;
+    GError *error = NULL;
+    bool res = polkit_authority_register_authentication_agent_finish((PolkitAuthority *) object, result, &error);
+    if (error != NULL)
+    {
+        qWarning("Enumeration of the actions failed with message: %s", error->message);
+        g_error_free(error);
+        return;
+    }
+
+    emit authority->registerAuthenticationAgentFinished(res);
+}
+
+void Authority::registerAuthenticationAgentCancel()
+{
+    if (!g_cancellable_is_cancelled(d->m_registerAuthenticationAgentCancellable))
+        g_cancellable_cancel(d->m_registerAuthenticationAgentCancellable);
+}
+
+// ---------------------------------------------------------------------------
+// Authority::unregisterAuthenticationAgent
+// ---------------------------------------------------------------------------
 
 bool Authority::unregisterAuthenticationAgent(Subject *subject, const QString &objectPath)
 {
@@ -337,6 +495,50 @@ bool Authority::unregisterAuthenticationAgent(Subject *subject, const QString &o
     return result;
 }
 
+void Authority::unregisterAuthenticationAgentAsync(Subject *subject, const QString &objectPath)
+{
+    if (Authority::instance()->hasError())
+        return;
+
+    if (!subject)
+    {
+        qWarning("No subject given for this target.");
+        return;
+    }
+
+    polkit_authority_unregister_authentication_agent(Authority::instance()->getPolkitAuthority(),
+                                                     subject->subject(),
+                                                     objectPath.toUtf8().data(),
+                                                     d->m_unregisterAuthenticationAgentCancellable,
+                                                     d->unregisterAuthenticationAgentCallback,
+                                                     Authority::instance());
+}
+
+void Authority::Private::unregisterAuthenticationAgentCallback(GObject *object, GAsyncResult *result, gpointer user_data)
+{
+    Authority *authority = (Authority *) user_data;
+    GError *error = NULL;
+    bool res = polkit_authority_unregister_authentication_agent_finish((PolkitAuthority *) object, result, &error);
+    if (error != NULL)
+    {
+        qWarning("Unregistrating agent failed with message: %s", error->message);
+        g_error_free(error);
+        return;
+    }
+
+    emit authority->unregisterAuthenticationAgentFinished(res);
+}
+
+void Authority::unregisterAuthenticationAgentCancel()
+{
+    if (!g_cancellable_is_cancelled(d->m_unregisterAuthenticationAgentCancellable))
+        g_cancellable_cancel(d->m_unregisterAuthenticationAgentCancellable);
+}
+
+// ---------------------------------------------------------------------------
+// Authority::authenticationAgentResponse
+// ---------------------------------------------------------------------------
+
 bool Authority::authenticationAgentResponse(const QString & cookie, Identity * identity)
 {
     if (Authority::instance()->hasError())
@@ -366,6 +568,51 @@ bool Authority::authenticationAgentResponse(const QString & cookie, Identity * i
 
     return result;
 }
+
+void Authority::authenticationAgentResponseAsync(const QString & cookie, Identity * identity)
+{
+    if (Authority::instance()->hasError())
+        return;
+
+    if (cookie.isEmpty() || !identity)
+    {
+        qWarning("Cookie or identity is empty!");
+        return;
+    }
+
+    polkit_authority_authentication_agent_response(Authority::instance()->getPolkitAuthority(),
+                                                   cookie.toUtf8().data(),
+                                                   identity->identity(),
+                                                   d->m_authenticationAgentResponseCancellable,
+                                                   d->authenticationAgentResponseCallback,
+                                                   Authority::instance());
+}
+
+void Authority::Private::authenticationAgentResponseCallback(GObject *object, GAsyncResult *result, gpointer user_data)
+{
+    Authority *authority = (Authority *) user_data;
+    GError *error = NULL;
+    bool res = polkit_authority_authentication_agent_response_finish((PolkitAuthority *) object, result, &error);
+    if (error != NULL)
+    {
+        qWarning("Authorization agent response failed with message: %s", error->message);
+        g_error_free(error);
+        return;
+    }
+
+    emit authority->authenticationAgentResponseFinished(res);
+}
+
+void Authority::authenticationAgentResponseCancel()
+{
+    if (!g_cancellable_is_cancelled(d->m_authenticationAgentResponseCancellable))
+        g_cancellable_cancel(d->m_authenticationAgentResponseCancellable);
+}
+
+// ---------------------------------------------------------------------------
+// Authority::enumerateTemporaryAuthorizations
+// ---------------------------------------------------------------------------
+
 
 QList<TemporaryAuthorization *> Authority::enumerateTemporaryAuthorizations(Subject *subject)
 {
@@ -397,6 +644,42 @@ QList<TemporaryAuthorization *> Authority::enumerateTemporaryAuthorizations(Subj
     return result;
 }
 
+void Authority::Private::enumerateTemporaryAuthorizationsCallback(GObject *object, GAsyncResult *result, gpointer user_data)
+{
+    Authority *authority = (Authority *) user_data;
+    GError *error = NULL;
+
+    GList *glist = polkit_authority_enumerate_temporary_authorizations_finish((PolkitAuthority *) object, result, &error);
+
+    if (error != NULL)
+     {
+        qWarning("Enumerate termporary actions failed with: %s", error->message);
+        g_error_free(error);
+        return;
+    }
+    QList<TemporaryAuthorization *> res;
+    GList *glist2;
+    for (glist2 = glist; glist2 != NULL; glist2 = g_list_next(glist2))
+    {
+        res.append(new TemporaryAuthorization((PolkitTemporaryAuthorization *) glist2->data));
+        g_object_unref(glist2->data);
+    }
+
+    g_list_free(glist);
+
+    emit authority->enumerateTemporaryAuthorizationsFinished(res);
+}
+
+void Authority::enumerateTemporaryAuthorizationsCancel()
+{
+    if (!g_cancellable_is_cancelled(d->m_enumerateTemporaryAuthorizationsCancellable))
+        g_cancellable_cancel(d->m_enumerateTemporaryAuthorizationsCancellable);
+}
+
+// ---------------------------------------------------------------------------
+// Authority::revokeTemporaryAuthorizations
+// ---------------------------------------------------------------------------
+
 bool Authority::revokeTemporaryAuthorizations(Subject *subject)
 {
     bool result;
@@ -410,12 +693,51 @@ bool Authority::revokeTemporaryAuthorizations(Subject *subject)
                                                                    &error);
     if (error != NULL)
     {
-        qWarning("Revoke temporary actions failed with: %s", error->message);
+        qWarning("Revoke temporary authorizations failed with: %s", error->message);
         g_error_free(error);
         return false;
     }
     return result;
 }
+
+void Authority::revokeTemporaryAuthorizationsAsync(Subject *subject)
+{
+    if (Authority::instance()->hasError())
+        return;
+
+    polkit_authority_revoke_temporary_authorizations(Authority::instance()->getPolkitAuthority(),
+                                                     subject->subject(),
+                                                     d->m_revokeTemporaryAuthorizationsCancellable,
+                                                     d->revokeTemporaryAuthorizationsCallback,
+                                                     Authority::instance());
+}
+
+void Authority::Private::revokeTemporaryAuthorizationsCallback(GObject *object, GAsyncResult *result, gpointer user_data)
+{
+    Authority *authority = (Authority *) user_data;
+    GError *error = NULL;
+
+    bool res = polkit_authority_revoke_temporary_authorizations_finish((PolkitAuthority *) object, result, &error);
+
+    if (error != NULL)
+     {
+        qWarning("Revoking termporary authorizations failed with: %s", error->message);
+        g_error_free(error);
+        return;
+    }
+
+    emit authority->revokeTemporaryAuthorizationsFinished(res);
+}
+
+void Authority::revokeTemporaryAuthorizationsCancel()
+{
+    if (!g_cancellable_is_cancelled(d->m_revokeTemporaryAuthorizationsCancellable))
+        g_cancellable_cancel(d->m_revokeTemporaryAuthorizationsCancellable);
+}
+
+// ---------------------------------------------------------------------------
+// Authority::revokeTemporaryAuthorization
+// ---------------------------------------------------------------------------
 
 bool Authority::revokeTemporaryAuthorization(const QString &id)
 {
@@ -435,6 +757,41 @@ bool Authority::revokeTemporaryAuthorization(const QString &id)
         return false;
     }
     return result;
+}
+
+void Authority::revokeTemporaryAuthorizationAsync(const QString &id)
+{
+    if (Authority::instance()->hasError())
+        return;
+
+    polkit_authority_revoke_temporary_authorization_by_id(Authority::instance()->getPolkitAuthority(),
+                                                          id.toUtf8().data(),
+                                                          d->m_revokeTemporaryAuthorizationCancellable,
+                                                          d->revokeTemporaryAuthorizationCallback,
+                                                          Authority::instance());
+}
+
+void Authority::Private::revokeTemporaryAuthorizationCallback(GObject *object, GAsyncResult *result, gpointer user_data)
+{
+    Authority *authority = (Authority *) user_data;
+    GError *error = NULL;
+
+    bool res = polkit_authority_revoke_temporary_authorization_by_id_finish((PolkitAuthority *) object, result, &error);
+
+    if (error != NULL)
+     {
+        qWarning("Revoking termporary authorization failed with: %s", error->message);
+        g_error_free(error);
+        return;
+    }
+
+    emit authority->revokeTemporaryAuthorizationFinished(res);
+}
+
+void Authority::revokeTemporaryAuthorizationCancel()
+{
+    if (!g_cancellable_is_cancelled(d->m_revokeTemporaryAuthorizationCancellable))
+        g_cancellable_cancel(d->m_revokeTemporaryAuthorizationCancellable);
 }
 
 #include "moc_authority.cpp"

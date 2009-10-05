@@ -29,6 +29,7 @@
 #include "temporaryauthorization.h"
 
 #include <QtCore/QObject>
+#include <QtCore/QMetaType>
 #include <QtCore/QString>
 #include <polkit/polkit.h>
 
@@ -160,11 +161,37 @@ public:
                               AuthorizationFlags flags);
 
     /**
+     * Asynchronous version of the checkAuthorization method.
+     * When operation is finished, signal checkAuthorizationFinish is emitted
+     * with result of authorization chech in its parameter.
+     *
+     * \param actionId the Id of the action in question
+     * \param subject ...
+     * \param flags
+     */
+    void checkAuthorizationAsync(const QString &actionId, Subject *subject,
+                                 AuthorizationFlags flags);
+    /**
+     * This method can be used to cancel last authorization check.
+     */
+    void checkAuthorizationCancel();
+
+    /**
       * Synchronously retrieves all registered actions.
       *
       * \return a list of Action IDs
       */
     QStringList enumerateActions();
+
+    /**
+     * Asynchronous version of method enumerateAction.
+     */
+    void enumerateActionsAsync();
+
+    /**
+     * This method can be used to cancel enumeration of actions
+     */
+    void enumerateActionsCancel();
 
     /**
      * Registers an authentication agent.
@@ -179,6 +206,21 @@ public:
     bool registerAuthenticationAgent(Subject *subject, const QString &locale,
                                      const QString &objectPath);
 
+    /**
+     * Asynchronous version of method registerAuthenticationAgent.
+     *
+     * \param subject caller subject
+     * \param locale the locale of the authentication agent
+     * \param objectPath the object path for the authentication agent
+     */
+    void registerAuthenticationAgentAsync(Subject *subject, const QString &locale,
+                                          const QString &objectPath);
+
+    /**
+     * This method can be used to cancel the registration of the authentication agent.
+     */
+    void registerAuthenticationAgentCancel();
+
 
     /**
      * Unregisters an Authentication agent.
@@ -192,6 +234,21 @@ public:
     bool unregisterAuthenticationAgent(Subject *subject, const QString &objectPath);
 
     /**
+     * Asynchronous version of method unregisterAuthenticationAgent.
+     * \param subject caller subject
+     * \param objectPath the object path for the Authentication agent
+     *
+     * \return \c true if the Authentication agent has been successfully unregistered
+     *         \c false if the Authentication agent unregistration failed
+     */
+    void unregisterAuthenticationAgentAsync(Subject *subject, const QString &objectPath);
+
+    /**
+     * This method can be used to cancel the unregistration of the authentication agent.
+     */
+    void unregisterAuthenticationAgentCancel();
+
+    /**
       * Provide response that \p identity successfully authenticated for the authentication request identified by \p cookie.
       * \param cookie The cookie passed to the authentication agent from the authority.
       * \param identity The identity that was authenticated.
@@ -200,6 +257,19 @@ public:
       *
     */
     bool authenticationAgentResponse(const QString & cookie, Identity * identity);
+
+    /**
+     * Asynchronous version of method authenticationAgentResponse.
+     *
+     * \param cookie The cookie passed to the authentication agent from the authority.
+     * \param identity The identity that was authenticated.
+     */
+    void authenticationAgentResponseAsync(const QString & cookie, Identity * identity);
+
+    /**
+     * This method can be used to cancel the authenticationAgentResponseAsync method.
+     */
+    void authenticationAgentResponseCancel();
 
     /**
      * Retrieves all temporary action that applies to \p subject
@@ -211,6 +281,19 @@ public:
     QList<TemporaryAuthorization *> enumerateTemporaryAuthorizations(Subject *subject);
 
     /**
+     * Asynchronous version of method enumerateTemporaryAuthorizations.
+     *
+     * \param subject the subject to get temporary authorizations for
+     *
+     */
+    void enumerateTemporaryAuthorizationsAsync(Subject *subject);
+
+    /**
+     * This method can be used to cancel the enumerateTemporaryAuthorizationsAsync method.
+     */
+    void enumerateTemporaryAuthorizationsCancel();
+
+    /**
      * Revokes all temporary authorizations that applies to \p subject
      *
      * \param subject the subject to revoke temporary authorizations from
@@ -219,6 +302,17 @@ public:
      *         \c false if the revoking failed
     */
     bool revokeTemporaryAuthorizations(Subject *subject);
+
+    /** Asynchronous version of method revokeTemporaryAuthorizations.
+     *
+     * \param subject the subject to revoke temporary authorizations from
+     */
+    void revokeTemporaryAuthorizationsAsync(Subject *subject);
+
+    /**
+     * This method can be used to cancel the method revokeTemporaryAuthorizationsAsync.
+     */
+    void revokeTemporaryAuthorizationsCancel();
 
     /**
      * Revokes temporary authorization by \p id
@@ -229,6 +323,17 @@ public:
      *         \c false if the revoking failed
     */
     bool revokeTemporaryAuthorization(const QString &id);
+
+    /** Asynchronous version of method revokeTemporaryAuthorization.
+     *
+     * \param id the identifier of the temporary authorization
+     */
+    void revokeTemporaryAuthorizationAsync(const QString &id);
+
+    /**
+     * This method can be used to cancel the method revokeTemporaryAuthorizationAsync.
+     */
+    void revokeTemporaryAuthorizationCancel();
 
 Q_SIGNALS:
     /**
@@ -254,6 +359,65 @@ Q_SIGNALS:
      */
     void consoleKitDBChanged();
 
+    /**
+     * This signal is emitted when asynchronous method checkAuthorizationAsync finishes.
+     *
+     * The argument is the result of authorization.
+     */
+    void checkAuthorizationFinished(PolkitQt::Authority::Result);
+
+    /**
+     * This signal is emitted when asynchronous method enumerateActionsAsync finishes.
+     *
+     * The argument is the list of all Action IDs.
+     */
+    void enumerateActionsFinished(QStringList);
+
+    /**
+     * This signal is emitted when asynchronous method registerAuthenticationAgentAsync finishes.
+     *
+     * The argument is \c true  if the Authentication agent has been successfully registered
+     *                 \c false if the Authentication agent registration failed
+     */
+    void registerAuthenticationAgentFinished(bool);
+
+    /**
+     * This signal is emitted when asynchronous method unregisterAuthenticationAgentAsync finishes.
+     *
+     * The argument is \c true  if the Authentication agent has been successfully unregistered
+     *                 \c false if the Authentication agent unregistration failed
+     */
+    void unregisterAuthenticationAgentFinished(bool);
+
+    /**
+     * This signal is emitted when asynchronous method authenticationAgentResponseAsync finishes.
+     *
+     * The argument is \c true if authority acknowledged the call, \c false if error is set.
+     */
+    void authenticationAgentResponseFinished(bool);
+
+    /**
+     * This signal is emmited when asynchronous method enumerateTemporaryAuthorizations finishes.
+     *
+     * The argument is list of all temporary authorizations.
+     */
+    void enumerateTemporaryAuthorizationsFinished(QList<TemporaryAuthorization *>);
+
+    /**
+     * This signal is emmited when asynchronous method revokeTemporaryAuthorizationsAsync finishes.
+     *
+     * The argument is \c true if all temporary authorizations were revoked
+     *                 \c false if the revoking failed
+     */
+    void revokeTemporaryAuthorizationsFinished(bool);
+
+    /**
+     * This signal is emmited when asynchronous method revokeTemporaryAuthorizationAsync finishes.
+     * \return \c true if the temporary authorization was revoked
+     *         \c false if the revoking failed
+     */
+    void revokeTemporaryAuthorizationFinished(bool);
+
 private:
     explicit Authority(PolkitAuthority *context, QObject *parent = 0);
 
@@ -264,8 +428,10 @@ private:
     Q_PRIVATE_SLOT(d, void dbusFilter(const QDBusMessage &message))
 };
 
-Q_DECLARE_OPERATORS_FOR_FLAGS(Authority::AuthorizationFlags)
+Q_DECLARE_OPERATORS_FOR_FLAGS(PolkitQt::Authority::AuthorizationFlags)
 
 }
+
+Q_DECLARE_METATYPE(PolkitQt::Authority::Result);
 
 #endif

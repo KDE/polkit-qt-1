@@ -64,15 +64,30 @@ void ListenerAdapter::polkit_qt_listener_initiate_authentication (PolkitAgentLis
 {
     qDebug() << "polkit_qt_listener_initiate_authentication callback for " << listener;
     
+    QList<PolkitQt::Identity *> idents;
+    
     Listener *listItem;
     
     foreach (listItem, m_listeners)
     {
-	Q_ASSERT(!listItem);
+	//Q_ASSERT(!listItem);
 	if (listItem->listener() == listener)
 	{
 	    qDebug() << "Listener has been found.";
-	    listItem->initiateAuthentication();
+	        
+	    GList *glist2;
+	    for (glist2 = identities; glist2 != NULL; glist2 = g_list_next(glist2))
+	    {
+		// FIXME: conversion
+		idents.append(PolkitQt::Identity::fromString(
+		    QString::fromUtf8(polkit_identity_to_string((PolkitIdentity *) glist2->data))));
+		    
+		g_object_unref(glist2->data);
+	    }
+
+	    g_list_free(identities);
+
+	    listItem->initiateAuthentication(action_id, message, icon_name, cookie, idents);
 	}    
     }
 }

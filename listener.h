@@ -26,6 +26,8 @@
 
 #include "listeneradapter.h"
 #include "polkitqtlistener.h"
+#include "subject.h"
+#include "identity.h"
 
 #define POLKIT_AGENT_I_KNOW_API_IS_SUBJECT_TO_CHANGE 1
 
@@ -47,10 +49,14 @@ public:
     Listener(QObject *parent = 0);
     ~Listener();
     // subject when ported to PolkitQt
-    bool registerListener(const QString &objectPath);
+    bool registerListener(PolkitQt::Subject *subject, const QString &objectPath);
     const PolkitAgentListener *listener();
 public slots:
-    virtual void initiateAuthentication() = 0;
+    virtual void initiateAuthentication(const QString &actionId,
+					const QString &message,
+					const QString &iconName,
+					const QString &cookie,
+					QList<PolkitQt::Identity *> identities) = 0;
 protected:
     PolkitAgentListener *m_listener;
 };

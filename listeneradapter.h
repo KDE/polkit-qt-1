@@ -28,6 +28,7 @@
 #include <polkitagent/polkitagent.h>
 #include <polkit/polkit.h>
 #include "listener.h"
+#include "identity.h"
 
 /**
  * \namespace PolkitQtAgent PolkitQtAgent

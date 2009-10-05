@@ -22,6 +22,7 @@
 
 #include "listener.h"
 #include "authority.h"
+#include "subject.h"
 
 using namespace PolkitQtAgent;
 
@@ -44,7 +45,7 @@ Listener::~Listener()
     ListenerAdapter::instance()->removeListener(this);
 }
 
-bool Listener::registerListener(Subject *subject, const QString &objectPath)
+bool Listener::registerListener(PolkitQt::Subject *subject, const QString &objectPath)
 {
     GError *error = NULL;
 

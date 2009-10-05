@@ -168,6 +168,15 @@ public:
     * \param sessionId The session id.
     */    
     UnixSession(const QString &sessionId, QObject *parent = 0);
+    
+    /**
+    * Subject constructor, takes one parameter - pid of process.
+    * 
+    * Synchronous!
+    *
+    * \param pid The session's process pid.
+    */  
+    UnixSession(qint64 pid, QObject *parent = 0);
 
     /**
     * Returns session id.

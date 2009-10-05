@@ -108,6 +108,12 @@ UnixSession::UnixSession(const QString &sessionId, QObject * parent) : Subject(p
     m_subject = polkit_unix_session_new(sessionId.toUtf8().data());
 }
 
+UnixSession::UnixSession(qint64 pid, QObject * parent) : Subject(parent)
+{
+    // TODO: error handling
+    m_subject = polkit_unix_session_new_for_process_sync(pid, NULL, NULL);
+}
+
 QString UnixSession::sessionId() const
 {
     return QString::fromUtf8(polkit_unix_session_get_session_id((PolkitUnixSession *) m_subject));

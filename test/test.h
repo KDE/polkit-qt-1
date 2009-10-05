@@ -12,6 +12,8 @@ private slots:
     void test_Auth_enumerateActions();
     void test_Identity();
     void test_Authority();
+    void test_Subject();
+    void test_Session();
 };
 
 #endif // TEST_H

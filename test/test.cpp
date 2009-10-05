@@ -2,11 +2,22 @@
 
 #include "test.h"
 #include "authority.h"
+#include "session.h"
 #include <stdlib.h>
 #include <unistd.h>
 #include <QtDBus/QDBusMessage>
 #include <QtDBus/QDBusConnection>
 using namespace PolkitQt;
+using namespace PolkitQtAgent;
+
+void wait()
+{
+    for (int i = 0; i < 100; i++)
+    {
+        usleep(100);
+        QCoreApplication::processEvents();
+    }
+}
 
 void TestAuth::test_Auth_checkAuthorization()
 {
@@ -21,6 +32,35 @@ void TestAuth::test_Auth_checkAuthorization()
     QCOMPARE(result, Authority::Yes);
     result = authority->checkAuthorization("org.qt.policykit.examples.bleed", process, Authority::None);
     QCOMPARE(result, Authority::Challenge);
+
+    // Now we try async methods
+    QSignalSpy spy(authority, SIGNAL(checkAuthorizationFinished(PolkitQt::Authority::Result)));
+    // Call asynchronous checkAuthorization
+    authority->checkAuthorizationAsync("org.qt.policykit.examples.kick", process, Authority::None);
+    // Give the polkit time to obtain the result and emit the signal with it
+    wait();
+    // Test if the signal was emitted
+    QCOMPARE(spy.count(), 1);
+    // Test the result
+    result = qVariantValue<PolkitQt::Authority::Result> (spy.takeFirst()[0]);
+    QCOMPARE(result, Authority::No);
+    spy.clear();
+
+    // Let's test the cancellability
+    authority->checkAuthorizationAsync("org.qt.policykit.examples.kick", process, Authority::None);
+    authority->checkAuthorizationCancel();
+    // Wait and check if the signal arrieved
+    wait();
+    QCOMPARE(spy.count(), 0);
+
+    // Check if it can cancel user authentification dialog
+    authority->checkAuthorizationAsync("org.qt.policykit.examples.bleed", process, Authority::AllowUserInteraction);
+    // Show it for second
+    sleep(1);
+    // And now kill it
+    authority->checkAuthorizationCancel();
+    // But how to test if it was successfull?
+    qWarning() << "You should see authentification dialog for short period.";
 }
 
 void TestAuth::test_Auth_enumerateActions()
@@ -31,6 +71,23 @@ void TestAuth::test_Auth_enumerateActions()
     QVERIFY(list.contains("org.qt.policykit.examples.kick"));
     QVERIFY(list.contains("org.qt.policykit.examples.cry"));
     QVERIFY(list.contains("org.qt.policykit.examples.bleed"));
+
+    // Test asynchronous version as well
+    QSignalSpy spy(Authority::instance(), SIGNAL(enumerateActionsFinished(QStringList)));
+    Authority::instance()->enumerateActionsAsync();
+    wait();
+    QCOMPARE(spy.count(), 1);
+    list = qVariantValue<QStringList> (spy.takeFirst()[0]);
+    QVERIFY(list.contains("org.qt.policykit.examples.kick"));
+    QVERIFY(list.contains("org.qt.policykit.examples.cry"));
+    QVERIFY(list.contains("org.qt.policykit.examples.bleed"));
+
+    // Test cancelling the enumeration
+    spy.clear();
+    Authority::instance()->enumerateActionsAsync();
+    Authority::instance()->enumerateActionsCancel();
+    wait();
+    QCOMPARE(spy.count(), 0);
 }
 
 void TestAuth::test_Identity()
@@ -95,6 +152,47 @@ void TestAuth::test_Authority()
     // configChanged signal from authority requires changing some policy files
     // and it would require user interaction (typing the password)
     // so this is not covered by this test
+}
+
+void TestAuth::test_Subject()
+{
+    // Get pid of this appication
+    qint64 pid = QCoreApplication::applicationPid();
+    // Create unix process for it
+    UnixProcess *process = new UnixProcess(pid);
+    // Test if pid doesn't differ
+    QCOMPARE(process->pid(), pid);
+
+    // Serialize and deserialize subject
+    //Subject *subject = Subject::fromString(process->toString());
+    // and try it
+    //QCOMPARE(((UnixProcess *) subject)->pid(), pid);
+    delete process;
+}
+
+void TestAuth::test_Session()
+{
+    /*
+    UnixUser user(getuid());
+    Session *session = new Session(&user, "/org/freedesktop/ConsoleKit/Session2");
+    QSignalSpy spy_completed(session, SIGNAL(completed(bool)));
+    QSignalSpy spy_request(session, SIGNAL(request(QString,bool)));
+    QSignalSpy spy_error(session, SIGNAL(showError(QString)));
+    QSignalSpy spy_info(session, SIGNAL(showInfo(QString)));
+    session->initiate();
+    session->response("aaa");
+    // Canceling should emit the "completed" signal
+    session->cancel();
+    QCOMPARE(spy_completed.count(), 1);
+
+    //UnixProcess *process = new UnixProcess(QCoreApplication::applicationPid());
+    //Authority::instance()->checkAuthorization("org.qt.policykit.examples.kick", process, Authority::None);
+
+    qDebug() << "COMPLETED:" << spy_completed.count();
+    qDebug() << "REQUEST:" << spy_request.count();
+    qDebug() << "ERROR:" << spy_error.count();
+    qDebug() << "INFO:" << spy_info.count();
+    */
 }
 
 QTEST_MAIN(TestAuth)

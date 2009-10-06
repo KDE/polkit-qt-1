@@ -78,7 +78,7 @@ public:
 
     /**
      * Cancel the authentication session.
-     * This will emit the "completed" signal.
+     * This will emit the completed() signal.
      */
     void cancel();
 

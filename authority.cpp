@@ -258,7 +258,7 @@ PolkitAuthority *Authority::getPolkitAuthority() const
 // Authority::checkAuthorization
 // ---------------------------------------------------------------------------
 
-Authority::Result Authority::checkAuthorization(const QString &actionId, Subject *subject, AuthorizationFlags flags)
+Authority::Result Authority::checkAuthorizationSync(const QString &actionId, Subject *subject, AuthorizationFlags flags)
 {
     PolkitAuthorizationResult *pk_result;
     GError *error = NULL;
@@ -289,7 +289,7 @@ Authority::Result Authority::checkAuthorization(const QString &actionId, Subject
         return polkitResultToResult(pk_result);
 }
 
-void Authority::checkAuthorizationAsync(const QString &actionId, Subject *subject, AuthorizationFlags flags)
+void Authority::checkAuthorization(const QString &actionId, Subject *subject, AuthorizationFlags flags)
 {
     if (Authority::instance()->hasError()) {
         return;
@@ -330,7 +330,7 @@ void Authority::checkAuthorizationCancel()
 // Authority::enumerateActions
 // ---------------------------------------------------------------------------
 
-QStringList Authority::enumerateActions()
+QStringList Authority::enumerateActionsSync()
 {
     if (Authority::instance()->hasError())
         return QStringList();
@@ -351,7 +351,7 @@ QStringList Authority::enumerateActions()
     return actionsToStringListAndFree(glist);
 }
 
-void Authority::enumerateActionsAsync()
+void Authority::enumerateActions()
 {
     if (Authority::instance()->hasError())
         return;
@@ -390,7 +390,7 @@ void Authority::enumerateActionsCancel()
 // ---------------------------------------------------------------------------
 
 
-bool Authority::registerAuthenticationAgent(Subject *subject, const QString &locale, const QString &objectPath)
+bool Authority::registerAuthenticationAgentSync(Subject *subject, const QString &locale, const QString &objectPath)
 {
     gboolean result;
     GError *error = NULL;
@@ -419,7 +419,7 @@ bool Authority::registerAuthenticationAgent(Subject *subject, const QString &loc
     return result;
 }
 
-void Authority::registerAuthenticationAgentAsync(Subject *subject, const QString &locale, const QString &objectPath)
+void Authority::registerAuthenticationAgent(Subject *subject, const QString &locale, const QString &objectPath)
 {
     if (Authority::instance()->hasError()) {
         return;
@@ -464,7 +464,7 @@ void Authority::registerAuthenticationAgentCancel()
 // Authority::unregisterAuthenticationAgent
 // ---------------------------------------------------------------------------
 
-bool Authority::unregisterAuthenticationAgent(Subject *subject, const QString &objectPath)
+bool Authority::unregisterAuthenticationAgentSync(Subject *subject, const QString &objectPath)
 {
     if (d->pkAuthority)
         return false;
@@ -495,7 +495,7 @@ bool Authority::unregisterAuthenticationAgent(Subject *subject, const QString &o
     return result;
 }
 
-void Authority::unregisterAuthenticationAgentAsync(Subject *subject, const QString &objectPath)
+void Authority::unregisterAuthenticationAgent(Subject *subject, const QString &objectPath)
 {
     if (Authority::instance()->hasError())
         return;
@@ -539,7 +539,7 @@ void Authority::unregisterAuthenticationAgentCancel()
 // Authority::authenticationAgentResponse
 // ---------------------------------------------------------------------------
 
-bool Authority::authenticationAgentResponse(const QString & cookie, Identity * identity)
+bool Authority::authenticationAgentResponseSync(const QString & cookie, Identity * identity)
 {
     if (Authority::instance()->hasError())
         return false;
@@ -569,7 +569,7 @@ bool Authority::authenticationAgentResponse(const QString & cookie, Identity * i
     return result;
 }
 
-void Authority::authenticationAgentResponseAsync(const QString & cookie, Identity * identity)
+void Authority::authenticationAgentResponse(const QString & cookie, Identity * identity)
 {
     if (Authority::instance()->hasError())
         return;
@@ -614,7 +614,7 @@ void Authority::authenticationAgentResponseCancel()
 // ---------------------------------------------------------------------------
 
 
-QList<TemporaryAuthorization *> Authority::enumerateTemporaryAuthorizations(Subject *subject)
+QList<TemporaryAuthorization *> Authority::enumerateTemporaryAuthorizationsSync(Subject *subject)
 {
     QList<TemporaryAuthorization *> result;
 
@@ -678,7 +678,7 @@ void Authority::enumerateTemporaryAuthorizationsCancel()
 // Authority::revokeTemporaryAuthorizations
 // ---------------------------------------------------------------------------
 
-bool Authority::revokeTemporaryAuthorizations(Subject *subject)
+bool Authority::revokeTemporaryAuthorizationsSync(Subject *subject)
 {
     bool result;
     if (Authority::instance()->hasError())
@@ -698,7 +698,7 @@ bool Authority::revokeTemporaryAuthorizations(Subject *subject)
     return result;
 }
 
-void Authority::revokeTemporaryAuthorizationsAsync(Subject *subject)
+void Authority::revokeTemporaryAuthorizations(Subject *subject)
 {
     if (Authority::instance()->hasError())
         return;
@@ -737,7 +737,7 @@ void Authority::revokeTemporaryAuthorizationsCancel()
 // Authority::revokeTemporaryAuthorization
 // ---------------------------------------------------------------------------
 
-bool Authority::revokeTemporaryAuthorization(const QString &id)
+bool Authority::revokeTemporaryAuthorizationSync(const QString &id)
 {
     bool result;
 
@@ -755,7 +755,7 @@ bool Authority::revokeTemporaryAuthorization(const QString &id)
     return result;
 }
 
-void Authority::revokeTemporaryAuthorizationAsync(const QString &id)
+void Authority::revokeTemporaryAuthorization(const QString &id)
 {
     if (Authority::instance()->hasError())
         return;

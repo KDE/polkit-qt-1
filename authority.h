@@ -148,6 +148,13 @@ public:
      * and check what it returns before doing anything in your helper, since otherwise
      * you could be actually performing an action from an unknown or unauthorized caller.
      *
+     * When operation is finished, signal checkAuthorizationFinish is emitted
+     * with result of authorization check in its parameter.
+     *
+     * \see checkAuthorizationSync Synchronous version of this method.
+     * \see checkAuthorizationFinished Signal that is emitted when this method finishes.
+     * \see checkAuthorizationCancel Use it to cancel execution of this method.
+     *
      * \param actionId the Id of the action in question
      * \param subject ...
      * \param flags
@@ -157,36 +164,46 @@ public:
      *                      or an error has occurred
      *
      */
-    Result checkAuthorization(const QString &actionId, Subject *subject,
-                              AuthorizationFlags flags);
+    void checkAuthorization(const QString &actionId, Subject *subject,
+                            AuthorizationFlags flags);
 
     /**
-     * Asynchronous version of the checkAuthorization method.
-     * When operation is finished, signal checkAuthorizationFinish is emitted
-     * with result of authorization chech in its parameter.
+     * Synchronous version of the checkAuthorization method.
      *
      * \param actionId the Id of the action in question
      * \param subject ...
      * \param flags
+     *
+     * \see checkAuthorization Asynchronous version of this method.
      */
-    void checkAuthorizationAsync(const QString &actionId, Subject *subject,
-                                 AuthorizationFlags flags);
+    Result checkAuthorizationSync(const QString &actionId, Subject *subject,
+                                  AuthorizationFlags flags);
+
     /**
      * This method can be used to cancel last authorization check.
      */
     void checkAuthorizationCancel();
 
     /**
+     * Asynchronously retrieves all registered actions.
+     *
+     * When operation is finished, signal checkAuthorizationFinish is emitted
+     * with result of authorization check in its parameter.
+     *
+     * \see enumerateActionsSync Synchronous version of this method.
+     * \see enumerateActionsFinished Signal that is emitted when this method finishes.
+     * \see enumerateActionsCancel Use it to cancel execution of this method.
+     */
+    void enumerateActions();
+
+     /**
       * Synchronously retrieves all registered actions.
+      *
+      * \see enumerateActions Asynchronous version of this method.
       *
       * \return a list of Action IDs
       */
-    QStringList enumerateActions();
-
-    /**
-     * Asynchronous version of method enumerateAction.
-     */
-    void enumerateActionsAsync();
+    QStringList enumerateActionsSync();
 
     /**
      * This method can be used to cancel enumeration of actions
@@ -196,6 +213,22 @@ public:
     /**
      * Registers an authentication agent.
      *
+     * \see registerAuthenticationAgentSync Synchronous version of this method.
+     * \see registerAuthenticationAgentFinished Signal that is emitted when this method finishes.
+     * \see registerAuthenticationAgentCancel Use it to cancel execution of this method.
+     *
+     * \param subject caller subject
+     * \param locale the locale of the authentication agent
+     * \param objectPath the object path for the authentication agent
+     */
+    void registerAuthenticationAgent(Subject *subject, const QString &locale,
+                                          const QString &objectPath);
+
+    /**
+     * Registers an authentication agent.
+     *
+     * \see registerAuthenticationAgent Asynchronous version of this method.
+     *
      * \param subject caller subject
      * \param locale the locale of the authentication agent
      * \param objectPath the object path for the authentication agent
@@ -203,27 +236,33 @@ public:
      * \return \c true if the Authentication agent has been successfully registered
      *         \c false if the Authentication agent registration failed
     */
-    bool registerAuthenticationAgent(Subject *subject, const QString &locale,
+    bool registerAuthenticationAgentSync(Subject *subject, const QString &locale,
                                      const QString &objectPath);
-
-    /**
-     * Asynchronous version of method registerAuthenticationAgent.
-     *
-     * \param subject caller subject
-     * \param locale the locale of the authentication agent
-     * \param objectPath the object path for the authentication agent
-     */
-    void registerAuthenticationAgentAsync(Subject *subject, const QString &locale,
-                                          const QString &objectPath);
 
     /**
      * This method can be used to cancel the registration of the authentication agent.
      */
     void registerAuthenticationAgentCancel();
 
+    /**
+     * Unregisters an Authentication agent.
+     *
+     * \see unregisterAuthenticationAgentSync Synchronous version of this method.
+     * \see unregisterAuthenticationAgentFinished Signal that is emitted when this method finishes.
+     * \see unregisterAuthenticationAgentCancel Use it to cancel execution of this method.
+     *
+     * \param subject caller subject
+     * \param objectPath the object path for the Authentication agent
+     *
+     * \return \c true if the Authentication agent has been successfully unregistered
+     *         \c false if the Authentication agent unregistration failed
+     */
+    void unregisterAuthenticationAgent(Subject *subject, const QString &objectPath);
 
     /**
      * Unregisters an Authentication agent.
+     *
+     * \see unregisterAuthenticationAgent Asynchronous version of this method.
      *
      * \param subject caller subject
      * \param objectPath the object path for the Authentication agent
@@ -231,17 +270,7 @@ public:
      * \return \c true if the Authentication agent has been successfully unregistered
      *         \c false if the Authentication agent unregistration failed
     */
-    bool unregisterAuthenticationAgent(Subject *subject, const QString &objectPath);
-
-    /**
-     * Asynchronous version of method unregisterAuthenticationAgent.
-     * \param subject caller subject
-     * \param objectPath the object path for the Authentication agent
-     *
-     * \return \c true if the Authentication agent has been successfully unregistered
-     *         \c false if the Authentication agent unregistration failed
-     */
-    void unregisterAuthenticationAgentAsync(Subject *subject, const QString &objectPath);
+    bool unregisterAuthenticationAgentSync(Subject *subject, const QString &objectPath);
 
     /**
      * This method can be used to cancel the unregistration of the authentication agent.
@@ -249,22 +278,29 @@ public:
     void unregisterAuthenticationAgentCancel();
 
     /**
+     * Provide response that \p identity successfully authenticated for the authentication request identified by \p cookie.
+     *
+     * \see authenticationAgentResponseSync Synchronous version of this method.
+     * \see authenticationAgentResponseFinished Signal that is emitted when this method finishes.
+     * \see authenticationAgentResponseCancel Use it to cancel execution of this method.
+     *
+     * \param cookie The cookie passed to the authentication agent from the authority.
+     * \param identity The identity that was authenticated.
+     */
+    void authenticationAgentResponse(const QString & cookie, Identity * identity);
+
+     /**
       * Provide response that \p identity successfully authenticated for the authentication request identified by \p cookie.
+      *
+      * \see authenticationAgentResponse Asynchronous version of this method.
+      *
       * \param cookie The cookie passed to the authentication agent from the authority.
       * \param identity The identity that was authenticated.
       *
       * \return \c true if authority acknowledged the call, \c false if error is set.
       *
     */
-    bool authenticationAgentResponse(const QString & cookie, Identity * identity);
-
-    /**
-     * Asynchronous version of method authenticationAgentResponse.
-     *
-     * \param cookie The cookie passed to the authentication agent from the authority.
-     * \param identity The identity that was authenticated.
-     */
-    void authenticationAgentResponseAsync(const QString & cookie, Identity * identity);
+    bool authenticationAgentResponseSync(const QString & cookie, Identity * identity);
 
     /**
      * This method can be used to cancel the authenticationAgentResponseAsync method.
@@ -272,21 +308,27 @@ public:
     void authenticationAgentResponseCancel();
 
     /**
+     * Retrieves all temporary action that applies to \p subject.
+     *
+     * \see enumerateTemporaryAuthorizationsSync Synchronous version of this method.
+     * \see enumerateTemporaryAuthorizationsFinished Signal that is emitted when this method finishes.
+     * \see enumerateTemporaryAuthorizationsCancel Use it to cancel execution of this method.
+     *
+     * \param subject the subject to get temporary authorizations for
+     *
+     */
+    void enumerateTemporaryAuthorizations(Subject *subject);
+
+    /**
      * Retrieves all temporary action that applies to \p subject
+     *
+     * \see enumerateTemporaryAuthorizations Asynchronous version of this method.
      *
      * \param subject the subject to get temporary authorizations for
      *
      * \return List of all temporary authorizations
     */
-    QList<TemporaryAuthorization *> enumerateTemporaryAuthorizations(Subject *subject);
-
-    /**
-     * Asynchronous version of method enumerateTemporaryAuthorizations.
-     *
-     * \param subject the subject to get temporary authorizations for
-     *
-     */
-    void enumerateTemporaryAuthorizationsAsync(Subject *subject);
+    QList<TemporaryAuthorization *> enumerateTemporaryAuthorizationsSync(Subject *subject);
 
     /**
      * This method can be used to cancel the enumerateTemporaryAuthorizationsAsync method.
@@ -296,18 +338,25 @@ public:
     /**
      * Revokes all temporary authorizations that applies to \p subject
      *
+     * \see revokeTemporaryAuthorizationsSync Synchronous version of this method.
+     * \see revokeTemporaryAuthorizationsFinished Signal that is emitted when this method finishes.
+     * \see revokeTemporaryAuthorizationsCancel Use it to cancel execution of this method.
+
+     * \param subject the subject to revoke temporary authorizations from
+     */
+    void revokeTemporaryAuthorizations(Subject *subject);
+
+    /**
+     * Revokes all temporary authorizations that applies to \p subject
+     *
+     * \see revokeTemporaryAuthorizations Asynchronous version of this method.
+     *
      * \param subject the subject to revoke temporary authorizations from
      *
      * \return \c true if all temporary authorization were revoked
      *         \c false if the revoking failed
     */
-    bool revokeTemporaryAuthorizations(Subject *subject);
-
-    /** Asynchronous version of method revokeTemporaryAuthorizations.
-     *
-     * \param subject the subject to revoke temporary authorizations from
-     */
-    void revokeTemporaryAuthorizationsAsync(Subject *subject);
+    bool revokeTemporaryAuthorizationsSync(Subject *subject);
 
     /**
      * This method can be used to cancel the method revokeTemporaryAuthorizationsAsync.
@@ -317,18 +366,25 @@ public:
     /**
      * Revokes temporary authorization by \p id
      *
+     * \see revokeTemporaryAuthorizationSync Synchronous version of this method.
+     * \see revokeTemporaryAuthorizationFinished Signal that is emitted when this method finishes.
+     * \see revokeTemporaryAuthorizationCancel Use it to cancel execution of this method.
+     *
+     * \param id the identifier of the temporary authorization
+     */
+    void revokeTemporaryAuthorization(const QString &id);
+
+    /**
+     * Revokes temporary authorization by \p id
+     *
+     * \see revokeTemporaryAuthorization Asynchronous version of this method.
+     *
      * \param id the identifier of the temporary authorization
      *
      * \return \c true if the temporary authorization was revoked
      *         \c false if the revoking failed
     */
-    bool revokeTemporaryAuthorization(const QString &id);
-
-    /** Asynchronous version of method revokeTemporaryAuthorization.
-     *
-     * \param id the identifier of the temporary authorization
-     */
-    void revokeTemporaryAuthorizationAsync(const QString &id);
+    bool revokeTemporaryAuthorizationSync(const QString &id);
 
     /**
      * This method can be used to cancel the method revokeTemporaryAuthorizationAsync.
@@ -360,21 +416,21 @@ Q_SIGNALS:
     void consoleKitDBChanged();
 
     /**
-     * This signal is emitted when asynchronous method checkAuthorizationAsync finishes.
+     * This signal is emitted when asynchronous method checkAuthorization finishes.
      *
      * The argument is the result of authorization.
      */
     void checkAuthorizationFinished(PolkitQt::Authority::Result);
 
     /**
-     * This signal is emitted when asynchronous method enumerateActionsAsync finishes.
+     * This signal is emitted when asynchronous method enumerateActions finishes.
      *
      * The argument is the list of all Action IDs.
      */
     void enumerateActionsFinished(QStringList);
 
     /**
-     * This signal is emitted when asynchronous method registerAuthenticationAgentAsync finishes.
+     * This signal is emitted when asynchronous method registerAuthenticationAgent finishes.
      *
      * The argument is \c true  if the Authentication agent has been successfully registered
      *                 \c false if the Authentication agent registration failed
@@ -382,7 +438,7 @@ Q_SIGNALS:
     void registerAuthenticationAgentFinished(bool);
 
     /**
-     * This signal is emitted when asynchronous method unregisterAuthenticationAgentAsync finishes.
+     * This signal is emitted when asynchronous method unregisterAuthenticationAgent finishes.
      *
      * The argument is \c true  if the Authentication agent has been successfully unregistered
      *                 \c false if the Authentication agent unregistration failed
@@ -390,7 +446,7 @@ Q_SIGNALS:
     void unregisterAuthenticationAgentFinished(bool);
 
     /**
-     * This signal is emitted when asynchronous method authenticationAgentResponseAsync finishes.
+     * This signal is emitted when asynchronous method authenticationAgentResponse finishes.
      *
      * The argument is \c true if authority acknowledged the call, \c false if error is set.
      */
@@ -404,7 +460,7 @@ Q_SIGNALS:
     void enumerateTemporaryAuthorizationsFinished(QList<TemporaryAuthorization *>);
 
     /**
-     * This signal is emmited when asynchronous method revokeTemporaryAuthorizationsAsync finishes.
+     * This signal is emmited when asynchronous method revokeTemporaryAuthorizations finishes.
      *
      * The argument is \c true if all temporary authorizations were revoked
      *                 \c false if the revoking failed
@@ -412,7 +468,7 @@ Q_SIGNALS:
     void revokeTemporaryAuthorizationsFinished(bool);
 
     /**
-     * This signal is emmited when asynchronous method revokeTemporaryAuthorizationAsync finishes.
+     * This signal is emmited when asynchronous method revokeTemporaryAuthorization finishes.
      * \return \c true if the temporary authorization was revoked
      *         \c false if the revoking failed
      */

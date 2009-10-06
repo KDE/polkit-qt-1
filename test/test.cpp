@@ -27,17 +27,17 @@ void TestAuth::test_Auth_checkAuthorization()
     Authority::Result result;
     // Check if this method returns good authorization results
     Authority *authority = Authority::instance();
-    result = authority->checkAuthorization("org.qt.policykit.examples.kick", process, Authority::None);
+    result = authority->checkAuthorizationSync("org.qt.policykit.examples.kick", process, Authority::None);
     QCOMPARE(result, Authority::No);
-    result = authority->checkAuthorization("org.qt.policykit.examples.cry", process, Authority::None);
+    result = authority->checkAuthorizationSync("org.qt.policykit.examples.cry", process, Authority::None);
     QCOMPARE(result, Authority::Yes);
-    result = authority->checkAuthorization("org.qt.policykit.examples.bleed", process, Authority::None);
+    result = authority->checkAuthorizationSync("org.qt.policykit.examples.bleed", process, Authority::None);
     QCOMPARE(result, Authority::Challenge);
 
     // Now we try async methods
     QSignalSpy spy(authority, SIGNAL(checkAuthorizationFinished(PolkitQt::Authority::Result)));
     // Call asynchronous checkAuthorization
-    authority->checkAuthorizationAsync("org.qt.policykit.examples.kick", process, Authority::None);
+    authority->checkAuthorization("org.qt.policykit.examples.kick", process, Authority::None);
     // Give the polkit time to obtain the result and emit the signal with it
     wait();
     // Test if the signal was emitted
@@ -48,14 +48,14 @@ void TestAuth::test_Auth_checkAuthorization()
     spy.clear();
 
     // Let's test the cancellability
-    authority->checkAuthorizationAsync("org.qt.policykit.examples.kick", process, Authority::None);
+    authority->checkAuthorization("org.qt.policykit.examples.kick", process, Authority::None);
     authority->checkAuthorizationCancel();
     // Wait and check if the signal arrieved
     wait();
     QCOMPARE(spy.count(), 0);
 
     // Check if it can cancel user authentification dialog
-    authority->checkAuthorizationAsync("org.qt.policykit.examples.bleed", process, Authority::AllowUserInteraction);
+    authority->checkAuthorization("org.qt.policykit.examples.bleed", process, Authority::AllowUserInteraction);
     // Show it for second
     sleep(1);
     // And now kill it
@@ -67,7 +67,7 @@ void TestAuth::test_Auth_checkAuthorization()
 void TestAuth::test_Auth_enumerateActions()
 {
     // This needs the file org.qt.policykit.examples.policy from examples to be installed
-    QStringList list = Authority::instance()->enumerateActions();
+    QStringList list = Authority::instance()->enumerateActionsSync();
     // Check whether enumerateAction returns at least example actions
     QVERIFY(list.contains("org.qt.policykit.examples.kick"));
     QVERIFY(list.contains("org.qt.policykit.examples.cry"));
@@ -75,7 +75,7 @@ void TestAuth::test_Auth_enumerateActions()
 
     // Test asynchronous version as well
     QSignalSpy spy(Authority::instance(), SIGNAL(enumerateActionsFinished(QStringList)));
-    Authority::instance()->enumerateActionsAsync();
+    Authority::instance()->enumerateActions();
     wait();
     QCOMPARE(spy.count(), 1);
     list = qVariantValue<QStringList> (spy.takeFirst()[0]);
@@ -85,7 +85,7 @@ void TestAuth::test_Auth_enumerateActions()
 
     // Test cancelling the enumeration
     spy.clear();
-    Authority::instance()->enumerateActionsAsync();
+    Authority::instance()->enumerateActions();
     Authority::instance()->enumerateActionsCancel();
     wait();
     QCOMPARE(spy.count(), 0);

@@ -220,7 +220,7 @@ void PkExample::actionActivated()
     // As debug message says we are pretending to be the mechanism for the
     // following action, here you will actually call your DBus helper that
     // will run as root (setuid is not needed, see DBus docs).
-    // In the helper application you will issue checkAuthorization,
+    // In the helper application you will issue checkAuthorizationSync,
     // passing the action id and the caller pid (which DBus will tell you).
     qDebug() << "pretending to be the mechanism for action:" << action->actionId();
 
@@ -229,7 +229,7 @@ void PkExample::actionActivated()
     
     subject = new UnixProcess(static_cast<uint>(QCoreApplication::applicationPid()));
     
-    result = Authority::instance()->checkAuthorization(action->actionId(), subject,
+    result = Authority::instance()->checkAuthorizationSync(action->actionId(), subject,
                       Authority::AllowUserInteraction);
     if (result == Authority::Yes) {
         // in the helper you will do the action

@@ -70,7 +70,7 @@ bool PkExampleHelper::set(const QString &action)
     
     subject = new SystemBusName(message().service());
     
-    result = Authority::instance()->checkAuthorization("org.qt.policykit.examples.set",
+    result = Authority::instance()->checkAuthorizationSync("org.qt.policykit.examples.set",
                                            subject , Authority::AllowUserInteraction);
     if (result == Authority::Yes) {
         qDebug() << message().service() << QString("Implicit authorization set to") << action;

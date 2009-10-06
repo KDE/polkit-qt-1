@@ -233,7 +233,7 @@ bool Action::Private::computePkResult()
     old_result = pkResult;
     pkResult = Authority::Unknown;
 
-    pkResult = Authority::instance()->checkAuthorization(actionId, subject, Authority::None);
+    pkResult = Authority::instance()->checkAuthorizationSync(actionId, subject, Authority::None);
 
     return old_result != pkResult;
 }

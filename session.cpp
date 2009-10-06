@@ -35,6 +35,11 @@ Session::Session(PolkitQt::Identity *identity, const QString &cookie)
     g_signal_connect(G_OBJECT(m_polkitAgentSession), "show-info", G_CALLBACK(_showInfo), this);
 }
 
+Session::~Session()
+{
+    g_object_unref(m_polkitAgentSession);
+}
+
 void Session::initiate()
 {
     polkit_agent_session_initiate(m_polkitAgentSession);

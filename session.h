@@ -56,6 +56,11 @@ public:
      * \param cookie The cookie obtained from the PolicyKit daemon
      */
     Session(PolkitQt::Identity *identity, const QString &cookie);
+    
+    /**
+     * Destroy authentication session.
+     */
+    ~Session();
 
     /**
      * Initiate the authentication session.

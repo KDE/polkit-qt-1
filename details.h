@@ -1,7 +1,6 @@
 /*
  * This file is part of the Polkit-qt project
- * Copyright (C) 2009 Dario Freddi <drf54321@gmail.com>
- * Copyright (C) 2007 David Faure <faure@kde.org>
+ * Copyright (C) 2009 Radek Novacek <rnovacek@redhat.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public

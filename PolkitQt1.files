@@ -37,4 +37,5 @@ polkitqtlistener.h
 test/CMakeLists.txt
 test/test.cpp
 test/test.h
-
+details.h
+details.cpp

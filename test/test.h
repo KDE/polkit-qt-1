@@ -14,6 +14,7 @@ private slots:
     void test_Authority();
     void test_Subject();
     void test_Session();
+    void test_Details();
 };
 
 #endif // TEST_H

@@ -37,6 +37,7 @@ set(polkit_qt_core_SRCS
     identity.cpp
     subject.cpp
     temporaryauthorization.cpp
+    details.cpp
 )
 
 set(polkit_qt_gui_SRCS

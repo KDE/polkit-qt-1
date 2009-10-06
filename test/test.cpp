@@ -3,6 +3,7 @@
 #include "test.h"
 #include "authority.h"
 #include "session.h"
+#include "details.h"
 #include <stdlib.h>
 #include <unistd.h>
 #include <QtDBus/QDBusMessage>
@@ -193,6 +194,24 @@ void TestAuth::test_Session()
     qDebug() << "ERROR:" << spy_error.count();
     qDebug() << "INFO:" << spy_info.count();
     */
+}
+
+void TestAuth::test_Details()
+{
+    Details details;
+    details.insert("1", "aaa");
+    details.insert("2", "bbb");
+    details.insert("3", "ccc");
+    details.insert("4", "ddd");
+    QCOMPARE(details.lookup("1"), QString("aaa"));
+    QCOMPARE(details.lookup("2"), QString("bbb"));
+    QCOMPARE(details.lookup("3"), QString("ccc"));
+    QCOMPARE(details.lookup("4"), QString("ddd"));
+    QList<QString> list = details.getKeys();
+    QVERIFY(list.contains("1"));
+    QVERIFY(list.contains("2"));
+    QVERIFY(list.contains("3"));
+    QVERIFY(list.contains("4"));
 }
 
 QTEST_MAIN(TestAuth)

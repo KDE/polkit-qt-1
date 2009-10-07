@@ -19,8 +19,12 @@
  */
 
 #include <QtCore/QDebug>
+#include <QInputDialog>
 
 #include "klistener.h"
+#include "session.h"
+
+using namespace PolkitQtAgent;
 
 KListener::KListener(QObject *parent)
         : Listener(parent)
@@ -28,7 +32,71 @@ KListener::KListener(QObject *parent)
     qDebug() << "Registering KDE listener";
 }
 
-void KListener::initiateAuthentication()
+// README: this is just testing code...
+
+void KListener::initiateAuthentication(const QString &actionId,
+					const QString &message,
+					const QString &iconName,
+				        PolkitQt::Details *details,
+					const QString &cookie,
+					QList<PolkitQt::Identity *> identities)
 {
-    qDebug() << "initiateAuthentication";
+    qDebug() << "initiateAuthentication for " << actionId << " with message " << message;
+    qDebug() << "iconName " << iconName;
+    qDebug() << details->getKeys();
+    qDebug() << "cookie" << cookie;
+    
+    PolkitQt::Identity *identity;
+    
+    foreach(identity, identities)
+    {
+	qDebug() << identity->toString();
+	Session *session;
+	session = new Session(identity, cookie);
+	connect(session, SIGNAL(request(QString, bool)), this, SLOT(request(QString, bool)));
+	connect(session, SIGNAL(completed(bool)), this, SLOT(completed(bool)));
+	connect(session, SIGNAL(showError(QString)), this, SLOT(showError(QString)));
+	connect(session, SIGNAL(showInfo(QString)), this, SLOT(showInfo(QString)));	
+	session->initiate();
+    }
+    
+    
+}
+
+bool KListener::initiateAuthenticationFinish()
+{
+    return true;
+}
+
+void KListener::cancelAuthentication()
+{
+    qDebug() << "Cancelling authentication";
+}
+    
+void KListener::request(const QString &request, bool echo)
+{
+    qDebug() << "Request: " << request;
+    
+    Session *session = (Session *)sender();
+    
+    session->response("");
+}
+
+void KListener::completed(bool gainedAuthorization)
+{
+    qDebug() << "Completed: " << gainedAuthorization;
+    
+    Session *session = (Session *)sender();
+    
+    delete session;
+}
+
+void KListener::showError(const QString &text)
+{
+    qDebug() << "Error: " << text;
+}
+
+void KListener::showInfo(const QString &text)
+{
+    qDebug() << "Info: " << text;
 }

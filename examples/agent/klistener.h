@@ -22,8 +22,11 @@
 #define POLKIT_QT_AGENT_KDE_LISTENER_H
 
 #include <QtCore/QObject>
+#include <QtCore/QString>
 
 #include "listener.h"
+#include "identity.h"
+#include "details.h"
 
 class KListener : public PolkitQtAgent::Listener
 {
@@ -33,7 +36,19 @@ public:
     KListener(QObject *parent = 0);
     ~KListener() {};
 public slots:
-    void initiateAuthentication();
+    void initiateAuthentication(const QString &actionId,
+					const QString &message,
+					const QString &iconName,
+				        PolkitQt::Details *details,
+					const QString &cookie,
+					QList<PolkitQt::Identity *> identities);
+    bool initiateAuthenticationFinish();
+    void cancelAuthentication();
+    
+    void request(const QString &request, bool echo);
+    void completed(bool gainedAuthorization);
+    void showError(const QString &text);
+    void showInfo(const QString &text);    
 };
 
 #endif

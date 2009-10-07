@@ -186,8 +186,6 @@ public:
     * \param name System bus name.
     */
     void setName(const QString &name);
-    
-    // TODO: unixProcess
 };
 
 /**
@@ -241,8 +239,6 @@ public:
     * \param name A session id.
     */
     void setSessionId(const QString &sessionId);
-    
-    // TODO: constructor from PID?
 };
 
 }

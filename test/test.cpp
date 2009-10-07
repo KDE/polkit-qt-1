@@ -29,10 +29,13 @@ void TestAuth::test_Auth_checkAuthorization()
     Authority *authority = Authority::instance();
     result = authority->checkAuthorizationSync("org.qt.policykit.examples.kick", process, Authority::None);
     QCOMPARE(result, Authority::No);
+    QVERIFY(!authority->hasError());
     result = authority->checkAuthorizationSync("org.qt.policykit.examples.cry", process, Authority::None);
     QCOMPARE(result, Authority::Yes);
+    QVERIFY(!authority->hasError());
     result = authority->checkAuthorizationSync("org.qt.policykit.examples.bleed", process, Authority::None);
     QCOMPARE(result, Authority::Challenge);
+    QVERIFY(!authority->hasError());
 
     // Now we try async methods
     QSignalSpy spy(authority, SIGNAL(checkAuthorizationFinished(PolkitQt::Authority::Result)));
@@ -45,6 +48,7 @@ void TestAuth::test_Auth_checkAuthorization()
     // Test the result
     result = qVariantValue<PolkitQt::Authority::Result> (spy.takeFirst()[0]);
     QCOMPARE(result, Authority::No);
+    QVERIFY(!authority->hasError());
     spy.clear();
 
     // Let's test the cancellability
@@ -60,6 +64,7 @@ void TestAuth::test_Auth_checkAuthorization()
     sleep(1);
     // And now kill it
     authority->checkAuthorizationCancel();
+    QVERIFY(!authority->hasError());
     // But how to test if it was successfull?
     qWarning() << "You should see authentification dialog for short period.";
 }
@@ -68,6 +73,7 @@ void TestAuth::test_Auth_enumerateActions()
 {
     // This needs the file org.qt.policykit.examples.policy from examples to be installed
     QStringList list = Authority::instance()->enumerateActionsSync();
+    QVERIFY(!Authority::instance()->hasError());
     // Check whether enumerateAction returns at least example actions
     QVERIFY(list.contains("org.qt.policykit.examples.kick"));
     QVERIFY(list.contains("org.qt.policykit.examples.cry"));
@@ -79,6 +85,7 @@ void TestAuth::test_Auth_enumerateActions()
     wait();
     QCOMPARE(spy.count(), 1);
     list = qVariantValue<QStringList> (spy.takeFirst()[0]);
+    QVERIFY(!Authority::instance()->hasError());
     QVERIFY(list.contains("org.qt.policykit.examples.kick"));
     QVERIFY(list.contains("org.qt.policykit.examples.cry"));
     QVERIFY(list.contains("org.qt.policykit.examples.bleed"));
@@ -89,6 +96,7 @@ void TestAuth::test_Auth_enumerateActions()
     Authority::instance()->enumerateActionsCancel();
     wait();
     QCOMPARE(spy.count(), 0);
+    QVERIFY(!Authority::instance()->hasError());
 }
 
 void TestAuth::test_Identity()

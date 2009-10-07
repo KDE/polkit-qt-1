@@ -112,10 +112,13 @@ public:
     ~Authority();
 
     /**
-     * You should always call this method first, since if an error is detected,
-     * the library will retry to initialize itself.
+     * You should always call this method after every action. No action will be allowed
+     * if the object is in error state. Use clearError() to clear the error message.
      *
-     * \return true if the library is ready, false if an error occurred
+     * \see lastError
+     * \see clearError
+     *
+     * \return \c true if an error occurred, \c false if the library is ready
      */
     bool hasError() const;
 
@@ -123,6 +126,11 @@ public:
      * \return the last error message
      */
     QString lastError() const;
+
+    /**
+     * Use this method to clear the error message.
+     */
+    void clearError();
 
     /**
      * Returns the current instance of PolkitAuthority. If you are handling

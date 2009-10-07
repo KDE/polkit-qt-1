@@ -160,6 +160,9 @@ void Authority::Private::init()
     m_registerAuthenticationAgentCancellable = g_cancellable_new();
     m_unregisterAuthenticationAgentCancellable = g_cancellable_new();
     m_authenticationAgentResponseCancellable = g_cancellable_new();
+    m_enumerateTemporaryAuthorizationsCancellable = g_cancellable_new();
+    m_revokeTemporaryAuthorizationsCancellable = g_cancellable_new();
+    m_revokeTemporaryAuthorizationCancellable = g_cancellable_new();
 
     if (pkAuthority == NULL) {
         pkAuthority = polkit_authority_get();

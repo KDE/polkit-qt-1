@@ -310,7 +310,7 @@ void Authority::checkAuthorization(const QString &actionId, Subject *subject, Au
 void Authority::Private::checkAuthorizationCallback(GObject *object, GAsyncResult *result, gpointer user_data)
 {
     Authority *authority = (Authority *) user_data;
-    //GAsyncResult *res;
+
     GError *error = NULL;
     PolkitAuthorizationResult *pkResult = polkit_authority_check_authorization_finish((PolkitAuthority *) object, result, &error);
     if (error != NULL)

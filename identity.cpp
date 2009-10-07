@@ -73,6 +73,11 @@ UnixUser::UnixUser(uid_t uid, QObject * parent)
     m_identity = polkit_unix_user_new(uid);
 }
 
+UnixUser::UnixUser(PolkitUnixUser *pkUnixUser, QObject *parent) : Identity((PolkitIdentity *)pkUnixUser, parent)
+{
+
+}
+
 uid_t UnixUser::uid() const
 {
     return polkit_unix_user_get_uid((PolkitUnixUser *) m_identity);
@@ -94,6 +99,11 @@ UnixGroup::UnixGroup(gid_t gid, QObject * parent)
     : Identity(parent)
 {
     m_identity = polkit_unix_group_new(gid);
+}
+
+UnixGroup::UnixGroup(PolkitUnixGroup *pkUnixGroup, QObject *parent) : Identity((PolkitIdentity *) pkUnixGroup, parent)
+{
+
 }
 
 gid_t UnixGroup::gid() const

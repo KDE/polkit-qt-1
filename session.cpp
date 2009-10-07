@@ -26,9 +26,17 @@
 
 using namespace PolkitQtAgent;
 
-Session::Session(PolkitQt::Identity *identity, const QString &cookie)
+Session::Session(PolkitQt::Identity *identity, const QString &cookie, QObject *parent) : QObject(parent)
 {
     m_polkitAgentSession = polkit_agent_session_new(identity->identity(), cookie.toUtf8().data());
+    g_signal_connect(G_OBJECT(m_polkitAgentSession), "completed", G_CALLBACK(_completed), this);
+    g_signal_connect(G_OBJECT(m_polkitAgentSession), "request", G_CALLBACK(_request), this);
+    g_signal_connect(G_OBJECT(m_polkitAgentSession), "show-error", G_CALLBACK(_showError), this);
+    g_signal_connect(G_OBJECT(m_polkitAgentSession), "show-info", G_CALLBACK(_showInfo), this);
+}
+
+Session::Session(PolkitAgentSession *pkAgentSession, QObject *parent) : m_polkitAgentSession(pkAgentSession), QObject(parent)
+{
     g_signal_connect(G_OBJECT(m_polkitAgentSession), "completed", G_CALLBACK(_completed), this);
     g_signal_connect(G_OBJECT(m_polkitAgentSession), "request", G_CALLBACK(_request), this);
     g_signal_connect(G_OBJECT(m_polkitAgentSession), "show-error", G_CALLBACK(_showError), this);

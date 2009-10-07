@@ -48,8 +48,16 @@ public:
     /**
      * Creates a new Details object
      */
-    Details(QObject *parent = NULL);
-    Details(PolkitDetails *pkDetails);
+    Details(QObject *parent = 0);
+
+    /**
+     * Creates Details object from PolkitDetails
+     *
+     * \warning Use this only if you are completely aware of what are you doing!
+     *
+     * \param pkDetails PolkitDetails object
+     */
+    Details(PolkitDetails *pkDetails, QObject *parent = 0);
 
     ~Details();
 

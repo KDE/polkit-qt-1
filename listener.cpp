@@ -38,6 +38,11 @@ Listener::Listener(QObject *parent)
     ListenerAdapter::instance()->addListener(this);
 }
 
+Listener::Listener(PolkitAgentListener *listener, QObject *parent) : m_listener(listener), QObject(parent)
+{
+    g_type_init();
+}
+
 Listener::~Listener()
 {
     qDebug("Destroying listener");

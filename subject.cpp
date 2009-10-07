@@ -30,6 +30,11 @@ Subject::Subject(QObject * parent)
     g_type_init();    
 }
 
+Subject::Subject(PolkitSubject *subject, QObject *parent) : m_subject(subject), QObject(parent)
+{
+    g_type_init();
+}
+
 Subject::~Subject()
 {
     g_object_unref(m_subject);
@@ -71,6 +76,11 @@ UnixProcess::UnixProcess(qint64 pid, quint64 startTime, QObject * parent) : Subj
     m_subject = polkit_unix_process_new_full(pid, startTime);
 }
 
+UnixProcess::UnixProcess(PolkitUnixProcess *pkUnixProcess, QObject *parent) : Subject((PolkitSubject *)pkUnixProcess, parent)
+{
+
+}
+
 qint64 UnixProcess::pid() const
 {
     return polkit_unix_process_get_pid((PolkitUnixProcess *) m_subject);
@@ -90,6 +100,11 @@ void UnixProcess::setPid(qint64 pid)
 SystemBusName::SystemBusName(const QString &name, QObject * parent) : Subject(parent)
 {
     m_subject = polkit_system_bus_name_new(name.toUtf8().data());
+}
+
+SystemBusName::SystemBusName(PolkitSystemBusName *pkSystemBusName , QObject *parent) : Subject((PolkitSubject *) pkSystemBusName , parent)
+{
+
 }
 
 QString SystemBusName::name() const
@@ -112,6 +127,11 @@ UnixSession::UnixSession(qint64 pid, QObject * parent) : Subject(parent)
 {
     // TODO: error handling
     m_subject = polkit_unix_session_new_for_process_sync(pid, NULL, NULL);
+}
+
+UnixSession::UnixSession(PolkitSystemBusName *pkUnixSession, QObject *parent) : Subject((PolkitSubject *) pkUnixSession, parent)
+{
+
 }
 
 QString UnixSession::sessionId() const

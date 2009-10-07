@@ -53,12 +53,35 @@ class POLKIT_QT_EXPORT Subject : public QObject
     Q_OBJECT
 public:
     ~Subject();
+
+    /**
+     * Serialization of object to the string
+     *
+     * \return Serialized Subject object
+     */
     QString toString() const;
+
+    /**
+     * Creates the Subject object from string reprezentation
+     *
+     * \param String reprezentation of the object
+     *
+     * \return Pointer to new Subject instance
+     */
     static Subject * fromString(const QString & string);
+
+    /**
+     * Gets PolkitSubject object.
+     *
+     * \warning It shouldn't be used directly unless you are completely aware of what are you doing
+     *
+     * \return Pointer to PolkitSubject instance
+     */
     PolkitSubject * subject();
 protected:
     PolkitSubject * m_subject;
     explicit Subject(QObject *parent = 0);
+    Subject(PolkitSubject *subject, QObject *parent);
 };
 
 /**
@@ -92,6 +115,15 @@ public:
     * \param startTime An Unix process start time.
     */    
     UnixProcess(qint64 pid, quint64 startTime, QObject *parent = 0);
+
+    /**
+     * Subject constructor, it creates UnixProcess object from PolkitUnixProcess object
+     *
+     * \warning Use this only if you are completely aware of what are you doing!
+     *
+     * \param pkUnixProcess PolkitUnixProcess object
+     */
+    UnixProcess(PolkitUnixProcess *process, QObject *parent = 0);
     
     /**
     * Returns Unix process PID.
@@ -131,6 +163,15 @@ public:
     * \param name A unique system bus name.
     */    
     SystemBusName(const QString &name, QObject *parent = 0);
+
+    /**
+     * Subject constructor, it creates SystemBusName object from PolkitSystemBusName object
+     *
+     * \warning Use this only if you are completely aware of what are you doing!
+     *
+     * \param pkSystemBusName PolkitSystemBusName object
+     */
+    SystemBusName(PolkitSystemBusName *pkSystemBusName, QObject *parent = 0);
 
     /**
     * Returns system bus name.
@@ -177,6 +218,15 @@ public:
     * \param pid The session's process pid.
     */  
     UnixSession(qint64 pid, QObject *parent = 0);
+
+    /**
+     * Subject constructor, it creates UnixSession object from PolkitUnixSession object
+     *
+     * \warning Use this only if you are completely aware of what are you doing!
+     *
+     * \param pkUnixSession PolkitUnixSession object
+     */
+    UnixSession(PolkitSystemBusName *pkUnixSession, QObject *parent = 0);
 
     /**
     * Returns session id.

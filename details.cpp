@@ -31,7 +31,7 @@ Details::Details(QObject *parent) : QObject(parent)
     m_polkitDetails = polkit_details_new();
 }
 
-Details::Details(PolkitDetails *pkDetails) : QObject(NULL)
+Details::Details(PolkitDetails *pkDetails, QObject *parent) : QObject(parent)
 {
     g_type_init();
     m_polkitDetails = pkDetails;

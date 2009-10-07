@@ -48,7 +48,14 @@ class POLKIT_QT_EXPORT TemporaryAuthorization : public QObject
 {
     Q_OBJECT
 public:
-    TemporaryAuthorization(PolkitTemporaryAuthorization *tempAuth);
+    /**
+     * Creates TemporaryAuthorization object from PolkitTemporaryAuthorization
+     *
+     * \warning It shouldn't be used directly unless you are completely aware of what are you doing
+     *
+     * \param pkTemporaryAuthorization PolkitTemporaryAuthorization object
+     */
+    TemporaryAuthorization(PolkitTemporaryAuthorization *pkTemporaryAuthorization, QObject *parent = 0);
 
     /**
      * \brief Gets the identifier for the authorization.

@@ -24,7 +24,7 @@
 
 #include <QtCore/QObject>
 #include "identity.h"
-#define POLKIT_AGENT_I_KNOW_API_IS_SUBJECT_TO_CHANGE
+#define POLKIT_AGENT_I_KNOW_API_IS_SUBJECT_TO_CHANGE 1
 #include <polkitagent/polkitagent.h>
 
 /**
@@ -55,7 +55,16 @@ public:
      * \param identity The identity to authenticate
      * \param cookie The cookie obtained from the PolicyKit daemon
      */
-    Session(PolkitQt::Identity *identity, const QString &cookie);
+    Session(PolkitQt::Identity *identity, const QString &cookie, QObject *parent = 0);
+
+    /**
+     * Create a new authentication session from PolkitAgentSession object
+     *
+     * \warning Use this only if you are completely aware of what are you doing!
+     *
+     * \param pkAgentSession PolkitAgentSession object
+     */
+    Session(PolkitAgentSession *pkAgentSession, QObject *parent = 0);
     
     /**
      * Destroy authentication session.

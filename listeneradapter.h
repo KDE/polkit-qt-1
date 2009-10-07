@@ -29,6 +29,7 @@
 #include <polkit/polkit.h>
 #include "listener.h"
 #include "identity.h"
+#include "details.h"
 
 /**
  * \namespace PolkitQtAgent PolkitQtAgent
@@ -67,6 +68,7 @@ public:
 private:
     void addListener(Listener *listener);
     void removeListener(Listener *listener);
+    Listener* findListener(PolkitAgentListener *listener);
     
     explicit ListenerAdapter(QObject *parent = 0); 
     QList<Listener *> m_listeners;

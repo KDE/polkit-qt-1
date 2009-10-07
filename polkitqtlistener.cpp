@@ -110,6 +110,7 @@ static void polkit_qt_listener_initiate_authentication (PolkitAgentListener  *ag
                                                         GAsyncReadyCallback   callback,
                                                         gpointer              user_data)
 {
+    qDebug() << "Listener adapter polkit_qt_listener_initiate_authentication";
     PolkitQtListener *listener = POLKIT_QT_LISTENER (agent_listener);
 
     ListenerAdapter::instance()->polkit_qt_listener_initiate_authentication(agent_listener,
@@ -137,13 +138,11 @@ static gboolean polkit_qt_listener_initiate_authentication_finish (PolkitAgentLi
                                                                    GAsyncResult         *res,
                                                                    GError              **error)
 {
-    GSimpleAsyncResult *simple = G_SIMPLE_ASYNC_RESULT (res);
-
-    g_warn_if_fail (g_simple_async_result_get_source_tag (simple) == polkit_qt_listener_initiate_authentication);
-
-    return ListenerAdapter::instance()->polkit_qt_listener_initiate_authentication_finish(listener,
-											  res,
-											  error);
-									                 
+    qDebug() << "Listener adapter polkit_qt_listener_initiate_authentication_finish";
+    return true;
+    
+/*    return ListenerAdapter::instance()->polkit_qt_listener_initiate_authentication_finish(listener,
+                                                                                          res,
+										          error);									                 */
 }
 

@@ -28,6 +28,7 @@
 #include "polkitqtlistener.h"
 #include "subject.h"
 #include "identity.h"
+#include "details.h"
 
 #define POLKIT_AGENT_I_KNOW_API_IS_SUBJECT_TO_CHANGE 1
 
@@ -56,8 +57,11 @@ public slots:
     virtual void initiateAuthentication(const QString &actionId,
 					const QString &message,
 					const QString &iconName,
+					PolkitQt::Details *details,
 					const QString &cookie,
 					QList<PolkitQt::Identity *> identities) = 0;
+    virtual bool initiateAuthenticationFinish() = 0;
+    virtual void cancelAuthentication() = 0;
 protected:
     PolkitAgentListener *m_listener;
 };

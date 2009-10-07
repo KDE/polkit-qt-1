@@ -51,6 +51,22 @@ ListenerAdapter::ListenerAdapter(QObject *parent)
     s_globalListenerAdapter()->q = this;
 }
 
+Listener* ListenerAdapter::findListener(PolkitAgentListener *listener)
+{
+    Listener *listItem;
+
+    foreach (listItem, m_listeners)
+    {
+	Q_ASSERT(listItem);
+	
+	if (listItem->listener() == listener)
+	    return listItem;
+	
+    }
+    
+    return NULL;
+}
+
 void ListenerAdapter::polkit_qt_listener_initiate_authentication (PolkitAgentListener  *listener,
                                                            const gchar          *action_id,
                                                            const gchar          *message,
@@ -65,31 +81,16 @@ void ListenerAdapter::polkit_qt_listener_initiate_authentication (PolkitAgentLis
     qDebug() << "polkit_qt_listener_initiate_authentication callback for " << listener;
     
     QList<PolkitQt::Identity *> idents;
+    PolkitQt::Details *dets;
     
-    Listener *listItem;
+    Listener *list = findListener(listener);
     
-    foreach (listItem, m_listeners)
-    {
-	//Q_ASSERT(!listItem);
-	if (listItem && (listItem->listener() == listener))
-	{
-	    qDebug() << "Listener has been found.";
-	        
-	    GList *glist2;
-	    for (glist2 = identities; glist2 != NULL; glist2 = g_list_next(glist2))
-	    {
-		// FIXME: conversion
-		idents.append(PolkitQt::Identity::fromString(
-		    QString::fromUtf8(polkit_identity_to_string((PolkitIdentity *) glist2->data))));
-		    
-		g_object_unref(glist2->data);
-	    }
+    for (GList *identity = g_list_first(identities); identity != NULL; identity = g_list_next(identity))
+	idents.append(new PolkitQt::Identity((PolkitIdentity *)identity->data));
 
-	    g_list_free(identities);
-
-	    listItem->initiateAuthentication(action_id, message, icon_name, cookie, idents);
-	}    
-    }
+    dets = new PolkitQt::Details(details);
+    
+    list->initiateAuthentication(action_id, message, icon_name, dets, cookie, idents);
 }
 
 gboolean ListenerAdapter::polkit_qt_listener_initiate_authentication_finish (PolkitAgentListener  *listener,
@@ -97,13 +98,19 @@ gboolean ListenerAdapter::polkit_qt_listener_initiate_authentication_finish (Pol
                                                                       GError              **error)
 {
     qDebug() << "polkit_qt_listener_initiate_authentication_finish callback for " << listener;
+
+    Listener *list = findListener(listener);
+
+    return list->initiateAuthenticationFinish();
 }
 
 void ListenerAdapter::cancelled_cb(PolkitAgentListener *listener)
 {
     qDebug() << "cancelled_cb for " << listener;
     
-    // TODO: call cancelAuthentication method 
+    Listener *list = findListener(listener);
+    
+    list->cancelAuthentication();
 }
 
 void ListenerAdapter::addListener(Listener *listener)

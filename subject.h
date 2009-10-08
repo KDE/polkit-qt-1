@@ -241,7 +241,7 @@ public:
     /**
     * Sets session id.
     *
-    * \param name A session id.
+    * \param sessionId A session id.
     */
     void setSessionId(const QString &sessionId);
 };

@@ -55,11 +55,11 @@ public:
     const PolkitAgentListener *listener();
 public slots:
     virtual void initiateAuthentication(const QString &actionId,
-					const QString &message,
-					const QString &iconName,
-					PolkitQt::Details *details,
-					const QString &cookie,
-					QList<PolkitQt::Identity *> identities) = 0;
+                                        const QString &message,
+                                        const QString &iconName,
+                                        PolkitQt::Details *details,
+                                        const QString &cookie,
+                                        QList<PolkitQt::Identity *> identities) = 0;
     virtual bool initiateAuthenticationFinish() = 0;
     virtual void cancelAuthentication() = 0;
 protected:

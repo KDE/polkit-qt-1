@@ -158,9 +158,9 @@ public:
     /**
      * Creates UnixGroup object by GID of the group
      *
-     * \param uid group id
+     * \param gid group id
      */
-    UnixGroup(gid_t uid, QObject *parent = 0);
+    UnixGroup(gid_t gid, QObject *parent = 0);
 
     /**
      * Creates UnixGroup object by unix name of the group
@@ -188,7 +188,7 @@ public:
     /**
      * Sets the id of group
      *
-     * \param uid group id
+     * \param gid group id
      */
     void setGid(gid_t gid);
 };

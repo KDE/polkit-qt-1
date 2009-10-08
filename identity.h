@@ -43,9 +43,9 @@ namespace PolkitQt
  * \class Identity identity.h Identity
  * \author Lukas Tinkl <ltinkl@redhat.com>
  *
- * Identity is an abstract class for representing identities
- *
  * This class encapsulates the PolkitIdentity interface.
+ *
+ * \brief Abstract class representing identities
  *
  * \see UnixGroup
  * \see UnixUser
@@ -72,9 +72,9 @@ public:
     QString toString() const;
 
     /**
-     * Creates the Identity object from string reprezentation
+     * Creates the Identity object from string representation
      *
-     * \param String reprezentation of the object
+     * \param String representation of the object
      *
      * \return Pointer to new Identity instance
      */
@@ -94,7 +94,12 @@ protected:
 };
 
 /**
+  * \class UnixUser identity.h Identity
+  *
   * An object representing a user identity on a UNIX system.
+  *
+  * \brief UNIX user identity
+  * \sa Identity
   */
 class POLKIT_QT_EXPORT UnixUser: public Identity
 {
@@ -139,7 +144,12 @@ public:
 };
 
 /**
+  * \class UnixGroup identity.h Identity
+  *
   * An object representing a group identity on a UNIX system.
+  *
+  * \brief UNIX group identity
+  * \sa Identity
   */
 class POLKIT_QT_EXPORT UnixGroup: public Identity
 {

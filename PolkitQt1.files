@@ -39,3 +39,5 @@ test/test.cpp
 test/test.h
 details.h
 details.cpp
+listeneradapter.cpp
+listeneradapter.h

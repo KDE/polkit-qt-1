@@ -95,6 +95,7 @@ protected:
  * increasing value representing the time since the 
  * kernel was started) is used.
  * 
+ * \sa Subject
  */    
 class POLKIT_QT_EXPORT UnixProcess: public Subject
 {
@@ -152,6 +153,8 @@ public:
  * \author Jaroslav Reznik <jreznik@redhat.com>
  *
  * \brief A class for representing a process owning a unique name on the system bus. 
+ *
+ * \sa Subject
  */    
 class POLKIT_QT_EXPORT SystemBusName: public Subject
 {
@@ -196,6 +199,8 @@ public:
  *
  * The session id is an opaque string obtained from 
  * ConsoleKit.
+ *
+ * \sa Subject
  */    
 class POLKIT_QT_EXPORT UnixSession: public Subject
 {

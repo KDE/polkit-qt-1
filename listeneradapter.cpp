@@ -57,26 +57,26 @@ Listener* ListenerAdapter::findListener(PolkitAgentListener *listener)
 
     foreach (listItem, m_listeners)
     {
-	Q_ASSERT(listItem);
-	
-	if (listItem->listener() == listener)
-	    return listItem;
-	
+        Q_ASSERT(listItem);
+
+        if (listItem->listener() == listener)
+            return listItem;
+
     }
     
     return NULL;
 }
 
 void ListenerAdapter::polkit_qt_listener_initiate_authentication (PolkitAgentListener  *listener,
-                                                           const gchar          *action_id,
-                                                           const gchar          *message,
-                                                           const gchar          *icon_name,
-                                                           PolkitDetails        *details,
-                                                           const gchar          *cookie,
-                                                           GList                *identities,
-                                                           GCancellable         *cancellable,
-                                                           GAsyncReadyCallback   callback,
-                                                           gpointer              user_data)
+                                                                  const gchar          *action_id,
+                                                                  const gchar          *message,
+                                                                  const gchar          *icon_name,
+                                                                  PolkitDetails        *details,
+                                                                  const gchar          *cookie,
+                                                                  GList                *identities,
+                                                                  GCancellable         *cancellable,
+                                                                  GAsyncReadyCallback   callback,
+                                                                  gpointer              user_data)
 {
     qDebug() << "polkit_qt_listener_initiate_authentication callback for " << listener;
     
@@ -86,7 +86,7 @@ void ListenerAdapter::polkit_qt_listener_initiate_authentication (PolkitAgentLis
     Listener *list = findListener(listener);
     
     for (GList *identity = g_list_first(identities); identity != NULL; identity = g_list_next(identity))
-	idents.append(new PolkitQt::Identity((PolkitIdentity *)identity->data));
+        idents.append(new PolkitQt::Identity((PolkitIdentity *)identity->data));
 
     dets = new PolkitQt::Details(details);
     
@@ -94,8 +94,8 @@ void ListenerAdapter::polkit_qt_listener_initiate_authentication (PolkitAgentLis
 }
 
 gboolean ListenerAdapter::polkit_qt_listener_initiate_authentication_finish (PolkitAgentListener  *listener,
-                                                                      GAsyncResult         *res,
-                                                                      GError              **error)
+                                                                             GAsyncResult         *res,
+                                                                             GError              **error)
 {
     qDebug() << "polkit_qt_listener_initiate_authentication_finish callback for " << listener;
 

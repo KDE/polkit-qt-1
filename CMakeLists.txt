@@ -14,7 +14,9 @@ include (${QT_USE_FILE})
 include (FindPkgConfig)
 include (InstallSettings)
 
-pkg_check_modules (POLKIT REQUIRED polkit-gobject-1>=0.94)
+pkg_check_modules (POLKIT REQUIRED polkit-gobject-1>=0.95)
+pkg_check_modules (POLKIT REQUIRED polkit-agent-1>=0.95)
+
 
 MESSAGE(STATUS " ${POLKIT_INCLUDE_DIRS} ===========")
 
@@ -28,7 +30,7 @@ include_directories(
 )
 
 set(MAJOR_POLKIT_QT_VERSION "0")
-set(MINOR_POLKIT_QT_VERSION "94")
+set(MINOR_POLKIT_QT_VERSION "95")
 set(PATCH_POLKIT_QT_VERSION "1")
 set(POLKIT_QT_VERSION_STRING "${MAJOR_POLKIT_QT_VERSION}.${MINOR_POLKIT_QT_VERSION}.${PATCH_POLKIT_QT_VERSION}")
 
@@ -53,82 +55,90 @@ set(polkit_qt_agent_SRCS
     polkitqtlistener.cpp
 )
 
-automoc4_add_library(polkit-qt-core SHARED ${polkit_qt_core_SRCS})
-automoc4_add_library(polkit-qt-gui SHARED ${polkit_qt_gui_SRCS})
-automoc4_add_library(polkit-qt-agent SHARED ${polkit_qt_agent_SRCS})
+automoc4_add_library(polkit-qt-core-1 SHARED ${polkit_qt_core_SRCS})
+automoc4_add_library(polkit-qt-gui-1 SHARED ${polkit_qt_gui_SRCS})
+automoc4_add_library(polkit-qt-agent-1 SHARED ${polkit_qt_agent_SRCS})
 
-target_link_libraries(polkit-qt-core
- 	${POLKITDBUS_LIBRARIES}
- 	${POLKITGRANT_LIBRARIES}
+target_link_libraries(polkit-qt-core-1
 	${QT_QTCORE_LIBRARY}
 	${QT_QTDBUS_LIBRARY}
 	${QT_QTXML_LIBRARY}
 	${POLKIT_LIBRARIES}
 )
 
-target_link_libraries(polkit-qt-gui
-	polkit-qt-core
- 	${POLKITDBUS_LIBRARIES}
- 	${POLKITGRANT_LIBRARIES}
+target_link_libraries(polkit-qt-gui-1
+	polkit-qt-core-1
 	${QT_QTCORE_LIBRARY}
 	${QT_QTGUI_LIBRARY}
 	${QT_QTDBUS_LIBRARY}
 	${POLKIT_LIBRARIES}
 )
 
-# FIXME polkit-agent-1
-target_link_libraries(polkit-qt-agent
+target_link_libraries(polkit-qt-agent-1
 	${POLKIT_LIBRARIES}
         ${QT_QTCORE_LIBRARY}
-        -lpolkit-agent-1
 )
 
-set_target_properties(polkit-qt-core PROPERTIES VERSION ${MAJOR_POLKIT_QT_VERSION}.${MINOR_POLKIT_QT_VERSION}.${PATCH_POLKIT_QT_VERSION}
+set_target_properties(polkit-qt-core-1 PROPERTIES VERSION ${MAJOR_POLKIT_QT_VERSION}.${MINOR_POLKIT_QT_VERSION}.${PATCH_POLKIT_QT_VERSION}
                                 SOVERSION ${MAJOR_POLKIT_QT_VERSION}
                                 DEFINE_SYMBOL MAKE_POLKIT_QT_LIB
                       )
                       
-set_target_properties(polkit-qt-gui PROPERTIES VERSION ${MAJOR_POLKIT_QT_VERSION}.${MINOR_POLKIT_QT_VERSION}.${PATCH_POLKIT_QT_VERSION}
+set_target_properties(polkit-qt-gui-1 PROPERTIES VERSION ${MAJOR_POLKIT_QT_VERSION}.${MINOR_POLKIT_QT_VERSION}.${PATCH_POLKIT_QT_VERSION}
                                 SOVERSION ${MAJOR_POLKIT_QT_VERSION}
                                 DEFINE_SYMBOL MAKE_POLKIT_QT_LIB
                       )
                     
-set_target_properties(polkit-qt-agent PROPERTIES VERSION ${MAJOR_POLKIT_QT_VERSION}.${MINOR_POLKIT_QT_VERSION}.${PATCH_POLKIT_QT_VERSION}
+set_target_properties(polkit-qt-agent-1 PROPERTIES VERSION ${MAJOR_POLKIT_QT_VERSION}.${MINOR_POLKIT_QT_VERSION}.${PATCH_POLKIT_QT_VERSION}
                                 SOVERSION ${MAJOR_POLKIT_QT_VERSION}
                                 DEFINE_SYMBOL MAKE_POLKIT_QT_LIB
                       )
   
-install(TARGETS polkit-qt-core ${INSTALL_TARGETS_DEFAULT_ARGS})
-install(TARGETS polkit-qt-gui ${INSTALL_TARGETS_DEFAULT_ARGS})
-install(TARGETS polkit-qt-agent ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS polkit-qt-core-1 ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS polkit-qt-gui-1 ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS polkit-qt-agent-1 ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 
-# FIXME all installable files
 install(FILES
 	action.h
 	authority.h
 	actionbutton.h
 	actionbuttons.h
+        details.h
+	identity.h
+	subject.h
+	temporaryauthorization.h
 	export.h
 	includes/Action
 	includes/Authority
 	includes/ActionButton
 	includes/ActionButtons
-	identity.h
-	subject.h
-	temporaryauthorization.h
+        includes/Details
+        includes/Identity
+        includes/Subject
+        includes/TemporaryAuthorization
 	DESTINATION
-	${INCLUDE_INSTALL_DIR}/PolicyKit/polkit-qt COMPONENT Devel)
+	${INCLUDE_INSTALL_DIR}/polkit-qt-1/PolkitQt COMPONENT Devel)
+
+install(FILES
+	listener.h
+	session.h
+        export.h
+	includes/Listener
+	includes/Session
+	DESTINATION
+	${INCLUDE_INSTALL_DIR}/polkit-qt-1/PolkitQtAgent COMPONENT Devel)
+
 
 # Pkgconfig
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/polkit-qt.pc.cmake ${CMAKE_CURRENT_BINARY_DIR}/polkit-qt.pc @ONLY)
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/polkit-qt.pc DESTINATION ${LIB_INSTALL_DIR}/pkgconfig )
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/polkit-qt-core.pc.cmake ${CMAKE_CURRENT_BINARY_DIR}/polkit-qt-core.pc @ONLY)
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/polkit-qt-core.pc DESTINATION ${LIB_INSTALL_DIR}/pkgconfig )
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/polkit-qt-gui.pc.cmake ${CMAKE_CURRENT_BINARY_DIR}/polkit-qt-gui.pc @ONLY)
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/polkit-qt-gui.pc DESTINATION ${LIB_INSTALL_DIR}/pkgconfig )
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/polkit-qt-agent.pc.cmake ${CMAKE_CURRENT_BINARY_DIR}/polkit-qt-agent.pc @ONLY)
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/polkit-qt-agent.pc DESTINATION ${LIB_INSTALL_DIR}/pkgconfig )
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/polkit-qt-1.pc.cmake ${CMAKE_CURRENT_BINARY_DIR}/polkit-qt-1.pc @ONLY)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/polkit-qt-1.pc DESTINATION ${LIB_INSTALL_DIR}/pkgconfig )
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/polkit-qt-core-1.pc.cmake ${CMAKE_CURRENT_BINARY_DIR}/polkit-qt-core-1.pc @ONLY)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/polkit-qt-core-1.pc DESTINATION ${LIB_INSTALL_DIR}/pkgconfig )
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/polkit-qt-gui-1.pc.cmake ${CMAKE_CURRENT_BINARY_DIR}/polkit-qt-gui-1.pc @ONLY)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/polkit-qt-gui-1.pc DESTINATION ${LIB_INSTALL_DIR}/pkgconfig )
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/polkit-qt-agent-1.pc.cmake ${CMAKE_CURRENT_BINARY_DIR}/polkit-qt-agent-1.pc @ONLY)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/polkit-qt-agent-1.pc DESTINATION ${LIB_INSTALL_DIR}/pkgconfig )
 
 if (BUILD_EXAMPLES)
     add_subdirectory(examples)

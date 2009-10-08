@@ -7,3 +7,7 @@ TODO
   
  * polkit-qt-gui
   + authorization checking for non privileged user
+  
+- document Listener and co.
+- fix the cmake library names
+- fix the list of installed header files (authority.h + includes/Authority)

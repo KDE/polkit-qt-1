@@ -17,7 +17,6 @@ include (InstallSettings)
 pkg_check_modules (POLKIT REQUIRED polkit-gobject-1>=0.95)
 pkg_check_modules (POLKIT REQUIRED polkit-agent-1>=0.95)
 
-
 MESSAGE(STATUS " ${POLKIT_INCLUDE_DIRS} ===========")
 
 include_directories(
@@ -31,7 +30,7 @@ include_directories(
 
 set(MAJOR_POLKIT_QT_VERSION "0")
 set(MINOR_POLKIT_QT_VERSION "95")
-set(PATCH_POLKIT_QT_VERSION "1")
+set(PATCH_POLKIT_QT_VERSION "0")
 set(POLKIT_QT_VERSION_STRING "${MAJOR_POLKIT_QT_VERSION}.${MINOR_POLKIT_QT_VERSION}.${PATCH_POLKIT_QT_VERSION}")
 
 set(polkit_qt_core_SRCS

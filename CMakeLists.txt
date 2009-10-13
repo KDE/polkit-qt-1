@@ -15,7 +15,7 @@ include (FindPkgConfig)
 include (InstallSettings)
 
 pkg_check_modules (POLKIT REQUIRED polkit-gobject-1>=0.95)
-pkg_check_modules (POLKIT REQUIRED polkit-agent-1>=0.95)
+pkg_check_modules (POLKIT_AGENT REQUIRED polkit-agent-1>=0.95)
 
 MESSAGE(STATUS " ${POLKIT_INCLUDE_DIRS} ===========")
 
@@ -75,7 +75,8 @@ target_link_libraries(polkit-qt-gui-1
 
 target_link_libraries(polkit-qt-agent-1
 	${POLKIT_LIBRARIES}
-        ${QT_QTCORE_LIBRARY}
+    ${QT_QTCORE_LIBRARY}
+    ${POLKIT_AGENT_LIBRARIES}
 )
 
 set_target_properties(polkit-qt-core-1 PROPERTIES VERSION ${MAJOR_POLKIT_QT_VERSION}.${MINOR_POLKIT_QT_VERSION}.${PATCH_POLKIT_QT_VERSION}

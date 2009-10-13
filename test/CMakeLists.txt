@@ -29,5 +29,5 @@ target_link_libraries(polkit-qt-test
     ${QT_QTCORE_LIBRARY}
     ${QT_QTTEST_LIBRARY}
     ${QT_QTGUI_LIBRARY}
-    polkit-qt-core
+    polkit-qt-core-1
 )

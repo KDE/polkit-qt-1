@@ -35,8 +35,8 @@ add_executable(polkit-example
 target_link_libraries(polkit-example
     ${QT_QTCORE_LIBRARY}
     ${QT_QTGUI_LIBRARY}
-    polkit-qt-gui
-    polkit-qt-core
+    polkit-qt-gui-1
+    polkit-qt-core-1
 )
 
 #--------Helper Application
@@ -76,7 +76,7 @@ add_executable(polkit-example-helper
 # see our helper is pretty small :D
 target_link_libraries(polkit-example-helper
     ${QT_QTCORE_LIBRARY}
-    polkit-qt-core
+    polkit-qt-core-1
 )
 
 install(TARGETS polkit-example-helper DESTINATION ${BIN_INSTALL_DIR})

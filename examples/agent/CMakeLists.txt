@@ -18,6 +18,6 @@ add_executable(polkit-agent-example
 target_link_libraries(polkit-agent-example
     ${QT_QTCORE_LIBRARY}
     ${QT_QTGUI_LIBRARY}
-    polkit-qt-agent
-    polkit-qt-core
+    polkit-qt-agent-1
+    polkit-qt-core-1
 )

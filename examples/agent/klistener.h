@@ -37,11 +37,11 @@ public:
     ~KListener() {};
 public slots:
     void initiateAuthentication(const QString &actionId,
-					const QString &message,
-					const QString &iconName,
-				        PolkitQt::Details *details,
-					const QString &cookie,
-					QList<PolkitQt::Identity *> identities);
+                                const QString &message,
+                                const QString &iconName,
+                                PolkitQt::Details *details,
+                                const QString &cookie,
+                                QList<PolkitQt::Identity *> identities);
     bool initiateAuthenticationFinish();
     void cancelAuthentication();
     

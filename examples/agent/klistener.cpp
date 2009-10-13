@@ -35,11 +35,11 @@ KListener::KListener(QObject *parent)
 // README: this is just testing code...
 
 void KListener::initiateAuthentication(const QString &actionId,
-					const QString &message,
-					const QString &iconName,
-				        PolkitQt::Details *details,
-					const QString &cookie,
-					QList<PolkitQt::Identity *> identities)
+                                       const QString &message,
+                                       const QString &iconName,
+                                       PolkitQt::Details *details,
+                                       const QString &cookie,
+                                       QList<PolkitQt::Identity *> identities)
 {
     qDebug() << "initiateAuthentication for " << actionId << " with message " << message;
     qDebug() << "iconName " << iconName;
@@ -65,6 +65,7 @@ void KListener::initiateAuthentication(const QString &actionId,
 
 bool KListener::initiateAuthenticationFinish()
 {
+    qDebug() << "initiateAuthenticationFinish()";
     return true;
 }
 
@@ -85,7 +86,8 @@ void KListener::request(const QString &request, bool echo)
 void KListener::completed(bool gainedAuthorization)
 {
     qDebug() << "Completed: " << gainedAuthorization;
-    
+    emit finished();
+
     Session *session = (Session *)sender();
     
     delete session;

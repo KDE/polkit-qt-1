@@ -22,6 +22,7 @@
 #define POLKIT_QT_AGENT_LISTENER_ADAPTER_H
 
 #include <QtCore/QObject>
+#include <QtCore/QSignalMapper>
 
 #define POLKIT_AGENT_I_KNOW_API_IS_SUBJECT_TO_CHANGE 1
 
@@ -40,7 +41,7 @@
  */
 namespace PolkitQtAgent
 {
-    
+class AsyncResult;
 class Listener;
 class ListenerAdapter : public QObject
 {
@@ -58,13 +59,14 @@ public:
                                                     const gchar          *cookie,
                                                     GList                *identities,
                                                     GCancellable         *cancellable,
-                                                    GAsyncReadyCallback   callback,
-                                                    gpointer              user_data);
+                                                    GSimpleAsyncResult   *result);
 							   
     gboolean polkit_qt_listener_initiate_authentication_finish(PolkitAgentListener  *listener,
                                                                GAsyncResult         *res,
                                                                GError               **error);
     void cancelled_cb(PolkitAgentListener *listener);
+public slots:
+    void authenticationFinished(QObject *);
 private:
     void addListener(Listener *listener);
     void removeListener(Listener *listener);
@@ -72,9 +74,27 @@ private:
     
     explicit ListenerAdapter(QObject *parent = 0); 
     QList<Listener *> m_listeners;
+    QSignalMapper *m_finishedSignals;
     
     friend class Listener;
 };
+
+
+/**
+ * \internal
+ * \brief Encapsulation of GSimpleAsyncResult to QObject class
+ */
+class AsyncResult : public QObject
+{
+    Q_OBJECT
+private:
+    GSimpleAsyncResult *m_result;
+public:
+    void complete();
+    void setError(int code, QString text);
+    AsyncResult(GSimpleAsyncResult *result);
+};
+
 }
 
 #endif

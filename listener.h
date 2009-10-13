@@ -62,6 +62,8 @@ public slots:
                                         QList<PolkitQt::Identity *> identities) = 0;
     virtual bool initiateAuthenticationFinish() = 0;
     virtual void cancelAuthentication() = 0;
+signals:
+    void finished();
 protected:
     PolkitAgentListener *m_listener;
 };

@@ -35,6 +35,7 @@
 #include <polkit/polkit.h>
 
 typedef struct _PolKitAuthority PolKitAuthority;
+class QStringList;
 
 /**
  * \namespace PolkitQt PolkitQt
@@ -436,7 +437,7 @@ Q_SIGNALS:
      *
      * The argument is the list of all Action IDs.
      */
-    void enumerateActionsFinished(const & QStringList);
+    void enumerateActionsFinished(const QStringList &);
 
     /**
      * This signal is emitted when asynchronous method registerAuthenticationAgent finishes.

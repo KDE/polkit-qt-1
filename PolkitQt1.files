@@ -21,6 +21,12 @@ examples/PkExample.h
 examples/PkExample.ui
 examples/PkExampleHelper.cpp
 examples/PkExampleHelper.h
+examples/agent/CMakeLists.txt
+examples/agent/klistener.cpp
+examples/agent/klistener.h
+examples/agent/main.cpp
+examples/agent/pkagentexample.cpp
+examples/agent/pkagentexample.h
 export.h
 identity.cpp
 identity.h
@@ -32,6 +38,8 @@ temporaryauthorization.h
 temporaryauthorization.cpp
 listener.cpp
 listener.h
+listeneradapter.cpp
+listeneradapter.h
 polkitqtlistener.cpp
 polkitqtlistener.h
 test/CMakeLists.txt

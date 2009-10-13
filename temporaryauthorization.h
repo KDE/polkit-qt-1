@@ -57,6 +57,8 @@ public:
      */
     TemporaryAuthorization(PolkitTemporaryAuthorization *pkTemporaryAuthorization, QObject *parent = 0);
 
+    ~TemporaryAuthorization();
+
     /**
      * \brief Gets the identifier for the authorization.
      *

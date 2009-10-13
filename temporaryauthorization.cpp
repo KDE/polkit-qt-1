@@ -31,6 +31,12 @@ TemporaryAuthorization::TemporaryAuthorization(PolkitTemporaryAuthorization *pkT
     m_subject = Subject::fromString(polkit_subject_to_string(polkit_temporary_authorization_get_subject(pkTemporaryAuthorization)));
     m_timeObtained = QDateTime::fromTime_t(polkit_temporary_authorization_get_time_obtained(pkTemporaryAuthorization));
     m_timeExpires = QDateTime::fromTime_t(polkit_temporary_authorization_get_time_expires(pkTemporaryAuthorization));
+    g_object_unref(pkTemporaryAuthorization);
+}
+
+TemporaryAuthorization::~TemporaryAuthorization()
+{
+    delete m_subject;
 }
 
 QString TemporaryAuthorization::id() const

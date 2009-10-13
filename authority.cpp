@@ -93,6 +93,8 @@ public:
             , pkAuthority(NULL)
             , m_hasError(false) {}
 
+    ~Private();
+
     void init();
 
     /** Use this method to set the error message to \p message. Set recover to \c true
@@ -129,6 +131,18 @@ public:
     static void revokeTemporaryAuthorizationsCallback(GObject *object, GAsyncResult *result, gpointer user_data);
     static void revokeTemporaryAuthorizationCallback(GObject *object, GAsyncResult *result, gpointer user_data);
 };
+
+Authority::Private::~Private()
+{
+    g_object_unref(m_checkAuthorizationCancellable);
+    g_object_unref(m_enumerateActionsCancellable);
+    g_object_unref(m_registerAuthenticationAgentCancellable);
+    g_object_unref(m_unregisterAuthenticationAgentCancellable);
+    g_object_unref(m_authenticationAgentResponseCancellable);
+    g_object_unref(m_enumerateTemporaryAuthorizationsCancellable);
+    g_object_unref(m_revokeTemporaryAuthorizationsCancellable);
+    g_object_unref(m_revokeTemporaryAuthorizationCancellable);
+}
 
 Authority::Authority(PolkitAuthority *authority, QObject *parent)
         : QObject(parent)
@@ -622,7 +636,7 @@ void Authority::Private::authenticationAgentResponseCallback(GObject *object, GA
     {
         // We don't want to set error if this is cancellation of some action
         if (error->code != 1)
-            authority->d->setError(tr("Authorization agent response failed with message: %1".arg(error->message)));
+            authority->d->setError(tr("Authorization agent response failed with message: %1").arg(error->message));
         g_error_free(error);
         return;
     }

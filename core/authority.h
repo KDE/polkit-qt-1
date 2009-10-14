@@ -142,7 +142,7 @@ public:
      *
      * \return the current PolkitAuthority instance
      */
-    PolkitAuthority *getPolkitAuthority() const;
+    PolkitAuthority *polkitAuthority() const;
 
     /**
      * TODO: rewrite, finish!

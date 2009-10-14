@@ -282,7 +282,7 @@ void Authority::Private::pk_config_changed()
     emit Authority::instance()->configChanged();
 }
 
-PolkitAuthority *Authority::getPolkitAuthority() const
+PolkitAuthority *Authority::polkitAuthority() const
 {
     return d->pkAuthority;
 }

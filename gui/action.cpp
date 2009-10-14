@@ -268,39 +268,83 @@ void Action::revoke()
 /*TODO: implement it? no negative authorizations available, no authorization db*/
 }
 
-void Action::setText(const QString &text)
+void Action::setText(const QString &text, States states)
 {
-    d->selfBlockedText = text;
-    d->noText          = text;
-    d->authText        = text;
-    d->yesText         = text;
+    if (states & All) {
+        d->selfBlockedText = text;
+        d->noText = text;
+        d->authText = text;
+        d->yesText = text;
+    } else if (states & Auth) {
+        d->authText = text;
+    } else if (states & No) {
+        d->noText = text;
+    } else if (states & SelfBlocked) {
+        d->selfBlockedText = text;
+    } else if (states & Yes) {
+        d->yesText = text;
+    }
+
     d->updateAction();
 }
 
-void Action::setToolTip(const QString &toolTip)
+void Action::setToolTip(const QString &toolTip, States states)
 {
-    d->selfBlockedToolTip = toolTip;
-    d->noToolTip          = toolTip;
-    d->authToolTip        = toolTip;
-    d->yesToolTip         = toolTip;
+    if (states & All) {
+        d->selfBlockedToolTip = toolTip;
+        d->noToolTip = toolTip;
+        d->authToolTip = toolTip;
+        d->yesToolTip = toolTip;
+    } else if (states & Auth) {
+        d->authToolTip = toolTip;
+    } else if (states & No) {
+        d->noToolTip = toolTip;
+    } else if (states & SelfBlocked) {
+        d->selfBlockedToolTip = toolTip;
+    } else if (states & Yes) {
+        d->yesToolTip = toolTip;
+    }
+
     d->updateAction();
 }
 
-void Action::setWhatsThis(const QString &whatsThis)
+void Action::setWhatsThis(const QString &whatsThis, States states)
 {
-    d->selfBlockedWhatsThis = whatsThis;
-    d->noWhatsThis          = whatsThis;
-    d->authWhatsThis        = whatsThis;
-    d->yesWhatsThis         = whatsThis;
+    if (states & All) {
+        d->selfBlockedWhatsThis = whatsThis;
+        d->noWhatsThis = whatsThis;
+        d->authWhatsThis = whatsThis;
+        d->yesWhatsThis = whatsThis;
+    } else if (states & Auth) {
+        d->authWhatsThis = whatsThis;
+    } else if (states & No) {
+        d->noWhatsThis = whatsThis;
+    } else if (states & SelfBlocked) {
+        d->selfBlockedWhatsThis = whatsThis;
+    } else if (states & Yes) {
+        d->yesWhatsThis = whatsThis;
+    }
+
     d->updateAction();
 }
 
-void Action::setIcon(const QIcon &icon)
+void Action::setIcon(const QIcon &icon, States states)
 {
-    d->selfBlockedIcon = icon;
-    d->noIcon          = icon;
-    d->authIcon        = icon;
-    d->yesIcon         = icon;
+    if (states & All) {
+        d->selfBlockedIcon = icon;
+        d->noIcon = icon;
+        d->authIcon = icon;
+        d->yesIcon = icon;
+    } else if (states & Auth) {
+        d->authIcon = icon;
+    } else if (states & No) {
+        d->noIcon = icon;
+    } else if (states & SelfBlocked) {
+        d->selfBlockedIcon = icon;
+    } else if (states & Yes) {
+        d->yesIcon = icon;
+    }
+
     d->updateAction();
 }
 
@@ -318,270 +362,6 @@ void Action::setPolkitAction(const QString &actionId)
 QString Action::actionId() const
 {
     return d->actionId;
-}
-//---------------------------------------------------
-void Action::setSelfBlockedVisible(bool value)
-{
-    d->selfBlockedVisible = value;
-    d->updateAction();
-}
-
-bool Action::selfBlockedVisible() const
-{
-    return d->selfBlockedVisible;
-}
-
-void Action::setSelfBlockedEnabled(bool value)
-{
-    d->selfBlockedEnabled = value;
-    d->updateAction();
-}
-
-bool Action::selfBlockedEnabled() const
-{
-    return d->selfBlockedEnabled;
-}
-
-void Action::setSelfBlockedText(const QString &text)
-{
-    d->selfBlockedText = text;
-    d->updateAction();
-}
-
-QString Action::selfBlockedText() const
-{
-    return d->selfBlockedText;
-}
-
-void Action::setSelfBlockedToolTip(const QString &toolTip)
-{
-    d->selfBlockedToolTip = toolTip;
-    d->updateAction();
-}
-
-QString Action::selfBlockedToolTip() const
-{
-    return d->selfBlockedToolTip;
-}
-
-void Action::setSelfBlockedWhatsThis(const QString &whatsThis)
-{
-    d->selfBlockedWhatsThis = whatsThis;
-    d->updateAction();
-}
-
-QString Action::selfBlockedWhatsThis() const
-{
-    return d->selfBlockedWhatsThis;
-}
-
-void Action::setSelfBlockedIcon(const QIcon &icon)
-{
-    d->selfBlockedIcon = icon;
-    d->updateAction();
-}
-
-QIcon Action::selfBlockedIcon() const
-{
-    return d->selfBlockedIcon;
-}
-//----------------------------------------------------------
-void Action::setNoVisible(bool value)
-{
-    d->noVisible = value;
-    d->updateAction();
-}
-
-bool Action::noVisible() const
-{
-    return d->noVisible;
-}
-
-void Action::setNoEnabled(bool value)
-{
-    d->noEnabled = value;
-    d->updateAction();
-}
-
-bool Action::noEnabled() const
-{
-    return d->noEnabled;
-}
-
-void Action::setNoText(const QString &text)
-{
-    d->noText = text;
-    d->updateAction();
-}
-
-QString Action::noText() const
-{
-    return d->noText;
-}
-
-void Action::setNoToolTip(const QString &toolTip)
-{
-    d->noToolTip = toolTip;
-    d->updateAction();
-}
-
-QString Action::noToolTip() const
-{
-    return d->noToolTip;
-}
-
-void Action::setNoWhatsThis(const QString &whatsThis)
-{
-    d->noWhatsThis = whatsThis;
-    d->updateAction();
-}
-
-QString Action::noWhatsThis() const
-{
-    return d->noWhatsThis;
-}
-
-void Action::setNoIcon(const QIcon &icon)
-{
-    d->noIcon = icon;
-    d->updateAction();
-}
-
-QIcon Action::noIcon() const
-{
-    return d->noIcon;
-}
-//-----------------------------------------
-void Action::setAuthVisible(bool value)
-{
-    d->authVisible = value;
-    d->updateAction();
-}
-
-bool Action::authVisible() const
-{
-    return d->authVisible;
-}
-
-void Action::setAuthEnabled(bool value)
-{
-    d->authEnabled = value;
-    d->updateAction();
-}
-
-bool Action::authEnabled() const
-{
-    return d->authEnabled;
-}
-
-void Action::setAuthText(const QString &text)
-{
-    d->authText = text;
-    d->updateAction();
-}
-
-QString Action::authText() const
-{
-    return d->authText;
-}
-
-void Action::setAuthToolTip(const QString &toolTip)
-{
-    d->authToolTip = toolTip;
-    d->updateAction();
-}
-
-QString Action::authToolTip() const
-{
-    return d->authToolTip;
-}
-
-void Action::setAuthWhatsThis(const QString &whatsThis)
-{
-    d->authWhatsThis = whatsThis;
-    d->updateAction();
-}
-
-QString Action::authWhatsThis() const
-{
-    return d->authWhatsThis;
-}
-
-void Action::setAuthIcon(const QIcon &icon)
-{
-    d->authIcon = icon;
-    d->updateAction();
-}
-
-QIcon Action::authIcon() const
-{
-    return d->authIcon;
-}
-//-------------------------------------------------
-void Action::setYesVisible(bool value)
-{
-    d->yesVisible = value;
-    d->updateAction();
-}
-
-bool Action::yesVisible() const
-{
-    return d->yesVisible;
-}
-
-void Action::setYesEnabled(bool value)
-{
-    d->yesEnabled = value;
-    d->updateAction();
-}
-
-bool Action::yesEnabled() const
-{
-    return d->yesEnabled;
-}
-
-void Action::setYesText(const QString &text)
-{
-    d->yesText = text;
-    d->updateAction();
-}
-
-QString Action::yesText() const
-{
-    return d->yesText;
-}
-
-void Action::setYesToolTip(const QString &toolTip)
-{
-    d->yesToolTip = toolTip;
-    d->updateAction();
-}
-
-QString Action::yesToolTip() const
-{
-    return d->yesToolTip;
-}
-
-void Action::setYesWhatsThis(const QString &whatsThis)
-{
-    d->yesWhatsThis = whatsThis;
-    d->updateAction();
-}
-
-QString Action::yesWhatsThis() const
-{
-    return d->yesWhatsThis;
-}
-
-void Action::setYesIcon(const QIcon &icon)
-{
-    d->yesIcon = icon;
-    d->updateAction();
-}
-
-QIcon Action::yesIcon() const
-{
-    return d->yesIcon;
 }
 //------------------------------------------------------
 void Action::setMasterVisible(bool value)

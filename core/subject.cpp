@@ -24,13 +24,14 @@
 
 using namespace PolkitQt;
 
-Subject::Subject(QObject * parent)
-    : QObject(parent), m_subject(0)
+Subject::Subject()
+        : m_subject(0)
 {
-    g_type_init();    
+    g_type_init();
 }
 
-Subject::Subject(PolkitSubject *subject, QObject *parent) : m_subject(subject), QObject(parent)
+Subject::Subject(PolkitSubject *subject)
+        : m_subject(subject)
 {
     g_type_init();
 }
@@ -55,7 +56,7 @@ Subject * Subject::fromString(const QString & string)
 {
    // should be in polkit library!!! but for strange reason it's neccessary to have it here
     g_type_init();
-    
+
     Subject *subject = new Subject();
     GError *error = NULL;
     subject->m_subject = polkit_subject_from_string(string.toUtf8().data(), &error);
@@ -66,17 +67,20 @@ Subject * Subject::fromString(const QString & string)
     return subject;
 }
 
-UnixProcess::UnixProcess(qint64 pid, QObject * parent) : Subject(parent)
+UnixProcess::UnixProcess(qint64 pid)
+        : Subject()
 {
     m_subject = polkit_unix_process_new(pid);
 }
 
-UnixProcess::UnixProcess(qint64 pid, quint64 startTime, QObject * parent) : Subject(parent)
+UnixProcess::UnixProcess(qint64 pid, quint64 startTime)
+        : Subject()
 {
     m_subject = polkit_unix_process_new_full(pid, startTime);
 }
 
-UnixProcess::UnixProcess(PolkitUnixProcess *pkUnixProcess, QObject *parent) : Subject((PolkitSubject *)pkUnixProcess, parent)
+UnixProcess::UnixProcess(PolkitUnixProcess *pkUnixProcess)
+        : Subject((PolkitSubject *)pkUnixProcess)
 {
 
 }
@@ -97,12 +101,14 @@ void UnixProcess::setPid(qint64 pid)
 }
 
 // ----- SystemBusName
-SystemBusName::SystemBusName(const QString &name, QObject * parent) : Subject(parent)
+SystemBusName::SystemBusName(const QString &name)
+        : Subject()
 {
     m_subject = polkit_system_bus_name_new(name.toUtf8().data());
 }
 
-SystemBusName::SystemBusName(PolkitSystemBusName *pkSystemBusName , QObject *parent) : Subject((PolkitSubject *) pkSystemBusName , parent)
+SystemBusName::SystemBusName(PolkitSystemBusName *pkSystemBusName)
+        : Subject((PolkitSubject *) pkSystemBusName)
 {
 
 }
@@ -111,25 +117,28 @@ QString SystemBusName::name() const
 {
     return QString::fromUtf8(polkit_system_bus_name_get_name((PolkitSystemBusName *) m_subject));
 }
-    
+
 void SystemBusName::setName(const QString &name)
 {
     polkit_system_bus_name_set_name((PolkitSystemBusName *) m_subject, name.toUtf8().data());
 }
 
 // ----- SystemSession
-UnixSession::UnixSession(const QString &sessionId, QObject * parent) : Subject(parent)
+UnixSession::UnixSession(const QString &sessionId)
+        : Subject()
 {
     m_subject = polkit_unix_session_new(sessionId.toUtf8().data());
 }
 
-UnixSession::UnixSession(qint64 pid, QObject * parent) : Subject(parent)
+UnixSession::UnixSession(qint64 pid)
+        : Subject()
 {
     // TODO: error handling
     m_subject = polkit_unix_session_new_for_process_sync(pid, NULL, NULL);
 }
 
-UnixSession::UnixSession(PolkitSystemBusName *pkUnixSession, QObject *parent) : Subject((PolkitSubject *) pkUnixSession, parent)
+UnixSession::UnixSession(PolkitSystemBusName *pkUnixSession)
+        : Subject((PolkitSubject *) pkUnixSession)
 {
 
 }

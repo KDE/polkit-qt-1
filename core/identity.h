@@ -89,10 +89,15 @@ public:
      *
      * \return Pointer to PolkitIdentity instance
      */
-    PolkitIdentity * identity();
+    PolkitIdentity * identity() const;
 protected:
-    PolkitIdentity * m_identity;
     Identity();
+
+    void setIdentity(PolkitIdentity *identity);
+
+private:
+    class Private;
+    Private * const d;
 };
 
 /**

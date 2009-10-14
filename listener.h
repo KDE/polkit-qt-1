@@ -24,13 +24,13 @@
 #include <QtCore/QObject>
 #include <QtCore/QDebug>
 
-#include "listeneradapter.h"
-#include "polkitqtlistener.h"
 #include "subject.h"
 #include "identity.h"
 #include "details.h"
 
 #define POLKIT_AGENT_I_KNOW_API_IS_SUBJECT_TO_CHANGE 1
+
+typedef struct _PolkitAgentListener PolkitAgentListener;
 
 /**
  * \namespace PolkitQtAgent PolkitQtAgent
@@ -41,7 +41,8 @@
  */
 namespace PolkitQtAgent
 {
-    
+
+class ListenerPrivate;
 class Listener : public QObject
 {
     Q_OBJECT
@@ -50,22 +51,21 @@ public:
     Listener(QObject *parent = 0);
     Listener(PolkitAgentListener *listener, QObject *parent = 0);
     ~Listener();
-    // subject when ported to PolkitQt
     bool registerListener(PolkitQt::Subject *subject, const QString &objectPath);
     const PolkitAgentListener *listener();
 public slots:
     virtual void initiateAuthentication(const QString &actionId,
-                                        const QString &message,
-                                        const QString &iconName,
-                                        PolkitQt::Details *details,
-                                        const QString &cookie,
-                                        QList<PolkitQt::Identity *> identities) = 0;
+					const QString &message,
+					const QString &iconName,
+					PolkitQt::Details *details,
+					const QString &cookie,
+					QList<PolkitQt::Identity *> identities) = 0;
     virtual bool initiateAuthenticationFinish() = 0;
     virtual void cancelAuthentication() = 0;
 signals:
     void finished();
-protected:
-    PolkitAgentListener *m_listener;
+private:
+    ListenerPrivate * const d;;
 };
 }
 

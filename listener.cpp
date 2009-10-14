@@ -23,24 +23,34 @@
 #include "listener.h"
 #include "authority.h"
 #include "subject.h"
+#include "polkitqtlistener.h"
 
 using namespace PolkitQtAgent;
 
+class PolkitQtAgent::ListenerPrivate
+{
+    public:
+        PolkitAgentListener *listener;
+};
+
 Listener::Listener(QObject *parent)
-        : QObject(parent)
+        : QObject(parent), d(new ListenerPrivate)
 {
     g_type_init();
     
-    m_listener = polkit_qt_listener_new ();
+    d->listener = polkit_qt_listener_new ();
     
-    qDebug() << "New PolkitAgentListener " << m_listener;
+    qDebug() << "New PolkitAgentListener " << d->listener;
     
     ListenerAdapter::instance()->addListener(this);
 }
 
-Listener::Listener(PolkitAgentListener *listener, QObject *parent) : m_listener(listener), QObject(parent)
+Listener::Listener(PolkitAgentListener *listener, QObject *parent = 0)
+        : QObject(parent), d(new ListenerPrivate)
 {
     g_type_init();
+    
+    d->listener = listener;
 }
 
 Listener::~Listener()
@@ -54,14 +64,15 @@ bool Listener::registerListener(PolkitQt::Subject *subject, const QString &objec
 {
     GError *error = NULL;
 
-    polkit_agent_register_listener (m_listener,
+    polkit_agent_register_listener (d->listener,
                                     subject->subject(),
                                     objectPath.toAscii().data(),
                                     &error);
     
 }
 
-const PolkitAgentListener * Listener::listener()
+const void * Listener::listener()
 {
-    return m_listener;
+     return d->listener;
 }
+

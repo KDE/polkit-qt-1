@@ -24,9 +24,9 @@
 #include <QtCore/QObject>
 #include <QtCore/QDebug>
 
-#include "subject.h"
-#include "identity.h"
-#include "details.h"
+#include <PolkitQt/Subject>
+#include <PolkitQt/Identity>
+#include <PolkitQt/Details>
 #include "session.h"
 
 #define POLKIT_AGENT_I_KNOW_API_IS_SUBJECT_TO_CHANGE 1
@@ -67,7 +67,7 @@ public slots:
 signals:
     void finished();
 private:
-    ListenerPrivate * const d;;
+    ListenerPrivate * const d;
 };
 }
 

@@ -21,9 +21,9 @@
 #include <QtCore/QDebug>
 
 #include "listener.h"
-#include "authority.h"
-#include "subject.h"
 #include "polkitqtlistener.h"
+
+#include <PolkitQt/Authority>
 
 using namespace PolkitQtAgent;
 

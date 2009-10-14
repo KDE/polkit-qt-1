@@ -110,13 +110,13 @@ void TestAuth::test_Identity()
     UnixUser user(userName);
     QVERIFY(user.identity());
 
-    // Create generic Identity from UnixUser via string reprezentation
+    // Create generic Identity from UnixUser via string representation
     Identity *id = Identity::fromString(user.toString());
     // Compare obtained uid with real uid
     QCOMPARE(((UnixUser *)id)->uid(), userId);
     delete id;
 
-    // Create generic Identity from UnixGroup via string reprezentation
+    // Create generic Identity from UnixGroup via string representation
     UnixGroup group(groupId);
     QVERIFY(group.identity());
     id = Identity::fromString(group.toString());

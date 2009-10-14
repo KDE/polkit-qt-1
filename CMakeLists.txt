@@ -17,16 +17,16 @@ include (FindPkgConfig)
 pkg_check_modules (POLKIT REQUIRED polkit-gobject-1>=0.95)
 pkg_check_modules (POLKIT_AGENT REQUIRED polkit-agent-1>=0.95)
 
-MESSAGE(STATUS " ${POLKIT_INCLUDE_DIRS} ===========")
+message(STATUS " ${POLKIT_INCLUDE_DIRS} ===========")
 
 include_directories(
-      ${CMAKE_CURRENT_BINARY_DIR}
-      ${POLKIT_INCLUDE_DIRS}
-      ${POLKITDBUS_INCLUDE_DIRS}
-      ${CMAKE_CURRENT_SOURCE_DIR}
-      ${CMAKE_CURRENT_SOURCE_DIR}/core
-      ${CMAKE_CURRENT_SOURCE_DIR}/includes
-      ${QT_QTXML_INCLUDE_DIR}
+    ${CMAKE_CURRENT_BINARY_DIR}
+    ${POLKIT_INCLUDE_DIRS}
+    ${POLKITDBUS_INCLUDE_DIRS}
+    ${CMAKE_CURRENT_SOURCE_DIR}
+    ${CMAKE_CURRENT_SOURCE_DIR}/core
+    ${CMAKE_CURRENT_SOURCE_DIR}/includes
+    ${QT_QTXML_INCLUDE_DIR}
 )
 
 set(MAJOR_POLKIT_QT_VERSION "0")
@@ -35,36 +35,38 @@ set(PATCH_POLKIT_QT_VERSION "0")
 set(POLKIT_QT_VERSION_STRING "${MAJOR_POLKIT_QT_VERSION}.${MINOR_POLKIT_QT_VERSION}.${PATCH_POLKIT_QT_VERSION}")
 
 install(FILES
-	gui/action.h
-	gui/actionbutton.h
-	gui/actionbuttons.h
+    gui/action.h
+    gui/actionbutton.h
+    gui/actionbuttons.h
 
-        core/authority.h
-        core/details.h
-	core/identity.h
-	core/subject.h
-	core/temporaryauthorization.h
-	export.h
+    core/authority.h
+    core/details.h
+    core/identity.h
+    core/subject.h
+    core/temporaryauthorization.h
+    export.h
 
-	includes/PolkitQt/Action
-	includes/PolkitQt/Authority
-	includes/PolkitQt/ActionButton
-	includes/PolkitQt/ActionButtons
-        includes/PolkitQt/Details
-        includes/PolkitQt/Identity
-        includes/PolkitQt/Subject
-        includes/PolkitQt/TemporaryAuthorization
-	DESTINATION
-	${INCLUDE_INSTALL_DIR}/polkit-qt-1/PolkitQt COMPONENT Devel)
+    includes/PolkitQt/Action
+    includes/PolkitQt/Authority
+    includes/PolkitQt/ActionButton
+    includes/PolkitQt/ActionButtons
+    includes/PolkitQt/Details
+    includes/PolkitQt/Identity
+    includes/PolkitQt/Subject
+    includes/PolkitQt/TemporaryAuthorization
+    DESTINATION
+    ${INCLUDE_INSTALL_DIR}/polkit-qt-1/PolkitQt COMPONENT Devel)
 
 install(FILES
-	agent/listener.h
-	agent/session.h
-        export.h
-	includes/PolkitQtAgent/Listener
-	includes/PolkitQtAgent/Session
-	DESTINATION
-	${INCLUDE_INSTALL_DIR}/polkit-qt-1/PolkitQtAgent COMPONENT Devel)
+    agent/listener.h
+    agent/session.h
+
+    export.h
+
+    includes/PolkitQtAgent/Listener
+    includes/PolkitQtAgent/Session
+    DESTINATION
+    ${INCLUDE_INSTALL_DIR}/polkit-qt-1/PolkitQtAgent COMPONENT Devel)
 
 
 # Pkgconfig

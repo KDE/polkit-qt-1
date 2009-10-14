@@ -99,7 +99,7 @@ public:
     void initiate();
 
     /**
-     * Method for providing response to requests recieved via request signal.
+     * Method for providing response to requests received via request signal.
      *
      * \param response Response from the user, typically a password
      */

@@ -216,7 +216,7 @@ void Authority::Private::init()
     QList<QString> seats;
     qVariantValue<QDBusArgument> (msg.arguments()[0]) >> seats;
     // it can be multiple seats present so connect all their signals
-    foreach (QString seat, seats)
+    foreach (const QString &seat, seats)
     {
         seatSignalsConnect(seat);
     }
@@ -274,7 +274,7 @@ QString Authority::lastError() const
 void Authority::clearError()
 {
     d->m_hasError = false;
-    d->m_lastError = QString();
+    d->m_lastError.clear();
 }
 
 void Authority::Private::pk_config_changed()

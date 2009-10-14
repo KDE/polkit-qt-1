@@ -50,7 +50,7 @@ class Listener : public QObject
     Q_DISABLE_COPY(Listener)
 public:
     Listener(QObject *parent = 0);
-    Listener(PolkitAgentListener *listener, QObject *parent = 0);
+    explicit Listener(PolkitAgentListener *listener, QObject *parent = 0);
     virtual ~Listener();
 
     bool registerListener(PolkitQt::Subject *subject, const QString &objectPath);

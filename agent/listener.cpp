@@ -18,9 +18,10 @@
  * Boston, MA 02110-1301, USA.
  */
 
+#include "listener.h"
+
 #include <QtCore/QDebug>
 
-#include "listener.h"
 #include "polkitqtlistener.h"
 
 #include <PolkitQt/Authority>

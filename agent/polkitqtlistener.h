@@ -20,8 +20,8 @@
  * polkit-qt-listener based on code by David Zeuthen <davidz@redhat.com>
  */
 
-#ifndef __POLKIT_QT_LISTENER_H
-#define __POLKIT_QT_LISTENER_H
+#ifndef POLKIT_QT_LISTENER_H
+#define POLKIT_QT_LISTENER_H
 
 #define POLKIT_AGENT_I_KNOW_API_IS_SUBJECT_TO_CHANGE 1
 
@@ -46,4 +46,4 @@ PolkitAgentListener  *polkit_qt_listener_new        (void);
 
 G_END_DECLS
 
-#endif /* __POLKIT_QT_LISTENER_H */
+#endif /* POLKIT_QT_LISTENER_H */

@@ -52,7 +52,7 @@ namespace PolkitQt
  * \author Dario Freddi <drf54321@gmail.com>
  * \author Jaroslav Reznik <jreznik@redhat.com>
  *
- * \brief Convenience class for Qt/KDE aplications
+ * \brief Convenience class for Qt/KDE applications
  *
  * This class is a singleton that provides makes easy the usage
  * of PolKitAuthority. It emits configChanged()

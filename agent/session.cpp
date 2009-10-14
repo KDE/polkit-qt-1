@@ -18,10 +18,11 @@
  * Boston, MA 02110-1301, USA.
  */
 
+#include "session.h"
+
 #include <QtCore/QDebug>
 #include <QtGui/QInputDialog>
 
-#include "session.h"
 #include "identity.h"
 
 #define POLKIT_AGENT_I_KNOW_API_IS_SUBJECT_TO_CHANGE 1

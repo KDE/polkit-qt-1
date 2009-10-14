@@ -106,7 +106,7 @@ class POLKIT_QT_EXPORT UnixProcess: public Subject
 public:
     /**
     * Subject constructor, takes one parameter - PID. The start time
-    * of process will be looked automaticaly.
+    * of process will be looked automatically.
     *
     * \param pid An Unix process PID.
     */    

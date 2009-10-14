@@ -59,7 +59,7 @@ public:
      *
      * \param pkDetails PolkitDetails object
      */
-    Details(PolkitDetails *pkDetails, QObject *parent = 0);
+    explicit Details(PolkitDetails *pkDetails, QObject *parent = 0);
 
     ~Details();
 

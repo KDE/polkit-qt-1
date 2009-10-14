@@ -64,7 +64,7 @@ public:
      *
      * \param polkitIdentity PolkitIdentity object
      */
-    Identity( PolkitIdentity * polkitIdentity, QObject *parent = 0 );
+    explicit Identity(PolkitIdentity * polkitIdentity, QObject *parent = 0);
     ~Identity();
 
     /**
@@ -113,14 +113,14 @@ public:
      *
      * \param uid user id
      */
-    UnixUser(uid_t uid, QObject *parent = 0);
+    explicit UnixUser(uid_t uid, QObject *parent = 0);
 
     /**
      * Creates UnixUser object by unix name of the user
      *
      * \param name Unix name
      */
-    UnixUser(const QString & name, QObject *parent = 0);
+    explicit UnixUser(const QString & name, QObject *parent = 0);
 
     /**
      * Creates UnixUser object from PolkitUnixUser object
@@ -129,7 +129,7 @@ public:
      *
      * \param pkUnixUser The PolkitUnixUser object
      */
-    UnixUser(PolkitUnixUser *pkUnixUser, QObject *parent = 0);
+    explicit UnixUser(PolkitUnixUser *pkUnixUser, QObject *parent = 0);
 
     /**
      * Gets an user id
@@ -163,14 +163,14 @@ public:
      *
      * \param gid group id
      */
-    UnixGroup(gid_t gid, QObject *parent = 0);
+    explicit UnixGroup(gid_t gid, QObject *parent = 0);
 
     /**
      * Creates UnixGroup object by unix name of the group
      *
      * \param name group name
      */
-    UnixGroup(const QString & name, QObject *parent = 0);
+    explicit UnixGroup(const QString & name, QObject *parent = 0);
 
     /**
      * Creates UnixGroup object from PolkitUnixGroup object
@@ -179,7 +179,7 @@ public:
      *
      * \param pkUnixGroup The PolkitUnixGroup object
      */
-    UnixGroup(PolkitUnixGroup *pkUnixGroup, QObject *parent = 0);
+    explicit UnixGroup(PolkitUnixGroup *pkUnixGroup, QObject *parent = 0);
 
     /**
      * Gets a group id

@@ -86,7 +86,8 @@ public:
      */
     QStringList getKeys() const;
 private:
-    PolkitDetails *m_polkitDetails;
+    class Private;
+    Private * const d;
 };
 
 }

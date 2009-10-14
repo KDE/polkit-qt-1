@@ -57,7 +57,7 @@ public:
      *
      * \param pkTemporaryAuthorization PolkitTemporaryAuthorization object
      */
-    TemporaryAuthorization(PolkitTemporaryAuthorization *pkTemporaryAuthorization, QObject *parent = 0);
+    explicit TemporaryAuthorization(PolkitTemporaryAuthorization *pkTemporaryAuthorization, QObject *parent = 0);
 
     ~TemporaryAuthorization();
 
@@ -107,10 +107,8 @@ public:
     bool revoke();
 
 private:
-    PolkitTemporaryAuthorization *m_temporaryAuthorization;
-    QString m_id, m_actionId;
-    Subject *m_subject;
-    QDateTime m_timeObtained, m_timeExpires;
+    class Private;
+    Private * const d;
 };
 }
 

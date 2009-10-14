@@ -27,26 +27,38 @@
 
 using namespace PolkitQt;
 
-Details::Details(QObject *parent) : QObject(parent)
+class Details::Private
+{
+    public:
+        Private() {}
+
+        PolkitDetails *polkitDetails;
+};
+
+Details::Details(QObject *parent)
+        : QObject(parent)
+        , d(new Private)
 {
     g_type_init();
-    m_polkitDetails = polkit_details_new();
+    d->polkitDetails = polkit_details_new();
 }
 
-Details::Details(PolkitDetails *pkDetails, QObject *parent) : QObject(parent)
+Details::Details(PolkitDetails *pkDetails, QObject *parent)
+        : QObject(parent)
+        , d(new Private)
 {
     g_type_init();
-    m_polkitDetails = pkDetails;
+    d->polkitDetails = pkDetails;
 }
 
 Details::~Details()
 {
-    g_object_unref(m_polkitDetails);
+    g_object_unref(d->polkitDetails);
 }
 
 QString Details::lookup(const QString &key) const
 {
-    const gchar *result = polkit_details_lookup(m_polkitDetails, key.toUtf8().data());
+    const gchar *result = polkit_details_lookup(d->polkitDetails, key.toUtf8().data());
     if (result != NULL)
         return QString::fromUtf8(result);
     else
@@ -55,12 +67,12 @@ QString Details::lookup(const QString &key) const
 
 void Details::insert(const QString &key, const QString &value)
 {
-    polkit_details_insert(m_polkitDetails, key.toUtf8().data(), value.toUtf8().data());
+    polkit_details_insert(d->polkitDetails, key.toUtf8().data(), value.toUtf8().data());
 }
 
 QStringList Details::getKeys() const
 {
-    gchar **result = polkit_details_get_keys(m_polkitDetails);
+    gchar **result = polkit_details_get_keys(d->polkitDetails);
     QStringList list;
     int len = g_strv_length(result);
     for (int i = 0; i < len; i++)

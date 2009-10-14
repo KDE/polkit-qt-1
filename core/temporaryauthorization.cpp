@@ -25,46 +25,61 @@
 
 using namespace PolkitQt;
 
-TemporaryAuthorization::TemporaryAuthorization(PolkitTemporaryAuthorization *pkTemporaryAuthorization, QObject *parent) : QObject(parent)
+class TemporaryAuthorization::Private
+{
+    public:
+        Private() {}
+
+        PolkitTemporaryAuthorization *temporaryAuthorization;
+        QString id;
+        QString actionId;
+        Subject *subject;
+        QDateTime timeObtained;
+        QDateTime timeExpires;
+};
+
+TemporaryAuthorization::TemporaryAuthorization(PolkitTemporaryAuthorization *pkTemporaryAuthorization, QObject *parent)
+        : QObject(parent)
+        , d(new Private)
 {
     g_type_init();
-    m_id = QString::fromUtf8(polkit_temporary_authorization_get_id(pkTemporaryAuthorization));
-    m_actionId = QString::fromUtf8(polkit_temporary_authorization_get_action_id(pkTemporaryAuthorization));
-    m_subject = Subject::fromString(polkit_subject_to_string(polkit_temporary_authorization_get_subject(pkTemporaryAuthorization)));
-    m_timeObtained = QDateTime::fromTime_t(polkit_temporary_authorization_get_time_obtained(pkTemporaryAuthorization));
-    m_timeExpires = QDateTime::fromTime_t(polkit_temporary_authorization_get_time_expires(pkTemporaryAuthorization));
+    d->id = QString::fromUtf8(polkit_temporary_authorization_get_id(pkTemporaryAuthorization));
+    d->actionId = QString::fromUtf8(polkit_temporary_authorization_get_action_id(pkTemporaryAuthorization));
+    d->subject = Subject::fromString(polkit_subject_to_string(polkit_temporary_authorization_get_subject(pkTemporaryAuthorization)));
+    d->timeObtained = QDateTime::fromTime_t(polkit_temporary_authorization_get_time_obtained(pkTemporaryAuthorization));
+    d->timeExpires = QDateTime::fromTime_t(polkit_temporary_authorization_get_time_expires(pkTemporaryAuthorization));
     g_object_unref(pkTemporaryAuthorization);
 }
 
 TemporaryAuthorization::~TemporaryAuthorization()
 {
-    delete m_subject;
+    delete d->subject;
 }
 
 QString TemporaryAuthorization::id() const
 {
-    return m_id;
+    return d->id;
 }
 
 QString TemporaryAuthorization::actionId() const
 {
-    return m_actionId;
+    return d->actionId;
 }
 
 Subject *TemporaryAuthorization::subject()
 {
-    //qFatal(polkit_subject_to_string(polkit_temporary_authorization_get_subject(m_temporaryAuthorization)));
-    return m_subject;//Subject::fromString(polkit_subject_to_string(m_subject));
+    //qFatal(polkit_subject_to_string(polkit_temporary_authorization_get_subject(d->temporaryAuthorization)));
+    return d->subject;//Subject::fromString(polkit_subject_to_string(d->subject));
 }
 
 QDateTime TemporaryAuthorization::timeObtained() const
 {
-    return m_timeObtained;
+    return d->timeObtained;
 }
 
 QDateTime TemporaryAuthorization::timeExpires() const
 {
-    return m_timeExpires;
+    return d->timeExpires;
 }
 
 bool TemporaryAuthorization::revoke()

@@ -110,7 +110,7 @@ public:
     *
     * \param pid An Unix process PID.
     */    
-    UnixProcess(qint64 pid, QObject *parent = 0);
+    explicit UnixProcess(qint64 pid, QObject *parent = 0);
 
     /**
     * Subject constructor, takes two parameters - PID and start time.
@@ -127,7 +127,7 @@ public:
      *
      * \param pkUnixProcess PolkitUnixProcess object
      */
-    UnixProcess(PolkitUnixProcess *process, QObject *parent = 0);
+    explicit UnixProcess(PolkitUnixProcess *process, QObject *parent = 0);
     
     /**
     * Returns Unix process PID.
@@ -168,7 +168,7 @@ public:
     *
     * \param name A unique system bus name.
     */    
-    SystemBusName(const QString &name, QObject *parent = 0);
+    explicit SystemBusName(const QString &name, QObject *parent = 0);
 
     /**
      * Subject constructor, it creates SystemBusName object from PolkitSystemBusName object
@@ -177,7 +177,7 @@ public:
      *
      * \param pkSystemBusName PolkitSystemBusName object
      */
-    SystemBusName(PolkitSystemBusName *pkSystemBusName, QObject *parent = 0);
+    explicit SystemBusName(PolkitSystemBusName *pkSystemBusName, QObject *parent = 0);
 
     /**
     * Returns system bus name.
@@ -214,7 +214,7 @@ public:
     *
     * \param sessionId The session id.
     */    
-    UnixSession(const QString &sessionId, QObject *parent = 0);
+    explicit UnixSession(const QString &sessionId, QObject *parent = 0);
     
     /**
     * Subject constructor, takes one parameter - pid of process.
@@ -223,7 +223,7 @@ public:
     *
     * \param pid The session's process pid.
     */  
-    UnixSession(qint64 pid, QObject *parent = 0);
+    explicit UnixSession(qint64 pid, QObject *parent = 0);
 
     /**
      * Subject constructor, it creates UnixSession object from PolkitUnixSession object
@@ -232,7 +232,7 @@ public:
      *
      * \param pkUnixSession PolkitUnixSession object
      */
-    UnixSession(PolkitSystemBusName *pkUnixSession, QObject *parent = 0);
+    explicit UnixSession(PolkitSystemBusName *pkUnixSession, QObject *parent = 0);
 
     /**
     * Returns session id.

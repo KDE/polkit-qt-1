@@ -38,6 +38,21 @@ namespace PolkitQtAgent
 {
 
 /**
+ * \internal
+ * \brief Encapsulation of GSimpleAsyncResult to QObject class
+ */
+class AsyncResult : public QObject
+{
+    Q_OBJECT
+private:
+    GSimpleAsyncResult *m_result;
+public:
+    void complete();
+    void setError(int code, QString text);
+    AsyncResult(GSimpleAsyncResult *result);
+};
+
+/**
  * \class Session session.h Session
  * \author Radek Novacek <rnovacek@redhat.com>
  *
@@ -55,7 +70,7 @@ public:
      * \param identity The identity to authenticate
      * \param cookie The cookie obtained from the PolicyKit daemon
      */
-    Session(PolkitQt::Identity *identity, const QString &cookie, QObject *parent = 0);
+    Session(PolkitQt::Identity *identity, const QString &cookie, AsyncResult *result = 0, QObject *parent = 0);
 
     /**
      * Create a new authentication session from PolkitAgentSession object
@@ -131,6 +146,7 @@ private:
     static void _showError(PolkitAgentSession *s, gchar *text, gpointer user_data);
     static void _showInfo(PolkitAgentSession *s, gchar *text, gpointer user_data);
 
+    AsyncResult *m_result;
     PolkitAgentSession *m_polkitAgentSession;
 };
 

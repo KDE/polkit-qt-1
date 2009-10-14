@@ -39,7 +39,8 @@ void KListener::initiateAuthentication(const QString &actionId,
                                        const QString &iconName,
                                        PolkitQt::Details *details,
                                        const QString &cookie,
-                                       QList<PolkitQt::Identity *> identities)
+                                       QList<PolkitQt::Identity *> identities,
+                                       AsyncResult *result)
 {
     qDebug() << "initiateAuthentication for " << actionId << " with message " << message;
     qDebug() << "iconName " << iconName;
@@ -52,7 +53,7 @@ void KListener::initiateAuthentication(const QString &actionId,
     {
 	qDebug() << identity->toString();
 	Session *session;
-	session = new Session(identity, cookie);
+	session = new Session(identity, cookie, result);
 	connect(session, SIGNAL(request(QString, bool)), this, SLOT(request(QString, bool)));
 	connect(session, SIGNAL(completed(bool)), this, SLOT(completed(bool)));
 	connect(session, SIGNAL(showError(QString)), this, SLOT(showError(QString)));

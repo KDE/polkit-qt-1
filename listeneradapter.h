@@ -65,8 +65,6 @@ public:
                                                                GAsyncResult         *res,
                                                                GError               **error);
     void cancelled_cb(PolkitAgentListener *listener);
-public slots:
-    void authenticationFinished(QObject *);
 private:
     void addListener(Listener *listener);
     void removeListener(Listener *listener);
@@ -74,25 +72,8 @@ private:
     
     explicit ListenerAdapter(QObject *parent = 0); 
     QList<Listener *> m_listeners;
-    QSignalMapper *m_finishedSignals;
     
     friend class Listener;
-};
-
-
-/**
- * \internal
- * \brief Encapsulation of GSimpleAsyncResult to QObject class
- */
-class AsyncResult : public QObject
-{
-    Q_OBJECT
-private:
-    GSimpleAsyncResult *m_result;
-public:
-    void complete();
-    void setError(int code, QString text);
-    AsyncResult(GSimpleAsyncResult *result);
 };
 
 }

@@ -33,22 +33,6 @@ public:
     ListenerAdapter *q;
 };
 
-AsyncResult::AsyncResult(GSimpleAsyncResult *result) : m_result(result)
-{
-}
-
-void AsyncResult::complete()
-{
-    g_simple_async_result_complete(m_result);
-}
-
-void AsyncResult::setError(int code, QString text)
-{
-    g_simple_async_result_set_error(m_result, G_IO_ERROR, code, text.toUtf8().data());
-}
-
-
-
 Q_GLOBAL_STATIC(ListenerAdapterHelper, s_globalListenerAdapter)
 
 ListenerAdapter *ListenerAdapter::instance()
@@ -65,8 +49,6 @@ ListenerAdapter::ListenerAdapter(QObject *parent)
 {
     Q_ASSERT(!s_globalListenerAdapter()->q);
     s_globalListenerAdapter()->q = this;
-    m_finishedSignals = new QSignalMapper(this);
-    connect(m_finishedSignals, SIGNAL(mapped(QObject *)), this, SLOT(authenticationFinished(QObject *)));
 }
 
 Listener* ListenerAdapter::findListener(PolkitAgentListener *listener)
@@ -107,18 +89,7 @@ void ListenerAdapter::polkit_qt_listener_initiate_authentication (PolkitAgentLis
 
     dets = new PolkitQt::Details(details);
 
-    // FIXME: what if more initializations occures at once
-    AsyncResult *res = new AsyncResult(result);
-    connect(list, SIGNAL(finished()), m_finishedSignals, SLOT(map()));
-    m_finishedSignals->setMapping(list, res);
-
-    list->initiateAuthentication(action_id, message, icon_name, dets, cookie, idents);
-}
-
-void ListenerAdapter::authenticationFinished(QObject *result)
-{
-    qDebug() << "authenticationFinished";
-    ((AsyncResult *) (result))->complete();
+    list->initiateAuthentication(action_id, message, icon_name, dets, cookie, idents, new AsyncResult(result));
 }
 
 gboolean ListenerAdapter::polkit_qt_listener_initiate_authentication_finish (PolkitAgentListener  *listener,

@@ -45,7 +45,7 @@ Listener::Listener(QObject *parent)
     ListenerAdapter::instance()->addListener(this);
 }
 
-Listener::Listener(PolkitAgentListener *listener, QObject *parent = 0)
+Listener::Listener(PolkitAgentListener *listener, QObject *parent)
         : QObject(parent), d(new ListenerPrivate)
 {
     g_type_init();
@@ -71,7 +71,7 @@ bool Listener::registerListener(PolkitQt::Subject *subject, const QString &objec
     
 }
 
-const void * Listener::listener()
+const PolkitAgentListener * Listener::listener()
 {
      return d->listener;
 }

@@ -26,7 +26,7 @@
 
 using namespace PolkitQtAgent;
 
-Session::Session(PolkitQt::Identity *identity, const QString &cookie, QObject *parent) : QObject(parent)
+Session::Session(PolkitQt::Identity *identity, const QString &cookie, AsyncResult *result, QObject *parent) : QObject(parent), m_result(result)
 {
     m_polkitAgentSession = polkit_agent_session_new(identity->identity(), cookie.toUtf8().data());
     g_signal_connect(G_OBJECT(m_polkitAgentSession), "completed", G_CALLBACK(_completed), this);
@@ -66,6 +66,9 @@ void Session::cancel()
 void Session::_completed(PolkitAgentSession *s, gboolean gained_authorization, gpointer user_data)
 {
     qDebug() << "COMPLETED";
+    Session *session = (Session *)user_data;
+    if (session->m_result != 0)
+        session->m_result->complete();
     emit ((Session *)user_data)->completed(gained_authorization);
 }
 
@@ -86,3 +89,18 @@ void Session::_showInfo(PolkitAgentSession *s, gchar *text, gpointer user_data)
     qDebug() << "showInfo";
     emit ((Session *)user_data)->showInfo(QString::fromUtf8(text));
 }
+
+AsyncResult::AsyncResult(GSimpleAsyncResult *result) : m_result(result)
+{
+}
+
+void AsyncResult::complete()
+{
+    g_simple_async_result_complete(m_result);
+}
+
+void AsyncResult::setError(int code, QString text)
+{
+    g_simple_async_result_set_error(m_result, G_IO_ERROR, code, text.toUtf8().data());
+}
+

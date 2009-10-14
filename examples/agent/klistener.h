@@ -27,6 +27,7 @@
 #include "listener.h"
 #include "identity.h"
 #include "details.h"
+#include "session.h"
 
 class KListener : public PolkitQtAgent::Listener
 {
@@ -41,7 +42,8 @@ public slots:
                                 const QString &iconName,
                                 PolkitQt::Details *details,
                                 const QString &cookie,
-                                QList<PolkitQt::Identity *> identities);
+                                QList<PolkitQt::Identity *> identities,
+                                PolkitQtAgent::AsyncResult *result);
     bool initiateAuthenticationFinish();
     void cancelAuthentication();
     

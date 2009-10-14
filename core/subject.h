@@ -79,12 +79,17 @@ public:
      *
      * \return Pointer to PolkitSubject instance
      */
-    PolkitSubject * subject();
+    PolkitSubject * subject() const;
 
 protected:
-    PolkitSubject * m_subject;
-    explicit Subject();
+    Subject();
     Subject(PolkitSubject* subject);
+
+    void setSubject(PolkitSubject *subject);
+
+private:
+    class Private;
+    Private * const d;
 };
 
 /**

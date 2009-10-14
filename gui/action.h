@@ -144,62 +144,60 @@ public:
     QString actionId() const;
 
     /**
-     * This function allows you to override PolicyKit settings
-     * about visibility. You can set this to \c false to force
-     * invisibility without caring about what PolicyKit reports.
-     *
-     * \param value \c false if you want to force invisibility
-     */
-    void setMasterVisible(bool value);
-
-    /**
-     * \see setMasterVisible
-     */
-    bool masterVisible() const;
-
-    /**
-     * This function allows you to override PolicyKit settings
-     * about availability. You can set this to \c false to force
-     * the action being disabled without caring about what PolicyKit reports.
-     *
-     * \param value \c false if you want to force the action to be disabled
-     */
-    void setMasterEnabled(bool value);
-
-    /**
-     * \see setMasterEnabled
-     */
-    bool masterEnabled() const;
-
-    /**
      * Sets the text for the current action. This will
-     * be shown in all four states.
+     * be shown only in the states specified in the \c states parameter.
      * \param text the new text for the action
+     * \param states the states of the Polkit action on which the setting
+     *               will be applied
      */
     void setText(const QString &text, States states = All);
 
     /**
      * Sets the tooltip for the current action. This will
-     * be shown in all four states.
+     * be shown only in the states specified in the \c states parameter.
      * \param toolTip the new tooltip for the action
+     * \param states the states of the Polkit action on which the setting
+     *               will be applied
      */
     void setToolTip(const QString &toolTip, States states = All);
 
     /**
      * Sets the whatsthis for the current action. This will
-     * be shown in all four states.
+     * be shown only in the states specified in the \c states parameter.
      * \param whatsThis the new whatsthis for the action
+     * \param states the states of the Polkit action on which the setting
+     *               will be applied
      */
     void setWhatsThis(const QString &whatsThis, States states = All);
 
     /**
      * Sets the icon for the current action. This will
-     * be shown in all four states.
+     * be shown only in the states specified in the \c states parameter.
      * \note You need to pass a QIcon here. You can easily
      *       create one from a Pixmap, or pass a KIcon
      * \param icon the new icon for the action
+     * \param states the states of the Polkit action on which the setting
+     *               will be applied
      */
     void setIcon(const QIcon &icon, States states = All);
+
+    /**
+     * Sets whether the current action is visible or not. This will
+     * be applied only in the states specified in the \c states parameter.
+     * \param text the new text for the action
+     * \param states the states of the Polkit action on which the setting
+     *               will be applied
+     */
+    void setVisible(bool visible, States states = All);
+
+    /**
+    * Sets whether the current action is enabled or not. This will
+    * be shown only in the states specified in the \c states parameter.
+    * \param text the new text for the action
+    * \param states the states of the Polkit action on which the setting
+    *               will be applied
+    */
+    void setEnabled(bool enabled, States states = All);
 
     /**
      * This function sets the process id of the target that
@@ -235,7 +233,7 @@ public:
      * \return \c true if the actionId is the same as this object's one
      */
     bool is(const QString &actionId) const;
-    
+
 private:
     class Private;
     Private * const d;

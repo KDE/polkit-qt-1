@@ -77,9 +77,6 @@ public:
     QString yesWhatsThis;
     QString yesToolTip;
     QIcon   yesIcon;
-
-    bool masterVisible;
-    bool masterEnabled;
 };
 
 Action::Private::Private(Action *p)
@@ -100,9 +97,6 @@ Action::Private::Private(Action *p)
 
     yesVisible    = true;
     yesEnabled    = true;
-
-    masterVisible = true;
-    masterEnabled = true;
 }
 
 Action::Action(const QString &actionId, QObject *parent)
@@ -111,7 +105,7 @@ Action::Action(const QString &actionId, QObject *parent)
 {
     // this must be called AFTER the values initialization	 
     setPolkitAction(actionId);
-     
+
     // track the config changes to update the action
     connect(Authority::instance(), SIGNAL(configChanged()),
             this, SLOT(configChanged()));
@@ -170,8 +164,8 @@ void Action::Private::updateAction()
     default:
     case Authority::Unknown:
     case Authority::No:
-        parent->setVisible(noVisible && masterVisible);
-        parent->setEnabled(noEnabled && masterEnabled);
+        parent->setVisible(noVisible);
+        parent->setEnabled(noEnabled);
         qobject_cast<QAction*>(parent)->setText(noText);
         if (!noWhatsThis.isNull()) {
             qobject_cast<QAction*>(parent)->setWhatsThis(noWhatsThis);
@@ -183,8 +177,8 @@ void Action::Private::updateAction()
         break;
 
     case Authority::Challenge:
-        parent->setVisible(authVisible && masterVisible);
-        parent->setEnabled(authEnabled && masterEnabled);
+        parent->setVisible(authVisible);
+        parent->setEnabled(authEnabled);
         qobject_cast<QAction*>(parent)->setText(authText);
         if (!authWhatsThis.isNull()) {
             qobject_cast<QAction*>(parent)->setWhatsThis(authWhatsThis);
@@ -195,8 +189,8 @@ void Action::Private::updateAction()
         qobject_cast<QAction*>(parent)->setIcon(authIcon);
         break;
     case Authority::Yes:
-        parent->setVisible(yesVisible && masterVisible);
-        parent->setEnabled(yesEnabled && masterEnabled);
+        parent->setVisible(yesVisible);
+        parent->setEnabled(yesEnabled);
         qobject_cast<QAction*>(parent)->setText(yesText);
         if (!yesWhatsThis.isNull()) {
             qobject_cast<QAction*>(parent)->setWhatsThis(yesWhatsThis);
@@ -348,11 +342,51 @@ void Action::setIcon(const QIcon &icon, States states)
     d->updateAction();
 }
 
+void Action::setEnabled(bool enabled, Action::States states)
+{
+    if (states & All) {
+        d->selfBlockedEnabled = enabled;
+        d->noEnabled = enabled;
+        d->authEnabled = enabled;
+        d->yesEnabled = enabled;
+    } else if (states & Auth) {
+        d->authEnabled = enabled;
+    } else if (states & No) {
+        d->noEnabled = enabled;
+    } else if (states & SelfBlocked) {
+        d->selfBlockedEnabled = enabled;
+    } else if (states & Yes) {
+        d->yesEnabled = enabled;
+    }
+
+    d->updateAction();
+}
+
+void Action::setVisible(bool visible, Action::States states)
+{
+    if (states & All) {
+        d->selfBlockedVisible = visible;
+        d->noVisible = visible;
+        d->authVisible = visible;
+        d->yesVisible = visible;
+    } else if (states & Auth) {
+        d->authVisible = visible;
+    } else if (states & No) {
+        d->noVisible = visible;
+    } else if (states & SelfBlocked) {
+        d->selfBlockedVisible = visible;
+    } else if (states & Yes) {
+        d->yesVisible = visible;
+    }
+
+    d->updateAction();
+}
+
 void Action::setPolkitAction(const QString &actionId)	 
 {
     //TODO:
     d->actionId = actionId; 
-    
+
     d->computePkResult();	 
     d->updateAction();
 }
@@ -362,28 +396,6 @@ void Action::setPolkitAction(const QString &actionId)
 QString Action::actionId() const
 {
     return d->actionId;
-}
-//------------------------------------------------------
-void Action::setMasterVisible(bool value)
-{
-    d->masterVisible = value;
-    d->updateAction();
-}
-
-bool Action::masterVisible() const
-{
-    return d->masterVisible;
-}
-
-void Action::setMasterEnabled(bool value)
-{
-    d->masterEnabled = value;
-    d->updateAction();
-}
-
-bool Action::masterEnabled() const
-{
-    return d->masterEnabled;
 }
 
 #include "moc_action.cpp"

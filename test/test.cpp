@@ -107,26 +107,26 @@ void TestAuth::test_Identity()
     unsigned int groupId = getpgid(QCoreApplication::applicationPid());
 
     // Try to create UnixUser from username
-    UnixUser user(userName);
+    UnixUserIdentity user(userName);
     QVERIFY(user.identity());
 
     // Create generic Identity from UnixUser via string representation
     Identity *id = Identity::fromString(user.toString());
     // Compare obtained uid with real uid
-    QCOMPARE(((UnixUser *)id)->uid(), userId);
+    QCOMPARE(((UnixUserIdentity *)id)->uid(), userId);
     delete id;
 
     // Create generic Identity from UnixGroup via string representation
-    UnixGroup group(groupId);
+    UnixGroupIdentity group(groupId);
     QVERIFY(group.identity());
     id = Identity::fromString(group.toString());
-    QCOMPARE(((UnixGroup *) id)->gid(), groupId);
+    QCOMPARE(((UnixGroupIdentity *) id)->gid(), groupId);
     delete id;
 
     // Test setting gid to another value
     group.setGid(9999U);
     id = Identity::fromString(group.toString());
-    QCOMPARE(((UnixGroup *) id)->gid(), 9999U);
+    QCOMPARE(((UnixGroupIdentity *) id)->gid(), 9999U);
     delete id;
 }
 

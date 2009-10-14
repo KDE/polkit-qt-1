@@ -73,60 +73,60 @@ Identity * Identity::fromString(const QString & string)
     return identity;
 }
 
-UnixUser::UnixUser(const QString & name)
+UnixUserIdentity::UnixUserIdentity(const QString & name)
         : Identity()
 {
     GError *error = NULL;
     setIdentity(polkit_unix_user_new_for_name(name.toUtf8().data(), &error));
 }
 
-UnixUser::UnixUser(uid_t uid)
+UnixUserIdentity::UnixUserIdentity(uid_t uid)
         : Identity()
 {
     setIdentity(polkit_unix_user_new(uid));
 }
 
-UnixUser::UnixUser(PolkitUnixUser *pkUnixUser)
+UnixUserIdentity::UnixUserIdentity(PolkitUnixUser *pkUnixUser)
         : Identity((PolkitIdentity *)pkUnixUser)
 {
 
 }
 
-uid_t UnixUser::uid() const
+uid_t UnixUserIdentity::uid() const
 {
     return polkit_unix_user_get_uid((PolkitUnixUser *) identity());
 }
 
-void UnixUser::setUid(uid_t uid)
+void UnixUserIdentity::setUid(uid_t uid)
 {
     polkit_unix_user_set_uid((PolkitUnixUser *) identity(), uid);
 }
 
-UnixGroup::UnixGroup(const QString & name)
+UnixGroupIdentity::UnixGroupIdentity(const QString & name)
         : Identity()
 {
     GError *error = NULL;
     setIdentity(polkit_unix_group_new_for_name(name.toUtf8().data(), &error));
 }
 
-UnixGroup::UnixGroup(gid_t gid)
+UnixGroupIdentity::UnixGroupIdentity(gid_t gid)
         : Identity()
 {
     setIdentity(polkit_unix_group_new(gid));
 }
 
-UnixGroup::UnixGroup(PolkitUnixGroup *pkUnixGroup)
+UnixGroupIdentity::UnixGroupIdentity(PolkitUnixGroup *pkUnixGroup)
         : Identity((PolkitIdentity *) pkUnixGroup)
 {
 
 }
 
-gid_t UnixGroup::gid() const
+gid_t UnixGroupIdentity::gid() const
 {
     return polkit_unix_group_get_gid((PolkitUnixGroup *) identity());
 }
 
-void UnixGroup::setGid(gid_t gid)
+void UnixGroupIdentity::setGid(gid_t gid)
 {
     polkit_unix_group_set_gid((PolkitUnixGroup *) identity(), gid);
 }

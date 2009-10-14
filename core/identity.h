@@ -108,7 +108,7 @@ private:
   * \brief UNIX user identity
   * \sa Identity
   */
-class POLKIT_QT_EXPORT UnixUser : public Identity
+class POLKIT_QT_EXPORT UnixUserIdentity : public Identity
 {
 public:
     /**
@@ -116,14 +116,14 @@ public:
      *
      * \param uid user id
      */
-    explicit UnixUser(uid_t uid);
+    explicit UnixUserIdentity(uid_t uid);
 
     /**
      * Creates UnixUser object by unix name of the user
      *
      * \param name Unix name
      */
-    explicit UnixUser(const QString & name);
+    explicit UnixUserIdentity(const QString & name);
 
     /**
      * Creates UnixUser object from PolkitUnixUser object
@@ -132,7 +132,7 @@ public:
      *
      * \param pkUnixUser The PolkitUnixUser object
      */
-    explicit UnixUser(PolkitUnixUser *pkUnixUser);
+    explicit UnixUserIdentity(PolkitUnixUser *pkUnixUser);
 
     /**
      * Gets an user id
@@ -157,7 +157,7 @@ public:
   * \brief UNIX group identity
   * \sa Identity
   */
-class POLKIT_QT_EXPORT UnixGroup : public Identity
+class POLKIT_QT_EXPORT UnixGroupIdentity : public Identity
 {
 public:
     /**
@@ -165,14 +165,14 @@ public:
      *
      * \param gid group id
      */
-    explicit UnixGroup(gid_t gid);
+    explicit UnixGroupIdentity(gid_t gid);
 
     /**
      * Creates UnixGroup object by unix name of the group
      *
      * \param name group name
      */
-    explicit UnixGroup(const QString & name);
+    explicit UnixGroupIdentity(const QString & name);
 
     /**
      * Creates UnixGroup object from PolkitUnixGroup object
@@ -181,7 +181,7 @@ public:
      *
      * \param pkUnixGroup The PolkitUnixGroup object
      */
-    explicit UnixGroup(PolkitUnixGroup *pkUnixGroup);
+    explicit UnixGroupIdentity(PolkitUnixGroup *pkUnixGroup);
 
     /**
      * Gets a group id

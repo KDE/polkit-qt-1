@@ -80,88 +80,88 @@ Subject * Subject::fromString(const QString & string)
     return subject;
 }
 
-UnixProcess::UnixProcess(qint64 pid)
+UnixProcessSubject::UnixProcessSubject(qint64 pid)
         : Subject()
 {
     setSubject(polkit_unix_process_new(pid));
 }
 
-UnixProcess::UnixProcess(qint64 pid, quint64 startTime)
+UnixProcessSubject::UnixProcessSubject(qint64 pid, quint64 startTime)
         : Subject()
 {
     setSubject(polkit_unix_process_new_full(pid, startTime));
 }
 
-UnixProcess::UnixProcess(PolkitUnixProcess *pkUnixProcess)
+UnixProcessSubject::UnixProcessSubject(PolkitUnixProcess *pkUnixProcess)
         : Subject((PolkitSubject *)pkUnixProcess)
 {
 
 }
 
-qint64 UnixProcess::pid() const
+qint64 UnixProcessSubject::pid() const
 {
     return polkit_unix_process_get_pid((PolkitUnixProcess *) subject());
 }
 
-qint64 UnixProcess::startTime() const
+qint64 UnixProcessSubject::startTime() const
 {
     return polkit_unix_process_get_start_time((PolkitUnixProcess *) subject());
 }
 
-void UnixProcess::setPid(qint64 pid)
+void UnixProcessSubject::setPid(qint64 pid)
 {
     polkit_unix_process_set_pid((PolkitUnixProcess *) subject(), pid);
 }
 
 // ----- SystemBusName
-SystemBusName::SystemBusName(const QString &name)
+SystemBusNameSubject::SystemBusNameSubject(const QString &name)
         : Subject()
 {
     setSubject(polkit_system_bus_name_new(name.toUtf8().data()));
 }
 
-SystemBusName::SystemBusName(PolkitSystemBusName *pkSystemBusName)
+SystemBusNameSubject::SystemBusNameSubject(PolkitSystemBusName *pkSystemBusName)
         : Subject((PolkitSubject *) pkSystemBusName)
 {
 
 }
 
-QString SystemBusName::name() const
+QString SystemBusNameSubject::name() const
 {
     return QString::fromUtf8(polkit_system_bus_name_get_name((PolkitSystemBusName *) subject()));
 }
 
-void SystemBusName::setName(const QString &name)
+void SystemBusNameSubject::setName(const QString &name)
 {
     polkit_system_bus_name_set_name((PolkitSystemBusName *) subject(), name.toUtf8().data());
 }
 
 // ----- SystemSession
-UnixSession::UnixSession(const QString &sessionId)
+UnixSessionSubject::UnixSessionSubject(const QString &sessionId)
         : Subject()
 {
     setSubject(polkit_unix_session_new(sessionId.toUtf8().data()));
 }
 
-UnixSession::UnixSession(qint64 pid)
+UnixSessionSubject::UnixSessionSubject(qint64 pid)
         : Subject()
 {
     // TODO: error handling
     setSubject(polkit_unix_session_new_for_process_sync(pid, NULL, NULL));
 }
 
-UnixSession::UnixSession(PolkitSystemBusName *pkUnixSession)
+UnixSessionSubject::UnixSessionSubject(PolkitSystemBusName *pkUnixSession)
         : Subject((PolkitSubject *) pkUnixSession)
 {
 
 }
 
-QString UnixSession::sessionId() const
+QString UnixSessionSubject::sessionId() const
 {
     return QString::fromUtf8(polkit_unix_session_get_session_id((PolkitUnixSession *) subject()));
 }
 
-void UnixSession::setSessionId(const QString &sessionId)
+void UnixSessionSubject::setSessionId(const QString &sessionId)
 {
     polkit_unix_session_set_session_id((PolkitUnixSession *) subject(), sessionId.toUtf8().data());
 }

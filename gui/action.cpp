@@ -225,9 +225,9 @@ void Action::Private::configChanged()
 bool Action::Private::computePkResult()
 {
     Authority::Result old_result;
-    UnixProcess *subject;
+    UnixProcessSubject *subject;
   
-    subject = new UnixProcess(parent->targetPID());
+    subject = new UnixProcessSubject(parent->targetPID());
     
     old_result = pkResult;
     pkResult = Authority::Unknown;

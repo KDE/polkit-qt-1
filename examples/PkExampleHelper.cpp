@@ -66,9 +66,9 @@ bool PkExampleHelper::set(const QString &action)
     // message().service() is the service name of the caller
     // We can check if the caller is authorized to the following action
     Authority::Result result;
-    SystemBusName *subject;
+    SystemBusNameSubject *subject;
     
-    subject = new SystemBusName(message().service());
+    subject = new SystemBusNameSubject(message().service());
     
     result = Authority::instance()->checkAuthorizationSync("org.qt.policykit.examples.set",
                                            subject , Authority::AllowUserInteraction);

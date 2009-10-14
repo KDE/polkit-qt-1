@@ -105,7 +105,7 @@ private:
  * 
  * \sa Subject
  */    
-class POLKIT_QT_EXPORT UnixProcess : public Subject
+class POLKIT_QT_EXPORT UnixProcessSubject : public Subject
 {
 public:
     /**
@@ -114,7 +114,7 @@ public:
     *
     * \param pid An Unix process PID.
     */    
-    explicit UnixProcess(qint64 pid);
+    explicit UnixProcessSubject(qint64 pid);
 
     /**
     * Subject constructor, takes two parameters - PID and start time.
@@ -122,7 +122,7 @@ public:
     * \param pid An Unix process PID.
     * \param startTime An Unix process start time.
     */    
-    UnixProcess(qint64 pid, quint64 startTime);
+    UnixProcessSubject(qint64 pid, quint64 startTime);
 
     /**
      * Subject constructor, it creates UnixProcess object from PolkitUnixProcess object
@@ -131,7 +131,7 @@ public:
      *
      * \param pkUnixProcess PolkitUnixProcess object
      */
-    explicit UnixProcess(PolkitUnixProcess *process);
+    explicit UnixProcessSubject(PolkitUnixProcess *process);
     
     /**
     * Returns Unix process PID.
@@ -163,7 +163,7 @@ public:
  *
  * \sa Subject
  */    
-class POLKIT_QT_EXPORT SystemBusName : public Subject
+class POLKIT_QT_EXPORT SystemBusNameSubject : public Subject
 {
 public:
     /**
@@ -171,7 +171,7 @@ public:
     *
     * \param name A unique system bus name.
     */    
-    explicit SystemBusName(const QString &name);
+    explicit SystemBusNameSubject(const QString &name);
 
     /**
      * Subject constructor, it creates SystemBusName object from PolkitSystemBusName object
@@ -180,7 +180,7 @@ public:
      *
      * \param pkSystemBusName PolkitSystemBusName object
      */
-    explicit SystemBusName(PolkitSystemBusName* pkSystemBusName);
+    explicit SystemBusNameSubject(PolkitSystemBusName* pkSystemBusName);
 
     /**
     * Returns system bus name.
@@ -208,7 +208,7 @@ public:
  *
  * \sa Subject
  */    
-class POLKIT_QT_EXPORT UnixSession : public Subject
+class POLKIT_QT_EXPORT UnixSessionSubject : public Subject
 {
 public:
     /**
@@ -216,7 +216,7 @@ public:
     *
     * \param sessionId The session id.
     */    
-    explicit UnixSession(const QString &sessionId);
+    explicit UnixSessionSubject(const QString &sessionId);
     
     /**
     * Subject constructor, takes one parameter - pid of process.
@@ -225,7 +225,7 @@ public:
     *
     * \param pid The session's process pid.
     */  
-    explicit UnixSession(qint64 pid);
+    explicit UnixSessionSubject(qint64 pid);
 
     /**
      * Subject constructor, it creates UnixSession object from PolkitUnixSession object
@@ -234,7 +234,7 @@ public:
      *
      * \param pkUnixSession PolkitUnixSession object
      */
-    explicit UnixSession(PolkitSystemBusName *pkUnixSession);
+    explicit UnixSessionSubject(PolkitSystemBusName *pkUnixSession);
 
     /**
     * Returns session id.

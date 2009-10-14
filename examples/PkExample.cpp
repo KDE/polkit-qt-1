@@ -225,9 +225,9 @@ void PkExample::actionActivated()
     qDebug() << "pretending to be the mechanism for action:" << action->actionId();
 
     Authority::Result result;
-    UnixProcess *subject;
+    UnixProcessSubject *subject;
     
-    subject = new UnixProcess(static_cast<uint>(QCoreApplication::applicationPid()));
+    subject = new UnixProcessSubject(static_cast<uint>(QCoreApplication::applicationPid()));
     
     result = Authority::instance()->checkAuthorizationSync(action->actionId(), subject,
                       Authority::AllowUserInteraction);

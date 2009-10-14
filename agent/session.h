@@ -27,9 +27,6 @@
 
 typedef struct _GSimpleAsyncResult GSimpleAsyncResult;
 typedef struct _PolkitAgentSession PolkitAgentSession;
-typedef int gboolean;
-typedef char gchar;
-typedef void * gpointer;
 
 /**
  * \namespace PolkitQtAgent PolkitQtAgent
@@ -48,12 +45,16 @@ namespace PolkitQtAgent
 class AsyncResult : public QObject
 {
     Q_OBJECT
-private:
-    GSimpleAsyncResult *m_result;
 public:
+    explicit AsyncResult(GSimpleAsyncResult *result);
+    virtual ~AsyncResult();
+
     void complete();
     void setError(int code, QString text);
-    AsyncResult(GSimpleAsyncResult *result);
+
+private:
+    class Private;
+    Private * const d;
 };
 
 /**
@@ -83,8 +84,8 @@ public:
      *
      * \param pkAgentSession PolkitAgentSession object
      */
-    Session(PolkitAgentSession *pkAgentSession, QObject *parent = 0);
-    
+    explicit Session(PolkitAgentSession *pkAgentSession, QObject *parent = 0);
+
     /**
      * Destroy authentication session.
      */
@@ -110,7 +111,7 @@ public:
      */
     void cancel();
 
-signals:
+Q_SIGNALS:
     /**
      * This signal will be emitted when the authentication
      * session has been completed or cancelled.
@@ -145,13 +146,8 @@ signals:
     void showInfo(const QString &text);
 
 private:
-    static void _completed(PolkitAgentSession *s, gboolean gained_authorization, gpointer user_data);
-    static void _request(PolkitAgentSession *s, gchar *request, gboolean echo_on, gpointer user_data);
-    static void _showError(PolkitAgentSession *s, gchar *text, gpointer user_data);
-    static void _showInfo(PolkitAgentSession *s, gchar *text, gpointer user_data);
-
-    AsyncResult *m_result;
-    PolkitAgentSession *m_polkitAgentSession;
+    class Private;
+    Private * const d;
 };
 
 }

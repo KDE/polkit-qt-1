@@ -51,10 +51,12 @@ class Listener : public QObject
 public:
     Listener(QObject *parent = 0);
     Listener(PolkitAgentListener *listener, QObject *parent = 0);
-    ~Listener();
+    virtual ~Listener();
+
     bool registerListener(PolkitQt::Subject *subject, const QString &objectPath);
     const PolkitAgentListener *listener();
-public slots:
+
+public Q_SLOTS:
     virtual void initiateAuthentication(const QString &actionId,
                                         const QString &message,
                                         const QString &iconName,
@@ -64,8 +66,10 @@ public slots:
                                         AsyncResult *result) = 0;
     virtual bool initiateAuthenticationFinish() = 0;
     virtual void cancelAuthentication() = 0;
-signals:
+
+Q_SIGNALS:
     void finished();
+
 private:
     ListenerPrivate * const d;
 };

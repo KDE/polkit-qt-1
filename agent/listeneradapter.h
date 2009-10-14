@@ -33,6 +33,8 @@ typedef struct _GCancellable GCancellable;
 typedef struct _GAsyncResult GAsyncResult;
 typedef struct _GSimpleAsyncResult GSimpleAsyncResult;
 typedef struct _GError GError;
+typedef int gboolean;
+typedef char gchar;
 
 /**
  * \namespace PolkitQtAgent PolkitQtAgent

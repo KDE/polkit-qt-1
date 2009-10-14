@@ -29,81 +29,116 @@
 
 using namespace PolkitQtAgent;
 
-Session::Session(PolkitQt::Identity *identity, const QString &cookie, AsyncResult *result, QObject *parent) : QObject(parent), m_result(result)
+class Session::Private
 {
-    m_polkitAgentSession = polkit_agent_session_new(identity->identity(), cookie.toUtf8().data());
-    g_signal_connect(G_OBJECT(m_polkitAgentSession), "completed", G_CALLBACK(_completed), this);
-    g_signal_connect(G_OBJECT(m_polkitAgentSession), "request", G_CALLBACK(_request), this);
-    g_signal_connect(G_OBJECT(m_polkitAgentSession), "show-error", G_CALLBACK(_showError), this);
-    g_signal_connect(G_OBJECT(m_polkitAgentSession), "show-info", G_CALLBACK(_showInfo), this);
+    public:
+        Private() {}
+
+        static void completed(PolkitAgentSession *s, gboolean gained_authorization, gpointer user_data);
+        static void request(PolkitAgentSession *s, gchar *request, gboolean echo_on, gpointer user_data);
+        static void showError(PolkitAgentSession *s, gchar *text, gpointer user_data);
+        static void showInfo(PolkitAgentSession *s, gchar *text, gpointer user_data);
+
+        AsyncResult *result;
+        PolkitAgentSession *polkitAgentSession;
+};
+
+Session::Session(PolkitQt::Identity *identity, const QString &cookie, AsyncResult *result, QObject *parent)
+        : QObject(parent)
+        , d(new Private)
+{
+    d->result = result;
+    d->polkitAgentSession = polkit_agent_session_new(identity->identity(), cookie.toUtf8().data());
+    g_signal_connect(G_OBJECT(d->polkitAgentSession), "completed", G_CALLBACK(Private::completed), this);
+    g_signal_connect(G_OBJECT(d->polkitAgentSession), "request", G_CALLBACK(Private::request), this);
+    g_signal_connect(G_OBJECT(d->polkitAgentSession), "show-error", G_CALLBACK(Private::showError), this);
+    g_signal_connect(G_OBJECT(d->polkitAgentSession), "show-info", G_CALLBACK(Private::showInfo), this);
 }
 
-Session::Session(PolkitAgentSession *pkAgentSession, QObject *parent) : m_polkitAgentSession(pkAgentSession), QObject(parent)
+Session::Session(PolkitAgentSession *pkAgentSession, QObject *parent)
+        : QObject(parent)
+        , d(new Private)
 {
-    g_signal_connect(G_OBJECT(m_polkitAgentSession), "completed", G_CALLBACK(_completed), this);
-    g_signal_connect(G_OBJECT(m_polkitAgentSession), "request", G_CALLBACK(_request), this);
-    g_signal_connect(G_OBJECT(m_polkitAgentSession), "show-error", G_CALLBACK(_showError), this);
-    g_signal_connect(G_OBJECT(m_polkitAgentSession), "show-info", G_CALLBACK(_showInfo), this);
+    d->polkitAgentSession = pkAgentSession;
+    g_signal_connect(G_OBJECT(d->polkitAgentSession), "completed", G_CALLBACK(Private::completed), this);
+    g_signal_connect(G_OBJECT(d->polkitAgentSession), "request", G_CALLBACK(Private::request), this);
+    g_signal_connect(G_OBJECT(d->polkitAgentSession), "show-error", G_CALLBACK(Private::showError), this);
+    g_signal_connect(G_OBJECT(d->polkitAgentSession), "show-info", G_CALLBACK(Private::showInfo), this);
 }
 
 Session::~Session()
 {
-    g_object_unref(m_polkitAgentSession);
+    g_object_unref(d->polkitAgentSession);
 }
 
 void Session::initiate()
 {
-    polkit_agent_session_initiate(m_polkitAgentSession);
+    polkit_agent_session_initiate(d->polkitAgentSession);
 }
 
 void Session::response(const QString &response)
 {
-    polkit_agent_session_response(m_polkitAgentSession, response.toUtf8().data());
+    polkit_agent_session_response(d->polkitAgentSession, response.toUtf8().data());
 }
 
 void Session::cancel()
 {
-    polkit_agent_session_cancel(m_polkitAgentSession);
+    polkit_agent_session_cancel(d->polkitAgentSession);
 }
 
-void Session::_completed(PolkitAgentSession *s, gboolean gained_authorization, gpointer user_data)
+void Session::Private::completed(PolkitAgentSession *s, gboolean gained_authorization, gpointer user_data)
 {
     qDebug() << "COMPLETED";
     Session *session = (Session *)user_data;
-    if (session->m_result != 0)
-        session->m_result->complete();
+    if (session->d->result != 0)
+        session->d->result->complete();
     emit ((Session *)user_data)->completed(gained_authorization);
 }
 
-void Session::_request(PolkitAgentSession *s, gchar *request, gboolean echo_on, gpointer user_data)
+void Session::Private::request(PolkitAgentSession *s, gchar *request, gboolean echo_on, gpointer user_data)
 {
     qDebug() << "REQUEST";
     emit ((Session *)user_data)->request(QString::fromUtf8(request), echo_on);
 }
 
-void Session::_showError(PolkitAgentSession *s, gchar *text, gpointer user_data)
+void Session::Private::showError(PolkitAgentSession *s, gchar *text, gpointer user_data)
 {
     qDebug() << "showError";
     emit ((Session *)user_data)->showError(QString::fromUtf8(text));
 }
 
-void Session::_showInfo(PolkitAgentSession *s, gchar *text, gpointer user_data)
+void Session::Private::showInfo(PolkitAgentSession *s, gchar *text, gpointer user_data)
 {
     qDebug() << "showInfo";
     emit ((Session *)user_data)->showInfo(QString::fromUtf8(text));
 }
 
-AsyncResult::AsyncResult(GSimpleAsyncResult *result) : m_result(result)
+//
+
+class AsyncResult::Private
+{
+    public:
+        Private(GSimpleAsyncResult *r) : result(r) {};
+
+        GSimpleAsyncResult *result;
+};
+
+AsyncResult::AsyncResult(GSimpleAsyncResult *result)
+        : d(new Private(result))
+{
+}
+
+AsyncResult::~AsyncResult()
 {
 }
 
 void AsyncResult::complete()
 {
-    g_simple_async_result_complete(m_result);
+    g_simple_async_result_complete(d->result);
 }
 
 void AsyncResult::setError(int code, QString text)
 {
-    g_simple_async_result_set_error(m_result, G_IO_ERROR, code, text.toUtf8().data());
+    g_simple_async_result_set_error(d->result, G_IO_ERROR, code, text.toUtf8().data());
 }
 

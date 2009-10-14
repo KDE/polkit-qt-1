@@ -25,14 +25,14 @@
 
 using namespace PolkitQt;
 
-Identity::Identity(QObject * parent)
-    : QObject(parent), m_identity(NULL)
+Identity::Identity()
+    : m_identity(NULL)
 {
     g_type_init();
 }
 
-Identity::Identity(PolkitIdentity * polkitIdentity, QObject * parent)
-    : QObject(parent), m_identity(polkitIdentity)
+Identity::Identity(PolkitIdentity * polkitIdentity)
+    : m_identity(polkitIdentity)
 {
     g_type_init();
 }
@@ -60,20 +60,21 @@ Identity * Identity::fromString(const QString & string)
     return identity;
 }
 
-UnixUser::UnixUser(const QString & name, QObject * parent)
-    : Identity(parent)
+UnixUser::UnixUser(const QString & name)
+    : Identity()
 {
     GError *error = NULL;
     m_identity = polkit_unix_user_new_for_name(name.toUtf8().data(), &error);
 }
 
-UnixUser::UnixUser(uid_t uid, QObject * parent)
-    : Identity(parent)
+UnixUser::UnixUser(uid_t uid)
+    : Identity()
 {
     m_identity = polkit_unix_user_new(uid);
 }
 
-UnixUser::UnixUser(PolkitUnixUser *pkUnixUser, QObject *parent) : Identity((PolkitIdentity *)pkUnixUser, parent)
+UnixUser::UnixUser(PolkitUnixUser *pkUnixUser)
+        : Identity((PolkitIdentity *)pkUnixUser)
 {
 
 }
@@ -88,20 +89,21 @@ void UnixUser::setUid(uid_t uid)
     polkit_unix_user_set_uid((PolkitUnixUser *) m_identity, uid);
 }
 
-UnixGroup::UnixGroup(const QString & name, QObject * parent)
-    : Identity(parent)
+UnixGroup::UnixGroup(const QString & name)
+        : Identity()
 {
     GError *error = NULL;
     m_identity = polkit_unix_group_new_for_name(name.toUtf8().data(), &error);
 }
 
-UnixGroup::UnixGroup(gid_t gid, QObject * parent)
-    : Identity(parent)
+UnixGroup::UnixGroup(gid_t gid)
+        : Identity()
 {
     m_identity = polkit_unix_group_new(gid);
 }
 
-UnixGroup::UnixGroup(PolkitUnixGroup *pkUnixGroup, QObject *parent) : Identity((PolkitIdentity *) pkUnixGroup, parent)
+UnixGroup::UnixGroup(PolkitUnixGroup *pkUnixGroup)
+        : Identity((PolkitIdentity *) pkUnixGroup)
 {
 
 }

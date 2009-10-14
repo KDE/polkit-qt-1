@@ -53,9 +53,8 @@ namespace PolkitQt
  * \see UnixGroup
  * \see UnixUser
  */
-class POLKIT_QT_EXPORT Identity: public QObject
+class POLKIT_QT_EXPORT Identity
 {
-    Q_OBJECT
 public:
     /**
      * Creates Identity object from PolkitIdentity
@@ -64,7 +63,7 @@ public:
      *
      * \param polkitIdentity PolkitIdentity object
      */
-    explicit Identity(PolkitIdentity * polkitIdentity, QObject *parent = 0);
+    explicit Identity(PolkitIdentity * polkitIdentity);
     ~Identity();
 
     /**
@@ -93,7 +92,7 @@ public:
     PolkitIdentity * identity();
 protected:
     PolkitIdentity * m_identity;
-    explicit Identity(QObject *parent = 0);
+    Identity();
 };
 
 /**
@@ -104,23 +103,22 @@ protected:
   * \brief UNIX user identity
   * \sa Identity
   */
-class POLKIT_QT_EXPORT UnixUser: public Identity
+class POLKIT_QT_EXPORT UnixUser : public Identity
 {
-    Q_OBJECT
 public:
     /**
      * Creates UnixUser object by UID of the user
      *
      * \param uid user id
      */
-    explicit UnixUser(uid_t uid, QObject *parent = 0);
+    explicit UnixUser(uid_t uid);
 
     /**
      * Creates UnixUser object by unix name of the user
      *
      * \param name Unix name
      */
-    explicit UnixUser(const QString & name, QObject *parent = 0);
+    explicit UnixUser(const QString & name);
 
     /**
      * Creates UnixUser object from PolkitUnixUser object
@@ -129,7 +127,7 @@ public:
      *
      * \param pkUnixUser The PolkitUnixUser object
      */
-    explicit UnixUser(PolkitUnixUser *pkUnixUser, QObject *parent = 0);
+    explicit UnixUser(PolkitUnixUser *pkUnixUser);
 
     /**
      * Gets an user id
@@ -154,23 +152,22 @@ public:
   * \brief UNIX group identity
   * \sa Identity
   */
-class POLKIT_QT_EXPORT UnixGroup: public Identity
+class POLKIT_QT_EXPORT UnixGroup : public Identity
 {
-    Q_OBJECT
 public:
     /**
      * Creates UnixGroup object by GID of the group
      *
      * \param gid group id
      */
-    explicit UnixGroup(gid_t gid, QObject *parent = 0);
+    explicit UnixGroup(gid_t gid);
 
     /**
      * Creates UnixGroup object by unix name of the group
      *
      * \param name group name
      */
-    explicit UnixGroup(const QString & name, QObject *parent = 0);
+    explicit UnixGroup(const QString & name);
 
     /**
      * Creates UnixGroup object from PolkitUnixGroup object
@@ -179,7 +176,7 @@ public:
      *
      * \param pkUnixGroup The PolkitUnixGroup object
      */
-    explicit UnixGroup(PolkitUnixGroup *pkUnixGroup, QObject *parent = 0);
+    explicit UnixGroup(PolkitUnixGroup *pkUnixGroup);
 
     /**
      * Gets a group id

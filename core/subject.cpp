@@ -54,6 +54,11 @@ PolkitSubject * Subject::subject() const
     return d->subject;
 }
 
+void Subject::setSubject(PolkitSubject* subject)
+{
+    d->subject = subject;
+}
+
 QString Subject::toString() const
 {
     Q_ASSERT(d->subject);

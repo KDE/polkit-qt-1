@@ -282,6 +282,24 @@ void Action::setText(const QString &text, States states)
     d->updateAction();
 }
 
+QString Action::text(Action::State state) const
+{
+    switch (state) {
+        case Yes:
+            return d->yesText;
+        case No:
+            return d->noText;
+        case Auth:
+            return d->authText;
+        case SelfBlocked:
+            return d->selfBlockedText;
+        case None:
+            return QAction::text();
+        default:
+            return QString();
+    }
+}
+
 void Action::setToolTip(const QString &toolTip, States states)
 {
     if (states & All) {
@@ -300,6 +318,24 @@ void Action::setToolTip(const QString &toolTip, States states)
     }
 
     d->updateAction();
+}
+
+QString Action::toolTip(Action::State state) const
+{
+    switch (state) {
+        case Yes:
+            return d->yesToolTip;
+        case No:
+            return d->noToolTip;
+        case Auth:
+            return d->authToolTip;
+        case SelfBlocked:
+            return d->selfBlockedToolTip;
+        case None:
+            return QAction::toolTip();
+        default:
+            return QString();
+    }
 }
 
 void Action::setWhatsThis(const QString &whatsThis, States states)
@@ -322,6 +358,24 @@ void Action::setWhatsThis(const QString &whatsThis, States states)
     d->updateAction();
 }
 
+QString Action::whatsThis(Action::State state) const
+{
+    switch (state) {
+        case Yes:
+            return d->yesWhatsThis;
+        case No:
+            return d->noWhatsThis;
+        case Auth:
+            return d->authWhatsThis;
+        case SelfBlocked:
+            return d->selfBlockedWhatsThis;
+        case None:
+            return QAction::whatsThis();
+        default:
+            return QString();
+    }
+}
+
 void Action::setIcon(const QIcon &icon, States states)
 {
     if (states & All) {
@@ -340,6 +394,24 @@ void Action::setIcon(const QIcon &icon, States states)
     }
 
     d->updateAction();
+}
+
+QIcon Action::icon(Action::State state) const
+{
+    switch (state) {
+        case Yes:
+            return d->yesIcon;
+        case No:
+            return d->noIcon;
+        case Auth:
+            return d->authIcon;
+        case SelfBlocked:
+            return d->selfBlockedIcon;
+        case None:
+            return QAction::icon();
+        default:
+            return QIcon();
+    }
 }
 
 void Action::setEnabled(bool enabled, Action::States states)
@@ -362,6 +434,24 @@ void Action::setEnabled(bool enabled, Action::States states)
     d->updateAction();
 }
 
+bool Action::isEnabled(Action::State state) const
+{
+    switch (state) {
+        case Yes:
+            return d->yesEnabled;
+        case No:
+            return d->noEnabled;
+        case Auth:
+            return d->authEnabled;
+        case SelfBlocked:
+            return d->selfBlockedEnabled;
+        case None:
+            return QAction::isEnabled();
+        default:
+            return false;
+    }
+}
+
 void Action::setVisible(bool visible, Action::States states)
 {
     if (states & All) {
@@ -380,6 +470,24 @@ void Action::setVisible(bool visible, Action::States states)
     }
 
     d->updateAction();
+}
+
+bool Action::isVisible(Action::State state) const
+{
+    switch (state) {
+        case Yes:
+            return d->yesVisible;
+        case No:
+            return d->noVisible;
+        case Auth:
+            return d->authVisible;
+        case SelfBlocked:
+            return d->selfBlockedVisible;
+        case None:
+            return QAction::isVisible();
+        default:
+            return false;
+    }
 }
 
 void Action::setPolkitAction(const QString &actionId)	 

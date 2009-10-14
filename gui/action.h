@@ -55,7 +55,7 @@ class POLKIT_QT_EXPORT Action : public QAction
     Q_DISABLE_COPY(Action)
 public:
 
-    enum Status {
+    enum State {
         None = 0,
         SelfBlocked = 1,
         Yes = 2,
@@ -68,7 +68,7 @@ public:
         // Future usage = 256,
         All = 512
     };
-    Q_DECLARE_FLAGS(States, Status)
+    Q_DECLARE_FLAGS(States, State)
 
     /**
      * Constructs a new Action item
@@ -207,6 +207,59 @@ public:
      * \param pid The target process id; 0 if it is the current process
      */
     void setTargetPID(qint64 pid);
+
+    /**
+     * Gets the text of the action when it is in the specified state
+     *
+     * \note Passing None will return the current value
+     * \param state The state to be checked
+     * \returns The text shown when the action is in the specified state
+     */
+    QString text(State state = None) const;
+
+    /**
+     * Gets the tooltip of the action when it is in the specified state
+     *
+     * \note Passing None will return the current value
+     * \param state The state to be checked
+     * \returns The tooltip shown when the action is in the specified state
+     */
+    QString toolTip(State state = None) const;
+
+    /**
+     * Gets the whatsThis of the action when it is in the specified state
+     *
+     * \param state The state to be checked
+     * \returns The whatsThis shown when the action is in the specified state
+     */
+    QString whatsThis(State state = None) const;
+
+    /**
+     * Gets the icon of the action when it is in the specified state
+     *
+     * \note Passing None will return the current value
+     * \param state The state to be checked
+     * \returns The icon shown when the action is in the specified state
+     */
+    QIcon icon(State state = None) const;
+
+    /**
+     * Gets whether the action is visible or not when it is in the specified state
+     *
+     * \note Passing None will return the current value
+     * \param state The state to be checked
+     * \returns Whether the action is visible or not in the specified state
+     */
+    bool isVisible(State state = None) const;
+
+    /**
+     * Gets whether the action is enabled or not when it is in the specified state
+     *
+     * \note Passing None will return the current value
+     * \param state The state to be checked
+     * \returns Whether the action is enabled or not in the specified state
+     */
+    bool isEnabled(State state = None) const;
 
     /**
      * \see setTargetPID

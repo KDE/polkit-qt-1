@@ -27,7 +27,10 @@
 
 #include <QtCore/QObject>
 #include <QtCore/QString>
-#include <polkit/polkit.h>
+
+typedef struct _PolkitIdentity PolkitIdentity;
+typedef struct _PolkitUnixUser PolkitUnixUser;
+typedef struct _PolkitUnixGroup PolkitUnixGroup;
 
 /**
  * \namespace PolkitQt PolkitQt

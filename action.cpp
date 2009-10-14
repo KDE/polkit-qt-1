@@ -24,7 +24,6 @@
 #include "authority.h"
 #include "subject.h"
 
-#include <polkit/polkit.h>
 #include <QDebug>
 #include <QtCore/QCoreApplication>
 

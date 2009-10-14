@@ -24,13 +24,15 @@
 #include <QtCore/QObject>
 #include <QtCore/QSignalMapper>
 
-#define POLKIT_AGENT_I_KNOW_API_IS_SUBJECT_TO_CHANGE 1
-
-#include <polkitagent/polkitagent.h>
-#include <polkit/polkit.h>
 #include "listener.h"
 #include "identity.h"
 #include "details.h"
+
+typedef struct _GList GList;
+typedef struct _GCancellable GCancellable;
+typedef struct _GAsyncResult GAsyncResult;
+typedef struct _GSimpleAsyncResult GSimpleAsyncResult;
+typedef struct _GError GError;
 
 /**
  * \namespace PolkitQtAgent PolkitQtAgent

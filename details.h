@@ -21,9 +21,11 @@
 #ifndef DETAILS_H
 #define DETAILS_H
 
-#include <QtCore/QObject>
-#include <polkit/polkit.h>
 #include "export.h"
+
+#include <QtCore/QObject>
+
+typedef struct _PolkitDetails PolkitDetails;
 
 /**
  * \namespace PolkitQt PolkitQt

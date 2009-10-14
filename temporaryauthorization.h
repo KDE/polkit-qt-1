@@ -21,10 +21,12 @@
 #ifndef TEMPORARYAUTHORIZATION_H
 #define TEMPORARYAUTHORIZATION_H
 
-#include <polkit/polkit.h>
+#include "subject.h"
+
 #include <QtCore/QObject>
 #include <QtCore/QDateTime>
-#include "subject.h"
+
+typedef struct _PolkitTemporaryAuthorization PolkitTemporaryAuthorization;
 
 /**
  * \namespace PolkitQt PolkitQt

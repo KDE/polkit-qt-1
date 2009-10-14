@@ -24,6 +24,9 @@
 #include "session.h"
 #include "identity.h"
 
+#define POLKIT_AGENT_I_KNOW_API_IS_SUBJECT_TO_CHANGE 1
+#include <polkitagent/polkitagent.h>
+
 using namespace PolkitQtAgent;
 
 Session::Session(PolkitQt::Identity *identity, const QString &cookie, AsyncResult *result, QObject *parent) : QObject(parent), m_result(result)

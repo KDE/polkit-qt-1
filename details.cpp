@@ -23,6 +23,8 @@
 #include <QtCore/QDebug>
 #include <QtCore/QStringList>
 
+#include <polkit/polkit.h>
+
 using namespace PolkitQt;
 
 Details::Details(QObject *parent) : QObject(parent)

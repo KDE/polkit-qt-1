@@ -32,9 +32,8 @@
 #include <QtCore/QObject>
 #include <QtCore/QMetaType>
 #include <QtCore/QString>
-#include <polkit/polkit.h>
 
-typedef struct _PolKitAuthority PolKitAuthority;
+typedef struct _PolkitAuthority PolkitAuthority;
 class QStringList;
 
 /**

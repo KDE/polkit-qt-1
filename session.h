@@ -24,8 +24,12 @@
 
 #include <QtCore/QObject>
 #include "identity.h"
-#define POLKIT_AGENT_I_KNOW_API_IS_SUBJECT_TO_CHANGE 1
-#include <polkitagent/polkitagent.h>
+
+typedef struct _GSimpleAsyncResult GSimpleAsyncResult;
+typedef struct _PolkitAgentSession PolkitAgentSession;
+typedef int gboolean;
+typedef char gchar;
+typedef void * gpointer;
 
 /**
  * \namespace PolkitQtAgent PolkitQtAgent

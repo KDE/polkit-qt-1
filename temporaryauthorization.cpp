@@ -21,6 +21,8 @@
 #include "temporaryauthorization.h"
 #include "authority.h"
 
+#include <polkit/polkit.h>
+
 using namespace PolkitQt;
 
 TemporaryAuthorization::TemporaryAuthorization(PolkitTemporaryAuthorization *pkTemporaryAuthorization, QObject *parent) : QObject(parent)

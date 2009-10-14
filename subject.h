@@ -24,7 +24,10 @@
 #include "export.h"
 
 #include <QtCore/QObject>
-#include <polkit/polkit.h>
+
+typedef struct _PolkitSubject PolkitSubject;
+typedef struct _PolkitUnixProcess PolkitUnixProcess;
+typedef struct _PolkitSystemBusName PolkitSystemBusName;
 
 /**
  * \namespace PolkitQt PolkitQt

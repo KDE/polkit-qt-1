@@ -103,8 +103,10 @@ void TestAuth::test_Identity()
 {
     // Get real name and id of current user and group
     QString userName = QString::fromAscii(getlogin());
+    qWarning() << "getlogin:" << userName;
     unsigned int userId = getuid();
     unsigned int groupId = getpgid(QCoreApplication::applicationPid());
+    qWarning() << "getuid:" << userId;
 
     // Try to create UnixUser from username
     UnixUserIdentity user(userName);

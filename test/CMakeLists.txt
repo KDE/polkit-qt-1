@@ -8,6 +8,7 @@ pkg_check_modules (POLKIT REQUIRED polkit-gobject-1>=0.94)
 include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${CMAKE_CURRENT_BINARY_DIR}
+    ${CMAKE_SOURCE_DIR}/agent
     ${QT_QTTEST_INCLUDE_DIR}
     ${POLKIT_INCLUDE_DIRS}
 )

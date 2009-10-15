@@ -23,7 +23,7 @@
 
 
 #include <QtCore/QObject>
-#include "identity.h"
+#include <PolkitQt/Identity>
 
 typedef struct _GSimpleAsyncResult GSimpleAsyncResult;
 typedef struct _PolkitAgentSession PolkitAgentSession;

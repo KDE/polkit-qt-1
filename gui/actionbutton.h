@@ -25,7 +25,6 @@
 #include "export.h"
 #include "action.h"
 
-#include <QtCore/QString>
 #include <QtGui/QAbstractButton>
 
 namespace PolkitQt

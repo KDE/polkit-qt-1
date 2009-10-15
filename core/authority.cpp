@@ -23,16 +23,8 @@
 
 #include "authority.h"
 
-#include <QtCore/QMap>
-#include <QtCore/QSocketNotifier>
-#include <QtCore/QStringList>
-#include <QtDBus/QDBusConnection>
 #include <QtDBus/QDBusInterface>
-#include <QtDBus/QDBusMessage>
 #include <QtDBus/QDBusReply>
-#include <QtCore/QDebug>
-#include <QtCore/QGlobalStatic>
-#include <QtXml/QDomDocument>
 
 #include <polkit/polkit.h>
 

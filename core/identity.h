@@ -26,7 +26,6 @@
 #include <unistd.h>
 
 #include <QtCore/QObject>
-#include <QtCore/QString>
 
 typedef struct _PolkitIdentity PolkitIdentity;
 typedef struct _PolkitUnixUser PolkitUnixUser;

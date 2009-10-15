@@ -25,8 +25,6 @@
 #include "export.h"
 
 #include <QtGui/QAction>
-#include <QtCore/QString>
-#include <QtCore/QProcess>
 
 namespace PolkitQt
 {

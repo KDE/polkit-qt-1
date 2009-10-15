@@ -20,7 +20,6 @@
 
 #include "details.h"
 
-#include <QtCore/QDebug>
 #include <QtCore/QStringList>
 
 #include <polkit/polkit.h>

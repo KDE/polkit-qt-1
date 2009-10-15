@@ -24,7 +24,6 @@
 #include "authority.h"
 #include "subject.h"
 
-#include <QDebug>
 #include <QtCore/QCoreApplication>
 
 using namespace PolkitQt;

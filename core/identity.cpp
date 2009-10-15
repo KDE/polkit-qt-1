@@ -21,7 +21,6 @@
 #include "identity.h"
 
 #include <polkit/polkit.h>
-#include <glib-object.h>
 
 using namespace PolkitQt;
 

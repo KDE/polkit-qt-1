@@ -22,11 +22,10 @@
 #define POLKIT_QT_AGENT_LISTENER_ADAPTER_H
 
 #include <QtCore/QObject>
-#include <QtCore/QSignalMapper>
 
 #include "listener.h"
-#include "identity.h"
-#include "details.h"
+#include <PolkitQt/Identity>
+#include <PolkitQt/Details>
 
 typedef struct _GList GList;
 typedef struct _GCancellable GCancellable;

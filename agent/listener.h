@@ -22,16 +22,18 @@
 #define POLKIT_QT_AGENT_LISTENER_H
 
 #include <QtCore/QObject>
-#include <QtCore/QDebug>
 
-#include <PolkitQt/Subject>
-#include <PolkitQt/Identity>
-#include <PolkitQt/Details>
-#include "session.h"
+#include <PolkitQtAgent/Session>
 
 #define POLKIT_AGENT_I_KNOW_API_IS_SUBJECT_TO_CHANGE 1
 
 typedef struct _PolkitAgentListener PolkitAgentListener;
+
+namespace PolkitQt {
+    class Subject;
+    class Identity;
+    class Details;
+}
 
 /**
  * \namespace PolkitQtAgent PolkitQtAgent

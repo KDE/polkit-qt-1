@@ -25,6 +25,9 @@
 #include "polkitqtlistener.h"
 
 #include <PolkitQt/Authority>
+#include <PolkitQt/Subject>
+#include <PolkitQt/Identity>
+#include <PolkitQt/Details>
 
 using namespace PolkitQtAgent;
 

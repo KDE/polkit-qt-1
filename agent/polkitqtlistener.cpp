@@ -23,6 +23,9 @@
 
 #include "polkitqtlistener.h"
 #include <stdio.h>
+
+#include <QDebug>
+
 #define POLKIT_AGENT_I_KNOW_API_IS_SUBJECT_TO_CHANGE 1
 
 using namespace PolkitQtAgent;

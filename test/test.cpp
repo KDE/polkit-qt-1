@@ -1,9 +1,9 @@
 
 
 #include "test.h"
-#include "authority.h"
-#include "session.h"
-#include "details.h"
+#include "core/authority.h"
+#include "agent/session.h"
+#include "core/details.h"
 #include <stdlib.h>
 #include <unistd.h>
 #include <QtDBus/QDBusMessage>
@@ -23,7 +23,7 @@ void wait()
 void TestAuth::test_Auth_checkAuthorization()
 {
     // This needs the file org.qt.policykit.examples.policy from examples to be installed
-    UnixProcess *process = new UnixProcess(QCoreApplication::applicationPid());
+    UnixProcessSubject *process = new UnixProcessSubject(QCoreApplication::applicationPid());
     Authority::Result result;
     // Check if this method returns good authorization results
     Authority *authority = Authority::instance();
@@ -168,7 +168,7 @@ void TestAuth::test_Subject()
     // Get pid of this appication
     qint64 pid = QCoreApplication::applicationPid();
     // Create unix process for it
-    UnixProcess *process = new UnixProcess(pid);
+    UnixProcessSubject *process = new UnixProcessSubject(pid);
     // Test if pid doesn't differ
     QCOMPARE(process->pid(), pid);
 

@@ -22,7 +22,7 @@
 #include <QInputDialog>
 
 #include "klistener.h"
-#include "session.h"
+#include "agent/session.h"
 
 using namespace PolkitQtAgent;
 

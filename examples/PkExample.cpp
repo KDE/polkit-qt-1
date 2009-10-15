@@ -21,10 +21,10 @@
 
 #include "PkExample.h"
 
-#include "actionbutton.h"
-#include "actionbuttons.h"
-#include "authority.h"
-#include <QDebug>
+#include "gui/actionbutton.h"
+#include "gui/actionbuttons.h"
+#include "core/authority.h"
+#include <QtCore/QDebug>
 
 #include <QtDBus/QDBusMessage>
 #include <QtDBus/QDBusConnection>
@@ -48,7 +48,7 @@ PkExample::PkExample(QMainWindow *parent)
     bt->setIcon(QPixmap(":/Icons/custom-no.png"));
     // By using set{Yes|No|Auth}Enabled you can set the states
     // when the button is enabled
-    bt->setNoEnabled(true);
+    bt->setEnabled(true, Action::No);
     // As ActionButton is also an Action we cast it to add to menu
     menuActions->addAction(qobject_cast<Action*>(bt));
     toolBar->addAction(qobject_cast<Action*>(bt));
@@ -85,23 +85,23 @@ PkExample::PkExample(QMainWindow *parent)
     bt = new ActionButton(playPB, "org.qt.policykit.examples.play", this);
     bt->setText("Play!");
     // here we set the behavior of PolKitResul = No
-    bt->setNoVisible(true);
-    bt->setNoEnabled(true);
-    bt->setNoText("Can't play!");
-    bt->setNoIcon(QPixmap(":/Icons/custom-no.png"));
-    bt->setNoToolTip("If your admin wasn't annoying, you could do this");
+    bt->setVisible(true, Action::No);
+    bt->setEnabled(true, Action::No);
+    bt->setText("Can't play!", Action::No);
+    bt->setIcon(QPixmap(":/Icons/custom-no.png"), Action::No);
+    bt->setToolTip("If your admin wasn't annoying, you could do this", Action::No);
     // here we set the behavior of PolKitResul = Auth
-    bt->setAuthVisible(true);
-    bt->setAuthEnabled(true);
-    bt->setAuthText("Play?");
-    bt->setAuthIcon(QPixmap(":/Icons/action-locked-default.png"));
-    bt->setAuthToolTip("Only card carrying tweakers can do this!");
+    bt->setVisible(true, Action::Auth);
+    bt->setEnabled(true, Action::Auth);
+    bt->setText("Play?", Action::Auth);
+    bt->setIcon(QPixmap(":/Icons/action-locked-default.png"), Action::Auth);
+    bt->setToolTip("Only card carrying tweakers can do this!", Action::Auth);
     // here we set the behavior of PolKitResul = Yes
-    bt->setYesVisible(true);
-    bt->setYesEnabled(true);
-    bt->setYesText("Play!");
-    bt->setYesIcon(QPixmap(":/Icons/custom-yes.png"));
-    bt->setYesToolTip("Go ahead, play!");
+    bt->setVisible(true, Action::Yes);
+    bt->setEnabled(true, Action::Yes);
+    bt->setText("Play!", Action::Yes);
+    bt->setIcon(QPixmap(":/Icons/custom-yes.png"), Action::Yes);
+    bt->setToolTip("Go ahead, play!", Action::Yes);
 
     menuActions->addAction(qobject_cast<Action*>(bt));
     toolBar->addAction(qobject_cast<Action*>(bt));
@@ -111,9 +111,9 @@ PkExample::PkExample(QMainWindow *parent)
 
     bt = new ActionButton(deletePB, "org.qt.policykit.examples.delete", this);
     bt->setText("Delete!");
-    bt->setNoIcon(QPixmap(":/Icons/custom-no.png"));
-    bt->setAuthIcon(QPixmap(":/Icons/action-locked-default.png"));
-    bt->setYesIcon(QPixmap(":/Icons/custom-yes.png"));
+    bt->setIcon(QPixmap(":/Icons/custom-no.png"), Action::No);
+    bt->setIcon(QPixmap(":/Icons/action-locked-default.png"), Action::Auth);
+    bt->setIcon(QPixmap(":/Icons/custom-yes.png"), Action::Yes);
     menuActions->addAction(qobject_cast<Action*>(bt));
     toolBar->addAction(qobject_cast<Action*>(bt));
     connect(bt, SIGNAL(triggered(bool)), this, SLOT(activateAction()));
@@ -122,9 +122,9 @@ PkExample::PkExample(QMainWindow *parent)
 
     bt = new ActionButton(listenPB, "org.qt.policykit.examples.listen", this);
     bt->setText("Listen!");
-    bt->setNoIcon(QPixmap(":/Icons/custom-no.png"));
-    bt->setAuthIcon(QPixmap(":/Icons/action-locked-default.png"));
-    bt->setYesIcon(QPixmap(":/Icons/custom-yes.png"));
+    bt->setIcon(QPixmap(":/Icons/custom-no.png"), Action::No);
+    bt->setIcon(QPixmap(":/Icons/action-locked-default.png"), Action::Auth);
+    bt->setIcon(QPixmap(":/Icons/custom-yes.png"), Action::Yes);
     menuActions->addAction(qobject_cast<Action*>(bt));
     toolBar->addAction(qobject_cast<Action*>(bt));
     connect(bt, SIGNAL(triggered(bool)), this, SLOT(activateAction()));
@@ -133,9 +133,9 @@ PkExample::PkExample(QMainWindow *parent)
 
     bt = new ActionButton(setPB, "org.qt.policykit.examples.set", this);
     bt->setText("Set!");
-    bt->setNoIcon(QPixmap(":/Icons/custom-no.png"));
-    bt->setAuthIcon(QPixmap(":/Icons/action-locked-default.png"));
-    bt->setYesIcon(QPixmap(":/Icons/custom-yes.png"));
+    bt->setIcon(QPixmap(":/Icons/custom-no.png"), Action::No);
+    bt->setIcon(QPixmap(":/Icons/action-locked-default.png"), Action::Auth);
+    bt->setIcon(QPixmap(":/Icons/custom-yes.png"), Action::Yes);
     menuActions->addAction(qobject_cast<Action*>(bt));
     toolBar->addAction(qobject_cast<Action*>(bt));
     connect(bt, SIGNAL(triggered(bool)), this, SLOT(activateAction()));
@@ -143,12 +143,12 @@ PkExample::PkExample(QMainWindow *parent)
     connect(bt, SIGNAL(activated()), this, SLOT(actionActivated()));
 
     bt = new ActionButton(shoutPB, "org.qt.policykit.examples.shout", this);
-    bt->setNoIcon(QPixmap(":/Icons/custom-no.png"));
-    bt->setNoText("Can't shout!");
-    bt->setAuthIcon(QPixmap(":/Icons/action-locked-default.png"));
-    bt->setAuthText("Shout?");
-    bt->setYesIcon(QPixmap(":/Icons/custom-yes.png"));
-    bt->setYesText("Shout!");
+    bt->setIcon(QPixmap(":/Icons/custom-no.png"), Action::No);
+    bt->setText("Can't shout!", Action::No);
+    bt->setIcon(QPixmap(":/Icons/action-locked-default.png"), Action::Auth);
+    bt->setText("Shout?", Action::Auth);
+    bt->setIcon(QPixmap(":/Icons/custom-yes.png"), Action::Yes);
+    bt->setText("Shout!", Action::Yes);
     menuActions->addAction(qobject_cast<Action*>(bt));
     toolBar->addAction(qobject_cast<Action*>(bt));
     connect(bt, SIGNAL(triggered(bool)), this, SLOT(activateAction()));

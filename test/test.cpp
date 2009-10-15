@@ -6,6 +6,7 @@
 #include "core/details.h"
 #include <stdlib.h>
 #include <unistd.h>
+#include <pwd.h>
 #include <QtDBus/QDBusMessage>
 #include <QtDBus/QDBusConnection>
 using namespace PolkitQt;
@@ -102,11 +103,10 @@ void TestAuth::test_Auth_enumerateActions()
 void TestAuth::test_Identity()
 {
     // Get real name and id of current user and group
-    QString userName = QString::fromAscii(getlogin());
-    qWarning() << "getlogin:" << userName;
-    unsigned int userId = getuid();
-    unsigned int groupId = getpgid(QCoreApplication::applicationPid());
-    qWarning() << "getuid:" << userId;
+    struct passwd *userinfo = getpwuid(getuid());
+    QString userName = userinfo->pw_name;
+    unsigned int userId = userinfo->pw_uid;
+    unsigned int groupId = userinfo->pw_gid;
 
     // Try to create UnixUser from username
     UnixUserIdentity user(userName);

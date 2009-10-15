@@ -21,6 +21,8 @@
 #ifndef POLKIT_QT_AGENT_LISTENER_H
 #define POLKIT_QT_AGENT_LISTENER_H
 
+#include "export.h"
+
 #include <QtCore/QObject>
 
 #include <PolkitQtAgent/Session>
@@ -46,7 +48,7 @@ namespace PolkitQtAgent
 {
 
 class ListenerPrivate;
-class Listener : public QObject
+class POLKIT_QT_EXPORT Listener : public QObject
 {
     Q_OBJECT
     Q_DISABLE_COPY(Listener)

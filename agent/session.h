@@ -21,7 +21,6 @@
 #ifndef SESSION_H
 #define SESSION_H
 
-
 #include <QtCore/QObject>
 #include <PolkitQt/Identity>
 
@@ -42,7 +41,7 @@ namespace PolkitQtAgent
  * \internal
  * \brief Encapsulation of GSimpleAsyncResult to QObject class
  */
-class AsyncResult : public QObject
+class POLKIT_QT_EXPORT AsyncResult : public QObject
 {
     Q_OBJECT
 public:

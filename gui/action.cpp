@@ -164,8 +164,8 @@ void Action::Private::updateAction()
     default:
     case Authority::Unknown:
     case Authority::No:
-        parent->setVisible(noVisible);
-        parent->setEnabled(noEnabled);
+        qobject_cast<QAction*>(parent)->setVisible(noVisible);
+        qobject_cast<QAction*>(parent)->setEnabled(noEnabled);
         qobject_cast<QAction*>(parent)->setText(noText);
         if (!noWhatsThis.isNull()) {
             qobject_cast<QAction*>(parent)->setWhatsThis(noWhatsThis);
@@ -177,8 +177,8 @@ void Action::Private::updateAction()
         break;
 
     case Authority::Challenge:
-        parent->setVisible(authVisible);
-        parent->setEnabled(authEnabled);
+        qobject_cast<QAction*>(parent)->setVisible(authVisible);
+        qobject_cast<QAction*>(parent)->setEnabled(authEnabled);
         qobject_cast<QAction*>(parent)->setText(authText);
         if (!authWhatsThis.isNull()) {
             qobject_cast<QAction*>(parent)->setWhatsThis(authWhatsThis);
@@ -189,8 +189,8 @@ void Action::Private::updateAction()
         qobject_cast<QAction*>(parent)->setIcon(authIcon);
         break;
     case Authority::Yes:
-        parent->setVisible(yesVisible);
-        parent->setEnabled(yesEnabled);
+        qobject_cast<QAction*>(parent)->setVisible(yesVisible);
+        qobject_cast<QAction*>(parent)->setEnabled(yesEnabled);
         qobject_cast<QAction*>(parent)->setText(yesText);
         if (!yesWhatsThis.isNull()) {
             qobject_cast<QAction*>(parent)->setWhatsThis(yesWhatsThis);

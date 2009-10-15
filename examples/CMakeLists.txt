@@ -4,6 +4,7 @@ install(FILES org.qt.policykit.examples.policy DESTINATION ${SHARE_INSTALL_PREFI
 include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${CMAKE_CURRENT_BINARY_DIR}
+    ${CMAKE_SOURCE_DIR}/gui
 )
 
 set(polkit_example_SRCS

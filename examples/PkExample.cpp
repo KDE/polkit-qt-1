@@ -84,21 +84,17 @@ PkExample::PkExample(QMainWindow *parent)
     // This action is more customized
     bt = new ActionButton(playPB, "org.qt.policykit.examples.play", this);
     bt->setText("Play!");
+    bt->setVisible(true, Action::No | Action::Auth | Action::Yes);
+    bt->setEnabled(true, Action::No | Action::Auth | Action::Yes);
     // here we set the behavior of PolKitResul = No
-    bt->setVisible(true, Action::No);
-    bt->setEnabled(true, Action::No);
     bt->setText("Can't play!", Action::No);
     bt->setIcon(QPixmap(":/Icons/custom-no.png"), Action::No);
     bt->setToolTip("If your admin wasn't annoying, you could do this", Action::No);
     // here we set the behavior of PolKitResul = Auth
-    bt->setVisible(true, Action::Auth);
-    bt->setEnabled(true, Action::Auth);
     bt->setText("Play?", Action::Auth);
     bt->setIcon(QPixmap(":/Icons/action-locked-default.png"), Action::Auth);
     bt->setToolTip("Only card carrying tweakers can do this!", Action::Auth);
     // here we set the behavior of PolKitResul = Yes
-    bt->setVisible(true, Action::Yes);
-    bt->setEnabled(true, Action::Yes);
     bt->setText("Play!", Action::Yes);
     bt->setIcon(QPixmap(":/Icons/custom-yes.png"), Action::Yes);
     bt->setToolTip("Go ahead, play!", Action::Yes);
@@ -144,10 +140,10 @@ PkExample::PkExample(QMainWindow *parent)
 
     bt = new ActionButton(shoutPB, "org.qt.policykit.examples.shout", this);
     bt->setIcon(QPixmap(":/Icons/custom-no.png"), Action::No);
-    bt->setText("Can't shout!", Action::No);
     bt->setIcon(QPixmap(":/Icons/action-locked-default.png"), Action::Auth);
-    bt->setText("Shout?", Action::Auth);
     bt->setIcon(QPixmap(":/Icons/custom-yes.png"), Action::Yes);
+    bt->setText("Can't shout!", Action::No);
+    bt->setText("Shout?", Action::Auth);
     bt->setText("Shout!", Action::Yes);
     menuActions->addAction(qobject_cast<Action*>(bt));
     toolBar->addAction(qobject_cast<Action*>(bt));

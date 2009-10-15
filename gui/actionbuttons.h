@@ -21,7 +21,7 @@
 #ifndef POLKIT_QT_ACTIONBUTTONS_H
 #define POLKIT_QT_ACTIONBUTTONS_H
 
-#include "actionbutton.h"
+#include <PolkitQt/ActionButton>
 
 namespace PolkitQt
 {

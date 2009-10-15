@@ -23,9 +23,9 @@
 #define POLKIT_QT_ACTIONBUTTON_H
 
 #include "export.h"
-#include "action.h"
+#include <PolkitQt/Action>
 
-#include <QtGui/QAbstractButton>
+class QAbstractButton;
 
 namespace PolkitQt
 {

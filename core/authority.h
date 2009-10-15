@@ -1,7 +1,7 @@
 /*
  * This file is part of the Polkit-qt project
  * Copyright (C) 2009 Daniel Nicoletti <dantti85-pk@yahoo.com.br>
- * Copyright (C) 2009 Dario Freddi <drf54321@gmail.com>
+ * Copyright (C) 2009 Dario Freddi <drf@kde.org>
  * Copyright (C) 2009 Jaroslav Reznik <jreznik@redhat.com>
  * Copyright (C) 2009 Radek Novacek <rnovacek@redhat.com>
  *
@@ -49,7 +49,7 @@ namespace PolkitQt
 /**
  * \class Authority authority.h Authority
  * \author Daniel Nicoletti <dantti85-pk@yahoo.com.br>
- * \author Dario Freddi <drf54321@gmail.com>
+ * \author Dario Freddi <drf@kde.org>
  * \author Jaroslav Reznik <jreznik@redhat.com>
  *
  * \brief Convenience class for Qt/KDE applications

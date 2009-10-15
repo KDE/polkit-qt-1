@@ -11,7 +11,7 @@
 
 # Copyright (c) 2008, Adrien Bustany, <madcat@mymadcat.com>
 # Copyright (c) 2009, Daniel Nicoletti, <dantti85-pk@yahoo.com.br>
-# Copyright (c) 2009, Dario Freddi, <drf54321@gmail.com>
+# Copyright (c) 2009, Dario Freddi, <drf@kde.org>
 # Copyright (c) 2009, Michal Malek, <michalm@jabster.pl>
 # Copyright (c) 2009, Jaroslav Reznik, <jreznik@redhat.com>
 #

@@ -1,6 +1,6 @@
 /*
  * This file is part of the Polkit-qt project
- * Copyright (C) 2009 Dario Freddi <drf54321@gmail.com>
+ * Copyright (C) 2009 Dario Freddi <drf@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -29,7 +29,7 @@ namespace PolkitQt
 class ActionButtonsPrivate;
 /**
  * \class ActionButtons actionbuttons.h ActionButtons
- * \author Dario Freddi <drf54321@gmail.com>
+ * \author Dario Freddi <drf@kde.org>
  *
  * \brief Class used to hold and update a list of QAbstractButtons
  *

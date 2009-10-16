@@ -38,23 +38,23 @@ PolicyKit support in an existing application. Let's see some details about it:
 bt = new ActionButton(kickPB, "org.qt.policykit.examples.kick", this);
 bt->setText("Kick... (long)");
 // here we set the behavior of PolKitResul = No
-bt->setNoVisible(true);
-bt->setNoEnabled(true);
-bt->setNoText("Kick (long)");
-bt->setNoIcon(QPixmap(":/Icons/custom-no.png"));
-bt->setNoToolTip("If your admin wasn't annoying, you could do this");
+bt->setVisible(true, Action::No);
+bt->setEnabled(true, Action::No);
+bt->setText("Kick (long)", Action::No);
+bt->setIcon(QPixmap(":/Icons/custom-no.png"), Action::No);
+bt->setToolTip("If your admin wasn't annoying, you could do this", Action::No);
 // here we set the behavior of PolKitResul = Auth
-bt->setAuthVisible(true);
-bt->setAuthEnabled(true);
-bt->setAuthText("Kick... (long)");
-bt->setAuthIcon(QPixmap(":/Icons/action-locked-default.png"));
-bt->setAuthToolTip("Only card carrying tweakers can do this!");
+bt->setVisible(true, Action::Auth);
+bt->setEnabled(true, Action::Auth);
+bt->setText("Kick... (long)", Action::Auth);
+bt->setIcon(QPixmap(":/Icons/action-locked-default.png"), Action::Auth);
+bt->setToolTip("Only card carrying tweakers can do this!", Action::Auth);
 // here we set the behavior of PolKitResul = Yes
-bt->setYesVisible(true);
-bt->setYesEnabled(true);
-bt->setYesText("Kick! (long)");
-bt->setYesIcon(QPixmap(":/Icons/custom-yes.png"));
-bt->setYesToolTip("Go ahead, kick kick kick!");
+bt->setVisible(true, Action::Yes);
+bt->setEnabled(true, Action::Yes);
+bt->setText("Kick! (long)", Action::Yes);
+bt->setIcon(QPixmap(":/Icons/custom-yes.png"), Action::Yes);
+bt->setToolTip("Go ahead, kick kick kick!", Action::Yes);
 \endcode
 
 This small paragraph sets up an action button using an existing button defined in the
@@ -65,7 +65,7 @@ on the action status/result. The code is mostly self-explainatory
 bt = new ActionButtons(QList<QAbstractButton*>() << listenPB << listenCB,
                            "org.qt.policykit.examples.listen", this);
 bt->setIcon(QPixmap(":/Icons/action-locked.png"));
-bt->setYesIcon(QPixmap(":/Icons/action-unlocked.png"));
+bt->setIcon(QPixmap(":/Icons/action-unlocked.png"), Action::Yes);
 bt->setText("Click to make changes...");
 \endcode
 

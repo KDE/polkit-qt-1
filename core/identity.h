@@ -100,7 +100,7 @@ private:
 };
 
 /**
-  * \class UnixUser identity.h Identity
+  * \class UnixUserIdentity identity.h Identity
   *
   * An object representing a user identity on a UNIX system.
   *
@@ -149,7 +149,7 @@ public:
 };
 
 /**
-  * \class UnixGroup identity.h Identity
+  * \class UnixGroupIdentity identity.h Identity
   *
   * An object representing a group identity on a UNIX system.
   *

@@ -72,7 +72,7 @@ public:
     Listener(QObject *parent = 0);
 
     /**
-     * \brief Constuctor of Listener class from PolkitAgentListener
+     * \brief Constructor of Listener class from PolkitAgentListener
      *
      * \warning Use this only if you are completely aware of what are you doing!
      *

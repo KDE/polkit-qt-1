@@ -22,6 +22,8 @@
 
 #include <polkit/polkit.h>
 
+#include <QtCore/QDebug>
+
 using namespace PolkitQt;
 
 class Identity::Private
@@ -67,9 +69,14 @@ QString Identity::toString() const
 
 Identity * Identity::fromString(const QString & string)
 {
-    Identity *identity = new Identity();
-    identity->d->identity = polkit_identity_from_string(string.toUtf8().data(), NULL);
-    return identity;
+    GError *error = NULL;
+    PolkitIdentity *pkIdentity = polkit_identity_from_string(string.toUtf8().data(), &error);
+    if (error != NULL)
+    {
+        qWarning() << QObject::tr("Cannot create Identity from string: ").arg(error->message);
+        return NULL;
+    }
+    return new Identity(pkIdentity);
 }
 
 UnixUserIdentity::UnixUserIdentity(const QString & name)
@@ -77,6 +84,11 @@ UnixUserIdentity::UnixUserIdentity(const QString & name)
 {
     GError *error = NULL;
     setIdentity(polkit_unix_user_new_for_name(name.toUtf8().data(), &error));
+    if (error != NULL)
+    {
+        qWarning() << QObject::tr("Cannot create UnixUserIdentity: ").arg(error->message);
+        setIdentity(NULL);
+    }
 }
 
 UnixUserIdentity::UnixUserIdentity(uid_t uid)
@@ -106,6 +118,11 @@ UnixGroupIdentity::UnixGroupIdentity(const QString & name)
 {
     GError *error = NULL;
     setIdentity(polkit_unix_group_new_for_name(name.toUtf8().data(), &error));
+    if (error != NULL)
+    {
+        qWarning() << QObject::tr("Cannot create UnixGroupIdentity: ").arg(error->message);
+        setIdentity(NULL);
+    }
 }
 
 UnixGroupIdentity::UnixGroupIdentity(gid_t gid)

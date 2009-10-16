@@ -20,6 +20,7 @@
 
 #include "subject.h"
 
+#include <QtCore/QDebug>
 #include <polkit/polkit.h>
 
 using namespace PolkitQt;
@@ -75,6 +76,7 @@ Subject * Subject::fromString(const QString & string)
     subject->d->subject = polkit_subject_from_string(string.toUtf8().data(), &error);
     if (error != NULL)
     {
+        qWarning() << QObject::tr("Cannot create Subject from string: %1").arg(error->message);
         return NULL;
     }
     return subject;
@@ -146,8 +148,13 @@ UnixSessionSubject::UnixSessionSubject(const QString &sessionId)
 UnixSessionSubject::UnixSessionSubject(qint64 pid)
         : Subject()
 {
-    // TODO: error handling
-    setSubject(polkit_unix_session_new_for_process_sync(pid, NULL, NULL));
+    GError *error = NULL;
+    setSubject(polkit_unix_session_new_for_process_sync(pid, NULL, &error));
+    if (error != NULL)
+    {
+        qWarning() << QObject::tr("Cannot create unix session: %1").arg(error->message);
+        setSubject(NULL);
+    }
 }
 
 UnixSessionSubject::UnixSessionSubject(PolkitSystemBusName *pkUnixSession)

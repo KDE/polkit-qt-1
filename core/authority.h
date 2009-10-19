@@ -144,7 +144,6 @@ public:
     PolkitAuthority *polkitAuthority() const;
 
     /**
-     * TODO: rewrite, finish!
      * This function should be used by mechanisms (e.g.: helper applications).
      * It returns the action should be carried out, so if the caller was
      * actually authorized to perform it. The result is in form of a Result, so that
@@ -164,8 +163,8 @@ public:
      * \see checkAuthorizationCancel Use it to cancel execution of this method.
      *
      * \param actionId the Id of the action in question
-     * \param subject ...
-     * \param flags
+     * \param subject subject that the action is authorized for (e.g. unix process)
+     * \param flags flags that influences the authorization checking
      *
      * \return \c Result::Yes if the caller is authorized and the action should be performed
      *         \c otherwise if the caller was not authorized and the action should not be performed,
@@ -179,8 +178,8 @@ public:
      * Synchronous version of the checkAuthorization method.
      *
      * \param actionId the Id of the action in question
-     * \param subject ...
-     * \param flags
+     * \param subject subject that the action is authorized for (e.g. unix process)
+     * \param flags flags that influences the authorization checking
      *
      * \see checkAuthorization Asynchronous version of this method.
      */

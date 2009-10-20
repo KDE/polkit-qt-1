@@ -33,6 +33,7 @@ class Session::Private
 {
     public:
         Private() {}
+        ~Private();
 
         static void completed(PolkitAgentSession *s, gboolean gained_authorization, gpointer user_data);
         static void request(PolkitAgentSession *s, gchar *request, gboolean echo_on, gpointer user_data);
@@ -42,6 +43,11 @@ class Session::Private
         AsyncResult *result;
         PolkitAgentSession *polkitAgentSession;
 };
+
+Session::Private::~Private()
+{
+    g_object_unref(polkitAgentSession);
+}
 
 Session::Session(PolkitQt::Identity *identity, const QString &cookie, AsyncResult *result, QObject *parent)
         : QObject(parent)
@@ -68,7 +74,7 @@ Session::Session(PolkitAgentSession *pkAgentSession, QObject *parent)
 
 Session::~Session()
 {
-    g_object_unref(d->polkitAgentSession);
+    delete d;
 }
 
 void Session::initiate()
@@ -130,6 +136,7 @@ AsyncResult::AsyncResult(GSimpleAsyncResult *result)
 
 AsyncResult::~AsyncResult()
 {
+    g_object_unref(d->result);
 }
 
 void AsyncResult::complete()

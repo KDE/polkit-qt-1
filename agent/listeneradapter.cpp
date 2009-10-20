@@ -91,7 +91,13 @@ void ListenerAdapter::polkit_qt_listener_initiate_authentication (PolkitAgentLis
 
     dets = new PolkitQt::Details(details);
 
-    list->initiateAuthentication(action_id, message, icon_name, dets, cookie, idents, new AsyncResult(result));
+    list->initiateAuthentication(QString::fromUtf8(action_id),
+                                 QString::fromUtf8(message),
+                                 QString::fromUtf8(icon_name),
+                                 dets,
+                                 QString::fromUtf8(cookie),
+                                 idents,
+                                 new AsyncResult(result));
 }
 
 gboolean ListenerAdapter::polkit_qt_listener_initiate_authentication_finish (PolkitAgentListener  *listener,

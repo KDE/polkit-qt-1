@@ -68,11 +68,17 @@ bool Listener::registerListener(PolkitQt::Subject *subject, const QString &objec
 {
     GError *error = NULL;
 
-    polkit_agent_register_listener (d->listener,
-                                    subject->subject(),
-                                    objectPath.toAscii().data(),
-                                    &error);
-    
+    bool r = polkit_agent_register_listener (d->listener,
+                                             subject->subject(),
+                                             objectPath.toAscii().data(),
+                                             &error);
+    if (error != NULL)
+    {
+        qWarning() << tr("Cannot register authentication agent: %1").arg(error->message);
+        g_error_free(error);
+        return false;
+    }
+    return r;
 }
 
 const PolkitAgentListener * Listener::listener()

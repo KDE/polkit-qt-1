@@ -132,7 +132,7 @@ static void polkit_qt_listener_initiate_authentication (PolkitAgentListener  *ag
 
     if (cancellable != NULL)
     {
-	g_signal_connect (cancellable,
+        g_signal_connect (cancellable,
                           "cancelled",
                           G_CALLBACK (cancelled_cb),
                           agent_listener);
@@ -144,11 +144,9 @@ static gboolean polkit_qt_listener_initiate_authentication_finish (PolkitAgentLi
                                                                    GAsyncResult         *res,
                                                                    GError              **error)
 {
-    qDebug() << "Listener adapter polkit_qt_listener_initiate_authentication_finish";
-    return true;
-    
-/*    return ListenerAdapter::instance()->polkit_qt_listener_initiate_authentication_finish(listener,
+    qDebug() << "Listener adapter polkit_qt_listener_initiate_authentication_finish";  
+    return ListenerAdapter::instance()->polkit_qt_listener_initiate_authentication_finish(listener,
                                                                                           res,
-										          error);									                 */
+                                                                                          error);
 }
 

@@ -79,12 +79,14 @@ install(FILES ${CMAKE_CURRENT_BINARY_DIR}/polkit-qt-gui-1.pc DESTINATION ${LIB_I
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/polkit-qt-agent-1.pc.cmake ${CMAKE_CURRENT_BINARY_DIR}/polkit-qt-agent-1.pc @ONLY)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/polkit-qt-agent-1.pc DESTINATION ${LIB_INSTALL_DIR}/pkgconfig )
 
+option(BUILD_EXAMPLES "Builds a set of examples for polkit-qt-1" OFF)
 if (BUILD_EXAMPLES)
     add_subdirectory(examples)
 endif (BUILD_EXAMPLES)
 
 add_subdirectory(cmake)
 
+option(BUILD_TEST "Builds unit tests for polkit-qt-1" OFF)
 if (BUILD_TEST)
     add_subdirectory(test)
 endif (BUILD_TEST)

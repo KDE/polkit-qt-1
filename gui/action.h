@@ -182,7 +182,7 @@ public:
     /**
      * Sets whether the current action is visible or not. This will
      * be applied only in the states specified in the \c states parameter.
-     * \param text the new text for the action
+     * \param visible visibility of the action
      * \param states the states of the Polkit action on which the setting
      *               will be applied
      */
@@ -191,7 +191,7 @@ public:
     /**
     * Sets whether the current action is enabled or not. This will
     * be shown only in the states specified in the \c states parameter.
-    * \param text the new text for the action
+    * \param enabled whether the Action will be enabled or not
     * \param states the states of the Polkit action on which the setting
     *               will be applied
     */

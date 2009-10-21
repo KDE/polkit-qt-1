@@ -66,7 +66,7 @@ public:
     /**
      * Creates the Subject object from string reprezentation
      *
-     * \param String reprezentation of the object
+     * \param string string reprezentation of the object
      *
      * \return Pointer to new Subject instance
      */
@@ -129,7 +129,7 @@ public:
      *
      * \warning Use this only if you are completely aware of what are you doing!
      *
-     * \param pkUnixProcess PolkitUnixProcess object
+     * \param process PolkitUnixProcess object
      */
     explicit UnixProcessSubject(PolkitUnixProcess *process);
     

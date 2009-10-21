@@ -56,6 +56,7 @@ public:
      * \warning It shouldn't be used directly unless you are completely aware of what are you doing
      *
      * \param pkTemporaryAuthorization PolkitTemporaryAuthorization object
+     * \param parent
      */
     explicit TemporaryAuthorization(PolkitTemporaryAuthorization *pkTemporaryAuthorization, QObject *parent = 0);
 

@@ -49,6 +49,7 @@ class POLKIT_QT_EXPORT Details : public QObject
 public:
     /**
      * Creates a new Details object
+     * \param parent
      */
     Details(QObject *parent = 0);
 
@@ -58,6 +59,7 @@ public:
      * \warning Use this only if you are completely aware of what are you doing!
      *
      * \param pkDetails PolkitDetails object
+     * \param parent
      */
     explicit Details(PolkitDetails *pkDetails, QObject *parent = 0);
 

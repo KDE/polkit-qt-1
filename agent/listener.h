@@ -77,6 +77,7 @@ public:
      * \warning Use this only if you are completely aware of what are you doing!
      *
      * \param listener Pointer to the PolkitAgentListener
+     * \param parent
      */
     explicit Listener(PolkitAgentListener *listener, QObject *parent = 0);
 

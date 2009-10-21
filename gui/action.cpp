@@ -413,7 +413,7 @@ QIcon Action::icon(Action::State state) const
     }
 }
 
-void Action::setEnabled(bool enabled, Action::States states)
+void Action::setEnabled(bool enabled, States states)
 {
     if (states & All) {
         d->selfBlockedEnabled = enabled;
@@ -451,7 +451,7 @@ bool Action::isEnabled(Action::State state) const
     }
 }
 
-void Action::setVisible(bool visible, Action::States states)
+void Action::setVisible(bool visible, States states)
 {
     if (states & All) {
         d->selfBlockedVisible = visible;

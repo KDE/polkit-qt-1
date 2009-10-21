@@ -75,7 +75,7 @@ public:
     /**
      * Creates the Identity object from string representation
      *
-     * \param String representation of the object
+     * \param string string representation of the object
      *
      * \return Pointer to new Identity instance
      */

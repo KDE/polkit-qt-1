@@ -73,6 +73,8 @@ public:
      *
      * \param identity The identity to authenticate
      * \param cookie The cookie obtained from the PolicyKit daemon
+     * \param result Result of the authentication action. Must be finished using complete() method.
+     * \param parent
      */
     Session(PolkitQt::Identity *identity, const QString &cookie, AsyncResult *result = 0, QObject *parent = 0);
 
@@ -82,6 +84,7 @@ public:
      * \warning Use this only if you are completely aware of what are you doing!
      *
      * \param pkAgentSession PolkitAgentSession object
+     * \param parent
      */
     explicit Session(PolkitAgentSession *pkAgentSession, QObject *parent = 0);
 

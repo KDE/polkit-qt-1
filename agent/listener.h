@@ -111,7 +111,7 @@ public Q_SLOTS:
      * \brief Initiate authentication for the action
      *
      * This method will be called on a registered authentication agent when the user owning
-     * the session needs to prove he is one of the identities listed int \p identities.
+     * the session needs to prove he is one of the identities listed in \p identities.
      *
      * \note You have to reimplement this method in the subclass.
      *
@@ -121,9 +121,9 @@ public Q_SLOTS:
      * \param details Details describing the action
      * \param cookie The cookie for the authentization request
      * \param identities A list of Identity object that the user can choose to authenticate as
-     * \param result This AsyncResult must be completed by using complete() method when the
-     *        authentication is done. You can use Session class that will handle that automatically
-     *        when you pass the result to its constructor.
+     * \param result This AsyncResult MUST be completed by using complete() method when the
+     *        authentication is done. You can pass it to the constructor of the Session class
+     *        and then call session->result()->complete() to mark the action as done.
      */
     virtual void initiateAuthentication(const QString &actionId,
                                         const QString &message,
@@ -152,14 +152,6 @@ public Q_SLOTS:
      * \see initiateAuthentication
      */
     virtual void cancelAuthentication() = 0;
-
-Q_SIGNALS:
-    /**
-     * \brief Emit this signal in the subclass when authentication finishes.
-     *
-     * If you use the Session class, handler of its completed signal is the right place.
-     */
-    void finished();
 
 private:
     ListenerPrivate * const d;

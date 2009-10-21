@@ -87,9 +87,9 @@ void KListener::request(const QString &request, bool echo)
 void KListener::completed(bool gainedAuthorization)
 {
     qDebug() << "Completed: " << gainedAuthorization;
-    emit finished();
-
     Session *session = (Session *)sender();
+
+    session->result()->complete();
     
     delete session;
 }

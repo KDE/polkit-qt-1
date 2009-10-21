@@ -110,6 +110,13 @@ public:
      */
     void cancel();
 
+    /**
+     * Get AsyncResult that can be used to finish authentication operation
+     *
+     * \return AsyncResult object or NULL if it is not set
+     */
+    AsyncResult *result();
+
 Q_SIGNALS:
     /**
      * This signal will be emitted when the authentication

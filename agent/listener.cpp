@@ -62,6 +62,7 @@ Listener::~Listener()
     qDebug("Destroying listener");
     
     ListenerAdapter::instance()->removeListener(this);
+    g_object_unref(d->listener);
 }
 
 bool Listener::registerListener(PolkitQt::Subject *subject, const QString &objectPath)

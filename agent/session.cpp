@@ -92,12 +92,15 @@ void Session::cancel()
     polkit_agent_session_cancel(d->polkitAgentSession);
 }
 
+AsyncResult *Session::result()
+{
+    return d->result;
+}
+
 void Session::Private::completed(PolkitAgentSession *s, gboolean gained_authorization, gpointer user_data)
 {
     qDebug() << "COMPLETED";
     Session *session = (Session *)user_data;
-    if (session->d->result != 0)
-        session->d->result->complete();
     emit ((Session *)user_data)->completed(gained_authorization);
 }
 

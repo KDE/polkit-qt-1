@@ -48,8 +48,18 @@ public:
     explicit AsyncResult(GSimpleAsyncResult *result);
     virtual ~AsyncResult();
 
+    /**
+     * \brief Mark the action that is tied to this result as completed.
+     */
     void complete();
-    void setError(int code, QString text);
+
+    /**
+     * \brief Sets an error for the asynchronous result.
+     * Method complete() must be called anyway.
+     *
+     * \param text text of the error message
+     */
+    void setError(const QString &text);
 
 private:
     class Private;

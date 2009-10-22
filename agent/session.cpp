@@ -144,11 +144,15 @@ AsyncResult::~AsyncResult()
 
 void AsyncResult::complete()
 {
+    if (d->result == NULL)
+        return;
     g_simple_async_result_complete(d->result);
+    // Assure that completed won't be called twice
+    g_object_unref(d->result);
+    d->result = NULL;
 }
 
-void AsyncResult::setError(int code, QString text)
+void AsyncResult::setError(const QString &text)
 {
-    g_simple_async_result_set_error(d->result, G_IO_ERROR, code, text.toUtf8().data());
+    g_simple_async_result_set_error(d->result, POLKIT_ERROR, POLKIT_ERROR_FAILED, text.toUtf8().data());
 }
-

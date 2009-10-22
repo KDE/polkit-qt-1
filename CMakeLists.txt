@@ -54,6 +54,7 @@ install(FILES
     includes/PolkitQt/Identity
     includes/PolkitQt/Subject
     includes/PolkitQt/TemporaryAuthorization
+    includes/PolkitQt/ActionDescription
     DESTINATION
     ${INCLUDE_INSTALL_DIR}/polkit-qt-1/PolkitQt COMPONENT Devel)
 

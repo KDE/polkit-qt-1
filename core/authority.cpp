@@ -61,14 +61,14 @@ Authority::Result polkitResultToResult(PolkitAuthorizationResult *result)
         return Authority::No;
 }
 
-QStringList actionsToStringListAndFree(GList *glist)
+ActionDescriptionList actionsToListAndFree(GList *glist)
 {
-    QStringList result;
+    ActionDescriptionList result;
     GList * glist2;
     for (glist2 = glist; glist2; glist2 = g_list_next(glist2))
     {
         gpointer i = glist2->data;
-        result.append(QString::fromUtf8(polkit_action_description_get_action_id((PolkitActionDescription*)i)));
+        result.append(new ActionDescription(static_cast<PolkitActionDescription*>(i)));
         g_object_unref(i);
     }
 
@@ -371,10 +371,10 @@ void Authority::checkAuthorizationCancel()
         g_cancellable_cancel(d->m_checkAuthorizationCancellable);
 }
 
-QStringList Authority::enumerateActionsSync()
+ActionDescriptionList Authority::enumerateActionsSync()
 {
     if (Authority::instance()->hasError())
-        return QStringList();
+        return ActionDescriptionList();
 
     GError *error = NULL;
 
@@ -386,10 +386,10 @@ QStringList Authority::enumerateActionsSync()
     {
         d->setError(tr("Enumerating actions failed with message: %1").arg(error->message));
         g_error_free(error);
-        return QStringList();
+        return ActionDescriptionList();
     }
 
-    return actionsToStringListAndFree(glist);
+    return actionsToListAndFree(glist);
 }
 
 void Authority::enumerateActions()
@@ -418,7 +418,7 @@ void Authority::Private::enumerateActionsCallback(GObject *object, GAsyncResult 
         return;
     }
 
-    emit authority->enumerateActionsFinished(actionsToStringListAndFree(list));
+    emit authority->enumerateActionsFinished(actionsToListAndFree(list));
 }
 
 void Authority::enumerateActionsCancel()

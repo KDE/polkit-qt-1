@@ -9,6 +9,7 @@ set(polkit_qt_core_SRCS
     subject.cpp
     temporaryauthorization.cpp
     details.cpp
+    actiondescription.cpp
 )
 
 automoc4_add_library(polkit-qt-core-1 SHARED ${polkit_qt_core_SRCS})

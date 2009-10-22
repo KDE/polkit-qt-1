@@ -28,6 +28,7 @@
 #include "identity.h"
 #include "subject.h"
 #include "temporaryauthorization.h"
+#include "actiondescription.h"
 
 #include <QtCore/QObject>
 #include <QtCore/QMetaType>
@@ -210,7 +211,7 @@ public:
       *
       * \return a list of Action IDs
       */
-    QStringList enumerateActionsSync();
+    ActionDescriptionList enumerateActionsSync();
 
     /**
      * This method can be used to cancel enumeration of actions
@@ -434,7 +435,7 @@ Q_SIGNALS:
      *
      * The argument is the list of all Action IDs.
      */
-    void enumerateActionsFinished(const QStringList &);
+    void enumerateActionsFinished(ActionDescriptionList);
 
     /**
      * This signal is emitted when asynchronous method registerAuthenticationAgent finishes.

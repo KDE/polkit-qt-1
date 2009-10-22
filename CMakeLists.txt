@@ -44,6 +44,7 @@ install(FILES
     core/identity.h
     core/subject.h
     core/temporaryauthorization.h
+    core/actiondescription.h
     export.h
 
     includes/PolkitQt/Action

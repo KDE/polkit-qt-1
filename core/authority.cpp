@@ -140,6 +140,7 @@ Authority::Authority(PolkitAuthority *authority, QObject *parent)
         , d(new Private(this))
 {
     qRegisterMetaType<PolkitQt::Authority::Result> ();
+    qRegisterMetaType<PolkitQt::ActionDescriptionList>("ActionDescriptionList");
 
     Q_ASSERT(!s_globalAuthority()->q);
     s_globalAuthority()->q = this;

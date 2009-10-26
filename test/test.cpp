@@ -73,23 +73,35 @@ void TestAuth::test_Auth_checkAuthorization()
 void TestAuth::test_Auth_enumerateActions()
 {
     // This needs the file org.qt.policykit.examples.policy from examples to be installed
-    QStringList list = Authority::instance()->enumerateActionsSync();
+    ActionDescriptionList list = Authority::instance()->enumerateActionsSync();
     QVERIFY(!Authority::instance()->hasError());
     // Check whether enumerateAction returns at least example actions
-    QVERIFY(list.contains("org.qt.policykit.examples.kick"));
-    QVERIFY(list.contains("org.qt.policykit.examples.cry"));
-    QVERIFY(list.contains("org.qt.policykit.examples.bleed"));
+    int count = 0;
+    foreach (ActionDescription *ad, list)
+    {
+        if ((ad->actionId() == "org.qt.policykit.examples.kick") ||
+            (ad->actionId() == "org.qt.policykit.examples.cry") ||
+            (ad->actionId() == "org.qt.policykit.examples.bleed"))
+            count++;
+    }
+    QCOMPARE(count, 3);
+
 
     // Test asynchronous version as well
-    QSignalSpy spy(Authority::instance(), SIGNAL(enumerateActionsFinished(QStringList)));
+    QSignalSpy spy(Authority::instance(), SIGNAL(enumerateActionsFinished(ActionDescriptionList)));
     Authority::instance()->enumerateActions();
     wait();
     QCOMPARE(spy.count(), 1);
-    list = qVariantValue<QStringList> (spy.takeFirst()[0]);
+    list = qVariantValue<ActionDescriptionList> (spy.takeFirst()[0]);
     QVERIFY(!Authority::instance()->hasError());
-    QVERIFY(list.contains("org.qt.policykit.examples.kick"));
-    QVERIFY(list.contains("org.qt.policykit.examples.cry"));
-    QVERIFY(list.contains("org.qt.policykit.examples.bleed"));
+    foreach (ActionDescription *ad, list)
+    {
+        if ((ad->actionId() == "org.qt.policykit.examples.kick") ||
+            (ad->actionId() == "org.qt.policykit.examples.cry") ||
+            (ad->actionId() == "org.qt.policykit.examples.bleed"))
+            count++;
+    }
+    QCOMPARE(count, 3);
 
     // Test cancelling the enumeration
     spy.clear();

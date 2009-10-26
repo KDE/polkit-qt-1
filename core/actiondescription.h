@@ -24,6 +24,7 @@
 #include "export.h"
 
 #include <QtCore/QList>
+#include <QtCore/QMetaType>
 
 typedef struct _PolkitActionDescription PolkitActionDescription;
 
@@ -76,5 +77,7 @@ private:
     Private * const d;
 };
 }
+
+Q_DECLARE_METATYPE(PolkitQt::ActionDescriptionList);
 
 #endif //POLKIT_QT_ACTION_DESCRIPTION_H

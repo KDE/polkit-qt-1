@@ -59,18 +59,77 @@ public:
 	Authorized = 5
     };
     
+    /**
+     * \brief Constructor of ActionDescription object from PolkitActionDescription
+     *
+     * \warning Use this only if you are completely aware of what are you doing!
+     *
+     * \param actionDesciption PolkitActionDescription
+     */
     ActionDescription(PolkitActionDescription *actionDescription);    
     ~ActionDescription();
     
+    /**
+     * \brief Gets the action id for ActionDescription
+     *
+     * \return id of the action
+     */
     QString actionId() const;
+
+    /**
+     * \brief Gets the description used of ActionDescription
+     *
+     * \return description of the action
+     */
     QString description() const;
+
+    /**
+     * \brief Gets the message user for ActionDescription
+     *
+     * \return action message
+     */
     QString message() const;
+
+    /**
+     * \brief Gets the vendor name for ActionDescription, if any
+     *
+     * \return vendor name
+     */
     QString vendorName() const;
+
+    /**
+     * \brief Gets the vendor URL for ActionDescription, if any
+     *
+     * \return vendor URL or empty QString if there is no vendor URL
+     */
     QString vendorUrl() const;
+
+    /**
+     * \brief Gets the icon name for ActionDescription, if any
+     *
+     * \return icon name or empty QString if there is no icon
+     */
     QString iconName() const;
     
+    /**
+     * \brief Gets the implicit authorization for ActionDescription used for any subject
+     *
+     * \return A value from ImplicitAuthorization enumeration
+     */
     ActionDescription::ImplicitAuthorization implicitAny() const;
+
+    /**
+     * \brief Gets the implicit authorization for ActionDescription used for subjects in inactive session on a local console
+     *
+     * \return A value from ImplicitAuthorization enumeration
+     */
     ActionDescription::ImplicitAuthorization implicitInactive() const;
+
+    /**
+     * \brief Gets the implicit authorization for ActionDescription used for subjects in active session on a local console
+     *
+     * \return A value from ImplicitAuthorization enumeration
+     */
     ActionDescription::ImplicitAuthorization implicitActive() const;
 private:
     class Private;

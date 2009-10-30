@@ -16,6 +16,8 @@ cmake/modules/InstallSettings.cmake
 cmake/modules/MacroPushRequiredVars.cmake
 
 core/CMakeLists.txt
+core/actiondescription.cpp
+core/actiondescription.h
 core/authority.cpp
 core/authority.h
 core/details.cpp

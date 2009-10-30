@@ -65,6 +65,7 @@ ActionDescription::ActionDescription(PolkitActionDescription *polkitActionDescri
 
 ActionDescription::~ActionDescription()
 {
+    delete d;
 }
 
 QString ActionDescription::actionId() const

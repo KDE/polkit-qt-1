@@ -40,7 +40,7 @@ Identity::Identity()
     g_type_init();
 }
 
-Identity::Identity(PolkitIdentity * polkitIdentity)
+Identity::Identity(PolkitIdentity *polkitIdentity)
         : d(new Private(polkitIdentity))
 {
     g_type_init();
@@ -51,12 +51,12 @@ Identity::~Identity()
     g_object_unref(d->identity);
 }
 
-PolkitIdentity * Identity::identity() const
+PolkitIdentity *Identity::identity() const
 {
     return d->identity;
 }
 
-void Identity::setIdentity(PolkitIdentity* identity)
+void Identity::setIdentity(PolkitIdentity *identity)
 {
     d->identity = identity;
 }
@@ -67,7 +67,7 @@ QString Identity::toString() const
     return QString::fromUtf8(polkit_identity_to_string(d->identity));
 }
 
-Identity * Identity::fromString(const QString & string)
+Identity *Identity::fromString(const QString &string)
 {
     GError *error = NULL;
     PolkitIdentity *pkIdentity = polkit_identity_from_string(string.toUtf8().data(), &error);
@@ -79,7 +79,7 @@ Identity * Identity::fromString(const QString & string)
     return new Identity(pkIdentity);
 }
 
-UnixUserIdentity::UnixUserIdentity(const QString & name)
+UnixUserIdentity::UnixUserIdentity(const QString &name)
         : Identity()
 {
     GError *error = NULL;
@@ -113,7 +113,7 @@ void UnixUserIdentity::setUid(uid_t uid)
     polkit_unix_user_set_uid((PolkitUnixUser *) identity(), uid);
 }
 
-UnixGroupIdentity::UnixGroupIdentity(const QString & name)
+UnixGroupIdentity::UnixGroupIdentity(const QString &name)
         : Identity()
 {
     GError *error = NULL;

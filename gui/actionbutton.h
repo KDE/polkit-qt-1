@@ -113,7 +113,7 @@ public Q_SLOTS:
 Q_SIGNALS:
     /**
      * Emitted when the abstract button clicked(bool) signal
-     * is emitted. This allows you to use qobject_cast<ActionButton*>(sender())
+     * is emitted. This allows you to use qobject_cast<ActionButton *>(sender())
      * in a slot connected to this signal and call activate() on it.
      *
      * \note you will normally want to connect this signal
@@ -128,7 +128,7 @@ Q_SIGNALS:
 protected:
     ActionButton(ActionButtonPrivate &dd, const QString &actionId, QObject *parent = 0);
 
-    ActionButtonPrivate * d_ptr;
+    ActionButtonPrivate *d_ptr;
 
 private:
     Q_PRIVATE_SLOT(d_func(), void updateButton())

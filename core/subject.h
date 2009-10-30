@@ -70,7 +70,7 @@ public:
      *
      * \return Pointer to new Subject instance
      */
-    static Subject * fromString(const QString & string);
+    static Subject *fromString(const QString &string);
 
     /**
      * Gets PolkitSubject object.
@@ -79,11 +79,11 @@ public:
      *
      * \return Pointer to PolkitSubject instance
      */
-    PolkitSubject * subject() const;
+    PolkitSubject *subject() const;
 
 protected:
     Subject();
-    Subject(PolkitSubject* subject);
+    Subject(PolkitSubject *subject);
 
     void setSubject(PolkitSubject *subject);
 
@@ -180,7 +180,7 @@ public:
      *
      * \param pkSystemBusName PolkitSystemBusName object
      */
-    explicit SystemBusNameSubject(PolkitSystemBusName* pkSystemBusName);
+    explicit SystemBusNameSubject(PolkitSystemBusName *pkSystemBusName);
 
     /**
     * Returns system bus name.

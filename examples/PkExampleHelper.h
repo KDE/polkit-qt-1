@@ -23,7 +23,7 @@
 #define PKEXAMPLE_HELPER_H
 
 #include <QtDBus/QDBusContext>
-#include <QCoreApplication>
+#include <QtCore/QCoreApplication>
 
 class PkExampleHelper : public QCoreApplication, protected QDBusContext
 {

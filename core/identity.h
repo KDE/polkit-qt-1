@@ -62,7 +62,7 @@ public:
      *
      * \param polkitIdentity PolkitIdentity object
      */
-    explicit Identity(PolkitIdentity * polkitIdentity);
+    explicit Identity(PolkitIdentity *polkitIdentity);
     ~Identity();
 
     /**
@@ -79,7 +79,7 @@ public:
      *
      * \return Pointer to new Identity instance
      */
-    static Identity * fromString(const QString & string);
+    static Identity *fromString(const QString &string);
 
     /**
      * Gets PolkitIdentity object.
@@ -88,7 +88,7 @@ public:
      *
      * \return Pointer to PolkitIdentity instance
      */
-    PolkitIdentity * identity() const;
+    PolkitIdentity *identity() const;
 protected:
     Identity();
 
@@ -122,7 +122,7 @@ public:
      *
      * \param name Unix name
      */
-    explicit UnixUserIdentity(const QString & name);
+    explicit UnixUserIdentity(const QString &name);
 
     /**
      * Creates UnixUser object from PolkitUnixUser object
@@ -171,7 +171,7 @@ public:
      *
      * \param name group name
      */
-    explicit UnixGroupIdentity(const QString & name);
+    explicit UnixGroupIdentity(const QString &name);
 
     /**
      * Creates UnixGroup object from PolkitUnixGroup object

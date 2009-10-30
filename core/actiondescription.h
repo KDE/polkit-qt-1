@@ -31,7 +31,7 @@ typedef struct _PolkitActionDescription PolkitActionDescription;
 namespace PolkitQt
 {
 class ActionDescription;
-typedef QList<ActionDescription*> ActionDescriptionList;
+typedef QList<ActionDescription *> ActionDescriptionList;
 
 /**
  * \class ActionDescription actiondescription.h ActionDescription
@@ -43,20 +43,20 @@ class POLKIT_QT_EXPORT ActionDescription
 {
 public:
     enum ImplicitAuthorization {
-	/** Unknown whether the subject is authorized, never returned in any public API. **/
-	Unknown = -1,
-	/** Subject is not authorized. **/
-	NotAuthorized = 0,
-	/** Authentication is required. **/
-	AuthenticationRequired = 1,
-	/** Authentication as an administrator is required. **/
-	AdministratorAuthenticationRequired = 2,
-	/** Authentication is required. If the authorization is obtained, it is retained. **/
-	AuthenticationRequiredRetained = 3,
-	/** Authentication as an administrator is required. If the authorization is obtained, it is retained. **/ 
-	AdministratorAuthenticationRequiredRetained = 4,
-	/** The subject is authorized. **/
-	Authorized = 5
+        /** Unknown whether the subject is authorized, never returned in any public API. **/
+        Unknown = -1,
+        /** Subject is not authorized. **/
+        NotAuthorized = 0,
+        /** Authentication is required. **/
+        AuthenticationRequired = 1,
+        /** Authentication as an administrator is required. **/
+        AdministratorAuthenticationRequired = 2,
+        /** Authentication is required. If the authorization is obtained, it is retained. **/
+        AuthenticationRequiredRetained = 3,
+        /** Authentication as an administrator is required. If the authorization is obtained, it is retained. **/
+        AdministratorAuthenticationRequiredRetained = 4,
+        /** The subject is authorized. **/
+        Authorized = 5
     };
     
     /**

@@ -27,7 +27,7 @@ using namespace PolkitQt;
 
 ActionButton::ActionButton(QAbstractButton *button, const QString &actionId, QObject *parent)
         : Action(actionId, parent)
-        , d_ptr(new ActionButtonPrivate(QList<QAbstractButton*>() << button))
+        , d_ptr(new ActionButtonPrivate(QList<QAbstractButton *>() << button))
 {
     d_ptr->q_ptr = this;
 
@@ -152,7 +152,7 @@ void ActionButtonPrivate::streamClicked(bool c)
 {
     Q_Q(ActionButton);
 
-    emit q->clicked(qobject_cast<QAbstractButton*>(q->sender()), c);
+    emit q->clicked(qobject_cast<QAbstractButton *>(q->sender()), c);
 }
 
 #include "moc_actionbutton.cpp"

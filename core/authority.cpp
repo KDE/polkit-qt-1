@@ -64,11 +64,11 @@ Authority::Result polkitResultToResult(PolkitAuthorizationResult *result)
 ActionDescriptionList actionsToListAndFree(GList *glist)
 {
     ActionDescriptionList result;
-    GList * glist2;
+    GList *glist2;
     for (glist2 = glist; glist2; glist2 = g_list_next(glist2))
     {
         gpointer i = glist2->data;
-        result.append(new ActionDescription(static_cast<PolkitActionDescription*>(i)));
+        result.append(new ActionDescription(static_cast<PolkitActionDescription *>(i)));
         g_object_unref(i);
     }
 
@@ -379,7 +379,7 @@ ActionDescriptionList Authority::enumerateActionsSync()
 
     GError *error = NULL;
 
-    GList * glist = polkit_authority_enumerate_actions_sync(d->pkAuthority,
+    GList *glist = polkit_authority_enumerate_actions_sync(d->pkAuthority,
                                                             NULL,
                                                             &error);
 
@@ -571,7 +571,7 @@ void Authority::unregisterAuthenticationAgentCancel()
         g_cancellable_cancel(d->m_unregisterAuthenticationAgentCancellable);
 }
 
-bool Authority::authenticationAgentResponseSync(const QString & cookie, Identity * identity)
+bool Authority::authenticationAgentResponseSync(const QString &cookie, Identity *identity)
 {
     if (Authority::instance()->hasError())
         return false;
@@ -599,7 +599,7 @@ bool Authority::authenticationAgentResponseSync(const QString & cookie, Identity
     return result;
 }
 
-void Authority::authenticationAgentResponse(const QString & cookie, Identity * identity)
+void Authority::authenticationAgentResponse(const QString &cookie, Identity *identity)
 {
     if (Authority::instance()->hasError())
         return;

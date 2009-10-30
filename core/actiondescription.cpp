@@ -56,11 +56,11 @@ ActionDescription::ActionDescription(PolkitActionDescription *polkitActionDescri
     d->iconName = QString::fromUtf8(polkit_action_description_get_icon_name(polkitActionDescription));
     
     d->implicitAny = static_cast<ActionDescription::ImplicitAuthorization>(polkit_action_description_get_implicit_any(
-	polkitActionDescription));
+        polkitActionDescription));
     d->implicitInactive = static_cast<ActionDescription::ImplicitAuthorization>(polkit_action_description_get_implicit_inactive(
-	polkitActionDescription));
+        polkitActionDescription));
     d->implicitActive = static_cast<ActionDescription::ImplicitAuthorization>(polkit_action_description_get_implicit_active(
-	polkitActionDescription)); 
+        polkitActionDescription));
 }
 
 ActionDescription::~ActionDescription()

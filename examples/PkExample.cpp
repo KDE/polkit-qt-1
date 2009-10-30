@@ -50,15 +50,15 @@ PkExample::PkExample(QMainWindow *parent)
     // when the button is enabled
     bt->setEnabled(true, Action::No);
     // As ActionButton is also an Action we cast it to add to menu
-    menuActions->addAction(qobject_cast<Action*>(bt));
-    toolBar->addAction(qobject_cast<Action*>(bt));
+    menuActions->addAction(qobject_cast<Action *>(bt));
+    toolBar->addAction(qobject_cast<Action *>(bt));
     // this signal is emitted when the user click on the action,
     // it will only happen if it was inserted in a QMenu or a QToolBar
     connect(bt, SIGNAL(triggered(bool)), this, SLOT(activateAction()));
     // This signal was propagated from the QAbstractButton just for
     // convenience in this case we don't have any benefit but the code
     // look cleaner
-    connect(bt, SIGNAL(clicked(QAbstractButton*, bool)), bt, SLOT(activate()));
+    connect(bt, SIGNAL(clicked(QAbstractButton *, bool)), bt, SLOT(activate()));
     // this is the Action activated signal, it is always emmited whenever
     // someone click and get authorized to do the action
     connect(bt, SIGNAL(activated()), this, SLOT(actionActivated()));
@@ -66,19 +66,19 @@ PkExample::PkExample(QMainWindow *parent)
     bt = new ActionButton(cryPB, "org.qt.policykit.examples.cry", this);
     bt->setText("Cry!");
     bt->setIcon(QPixmap(":/Icons/custom-yes.png"));
-    menuActions->addAction(qobject_cast<Action*>(bt));
-    toolBar->addAction(qobject_cast<Action*>(bt));
+    menuActions->addAction(qobject_cast<Action *>(bt));
+    toolBar->addAction(qobject_cast<Action *>(bt));
     connect(bt, SIGNAL(triggered(bool)), this, SLOT(activateAction()));
-    connect(bt, SIGNAL(clicked(QAbstractButton*, bool)), bt, SLOT(activate()));
+    connect(bt, SIGNAL(clicked(QAbstractButton *, bool)), bt, SLOT(activate()));
     connect(bt, SIGNAL(activated()), this, SLOT(actionActivated()));
 
     bt = new ActionButton(bleedPB, "org.qt.policykit.examples.bleed", this);
     bt->setText("Bleed!");
     bt->setIcon(QPixmap(":/Icons/action-locked-default.png"));
-    menuActions->addAction(qobject_cast<Action*>(bt));
-    toolBar->addAction(qobject_cast<Action*>(bt));
+    menuActions->addAction(qobject_cast<Action *>(bt));
+    toolBar->addAction(qobject_cast<Action *>(bt));
     connect(bt, SIGNAL(triggered(bool)), this, SLOT(activateAction()));
-    connect(bt, SIGNAL(clicked(QAbstractButton*, bool)), bt, SLOT(activate()));
+    connect(bt, SIGNAL(clicked(QAbstractButton *, bool)), bt, SLOT(activate()));
     connect(bt, SIGNAL(activated()), this, SLOT(actionActivated()));
 
     // This action is more customized
@@ -99,10 +99,10 @@ PkExample::PkExample(QMainWindow *parent)
     bt->setIcon(QPixmap(":/Icons/custom-yes.png"), Action::Yes);
     bt->setToolTip("Go ahead, play!", Action::Yes);
 
-    menuActions->addAction(qobject_cast<Action*>(bt));
-    toolBar->addAction(qobject_cast<Action*>(bt));
+    menuActions->addAction(qobject_cast<Action *>(bt));
+    toolBar->addAction(qobject_cast<Action *>(bt));
     connect(bt, SIGNAL(triggered(bool)), this, SLOT(activateAction()));
-    connect(bt, SIGNAL(clicked(QAbstractButton*, bool)), bt, SLOT(activate()));
+    connect(bt, SIGNAL(clicked(QAbstractButton *, bool)), bt, SLOT(activate()));
     connect(bt, SIGNAL(activated()), this, SLOT(actionActivated()));
 
     bt = new ActionButton(deletePB, "org.qt.policykit.examples.delete", this);
@@ -110,10 +110,10 @@ PkExample::PkExample(QMainWindow *parent)
     bt->setIcon(QPixmap(":/Icons/custom-no.png"), Action::No);
     bt->setIcon(QPixmap(":/Icons/action-locked-default.png"), Action::Auth);
     bt->setIcon(QPixmap(":/Icons/custom-yes.png"), Action::Yes);
-    menuActions->addAction(qobject_cast<Action*>(bt));
-    toolBar->addAction(qobject_cast<Action*>(bt));
+    menuActions->addAction(qobject_cast<Action *>(bt));
+    toolBar->addAction(qobject_cast<Action *>(bt));
     connect(bt, SIGNAL(triggered(bool)), this, SLOT(activateAction()));
-    connect(bt, SIGNAL(clicked(QAbstractButton*, bool)), bt, SLOT(activate()));
+    connect(bt, SIGNAL(clicked(QAbstractButton *, bool)), bt, SLOT(activate()));
     connect(bt, SIGNAL(activated()), this, SLOT(actionActivated()));
 
     bt = new ActionButton(listenPB, "org.qt.policykit.examples.listen", this);
@@ -121,10 +121,10 @@ PkExample::PkExample(QMainWindow *parent)
     bt->setIcon(QPixmap(":/Icons/custom-no.png"), Action::No);
     bt->setIcon(QPixmap(":/Icons/action-locked-default.png"), Action::Auth);
     bt->setIcon(QPixmap(":/Icons/custom-yes.png"), Action::Yes);
-    menuActions->addAction(qobject_cast<Action*>(bt));
-    toolBar->addAction(qobject_cast<Action*>(bt));
+    menuActions->addAction(qobject_cast<Action *>(bt));
+    toolBar->addAction(qobject_cast<Action *>(bt));
     connect(bt, SIGNAL(triggered(bool)), this, SLOT(activateAction()));
-    connect(bt, SIGNAL(clicked(QAbstractButton*, bool)), bt, SLOT(activate()));
+    connect(bt, SIGNAL(clicked(QAbstractButton *, bool)), bt, SLOT(activate()));
     connect(bt, SIGNAL(activated()), this, SLOT(actionActivated()));
 
     bt = new ActionButton(setPB, "org.qt.policykit.examples.set", this);
@@ -132,10 +132,10 @@ PkExample::PkExample(QMainWindow *parent)
     bt->setIcon(QPixmap(":/Icons/custom-no.png"), Action::No);
     bt->setIcon(QPixmap(":/Icons/action-locked-default.png"), Action::Auth);
     bt->setIcon(QPixmap(":/Icons/custom-yes.png"), Action::Yes);
-    menuActions->addAction(qobject_cast<Action*>(bt));
-    toolBar->addAction(qobject_cast<Action*>(bt));
+    menuActions->addAction(qobject_cast<Action *>(bt));
+    toolBar->addAction(qobject_cast<Action *>(bt));
     connect(bt, SIGNAL(triggered(bool)), this, SLOT(activateAction()));
-    connect(bt, SIGNAL(clicked(QAbstractButton*, bool)), bt, SLOT(activate()));
+    connect(bt, SIGNAL(clicked(QAbstractButton *, bool)), bt, SLOT(activate()));
     connect(bt, SIGNAL(activated()), this, SLOT(actionActivated()));
 
     bt = new ActionButton(shoutPB, "org.qt.policykit.examples.shout", this);
@@ -145,10 +145,10 @@ PkExample::PkExample(QMainWindow *parent)
     bt->setText("Can't shout!", Action::No);
     bt->setText("Shout?", Action::Auth);
     bt->setText("Shout!", Action::Yes);
-    menuActions->addAction(qobject_cast<Action*>(bt));
-    toolBar->addAction(qobject_cast<Action*>(bt));
+    menuActions->addAction(qobject_cast<Action *>(bt));
+    toolBar->addAction(qobject_cast<Action *>(bt));
     connect(bt, SIGNAL(triggered(bool)), this, SLOT(activateAction()));
-    connect(bt, SIGNAL(clicked(QAbstractButton*, bool)), bt, SLOT(activate()));
+    connect(bt, SIGNAL(clicked(QAbstractButton *, bool)), bt, SLOT(activate()));
     connect(bt, SIGNAL(activated()), this, SLOT(actionActivated()));
 
     // test configChanged
@@ -167,7 +167,7 @@ void PkExample::activateAction()
     // not ActionButton::activate which are different.
     // You can cast then to ActionButton but be carefull
     // an Action casted to ActionButton may crash you app
-    Action *action = qobject_cast<Action*>(sender());
+    Action *action = qobject_cast<Action *>(sender());
     // calling activate with winId() makes the auth dialog
     // be correct parented with your application.
     action->activate();
@@ -178,7 +178,7 @@ void PkExample::actionActivated()
     // This slot is called whenever an action is allowed
     // here you will do your dirt job by calling a helper application
     // that might erase your hardrive ;)
-    Action *action = qobject_cast<Action*>(sender());
+    Action *action = qobject_cast<Action *>(sender());
 
     // this is our Special Action that after allowed will call the helper
     if (action->is("org.qt.policykit.examples.set")) {

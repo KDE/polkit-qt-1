@@ -25,9 +25,9 @@
 #include "authority.h"
 
 #include <QtDBus/QDBusConnection>
-#include <QTimer>
-#include <QDebug>
-#include <QtXml>
+#include <QtCore/QTimer>
+#include <QtCore/QDebug>
+#include <QtXml/QDomDocument>
 
 #define MINUTE 60000
 

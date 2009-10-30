@@ -127,12 +127,12 @@ public Q_SLOTS:
 
 public:
     /**
-      * Changes the action being tracked	 
+      * Changes the action being tracked
       *
-      * \param actionId The new action ID	 
+      * \param actionId The new action ID
       */
     void setPolkitAction(const QString &actionId);
-	
+
     /**
      * Returns the current action ID.
      *

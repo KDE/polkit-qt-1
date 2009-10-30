@@ -102,7 +102,7 @@ Action::Action(const QString &actionId, QObject *parent)
         : QAction(parent)
         , d(new Private(this))
 {
-    // this must be called AFTER the values initialization	 
+    // this must be called AFTER the values initialization
     setPolkitAction(actionId);
 
     // track the config changes to update the action
@@ -130,7 +130,7 @@ bool Action::activate()
     default:
     case Authority::No:
         if (d->noEnabled) {
-	    /* If PolicyKit says no... and we got here.. it means
+            /* If PolicyKit says no... and we got here.. it means
              * that the user set the property "no-enabled" to
              * TRUE..
              *
@@ -163,43 +163,43 @@ void Action::Private::updateAction()
     default:
     case Authority::Unknown:
     case Authority::No:
-        qobject_cast<QAction*>(parent)->setVisible(noVisible);
-        qobject_cast<QAction*>(parent)->setEnabled(noEnabled);
-        qobject_cast<QAction*>(parent)->setText(noText);
+        qobject_cast<QAction *>(parent)->setVisible(noVisible);
+        qobject_cast<QAction *>(parent)->setEnabled(noEnabled);
+        qobject_cast<QAction *>(parent)->setText(noText);
         if (!noWhatsThis.isNull()) {
-            qobject_cast<QAction*>(parent)->setWhatsThis(noWhatsThis);
+            qobject_cast<QAction *>(parent)->setWhatsThis(noWhatsThis);
         }
         if (!noToolTip.isNull()) {
-            qobject_cast<QAction*>(parent)->setToolTip(noToolTip);
+            qobject_cast<QAction *>(parent)->setToolTip(noToolTip);
         }
-        qobject_cast<QAction*>(parent)->setIcon(noIcon);
+        qobject_cast<QAction *>(parent)->setIcon(noIcon);
         break;
 
     case Authority::Challenge:
-        qobject_cast<QAction*>(parent)->setVisible(authVisible);
-        qobject_cast<QAction*>(parent)->setEnabled(authEnabled);
-        qobject_cast<QAction*>(parent)->setText(authText);
+        qobject_cast<QAction *>(parent)->setVisible(authVisible);
+        qobject_cast<QAction *>(parent)->setEnabled(authEnabled);
+        qobject_cast<QAction *>(parent)->setText(authText);
         if (!authWhatsThis.isNull()) {
-            qobject_cast<QAction*>(parent)->setWhatsThis(authWhatsThis);
+            qobject_cast<QAction *>(parent)->setWhatsThis(authWhatsThis);
         }
         if (!authToolTip.isNull()) {
-            qobject_cast<QAction*>(parent)->setToolTip(authToolTip);
+            qobject_cast<QAction *>(parent)->setToolTip(authToolTip);
         }
-        qobject_cast<QAction*>(parent)->setIcon(authIcon);
+        qobject_cast<QAction *>(parent)->setIcon(authIcon);
         break;
     case Authority::Yes:
-        qobject_cast<QAction*>(parent)->setVisible(yesVisible);
-        qobject_cast<QAction*>(parent)->setEnabled(yesEnabled);
-        qobject_cast<QAction*>(parent)->setText(yesText);
+        qobject_cast<QAction *>(parent)->setVisible(yesVisible);
+        qobject_cast<QAction *>(parent)->setEnabled(yesEnabled);
+        qobject_cast<QAction *>(parent)->setText(yesText);
         if (!yesWhatsThis.isNull()) {
-            qobject_cast<QAction*>(parent)->setWhatsThis(yesWhatsThis);
+            qobject_cast<QAction *>(parent)->setWhatsThis(yesWhatsThis);
         }
         if (!yesToolTip.isNull()) {
-            qobject_cast<QAction*>(parent)->setToolTip(yesToolTip);
+            qobject_cast<QAction *>(parent)->setToolTip(yesToolTip);
         }
-        qobject_cast<QAction*>(parent)->setIcon(yesIcon);
+        qobject_cast<QAction *>(parent)->setIcon(yesIcon);
         if (parent->isCheckable()) {
-            qobject_cast<QAction*>(parent)->setChecked(!initiallyChecked);
+            qobject_cast<QAction *>(parent)->setChecked(!initiallyChecked);
         }
         break;
     }
@@ -284,18 +284,18 @@ void Action::setText(const QString &text, States states)
 QString Action::text(Action::State state) const
 {
     switch (state) {
-        case Yes:
-            return d->yesText;
-        case No:
-            return d->noText;
-        case Auth:
-            return d->authText;
-        case SelfBlocked:
-            return d->selfBlockedText;
-        case None:
-            return QAction::text();
-        default:
-            return QString();
+    case Yes:
+        return d->yesText;
+    case No:
+        return d->noText;
+    case Auth:
+        return d->authText;
+    case SelfBlocked:
+        return d->selfBlockedText;
+    case None:
+        return QAction::text();
+    default:
+        return QString();
     }
 }
 
@@ -322,18 +322,18 @@ void Action::setToolTip(const QString &toolTip, States states)
 QString Action::toolTip(Action::State state) const
 {
     switch (state) {
-        case Yes:
-            return d->yesToolTip;
-        case No:
-            return d->noToolTip;
-        case Auth:
-            return d->authToolTip;
-        case SelfBlocked:
-            return d->selfBlockedToolTip;
-        case None:
-            return QAction::toolTip();
-        default:
-            return QString();
+    case Yes:
+        return d->yesToolTip;
+    case No:
+        return d->noToolTip;
+    case Auth:
+        return d->authToolTip;
+    case SelfBlocked:
+        return d->selfBlockedToolTip;
+    case None:
+        return QAction::toolTip();
+    default:
+        return QString();
     }
 }
 
@@ -360,18 +360,18 @@ void Action::setWhatsThis(const QString &whatsThis, States states)
 QString Action::whatsThis(Action::State state) const
 {
     switch (state) {
-        case Yes:
-            return d->yesWhatsThis;
-        case No:
-            return d->noWhatsThis;
-        case Auth:
-            return d->authWhatsThis;
-        case SelfBlocked:
-            return d->selfBlockedWhatsThis;
-        case None:
-            return QAction::whatsThis();
-        default:
-            return QString();
+    case Yes:
+        return d->yesWhatsThis;
+    case No:
+        return d->noWhatsThis;
+    case Auth:
+        return d->authWhatsThis;
+    case SelfBlocked:
+        return d->selfBlockedWhatsThis;
+    case None:
+        return QAction::whatsThis();
+    default:
+        return QString();
     }
 }
 
@@ -398,18 +398,18 @@ void Action::setIcon(const QIcon &icon, States states)
 QIcon Action::icon(Action::State state) const
 {
     switch (state) {
-        case Yes:
-            return d->yesIcon;
-        case No:
-            return d->noIcon;
-        case Auth:
-            return d->authIcon;
-        case SelfBlocked:
-            return d->selfBlockedIcon;
-        case None:
-            return QAction::icon();
-        default:
-            return QIcon();
+    case Yes:
+        return d->yesIcon;
+    case No:
+        return d->noIcon;
+    case Auth:
+        return d->authIcon;
+    case SelfBlocked:
+        return d->selfBlockedIcon;
+    case None:
+        return QAction::icon();
+    default:
+        return QIcon();
     }
 }
 
@@ -436,18 +436,18 @@ void Action::setEnabled(bool enabled, States states)
 bool Action::isEnabled(Action::State state) const
 {
     switch (state) {
-        case Yes:
-            return d->yesEnabled;
-        case No:
-            return d->noEnabled;
-        case Auth:
-            return d->authEnabled;
-        case SelfBlocked:
-            return d->selfBlockedEnabled;
-        case None:
-            return QAction::isEnabled();
-        default:
-            return false;
+    case Yes:
+        return d->yesEnabled;
+    case No:
+        return d->noEnabled;
+    case Auth:
+        return d->authEnabled;
+    case SelfBlocked:
+        return d->selfBlockedEnabled;
+    case None:
+        return QAction::isEnabled();
+    default:
+        return false;
     }
 }
 
@@ -474,27 +474,27 @@ void Action::setVisible(bool visible, States states)
 bool Action::isVisible(Action::State state) const
 {
     switch (state) {
-        case Yes:
-            return d->yesVisible;
-        case No:
-            return d->noVisible;
-        case Auth:
-            return d->authVisible;
-        case SelfBlocked:
-            return d->selfBlockedVisible;
-        case None:
-            return QAction::isVisible();
-        default:
-            return false;
+    case Yes:
+        return d->yesVisible;
+    case No:
+        return d->noVisible;
+    case Auth:
+        return d->authVisible;
+    case SelfBlocked:
+        return d->selfBlockedVisible;
+    case None:
+        return QAction::isVisible();
+    default:
+        return false;
     }
 }
 
-void Action::setPolkitAction(const QString &actionId)	 
+void Action::setPolkitAction(const QString &actionId)
 {
     //TODO:
     d->actionId = actionId; 
 
-    d->computePkResult();	 
+    d->computePkResult();
     d->updateAction();
 }
 

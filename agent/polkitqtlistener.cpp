@@ -24,7 +24,7 @@
 #include "polkitqtlistener.h"
 #include <stdio.h>
 
-#include <QDebug>
+#include <QtCore/QDebug>
 
 #define POLKIT_AGENT_I_KNOW_API_IS_SUBJECT_TO_CHANGE 1
 
@@ -92,7 +92,7 @@ static void polkit_qt_listener_class_init (PolkitQtListenerClass *klass)
     listener_class->initiate_authentication_finish   = polkit_qt_listener_initiate_authentication_finish;
 }
 
-PolkitAgentListener * polkit_qt_listener_new (void)
+PolkitAgentListener *polkit_qt_listener_new (void)
 {
     return POLKIT_AGENT_LISTENER (g_object_new (POLKIT_QT_TYPE_LISTENER, NULL));
 }

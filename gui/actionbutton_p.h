@@ -30,7 +30,7 @@
 class PolkitQt::ActionButtonPrivate
 {
 public:
-    ActionButtonPrivate(const QList<QAbstractButton*> &b)
+    ActionButtonPrivate(const QList<QAbstractButton *> &b)
             : buttons(b) {}
     virtual ~ActionButtonPrivate() {}
 
@@ -42,7 +42,7 @@ public:
     Q_DECLARE_PUBLIC(ActionButton)
     ActionButton *q_ptr;
 
-    QList<QAbstractButton*> buttons;
+    QList<QAbstractButton *> buttons;
 };
 
 #endif /* ACTIONBUTTON_P_H */

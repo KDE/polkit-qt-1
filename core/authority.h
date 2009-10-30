@@ -108,7 +108,7 @@ public:
      *
      * \return The current authority instance
      */
-    static Authority* instance(PolkitAuthority *authority = 0);
+    static Authority *instance(PolkitAuthority *authority = 0);
 
     ~Authority();
 
@@ -295,7 +295,7 @@ public:
      * \param cookie The cookie passed to the authentication agent from the authority.
      * \param identity The identity that was authenticated.
      */
-    void authenticationAgentResponse(const QString & cookie, Identity * identity);
+    void authenticationAgentResponse(const QString &cookie, Identity *identity);
 
      /**
       * Provide response that \p identity successfully authenticated for the authentication request identified by \p cookie.
@@ -308,7 +308,7 @@ public:
       * \return \c true if authority acknowledged the call, \c false if error is set.
       *
     */
-    bool authenticationAgentResponseSync(const QString & cookie, Identity * identity);
+    bool authenticationAgentResponseSync(const QString &cookie, Identity *identity);
 
     /**
      * This method can be used to cancel the authenticationAgentResponseAsync method.

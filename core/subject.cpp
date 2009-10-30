@@ -50,12 +50,12 @@ Subject::~Subject()
     g_object_unref(d->subject);
 }
 
-PolkitSubject * Subject::subject() const
+PolkitSubject *Subject::subject() const
 {
     return d->subject;
 }
 
-void Subject::setSubject(PolkitSubject* subject)
+void Subject::setSubject(PolkitSubject *subject)
 {
     d->subject = subject;
 }
@@ -66,7 +66,7 @@ QString Subject::toString() const
     return QString::fromUtf8(polkit_subject_to_string(d->subject));
 }
 
-Subject * Subject::fromString(const QString & string)
+Subject *Subject::fromString(const QString &string)
 {
    // should be in polkit library!!! but for strange reason it's neccessary to have it here
     g_type_init();
@@ -95,7 +95,7 @@ UnixProcessSubject::UnixProcessSubject(qint64 pid, quint64 startTime)
 }
 
 UnixProcessSubject::UnixProcessSubject(PolkitUnixProcess *pkUnixProcess)
-        : Subject((PolkitSubject *)pkUnixProcess)
+        : Subject((PolkitSubject *) pkUnixProcess)
 {
 
 }

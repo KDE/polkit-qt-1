@@ -106,9 +106,10 @@ gboolean ListenerAdapter::polkit_qt_listener_initiate_authentication_finish (Pol
 {
     qDebug() << "polkit_qt_listener_initiate_authentication_finish callback for " << listener;
 
-    Listener *list = findListener(listener);
-
-    return list->initiateAuthenticationFinish();
+    GSimpleAsyncResult *simple = G_SIMPLE_ASYNC_RESULT(res);
+    if (g_simple_async_result_propagate_error(simple, error))
+        return false;
+    return true;
 }
 
 void ListenerAdapter::cancelled_cb(PolkitAgentListener *listener)

@@ -154,5 +154,6 @@ void AsyncResult::complete()
 
 void AsyncResult::setError(const QString &text)
 {
+    Q_ASSERT(d->result);
     g_simple_async_result_set_error(d->result, POLKIT_ERROR, POLKIT_ERROR_FAILED, text.toUtf8().data());
 }

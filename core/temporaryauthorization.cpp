@@ -54,6 +54,7 @@ TemporaryAuthorization::TemporaryAuthorization(PolkitTemporaryAuthorization *pkT
 TemporaryAuthorization::~TemporaryAuthorization()
 {
     delete d->subject;
+    delete d;
 }
 
 QString TemporaryAuthorization::id() const

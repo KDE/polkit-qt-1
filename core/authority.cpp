@@ -316,7 +316,9 @@ Authority::Result Authority::checkAuthorizationSync(const QString &actionId, Sub
     }
     else
     {
-        return polkitResultToResult(pk_result);
+        Authority::Result res = polkitResultToResult(pk_result);
+        g_object_unref(pk_result);
+        return res;
     }
 }
 
@@ -359,7 +361,10 @@ void Authority::Private::checkAuthorizationCallback(GObject *object, GAsyncResul
         return;
     }
     if (pkResult != NULL)
+    {
         emit authority->checkAuthorizationFinished(polkitResultToResult(pkResult));
+        g_object_unref(pkResult);
+    }
     else
     {
         authority->d->setError(tr("Authorization checking failed with message: Unknown error"));

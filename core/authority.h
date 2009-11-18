@@ -334,6 +334,8 @@ public:
      *
      * \param subject the subject to get temporary authorizations for
      *
+     * \note Free all TemporaryAuthorization objects using \p delete operator.
+     *
      * \return List of all temporary authorizations
     */
     QList<TemporaryAuthorization *> enumerateTemporaryAuthorizationsSync(Subject *subject);
@@ -464,6 +466,8 @@ Q_SIGNALS:
      * This signal is emmited when asynchronous method enumerateTemporaryAuthorizations finishes.
      *
      * The argument is list of all temporary authorizations.
+     *
+     * \note Free all TemporaryAuthorization objects using \p delete operator.
      */
     void enumerateTemporaryAuthorizationsFinished(QList<TemporaryAuthorization *>);
 

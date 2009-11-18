@@ -49,6 +49,7 @@ Identity::Identity(PolkitIdentity *polkitIdentity)
 Identity::~Identity()
 {
     g_object_unref(d->identity);
+    delete d;
 }
 
 PolkitIdentity *Identity::identity() const

@@ -53,6 +53,7 @@ Details::Details(PolkitDetails *pkDetails, QObject *parent)
 Details::~Details()
 {
     g_object_unref(d->polkitDetails);
+    delete d;
 }
 
 QString Details::lookup(const QString &key) const

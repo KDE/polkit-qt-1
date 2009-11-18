@@ -48,6 +48,7 @@ Subject::Subject(PolkitSubject *subject)
 Subject::~Subject()
 {
     g_object_unref(d->subject);
+    delete d;
 }
 
 PolkitSubject *Subject::subject() const

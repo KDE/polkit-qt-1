@@ -227,6 +227,7 @@ bool Action::Private::computePkResult()
 
     pkResult = Authority::instance()->checkAuthorizationSync(actionId, subject, Authority::None);
 
+    delete subject;
     return old_result != pkResult;
 }
 

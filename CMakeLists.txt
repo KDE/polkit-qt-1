@@ -71,6 +71,7 @@ install(FILES
     ${INCLUDE_INSTALL_DIR}/polkit-qt-1/PolkitQtAgent COMPONENT Devel)
 
 
+if(NOT WIN32)
 # Pkgconfig
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/polkit-qt-1.pc.cmake ${CMAKE_CURRENT_BINARY_DIR}/polkit-qt-1.pc @ONLY)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/polkit-qt-1.pc DESTINATION ${LIB_INSTALL_DIR}/pkgconfig )
@@ -80,6 +81,7 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/polkit-qt-gui-1.pc.cmake ${CMAKE_CURR
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/polkit-qt-gui-1.pc DESTINATION ${LIB_INSTALL_DIR}/pkgconfig )
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/polkit-qt-agent-1.pc.cmake ${CMAKE_CURRENT_BINARY_DIR}/polkit-qt-agent-1.pc @ONLY)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/polkit-qt-agent-1.pc DESTINATION ${LIB_INSTALL_DIR}/pkgconfig )
+endif(NOT WIN32)
 
 option(BUILD_EXAMPLES "Builds a set of examples for polkit-qt-1" OFF)
 if (BUILD_EXAMPLES)

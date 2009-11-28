@@ -562,7 +562,7 @@ void Authority::Private::unregisterAuthenticationAgentCallback(GObject *object, 
     {
         // We don't want to set error if this is cancellation of some action
         if (error->code != 1)
-            authority->d->setError(tr("Unregist agent failed with message: %1").arg(error->message));
+            authority->d->setError(tr("Unregister agent failed with message: %1").arg(error->message));
         g_error_free(error);
         return;
     }
@@ -658,7 +658,7 @@ QList<TemporaryAuthorization *> Authority::enumerateTemporaryAuthorizationsSync(
                                                                             &error);
     if (error != NULL)
     {
-        d->setError(tr("Enumerate termporary actions failed with: %1").arg(error->message));
+        d->setError(tr("Enumerate temporary actions failed with: %1").arg(error->message));
         g_error_free(error);
         return result;
     }
@@ -687,7 +687,7 @@ void Authority::Private::enumerateTemporaryAuthorizationsCallback(GObject *objec
     {
         // We don't want to set error if this is cancellation of some action
         if (error->code != 1)
-            authority->d->setError(tr("Enumerate termporary actions failed with: %1").arg(error->message));
+            authority->d->setError(tr("Enumerate temporary actions failed with: %1").arg(error->message));
         g_error_free(error);
         return;
     }
@@ -754,7 +754,7 @@ void Authority::Private::revokeTemporaryAuthorizationsCallback(GObject *object, 
      {
         // We don't want to set error if this is cancellation of some action
         if (error->code != 1)
-            authority->d->setError(tr("Revoking termporary authorizations failed with: %1").arg(error->message));
+            authority->d->setError(tr("Revoking temporary authorizations failed with: %1").arg(error->message));
         g_error_free(error);
         return;
     }
@@ -812,7 +812,7 @@ void Authority::Private::revokeTemporaryAuthorizationCallback(GObject *object, G
      {
         // We don't want to set error if this is cancellation of some action
         if (error->code != 1)
-            authority->d->setError(tr("Revoking termporary authorization failed with: %1").arg(error->message));
+            authority->d->setError(tr("Revoking temporary authorization failed with: %1").arg(error->message));
         g_error_free(error);
         return;
     }

@@ -183,7 +183,7 @@ void Authority::Private::init()
 
     if (pkAuthority == NULL)
     {
-        setError(tr("Can't get authority!"));
+        setError(tr("Cannot get authority."));
         return;
     }
 
@@ -583,7 +583,7 @@ bool Authority::authenticationAgentResponseSync(const QString &cookie, Identity 
 
     if (cookie.isEmpty() || !identity)
     {
-        d->setError(tr("Cookie or identity is empty!"));
+        d->setError(tr("Cookie or identity is empty."));
         return false;
     }
 
@@ -611,7 +611,7 @@ void Authority::authenticationAgentResponse(const QString &cookie, Identity *ide
 
     if (cookie.isEmpty() || !identity)
     {
-        d->setError(tr("Cookie or identity is empty!"));
+        d->setError(tr("Cookie or identity is empty."));
         return;
     }
 

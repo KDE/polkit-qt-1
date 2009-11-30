@@ -20,6 +20,7 @@ target_link_libraries(polkit-qt-agent-1
 	${POLKIT_LIBRARIES}
         ${QT_QTCORE_LIBRARY}
         ${POLKIT_AGENT_LIBRARIES}
+	polkit-qt-core-1
 )
 
 set_target_properties(polkit-qt-agent-1 PROPERTIES VERSION ${MAJOR_POLKIT_QT_VERSION}.${MINOR_POLKIT_QT_VERSION}.${PATCH_POLKIT_QT_VERSION}

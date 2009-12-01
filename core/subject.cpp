@@ -77,7 +77,7 @@ Subject *Subject::fromString(const QString &string)
     subject->d->subject = polkit_subject_from_string(string.toUtf8().data(), &error);
     if (error != NULL)
     {
-        qWarning() << QObject::tr("Cannot create Subject from string: %1").arg(error->message);
+        qWarning() << QString("Cannot create Subject from string: %1").arg(error->message);
         return NULL;
     }
     return subject;
@@ -153,7 +153,7 @@ UnixSessionSubject::UnixSessionSubject(qint64 pid)
     setSubject(polkit_unix_session_new_for_process_sync(pid, NULL, &error));
     if (error != NULL)
     {
-        qWarning() << QObject::tr("Cannot create unix session: %1").arg(error->message);
+        qWarning() << QString("Cannot create unix session: %1").arg(error->message);
         setSubject(NULL);
     }
 }

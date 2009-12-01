@@ -91,7 +91,7 @@ public:
     /** Use this method to set the error message to \p message. Set recover to \c true
      * to try to reinitialize this object with init() method
      */
-    void setError(const QString &message, bool recover = false);
+    void setError(Authority::ErrorCode code, const QString &details = QString(), bool recover = false);
 
     void dbusFilter(const QDBusMessage &message);
     void dbusSignalAdd(const QString &service, const QString &path, const QString &interface, const QString &name);
@@ -100,7 +100,8 @@ public:
     Authority *q;
     PolkitAuthority *pkAuthority;
     bool m_hasError;
-    QString m_lastError;
+    Authority::ErrorCode m_lastError;
+    QString m_errorDetails;
     QDBusConnection *m_systemBus;
     GCancellable *m_checkAuthorizationCancellable,
                  *m_enumerateActionsCancellable,
@@ -183,7 +184,7 @@ void Authority::Private::init()
 
     if (pkAuthority == NULL)
     {
-        setError(tr("Cannot get authority."));
+        (E_GetAuthority);
         return;
     }
 
@@ -215,11 +216,12 @@ void Authority::Private::init()
     }
 }
 
-void Authority::Private::setError(const QString &message, bool recover)
+void Authority::Private::setError(Authority::ErrorCode code, const QString &details, bool recover)
 {
     if (recover)
         init();
-    m_lastError = message;
+    m_lastError = code;
+    m_errorDetails = details;
     m_hasError = true;
 }
 
@@ -259,15 +261,23 @@ bool Authority::hasError() const
     return d->m_hasError;
 }
 
-QString Authority::lastError() const
+Authority::ErrorCode Authority::lastError() const
 {
     return d->m_lastError;
+}
+
+const QString Authority::errorDetails() const
+{
+    if (d->m_lastError == E_None)
+        return QString();
+    else
+        return d->m_errorDetails;
 }
 
 void Authority::clearError()
 {
     d->m_hasError = false;
-    d->m_lastError.clear();
+    d->m_lastError = E_None;
 }
 
 void Authority::Private::pk_config_changed()
@@ -291,7 +301,7 @@ Authority::Result Authority::checkAuthorizationSync(const QString &actionId, Sub
 
     if (subject == NULL)
     {
-        d->setError(tr("Authority checking failed with message: Wrong subject"));
+        d->setError(E_WrongSubject);
         return Unknown;
     }
 
@@ -304,14 +314,14 @@ Authority::Result Authority::checkAuthorizationSync(const QString &actionId, Sub
                 &error);
 
     if (error != NULL) {
-        d->setError(tr("Authority checking failed with message: %1").arg(error->message));
+        d->setError(E_CheckFailed, error->message);
         g_error_free(error);
         return Unknown;
     }
 
     if (!pk_result)
     {
-        d->setError(tr("Authority checking failed with message: Unknown result"));
+        d->setError(E_UnknownResult);
         return Unknown;
     }
     else
@@ -330,7 +340,7 @@ void Authority::checkAuthorization(const QString &actionId, Subject *subject, Au
 
     if (subject == NULL)
     {
-        d->setError(tr("Authority checking failed with message: Wrong subject"));
+        d->setError(E_WrongSubject);
         return;
     }
 
@@ -356,7 +366,7 @@ void Authority::Private::checkAuthorizationCallback(GObject *object, GAsyncResul
     {
         // We don't want to set error if this is cancellation of some action
         if (error->code != 1)
-            authority->d->setError(tr("Authorization checking failed with message: %1").arg(error->message));
+            authority->d->setError(E_CheckFailed, error->message);
         g_error_free(error);
         return;
     }
@@ -367,7 +377,7 @@ void Authority::Private::checkAuthorizationCallback(GObject *object, GAsyncResul
     }
     else
     {
-        authority->d->setError(tr("Authorization checking failed with message: Unknown error"));
+        authority->d->setError(E_UnknownResult);
     }
 }
 
@@ -390,7 +400,7 @@ ActionDescriptionList Authority::enumerateActionsSync()
 
     if (error != NULL)
     {
-        d->setError(tr("Enumerating actions failed with message: %1").arg(error->message));
+        d->setError(E_EnumFailed, error->message);
         g_error_free(error);
         return ActionDescriptionList();
     }
@@ -419,7 +429,7 @@ void Authority::Private::enumerateActionsCallback(GObject *object, GAsyncResult 
     {
         // We don't want to set error if this is cancellation of some action
         if (error->code != 1)
-            authority->d->setError(tr("Enumeration of the actions failed with message: %1").arg(error->message));
+            authority->d->setError(E_EnumFailed, error->message);
         g_error_free(error);
         return;
     }
@@ -443,7 +453,7 @@ bool Authority::registerAuthenticationAgentSync(Subject *subject, const QString 
     GError *error = NULL;
 
     if (!subject) {
-        d->setError(tr("No subject given for this target."));
+        d->setError(E_WrongSubject);
         return false;
     }
 
@@ -452,7 +462,7 @@ bool Authority::registerAuthenticationAgentSync(Subject *subject, const QString 
                            objectPath.toAscii().data(), NULL, &error);
 
     if (error) {
-        d->setError(tr("Authentication agent registration failed with message: %1").arg(error->message));
+        d->setError(E_RegisterFailed, error->message);
         g_error_free (error);
         return false;
     }
@@ -467,7 +477,7 @@ void Authority::registerAuthenticationAgent(Subject *subject, const QString &loc
     }
 
     if (!subject) {
-        d->setError(tr("No subject given for this target."));
+        d->setError(E_WrongSubject);
         return;
     }
 
@@ -490,7 +500,7 @@ void Authority::Private::registerAuthenticationAgentCallback(GObject *object, GA
     {
         // We don't want to set error if this is cancellation of some action
         if (error->code != 1)
-            authority->d->setError(tr("Enumeration of the actions failed with message: %1").arg(error->message));
+            authority->d->setError(E_EnumFailed ,error->message);
         g_error_free(error);
         return;
     }
@@ -511,7 +521,7 @@ bool Authority::unregisterAuthenticationAgentSync(Subject *subject, const QStrin
 
     if (!subject)
     {
-        d->setError(tr("No subject given for this target."));
+        d->setError(E_WrongSubject);
         return false;
     }
 
@@ -525,7 +535,7 @@ bool Authority::unregisterAuthenticationAgentSync(Subject *subject, const QStrin
 
     if (error != NULL)
     {
-        d->setError(tr("Unregistering agent failed with message: %1").arg(error->message));
+        d->setError(E_UnregisterFailed, error->message);
         g_error_free(error);
         return false;
     }
@@ -540,7 +550,7 @@ void Authority::unregisterAuthenticationAgent(Subject *subject, const QString &o
 
     if (!subject)
     {
-        d->setError(tr("No subject given for this target."));
+        d->setError(E_WrongSubject);
         return;
     }
 
@@ -562,7 +572,7 @@ void Authority::Private::unregisterAuthenticationAgentCallback(GObject *object, 
     {
         // We don't want to set error if this is cancellation of some action
         if (error->code != 1)
-            authority->d->setError(tr("Unregister agent failed with message: %1").arg(error->message));
+            authority->d->setError(E_UnregisterFailed, error->message);
         g_error_free(error);
         return;
     }
@@ -583,7 +593,7 @@ bool Authority::authenticationAgentResponseSync(const QString &cookie, Identity 
 
     if (cookie.isEmpty() || !identity)
     {
-        d->setError(tr("Cookie or identity is empty."));
+        d->setError(E_CookieOrIdentityEmpty);
         return false;
     }
 
@@ -596,7 +606,7 @@ bool Authority::authenticationAgentResponseSync(const QString &cookie, Identity 
                                                                       &error);
     if (error != NULL)
     {
-        d->setError(tr("Auth agent response failed with: %1").arg(error->message));
+        d->setError(E_AgentResponseFailed, error->message);
         g_error_free(error);
         return false;
     }
@@ -611,7 +621,7 @@ void Authority::authenticationAgentResponse(const QString &cookie, Identity *ide
 
     if (cookie.isEmpty() || !identity)
     {
-        d->setError(tr("Cookie or identity is empty."));
+        d->setError(E_CookieOrIdentityEmpty);
         return;
     }
 
@@ -633,7 +643,7 @@ void Authority::Private::authenticationAgentResponseCallback(GObject *object, GA
     {
         // We don't want to set error if this is cancellation of some action
         if (error->code != 1)
-            authority->d->setError(tr("Authorization agent response failed with message: %1").arg(error->message));
+            authority->d->setError(E_AgentResponseFailed, error->message);
         g_error_free(error);
         return;
     }
@@ -658,7 +668,7 @@ QList<TemporaryAuthorization *> Authority::enumerateTemporaryAuthorizationsSync(
                                                                             &error);
     if (error != NULL)
     {
-        d->setError(tr("Enumerate temporary actions failed with: %1").arg(error->message));
+        d->setError(E_EnumFailed, error->message);
         g_error_free(error);
         return result;
     }
@@ -687,7 +697,7 @@ void Authority::Private::enumerateTemporaryAuthorizationsCallback(GObject *objec
     {
         // We don't want to set error if this is cancellation of some action
         if (error->code != 1)
-            authority->d->setError(tr("Enumerate temporary actions failed with: %1").arg(error->message));
+            authority->d->setError(E_EnumFailed, error->message);
         g_error_free(error);
         return;
     }
@@ -723,7 +733,7 @@ bool Authority::revokeTemporaryAuthorizationsSync(Subject *subject)
                                                                    &error);
     if (error != NULL)
     {
-        d->setError(tr("Revoke temporary authorizations failed with: %1").arg(error->message));
+        d->setError(E_RevokeFailed, error->message);
         g_error_free(error);
         return false;
     }
@@ -754,7 +764,7 @@ void Authority::Private::revokeTemporaryAuthorizationsCallback(GObject *object, 
      {
         // We don't want to set error if this is cancellation of some action
         if (error->code != 1)
-            authority->d->setError(tr("Revoking temporary authorizations failed with: %1").arg(error->message));
+            authority->d->setError(E_RevokeFailed, error->message);
         g_error_free(error);
         return;
     }
@@ -781,7 +791,7 @@ bool Authority::revokeTemporaryAuthorizationSync(const QString &id)
                                                                          &error);
     if (error != NULL)
     {
-        d->setError(tr("Revoke temporary actions failed with: %1").arg(error->message));
+        d->setError(E_RevokeFailed, error->message);
         g_error_free(error);
         return false;
     }
@@ -812,7 +822,7 @@ void Authority::Private::revokeTemporaryAuthorizationCallback(GObject *object, G
      {
         // We don't want to set error if this is cancellation of some action
         if (error->code != 1)
-            authority->d->setError(tr("Revoking temporary authorization failed with: %1").arg(error->message));
+            authority->d->setError(E_RevokeFailed, error->message);
         g_error_free(error);
         return;
     }

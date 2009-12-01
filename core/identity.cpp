@@ -74,7 +74,7 @@ Identity *Identity::fromString(const QString &string)
     PolkitIdentity *pkIdentity = polkit_identity_from_string(string.toUtf8().data(), &error);
     if (error != NULL)
     {
-        qWarning() << QObject::tr("Cannot create Identity from string: ").arg(error->message);
+        qWarning() << QString("Cannot create Identity from string: %1").arg(error->message);
         return NULL;
     }
     return new Identity(pkIdentity);
@@ -87,7 +87,7 @@ UnixUserIdentity::UnixUserIdentity(const QString &name)
     setIdentity(polkit_unix_user_new_for_name(name.toUtf8().data(), &error));
     if (error != NULL)
     {
-        qWarning() << QObject::tr("Cannot create UnixUserIdentity: ").arg(error->message);
+        qWarning() << QString("Cannot create UnixUserIdentity: %1").arg(error->message);
         setIdentity(NULL);
     }
 }
@@ -121,7 +121,7 @@ UnixGroupIdentity::UnixGroupIdentity(const QString &name)
     setIdentity(polkit_unix_group_new_for_name(name.toUtf8().data(), &error));
     if (error != NULL)
     {
-        qWarning() << QObject::tr("Cannot create UnixGroupIdentity: ").arg(error->message);
+        qWarning() << QString("Cannot create UnixGroupIdentity: %1").arg(error->message);
         setIdentity(NULL);
     }
 }

@@ -91,6 +91,32 @@ public:
     };
     Q_DECLARE_FLAGS(AuthorizationFlags, AuthorizationFlag)
 
+    /** Error codes for the authority class */
+    enum ErrorCode {
+        /** No error occured **/
+        E_None = 0x00,
+        /** Authority cannot be obtained **/
+        E_GetAuthority = 0x01,
+        /** Authority check failed **/
+        E_CheckFailed = 0x02,
+        /** Wrong or empty subject was given **/
+        E_WrongSubject = 0x03,
+        /** Action returned unknown result **/
+        E_UnknownResult = 0x04,
+        /** Enumerating actions failed **/
+        E_EnumFailed = 0x05,
+        /** Registration of authentication agent failed **/
+        E_RegisterFailed = 0x06,
+        /** Unregistration of authentication agent failed **/
+        E_UnregisterFailed = 0x07,
+        /** Cookie or identity handled to the action is empty **/
+        E_CookieOrIdentityEmpty = 0x08,
+        /** Response of auth agent failed **/
+        E_AgentResponseFailed = 0x09,
+        /** Revoke temporary authorizations failed **/
+        E_RevokeFailed = 0x0A
+    };
+
     /**
      * \brief Returns the instance of Authority
      *
@@ -124,9 +150,16 @@ public:
     bool hasError() const;
 
     /**
-     * \return the last error message
+     * \return the code of last error
      */
-    QString lastError() const;
+    ErrorCode lastError() const;
+
+    /**
+     * Get detail information about error that occured.
+     *
+     * \return detail message
+     */
+    const QString errorDetails() const;
 
     /**
      * Use this method to clear the error message.

@@ -30,9 +30,6 @@ typedef struct _PolkitActionDescription PolkitActionDescription;
 
 namespace PolkitQt1
 {
-class ActionDescription;
-typedef QList<ActionDescription *> ActionDescriptionList;
-
 /**
  * \class ActionDescription actiondescription.h ActionDescription
  * \author Jaroslav Reznik <jreznik@redhat.com>
@@ -58,7 +55,9 @@ public:
         /** The subject is authorized. **/
         Authorized = 5
     };
-    
+
+    typedef QList<ActionDescription *> List;
+
     /**
      * \brief Constructor of ActionDescription object from PolkitActionDescription
      *
@@ -68,7 +67,7 @@ public:
      */
     ActionDescription(PolkitActionDescription *actionDescription);    
     ~ActionDescription();
-    
+
     /**
      * \brief Gets the action id for ActionDescription
      *
@@ -110,7 +109,7 @@ public:
      * \return icon name or empty QString if there is no icon
      */
     QString iconName() const;
-    
+
     /**
      * \brief Gets the implicit authorization for ActionDescription used for any subject
      *
@@ -131,12 +130,13 @@ public:
      * \return A value from ImplicitAuthorization enumeration
      */
     ActionDescription::ImplicitAuthorization implicitActive() const;
+
 private:
     class Private;
     Private * const d;
 };
 }
 
-Q_DECLARE_METATYPE(PolkitQt1::ActionDescriptionList);
+Q_DECLARE_METATYPE(PolkitQt1::ActionDescription::List);
 
 #endif //POLKIT_QT_ACTION_DESCRIPTION_H

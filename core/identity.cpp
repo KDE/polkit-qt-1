@@ -24,7 +24,7 @@
 
 #include <QtCore/QDebug>
 
-using namespace PolkitQt1;
+namespace PolkitQt1 {
 
 class Identity::Private
 {
@@ -146,4 +146,6 @@ gid_t UnixGroupIdentity::gid() const
 void UnixGroupIdentity::setGid(gid_t gid)
 {
     polkit_unix_group_set_gid((PolkitUnixGroup *) identity(), gid);
+}
+
 }

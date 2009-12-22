@@ -113,7 +113,7 @@ public:
     * of process will be looked automatically.
     *
     * \param pid An Unix process PID.
-    */    
+    */
     explicit UnixProcessSubject(qint64 pid);
 
     /**
@@ -121,7 +121,7 @@ public:
     *
     * \param pid An Unix process PID.
     * \param startTime An Unix process start time.
-    */    
+    */
     UnixProcessSubject(qint64 pid, quint64 startTime);
 
     /**
@@ -132,7 +132,7 @@ public:
      * \param process PolkitUnixProcess object
      */
     explicit UnixProcessSubject(PolkitUnixProcess *process);
-    
+
     /**
     * Returns Unix process PID.
     *

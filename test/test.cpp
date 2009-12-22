@@ -73,7 +73,7 @@ void TestAuth::test_Auth_checkAuthorization()
 void TestAuth::test_Auth_enumerateActions()
 {
     // This needs the file org.qt.policykit.examples.policy from examples to be installed
-    ActionDescriptionList list = Authority::instance()->enumerateActionsSync();
+    ActionDescription::List list = Authority::instance()->enumerateActionsSync();
     QVERIFY(!Authority::instance()->hasError());
     // Check whether enumerateAction returns at least example actions
     int count = 0;
@@ -88,11 +88,13 @@ void TestAuth::test_Auth_enumerateActions()
 
 
     // Test asynchronous version as well
-    QSignalSpy spy(Authority::instance(), SIGNAL(enumerateActionsFinished(ActionDescriptionList)));
+    list.clear();
+    count = 0;
+    QSignalSpy spy(Authority::instance(), SIGNAL(enumerateActionsFinished(PolkitQt1::ActionDescription::List)));
     Authority::instance()->enumerateActions();
     wait();
     QCOMPARE(spy.count(), 1);
-    list = qVariantValue<ActionDescriptionList> (spy.takeFirst()[0]);
+    list = qVariantValue<PolkitQt1::ActionDescription::List> (spy.takeFirst()[0]);
     QVERIFY(!Authority::instance()->hasError());
     foreach (ActionDescription *ad, list)
     {
@@ -229,7 +231,7 @@ void TestAuth::test_Details()
     QCOMPARE(details.lookup("2"), QString("bbb"));
     QCOMPARE(details.lookup("3"), QString("ccc"));
     QCOMPARE(details.lookup("4"), QString("ddd"));
-    QList<QString> list = details.getKeys();
+    QList<QString> list = details.keys();
     QVERIFY(list.contains("1"));
     QVERIFY(list.contains("2"));
     QVERIFY(list.contains("3"));

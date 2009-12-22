@@ -67,6 +67,8 @@ class POLKITQT1_EXPORT Authority : public QObject
 {
     Q_OBJECT
     Q_DISABLE_COPY(Authority)
+    Q_ENUMS(Result)
+    Q_ENUMS(ErrorCode)
 public:
     enum Result {
         /** Result unknown */
@@ -244,7 +246,7 @@ public:
       *
       * \return a list of Action IDs
       */
-    ActionDescriptionList enumerateActionsSync();
+    ActionDescription::List enumerateActionsSync();
 
     /**
      * This method can be used to cancel enumeration of actions
@@ -470,7 +472,7 @@ Q_SIGNALS:
      *
      * The argument is the list of all Action IDs.
      */
-    void enumerateActionsFinished(ActionDescriptionList);
+    void enumerateActionsFinished(PolkitQt1::ActionDescription::List);
 
     /**
      * This signal is emitted when asynchronous method registerAuthenticationAgent finishes.
@@ -502,7 +504,7 @@ Q_SIGNALS:
      *
      * \note Free all TemporaryAuthorization objects using \p delete operator.
      */
-    void enumerateTemporaryAuthorizationsFinished(QList<TemporaryAuthorization *>);
+    void enumerateTemporaryAuthorizationsFinished(QList<PolkitQt1::TemporaryAuthorization *>);
 
     /**
      * This signal is emmited when asynchronous method revokeTemporaryAuthorizations finishes.
@@ -529,10 +531,9 @@ private:
     Q_PRIVATE_SLOT(d, void dbusFilter(const QDBusMessage &message))
 };
 
-Q_DECLARE_OPERATORS_FOR_FLAGS(PolkitQt1::Authority::AuthorizationFlags)
-
 }
 
+Q_DECLARE_OPERATORS_FOR_FLAGS(PolkitQt1::Authority::AuthorizationFlags)
 Q_DECLARE_METATYPE(PolkitQt1::Authority::Result);
 
 #endif

@@ -28,7 +28,7 @@
 
 #include <polkit/polkit.h>
 
-using namespace PolkitQt1;
+namespace PolkitQt1 {
 
 class AuthorityHelper
 {
@@ -61,11 +61,10 @@ Authority::Result polkitResultToResult(PolkitAuthorizationResult *result)
         return Authority::No;
 }
 
-ActionDescriptionList actionsToListAndFree(GList *glist)
+ActionDescription::List actionsToListAndFree(GList *glist)
 {
-    ActionDescriptionList result;
-    GList *glist2;
-    for (glist2 = glist; glist2; glist2 = g_list_next(glist2))
+    ActionDescription::List result;
+    for (GList *glist2 = glist; glist2; glist2 = g_list_next(glist2))
     {
         gpointer i = glist2->data;
         result.append(new ActionDescription(static_cast<PolkitActionDescription *>(i)));
@@ -141,7 +140,7 @@ Authority::Authority(PolkitAuthority *authority, QObject *parent)
         , d(new Private(this))
 {
     qRegisterMetaType<PolkitQt1::Authority::Result> ();
-    qRegisterMetaType<PolkitQt1::ActionDescriptionList>("ActionDescriptionList");
+    qRegisterMetaType<PolkitQt1::ActionDescription::List>();
 
     Q_ASSERT(!s_globalAuthority()->q);
     s_globalAuthority()->q = this;
@@ -387,10 +386,11 @@ void Authority::checkAuthorizationCancel()
         g_cancellable_cancel(d->m_checkAuthorizationCancellable);
 }
 
-ActionDescriptionList Authority::enumerateActionsSync()
+ActionDescription::List Authority::enumerateActionsSync()
 {
-    if (Authority::instance()->hasError())
-        return ActionDescriptionList();
+    if (Authority::instance()->hasError()) {
+        return ActionDescription::List();
+    }
 
     GError *error = NULL;
 
@@ -402,7 +402,7 @@ ActionDescriptionList Authority::enumerateActionsSync()
     {
         d->setError(E_EnumFailed, error->message);
         g_error_free(error);
-        return ActionDescriptionList();
+        return ActionDescription::List();
     }
 
     return actionsToListAndFree(glist);
@@ -410,8 +410,9 @@ ActionDescriptionList Authority::enumerateActionsSync()
 
 void Authority::enumerateActions()
 {
-    if (Authority::instance()->hasError())
+    if (Authority::instance()->hasError()) {
         return;
+    }
 
     polkit_authority_enumerate_actions(d->pkAuthority,
                                        d->m_enumerateActionsCancellable,
@@ -836,4 +837,6 @@ void Authority::revokeTemporaryAuthorizationCancel()
         g_cancellable_cancel(d->m_revokeTemporaryAuthorizationCancellable);
 }
 
-#include "moc_authority.cpp"
+}
+
+#include "authority.moc"

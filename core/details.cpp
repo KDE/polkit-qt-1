@@ -24,7 +24,7 @@
 
 #include <polkit/polkit.h>
 
-using namespace PolkitQt1;
+namespace PolkitQt1 {
 
 class Details::Private
 {
@@ -70,7 +70,7 @@ void Details::insert(const QString &key, const QString &value)
     polkit_details_insert(d->polkitDetails, key.toUtf8().data(), value.toUtf8().data());
 }
 
-QStringList Details::getKeys() const
+QStringList Details::keys() const
 {
     gchar **result = polkit_details_get_keys(d->polkitDetails);
     QStringList list;
@@ -82,3 +82,7 @@ QStringList Details::getKeys() const
     g_strfreev(result);
     return list;
 }
+
+}
+
+#include "details.moc"

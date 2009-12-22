@@ -23,7 +23,7 @@
 
 #include <polkit/polkit.h>
 
-using namespace PolkitQt1;
+namespace PolkitQt1 {
 
 class TemporaryAuthorization::Private
 {
@@ -73,12 +73,12 @@ Subject *TemporaryAuthorization::subject()
     return d->subject;//Subject::fromString(polkit_subject_to_string(d->subject));
 }
 
-QDateTime TemporaryAuthorization::timeObtained() const
+QDateTime TemporaryAuthorization::obtainedAt() const
 {
     return d->timeObtained;
 }
 
-QDateTime TemporaryAuthorization::timeExpires() const
+QDateTime TemporaryAuthorization::expirationTime() const
 {
     return d->timeExpires;
 }
@@ -87,3 +87,7 @@ bool TemporaryAuthorization::revoke()
 {
     Authority::instance()->revokeTemporaryAuthorization(id());
 }
+
+}
+
+#include "temporaryauthorization.moc"

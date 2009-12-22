@@ -24,7 +24,7 @@
 
 #include <polkit/polkit.h>
 
-using namespace PolkitQt1;
+namespace PolkitQt1 {
 
 class ActionDescription::Private
 {
@@ -37,7 +37,7 @@ class ActionDescription::Private
         QString vendorName;
         QString vendorUrl;
         QString iconName;
-    
+
         ActionDescription::ImplicitAuthorization implicitAny;
         ActionDescription::ImplicitAuthorization implicitInactive;
         ActionDescription::ImplicitAuthorization implicitActive;
@@ -47,14 +47,14 @@ ActionDescription::ActionDescription(PolkitActionDescription *polkitActionDescri
         : d(new Private)
 {
     g_type_init();
-    
+
     d->actionId = QString::fromUtf8(polkit_action_description_get_action_id(polkitActionDescription));
     d->description = QString::fromUtf8(polkit_action_description_get_description(polkitActionDescription));
     d->message = QString::fromUtf8(polkit_action_description_get_message(polkitActionDescription));
     d->vendorName = QString::fromUtf8(polkit_action_description_get_vendor_name(polkitActionDescription));
     d->vendorUrl = QString::fromUtf8(polkit_action_description_get_vendor_url(polkitActionDescription));
     d->iconName = QString::fromUtf8(polkit_action_description_get_icon_name(polkitActionDescription));
-    
+
     d->implicitAny = static_cast<ActionDescription::ImplicitAuthorization>(polkit_action_description_get_implicit_any(
         polkitActionDescription));
     d->implicitInactive = static_cast<ActionDescription::ImplicitAuthorization>(polkit_action_description_get_implicit_inactive(
@@ -111,4 +111,6 @@ ActionDescription::ImplicitAuthorization ActionDescription::implicitInactive() c
 ActionDescription::ImplicitAuthorization ActionDescription::implicitActive() const
 {
     return d->implicitActive;
+}
+
 }

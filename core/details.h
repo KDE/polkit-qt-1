@@ -86,7 +86,7 @@ public:
      *
      * \return List of all keys.
      */
-    QStringList getKeys() const;
+    QStringList keys() const;
 private:
     class Private;
     Private * const d;

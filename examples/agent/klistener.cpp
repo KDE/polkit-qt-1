@@ -44,7 +44,7 @@ void KListener::initiateAuthentication(const QString &actionId,
 {
     qDebug() << "initiateAuthentication for " << actionId << " with message " << message;
     qDebug() << "iconName " << iconName;
-    qDebug() << details->getKeys();
+    qDebug() << details->keys();
     qDebug() << "cookie" << cookie;
     
     PolkitQt1::Identity *identity;

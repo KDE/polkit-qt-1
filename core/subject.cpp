@@ -23,7 +23,7 @@
 #include <QtCore/QDebug>
 #include <polkit/polkit.h>
 
-using namespace PolkitQt1;
+namespace PolkitQt1 {
 
 class Subject::Private
 {
@@ -172,4 +172,6 @@ QString UnixSessionSubject::sessionId() const
 void UnixSessionSubject::setSessionId(const QString &sessionId)
 {
     polkit_unix_session_set_session_id((PolkitUnixSession *) subject(), sessionId.toUtf8().data());
+}
+
 }

@@ -90,14 +90,14 @@ public:
      *
      * \return Time of obtaining the authorization
      */
-    QDateTime timeObtained() const;
+    QDateTime obtainedAt() const;
 
     /**
      * \brief Gets the time when authorizaton will expire
      *
      * \return Time of expiration
      */
-    QDateTime timeExpires() const;
+    QDateTime expirationTime() const;
 
     /**
      * \brief Revoke temporary authorization

@@ -34,7 +34,7 @@ set(CMAKE_MINOR_POLKITQT-1_VERSION 95 CACHE INT "PolkitQt-1's minor version numb
 set(CMAKE_RELEASE_POLKITQT-1_VERSION 1 CACHE INT "PolkitQt-1's release version number" FORCE)
 set(CMAKE_POLKITQT-1_VERSION_STRING "${CMAKE_MAJOR_POLKITQT-1_VERSION}.${CMAKE_MINOR_POLKITQT-1_VERSION}.${CMAKE_RELEASE_POLKITQT-1_VERSION}")
 
-configure_file(version.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/version.h)
+configure_file(polkitqt1version.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/polkitqt1version.h)
 
 install(FILES
     gui/action.h
@@ -51,7 +51,7 @@ install(FILES
     agent/listener.h
     agent/session.h
 
-    ${CMAKE_CURRENT_BINARY_DIR}/version.h
+    ${CMAKE_CURRENT_BINARY_DIR}/polkitqt1version.h
     export.h
 
     DESTINATION

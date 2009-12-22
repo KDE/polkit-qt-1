@@ -3,36 +3,44 @@
 
 \section polkitqt_overview Overview
 
-Polkit-qt aims to make it easy for Qt developers to take advantage of
-PolicyKit API. It is a convenience wrapper around QAction and QAbstractButton
-that lets you integrate those two components easily with PolicyKit.
+\note Please note that if you're developing an application on the KDE Development
+      Platform and not just with Qt, you might want to use KAuth (kdelibs/core/auth)
 
-Polkit-qt is split in three libraries: polkit-qt-core, polkit-qt-gui and polkit-qt-agent
+polkit-qt-1 aims to make it easy for Qt developers to take advantage of
+polkit API. It is a convenience wrapper around QAction and QAbstractButton
+that lets you integrate those two components easily with polkit.
 
-\b polkit-qt-core lets you control actions and authentication without a GUI, with some very
-simple functions. It also lets you retrieve and control useful informations on the PolicyKit
-context. It includes the classes Auth and Context.
+polkit-qt-1 is not a direct replacement of polkit-qt: it is based on polkit-1, which is not
+backwards compatible in any way with Policykit <= 0.9, which was the backend of polkit-qt.
+You are encouraged to port polkit-qt applications to polkit-qt or KAuth, if based on the KDE
+Development Platform, since PolicyKit <= 0.9 is no longer maintained.
 
-\b polkit-qt-gui lets you easily associate GUI items with PolicyKit actions. By some simple
-wrapper classes you are able to associate QAction and QAbstractButton to a PolicyKit action,
-and get their properties changed accordingly to PolicyKit result. It includes the classes
+polkit-qt-1 is split in three libraries: polkit-qt-core-1, polkit-qt-gui-1 and polkit-qt-agent-1
+
+\b polkit-qt-core-1 lets you control actions and authentication without a GUI, with some very
+simple functions. It also lets you retrieve and control useful informations on the polkit
+authority. You will be mostly interested in the \c Authority class.
+
+\b polkit-qt-gui-1 lets you easily associate GUI items with polkit actions. Through some simple
+wrapper classes you are able to associate QAction and QAbstractButton to a polkit action,
+and get their properties changed accordingly to polkit's result. It includes the classes
 Action, ActionButton and ActionButtons
 
-\b polkit-qt-agent lets you write your own authentication agents.
+\b polkit-qt-agent-1 lets you write your own polkit authentication agents in a very simple way.
 
-\li A sample usage of polkit-qt can be found in \ref polkitqt_example
+\li A sample usage of polkit-qt-1 can be found in \ref polkitqt1_example
 \li <a href="classes.html">Alphabetical Class List</a>
 \li <a href="hierarchy.html">Class Hierarchy</a>
 
 
 
 
-\page polkitqt_example Polkit-qt usage example
+\page polkitqt1_example Polkit-qt usage example
 
-You can find an example usage of Polkit-qt in the examples/ dir. You can
+You can find an example usage of Polkit-qt-1 in the examples/ dir. You can
 build it by passing \c -DBUILD_EXAMPLES=TRUE to your cmake line. The structure
 consists of a .ui file and a main class, to demonstrate how easy it is to integrate
-PolicyKit support in an existing application. Let's see some details about it:
+polkit support in an existing application. Let's see some details about it:
 
 \code
 bt = new ActionButton(kickPB, "org.qt.policykit.examples.kick", this);
@@ -76,7 +84,7 @@ are kept in sync with the action.
 \code
 connect(bt, SIGNAL(triggered(bool)), this, SLOT(activateAction()));
 connect(bt, SIGNAL(clicked(QAbstractButton*,bool)), bt, SLOT(activate()));
-connect(bt, SIGNAL(activated()), this, SLOT(actionActivated()));
+connect(bt, SIGNAL(authorized()), this, SLOT(actionActivated()));
 \endcode
 
 Those three signals are all you need to control the action and the activation. Action::triggered()
@@ -91,8 +99,8 @@ and to the API Docs for more details.
 
 */
 
-// DOXYGEN_PROJECTVERSION=0.94.1
-// DOXYGEN_PROJECTNAME=Polkit-Qt1
+// DOXYGEN_PROJECTVERSION=0.95.1
+// DOXYGEN_PROJECTNAME=PolkitQt-1
 // DOXYGEN_ENABLE=YES
 
 // vim:ts=4:sw=4:expandtab:filetype=doxygen

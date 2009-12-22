@@ -9,5 +9,3 @@ TODO
   + authorization checking for non privileged user
   
 - document Listener and co.
-- fix the cmake library names
-- fix the list of installed header files (polkitqt1-authority.h + includes/Authority)

@@ -31,10 +31,11 @@
 
 typedef struct _PolkitAgentListener PolkitAgentListener;
 
-namespace PolkitQt1 {
-    class Subject;
-    class Identity;
-    class Details;
+namespace PolkitQt1
+{
+class Subject;
+class Identity;
+class Details;
 }
 
 namespace PolkitQt1

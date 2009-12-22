@@ -24,14 +24,15 @@
 
 #include <polkit/polkit.h>
 
-namespace PolkitQt1 {
+namespace PolkitQt1
+{
 
 class Details::Private
 {
-    public:
-        Private() {}
+public:
+    Private() {}
 
-        PolkitDetails *polkitDetails;
+    PolkitDetails *polkitDetails;
 };
 
 Details::Details(QObject *parent)
@@ -75,8 +76,7 @@ QStringList Details::keys() const
     gchar **result = polkit_details_get_keys(d->polkitDetails);
     QStringList list;
     int len = g_strv_length(result);
-    for (int i = 0; i < len; i++)
-    {
+    for (int i = 0; i < len; i++) {
         list.append(QString::fromUtf8(result[i]));
     }
     g_strfreev(result);

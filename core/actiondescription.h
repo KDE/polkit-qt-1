@@ -65,7 +65,7 @@ public:
      *
      * \param actionDesciption PolkitActionDescription
      */
-    ActionDescription(PolkitActionDescription *actionDescription);    
+    ActionDescription(PolkitActionDescription *actionDescription);
     ~ActionDescription();
 
     /**

@@ -23,14 +23,15 @@
 #include <QtCore/QDebug>
 #include <polkit/polkit.h>
 
-namespace PolkitQt1 {
+namespace PolkitQt1
+{
 
 class Subject::Private
 {
-    public:
-        Private(PolkitSubject *s) :subject(s) {}
+public:
+    Private(PolkitSubject *s) : subject(s) {}
 
-        PolkitSubject *subject;
+    PolkitSubject *subject;
 };
 
 Subject::Subject()
@@ -69,14 +70,13 @@ QString Subject::toString() const
 
 Subject *Subject::fromString(const QString &string)
 {
-   // should be in polkit library!!! but for strange reason it's neccessary to have it here
+    // should be in polkit library!!! but for strange reason it's neccessary to have it here
     g_type_init();
 
     Subject *subject = new Subject();
     GError *error = NULL;
     subject->d->subject = polkit_subject_from_string(string.toUtf8().data(), &error);
-    if (error != NULL)
-    {
+    if (error != NULL) {
         qWarning() << QString("Cannot create Subject from string: %1").arg(error->message);
         return NULL;
     }
@@ -151,8 +151,7 @@ UnixSessionSubject::UnixSessionSubject(qint64 pid)
 {
     GError *error = NULL;
     setSubject(polkit_unix_session_new_for_process_sync(pid, NULL, &error));
-    if (error != NULL)
-    {
+    if (error != NULL) {
         qWarning() << QString("Cannot create unix session: %1").arg(error->message);
         setSubject(NULL);
     }

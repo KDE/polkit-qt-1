@@ -41,8 +41,8 @@ G_BEGIN_DECLS
 typedef struct _PolkitQtListener PolkitQtListener;
 typedef struct _PolkitQtListenerClass PolkitQtListenerClass;
 
-GType                 polkit_qt_listener_get_type   (void) G_GNUC_CONST;
-PolkitAgentListener  *polkit_qt_listener_new        (void);
+GType                 polkit_qt_listener_get_type(void) G_GNUC_CONST;
+PolkitAgentListener  *polkit_qt_listener_new(void);
 
 G_END_DECLS
 

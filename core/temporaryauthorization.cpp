@@ -23,19 +23,20 @@
 
 #include <polkit/polkit.h>
 
-namespace PolkitQt1 {
+namespace PolkitQt1
+{
 
 class TemporaryAuthorization::Private
 {
-    public:
-        Private() {}
+public:
+    Private() {}
 
-        PolkitTemporaryAuthorization *temporaryAuthorization;
-        QString id;
-        QString actionId;
-        Subject *subject;
-        QDateTime timeObtained;
-        QDateTime timeExpires;
+    PolkitTemporaryAuthorization *temporaryAuthorization;
+    QString id;
+    QString actionId;
+    Subject *subject;
+    QDateTime timeObtained;
+    QDateTime timeExpires;
 };
 
 TemporaryAuthorization::TemporaryAuthorization(PolkitTemporaryAuthorization *pkTemporaryAuthorization, QObject *parent)

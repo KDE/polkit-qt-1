@@ -14,6 +14,6 @@ PkAgentExample::PkAgentExample(int &argc, char **argv)
 
     PolkitQt1::UnixSessionSubject *session;
     session = new PolkitQt1::UnixSessionSubject(getpid());
-    
+
     m_listener.registerListener(session, "/org/kde/PolicyKit1/AuthenticationAgent");
 }

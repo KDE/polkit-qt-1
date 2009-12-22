@@ -239,13 +239,13 @@ public:
      */
     void enumerateActions();
 
-     /**
-      * Synchronously retrieves all registered actions.
-      *
-      * \see enumerateActions Asynchronous version of this method.
-      *
-      * \return a list of Action IDs
-      */
+    /**
+     * Synchronously retrieves all registered actions.
+     *
+     * \see enumerateActions Asynchronous version of this method.
+     *
+     * \return a list of Action IDs
+     */
     ActionDescription::List enumerateActionsSync();
 
     /**
@@ -265,7 +265,7 @@ public:
      * \param objectPath the object path for the authentication agent
      */
     void registerAuthenticationAgent(Subject *subject, const QString &locale,
-                                          const QString &objectPath);
+                                     const QString &objectPath);
 
     /**
      * Registers an authentication agent.
@@ -280,7 +280,7 @@ public:
      *         \c false if the Authentication agent registration failed
     */
     bool registerAuthenticationAgentSync(Subject *subject, const QString &locale,
-                                     const QString &objectPath);
+                                         const QString &objectPath);
 
     /**
      * This method can be used to cancel the registration of the authentication agent.
@@ -332,16 +332,16 @@ public:
      */
     void authenticationAgentResponse(const QString &cookie, Identity *identity);
 
-     /**
-      * Provide response that \p identity successfully authenticated for the authentication request identified by \p cookie.
-      *
-      * \see authenticationAgentResponse Asynchronous version of this method.
-      *
-      * \param cookie The cookie passed to the authentication agent from the authority.
-      * \param identity The identity that was authenticated.
-      *
-      * \return \c true if authority acknowledged the call, \c false if error is set.
-      *
+    /**
+     * Provide response that \p identity successfully authenticated for the authentication request identified by \p cookie.
+     *
+     * \see authenticationAgentResponse Asynchronous version of this method.
+     *
+     * \param cookie The cookie passed to the authentication agent from the authority.
+     * \param identity The identity that was authenticated.
+     *
+     * \return \c true if authority acknowledged the call, \c false if error is set.
+     *
     */
     bool authenticationAgentResponseSync(const QString &cookie, Identity *identity);
 

@@ -67,11 +67,11 @@ bool PkExampleHelper::set(const QString &action)
     // We can check if the caller is authorized to the following action
     Authority::Result result;
     SystemBusNameSubject *subject;
-    
+
     subject = new SystemBusNameSubject(message().service());
-    
+
     result = Authority::instance()->checkAuthorizationSync("org.qt.policykit.examples.set",
-                                           subject , Authority::AllowUserInteraction);
+             subject , Authority::AllowUserInteraction);
     if (result == Authority::Yes) {
         qDebug() << message().service() << QString("Implicit authorization set to") << action;
         // Caller is authorized so we can perform the action
@@ -94,9 +94,8 @@ bool PkExampleHelper::setValue(const QString &action)
     doc.setContent(&file);
     file.close();
     QDomElement el = doc.firstChildElement("policyconfig").
-                         firstChildElement("action");
-    while (!el.isNull() && el.attribute("id", QString()) != "org.qt.policykit.examples.shout")
-    {
+                     firstChildElement("action");
+    while (!el.isNull() && el.attribute("id", QString()) != "org.qt.policykit.examples.shout") {
         el = el.nextSiblingElement("action");
     }
     el = el.firstChildElement("defaults");

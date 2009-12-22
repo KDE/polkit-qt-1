@@ -31,17 +31,17 @@ using namespace PolkitQt1::Agent;
 
 class Session::Private
 {
-    public:
-        Private() {}
-        ~Private();
+public:
+    Private() {}
+    ~Private();
 
-        static void completed(PolkitAgentSession *s, gboolean gained_authorization, gpointer user_data);
-        static void request(PolkitAgentSession *s, gchar *request, gboolean echo_on, gpointer user_data);
-        static void showError(PolkitAgentSession *s, gchar *text, gpointer user_data);
-        static void showInfo(PolkitAgentSession *s, gchar *text, gpointer user_data);
+    static void completed(PolkitAgentSession *s, gboolean gained_authorization, gpointer user_data);
+    static void request(PolkitAgentSession *s, gchar *request, gboolean echo_on, gpointer user_data);
+    static void showError(PolkitAgentSession *s, gchar *text, gpointer user_data);
+    static void showInfo(PolkitAgentSession *s, gchar *text, gpointer user_data);
 
-        AsyncResult *result;
-        PolkitAgentSession *polkitAgentSession;
+    AsyncResult *result;
+    PolkitAgentSession *polkitAgentSession;
 };
 
 Session::Private::~Private()
@@ -101,35 +101,35 @@ void Session::Private::completed(PolkitAgentSession *s, gboolean gained_authoriz
 {
     qDebug() << "COMPLETED";
     Session *session = (Session *)user_data;
-    emit ((Session *)user_data)->completed(gained_authorization);
+    emit((Session *)user_data)->completed(gained_authorization);
 }
 
 void Session::Private::request(PolkitAgentSession *s, gchar *request, gboolean echo_on, gpointer user_data)
 {
     qDebug() << "REQUEST";
-    emit ((Session *)user_data)->request(QString::fromUtf8(request), echo_on);
+    emit((Session *)user_data)->request(QString::fromUtf8(request), echo_on);
 }
 
 void Session::Private::showError(PolkitAgentSession *s, gchar *text, gpointer user_data)
 {
     qDebug() << "showError";
-    emit ((Session *)user_data)->showError(QString::fromUtf8(text));
+    emit((Session *)user_data)->showError(QString::fromUtf8(text));
 }
 
 void Session::Private::showInfo(PolkitAgentSession *s, gchar *text, gpointer user_data)
 {
     qDebug() << "showInfo";
-    emit ((Session *)user_data)->showInfo(QString::fromUtf8(text));
+    emit((Session *)user_data)->showInfo(QString::fromUtf8(text));
 }
 
 //
 
 class AsyncResult::Private
 {
-    public:
-        Private(GSimpleAsyncResult *r) : result(r) {};
+public:
+    Private(GSimpleAsyncResult *r) : result(r) {};
 
-        GSimpleAsyncResult *result;
+    GSimpleAsyncResult *result;
 };
 
 AsyncResult::AsyncResult(GSimpleAsyncResult *result)

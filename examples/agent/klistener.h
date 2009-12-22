@@ -46,11 +46,11 @@ public slots:
                                 PolkitQt1::Agent::AsyncResult *result);
     bool initiateAuthenticationFinish();
     void cancelAuthentication();
-    
+
     void request(const QString &request, bool echo);
     void completed(bool gainedAuthorization);
     void showError(const QString &text);
-    void showInfo(const QString &text);    
+    void showInfo(const QString &text);
 };
 
 #endif

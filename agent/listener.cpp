@@ -37,19 +37,19 @@ namespace Agent
 
 class ListenerPrivate
 {
-    public:
-        PolkitAgentListener *listener;
+public:
+    PolkitAgentListener *listener;
 };
 
 Listener::Listener(QObject *parent)
         : QObject(parent), d(new ListenerPrivate)
 {
     g_type_init();
-    
-    d->listener = polkit_qt_listener_new ();
-    
+
+    d->listener = polkit_qt_listener_new();
+
     qDebug() << "New PolkitAgentListener " << d->listener;
-    
+
     ListenerAdapter::instance()->addListener(this);
 }
 
@@ -57,14 +57,14 @@ Listener::Listener(PolkitAgentListener *listener, QObject *parent)
         : QObject(parent), d(new ListenerPrivate)
 {
     g_type_init();
-    
+
     d->listener = listener;
 }
 
 Listener::~Listener()
 {
     qDebug("Destroying listener");
-    
+
     ListenerAdapter::instance()->removeListener(this);
     g_object_unref(d->listener);
 }
@@ -73,10 +73,10 @@ bool Listener::registerListener(PolkitQt1::Subject *subject, const QString &obje
 {
     GError *error = NULL;
 
-    bool r = polkit_agent_register_listener (d->listener,
-                                             subject->subject(),
-                                             objectPath.toAscii().data(),
-                                             &error);
+    bool r = polkit_agent_register_listener(d->listener,
+                                            subject->subject(),
+                                            objectPath.toAscii().data(),
+                                            &error);
     if (error != NULL) {
         qWarning() << QString("Cannot register authentication agent: %1").arg(error->message);
         g_error_free(error);
@@ -87,7 +87,7 @@ bool Listener::registerListener(PolkitQt1::Subject *subject, const QString &obje
 
 const PolkitAgentListener *Listener::listener()
 {
-     return d->listener;
+    return d->listener;
 }
 
 }

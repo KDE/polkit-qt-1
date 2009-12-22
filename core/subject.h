@@ -43,14 +43,14 @@ namespace PolkitQt1
  * \class Subject subject.h Subject
  * \author Jaroslav Reznik <jreznik@redhat.com>
  *
- * \brief This class represents PolicyKit subjects 
+ * \brief This class represents PolicyKit subjects
  *
  * This class encapsulates the PolkitSubject interface.
- * 
+ *
  * \see UnixProcess
  * \see SystemBusName
  * \see UnixSession
- */    
+ */
 class POLKITQT1_EXPORT Subject
 {
 public:
@@ -96,15 +96,15 @@ private:
  * \class UnixProcessSubject subject.h Subject
  * \author Jaroslav Reznik <jreznik@redhat.com>
  *
- * \brief A class for representing a UNIX process. 
+ * \brief A class for representing a UNIX process.
  *
  * To uniquely identify processes, both the process
- * id and the start time of the process (a monotonic 
- * increasing value representing the time since the 
+ * id and the start time of the process (a monotonic
+ * increasing value representing the time since the
  * kernel was started) is used.
- * 
+ *
  * \sa Subject
- */    
+ */
 class POLKITQT1_EXPORT UnixProcessSubject : public Subject
 {
 public:
@@ -137,16 +137,16 @@ public:
     * Returns Unix process PID.
     *
     * \return A PID of associated Unix process.
-    */    
+    */
     qint64 pid() const;
 
     /**
     * Returns Unix process start time.
     *
     * \return A start time of associated Unix process.
-    */    
+    */
     qint64 startTime() const;
-    
+
     /**
     * Sets Unix process PID.
     *
@@ -159,10 +159,10 @@ public:
  * \class SystemBusNameSubject subject.h Subject
  * \author Jaroslav Reznik <jreznik@redhat.com>
  *
- * \brief A class for representing a process owning a unique name on the system bus. 
+ * \brief A class for representing a process owning a unique name on the system bus.
  *
  * \sa Subject
- */    
+ */
 class POLKITQT1_EXPORT SystemBusNameSubject : public Subject
 {
 public:
@@ -170,7 +170,7 @@ public:
     * Subject constructor, takes one parameter - system bus name.
     *
     * \param name A unique system bus name.
-    */    
+    */
     explicit SystemBusNameSubject(const QString &name);
 
     /**
@@ -186,9 +186,9 @@ public:
     * Returns system bus name.
     *
     * \return A unique system bus name.
-    */    
+    */
     QString name() const;
-    
+
     /**
     * Sets system bus name.
     *
@@ -203,11 +203,11 @@ public:
  *
  * \brief A class for representing unix session.
  *
- * The session id is an opaque string obtained from 
+ * The session id is an opaque string obtained from
  * ConsoleKit.
  *
  * \sa Subject
- */    
+ */
 class POLKITQT1_EXPORT UnixSessionSubject : public Subject
 {
 public:
@@ -215,16 +215,16 @@ public:
     * Subject constructor, takes one parameter - session id.
     *
     * \param sessionId The session id.
-    */    
+    */
     explicit UnixSessionSubject(const QString &sessionId);
-    
+
     /**
     * Subject constructor, takes one parameter - pid of process.
-    * 
+    *
     * Synchronous!
     *
     * \param pid The session's process pid.
-    */  
+    */
     explicit UnixSessionSubject(qint64 pid);
 
     /**
@@ -240,9 +240,9 @@ public:
     * Returns session id.
     *
     * \return A session id.
-    */    
+    */
     QString sessionId() const;
-    
+
     /**
     * Sets session id.
     *

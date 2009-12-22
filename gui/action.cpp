@@ -26,9 +26,11 @@
 
 #include <QtCore/QCoreApplication>
 
-namespace PolkitQt1 {
+namespace PolkitQt1
+{
 
-namespace Gui {
+namespace Gui
+{
 
 /**
   * \internal
@@ -221,9 +223,9 @@ bool Action::Private::computePkResult()
 {
     Authority::Result old_result;
     UnixProcessSubject *subject;
-  
+
     subject = new UnixProcessSubject(parent->targetPID());
-    
+
     old_result = pkResult;
     pkResult = Authority::Unknown;
 
@@ -261,7 +263,7 @@ bool Action::is(const QString &other) const
 
 void Action::revoke()
 {
-/*TODO: implement it? no negative authorizations available, no authorization db*/
+    /*TODO: implement it? no negative authorizations available, no authorization db*/
 }
 
 void Action::setText(const QString &text, States states)
@@ -495,7 +497,7 @@ bool Action::isVisible(Action::State state) const
 void Action::setPolkitAction(const QString &actionId)
 {
     //TODO:
-    d->actionId = actionId; 
+    d->actionId = actionId;
 
     d->computePkResult();
     d->updateAction();

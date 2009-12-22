@@ -14,8 +14,7 @@ using namespace PolkitQt1::Agent;
 
 void wait()
 {
-    for (int i = 0; i < 100; i++)
-    {
+    for (int i = 0; i < 100; i++) {
         usleep(100);
         QCoreApplication::processEvents();
     }
@@ -77,11 +76,10 @@ void TestAuth::test_Auth_enumerateActions()
     QVERIFY(!Authority::instance()->hasError());
     // Check whether enumerateAction returns at least example actions
     int count = 0;
-    foreach (ActionDescription *ad, list)
-    {
+    foreach(ActionDescription *ad, list) {
         if ((ad->actionId() == "org.qt.policykit.examples.kick") ||
-            (ad->actionId() == "org.qt.policykit.examples.cry") ||
-            (ad->actionId() == "org.qt.policykit.examples.bleed"))
+                (ad->actionId() == "org.qt.policykit.examples.cry") ||
+                (ad->actionId() == "org.qt.policykit.examples.bleed"))
             count++;
     }
     QCOMPARE(count, 3);
@@ -96,11 +94,10 @@ void TestAuth::test_Auth_enumerateActions()
     QCOMPARE(spy.count(), 1);
     list = qVariantValue<PolkitQt1::ActionDescription::List> (spy.takeFirst()[0]);
     QVERIFY(!Authority::instance()->hasError());
-    foreach (ActionDescription *ad, list)
-    {
+    foreach(ActionDescription *ad, list) {
         if ((ad->actionId() == "org.qt.policykit.examples.kick") ||
-            (ad->actionId() == "org.qt.policykit.examples.cry") ||
-            (ad->actionId() == "org.qt.policykit.examples.bleed"))
+                (ad->actionId() == "org.qt.policykit.examples.cry") ||
+                (ad->actionId() == "org.qt.policykit.examples.bleed"))
             count++;
     }
     QCOMPARE(count, 3);
@@ -155,18 +152,18 @@ void TestAuth::test_Authority()
     // Verify emiting of the signals
     QSignalSpy spy(authority, SIGNAL(consoleKitDBChanged()));
     QDBusMessage msg = QDBusMessage::createMethodCall("org.freedesktop.ConsoleKit",
-                                                      "/org/freedesktop/ConsoleKit/Manager",
-                                                      "org.freedesktop.ConsoleKit.Manager",
-                                                      "OpenSession");
+                       "/org/freedesktop/ConsoleKit/Manager",
+                       "org.freedesktop.ConsoleKit.Manager",
+                       "OpenSession");
     QDBusMessage reply = QDBusConnection::systemBus().call(msg);
     QString cookie;
     cookie = qVariantValue<QString> (reply.arguments()[0]);
 
 
     msg = QDBusMessage::createMethodCall("org.freedesktop.ConsoleKit",
-                                                      "/org/freedesktop/ConsoleKit/Manager",
-                                                      "org.freedesktop.ConsoleKit.Manager",
-                                                      "CloseSession");
+                                         "/org/freedesktop/ConsoleKit/Manager",
+                                         "org.freedesktop.ConsoleKit.Manager",
+                                         "CloseSession");
     msg.setArguments(QList<QVariant> () << cookie);
     QDBusConnection::systemBus().call(msg);
     // FIXME: Emitting consoleKitDBChanged is not working now

@@ -61,35 +61,34 @@ Listener* ListenerAdapter::findListener(PolkitAgentListener *listener)
 {
     Listener *listItem;
 
-    foreach (listItem, m_listeners)
-    {
+    foreach(listItem, m_listeners) {
         Q_ASSERT(listItem);
 
         if (listItem->listener() == listener)
             return listItem;
 
     }
-    
+
     return NULL;
 }
 
-void ListenerAdapter::polkit_qt_listener_initiate_authentication (PolkitAgentListener  *listener,
-                                                                  const gchar          *action_id,
-                                                                  const gchar          *message,
-                                                                  const gchar          *icon_name,
-                                                                  PolkitDetails        *details,
-                                                                  const gchar          *cookie,
-                                                                  GList                *identities,
-                                                                  GCancellable         *cancellable,
-                                                                  GSimpleAsyncResult *result)
+void ListenerAdapter::polkit_qt_listener_initiate_authentication(PolkitAgentListener  *listener,
+        const gchar          *action_id,
+        const gchar          *message,
+        const gchar          *icon_name,
+        PolkitDetails        *details,
+        const gchar          *cookie,
+        GList                *identities,
+        GCancellable         *cancellable,
+        GSimpleAsyncResult *result)
 {
     qDebug() << "polkit_qt_listener_initiate_authentication callback for " << listener;
-    
+
     QList<PolkitQt1::Identity *> idents;
     PolkitQt1::Details *dets;
-    
+
     Listener *list = findListener(listener);
-    
+
     for (GList *identity = g_list_first(identities); identity != NULL; identity = g_list_next(identity))
         idents.append(new PolkitQt1::Identity((PolkitIdentity *)identity->data));
 
@@ -104,9 +103,9 @@ void ListenerAdapter::polkit_qt_listener_initiate_authentication (PolkitAgentLis
                                  new AsyncResult(result));
 }
 
-gboolean ListenerAdapter::polkit_qt_listener_initiate_authentication_finish (PolkitAgentListener  *listener,
-                                                                             GAsyncResult         *res,
-                                                                             GError              **error)
+gboolean ListenerAdapter::polkit_qt_listener_initiate_authentication_finish(PolkitAgentListener  *listener,
+        GAsyncResult         *res,
+        GError              **error)
 {
     qDebug() << "polkit_qt_listener_initiate_authentication_finish callback for " << listener;
 
@@ -119,23 +118,23 @@ gboolean ListenerAdapter::polkit_qt_listener_initiate_authentication_finish (Pol
 void ListenerAdapter::cancelled_cb(PolkitAgentListener *listener)
 {
     qDebug() << "cancelled_cb for " << listener;
-    
+
     Listener *list = findListener(listener);
-    
+
     list->cancelAuthentication();
 }
 
 void ListenerAdapter::addListener(Listener *listener)
 {
     qDebug() << "Adding new listener " << listener << "for " << listener->listener();
-    
+
     m_listeners.append(listener);
 }
 
 void ListenerAdapter::removeListener(Listener *listener)
 {
     qDebug() << "Removing listener " << listener;
-    
+
     // should be safe as we don't have more than one same listener registered in one time
     m_listeners.removeOne(listener);
 }

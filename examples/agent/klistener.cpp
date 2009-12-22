@@ -46,22 +46,21 @@ void KListener::initiateAuthentication(const QString &actionId,
     qDebug() << "iconName " << iconName;
     qDebug() << details->keys();
     qDebug() << "cookie" << cookie;
-    
+
     PolkitQt1::Identity *identity;
-    
-    foreach(identity, identities)
-    {
-	qDebug() << identity->toString();
-	Session *session;
-	session = new Session(identity, cookie, result);
-	connect(session, SIGNAL(request(QString, bool)), this, SLOT(request(QString, bool)));
-	connect(session, SIGNAL(completed(bool)), this, SLOT(completed(bool)));
-	connect(session, SIGNAL(showError(QString)), this, SLOT(showError(QString)));
-	connect(session, SIGNAL(showInfo(QString)), this, SLOT(showInfo(QString)));	
-	session->initiate();
+
+    foreach(identity, identities) {
+        qDebug() << identity->toString();
+        Session *session;
+        session = new Session(identity, cookie, result);
+        connect(session, SIGNAL(request(QString, bool)), this, SLOT(request(QString, bool)));
+        connect(session, SIGNAL(completed(bool)), this, SLOT(completed(bool)));
+        connect(session, SIGNAL(showError(QString)), this, SLOT(showError(QString)));
+        connect(session, SIGNAL(showInfo(QString)), this, SLOT(showInfo(QString)));
+        session->initiate();
     }
-    
-    
+
+
 }
 
 bool KListener::initiateAuthenticationFinish()
@@ -74,13 +73,13 @@ void KListener::cancelAuthentication()
 {
     qDebug() << "Cancelling authentication";
 }
-    
+
 void KListener::request(const QString &request, bool echo)
 {
     qDebug() << "Request: " << request;
-    
+
     Session *session = (Session *)sender();
-    
+
     session->setResponse("");
 }
 
@@ -90,7 +89,7 @@ void KListener::completed(bool gainedAuthorization)
     Session *session = (Session *)sender();
 
     session->result()->setCompleted();
-    
+
     delete session;
 }
 

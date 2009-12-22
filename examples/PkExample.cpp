@@ -201,11 +201,11 @@ void PkExample::actionActivated()
             QListWidgetItem *item;
             if (reply.arguments().first().toBool())
                 item = new QListWidgetItem(QPixmap(":/Icons/custom-yes.png"),
-                        QString("Implicit authorization for shout has been set to %0")
-                        .arg(setCB->currentText()));
+                                           QString("Implicit authorization for shout has been set to %0")
+                                           .arg(setCB->currentText()));
             else
                 item = new QListWidgetItem(QPixmap(":/Icons/custom-no.png"),
-                        QString("Can't change the implicit authorization. Denied."));
+                                           QString("Can't change the implicit authorization. Denied."));
             actionList->addItem(item);
             qDebug() << reply.arguments().first().toString();
         } else if (reply.type() == QDBusMessage::MethodCallMessage) {
@@ -223,11 +223,11 @@ void PkExample::actionActivated()
 
     Authority::Result result;
     UnixProcessSubject *subject;
-    
+
     subject = new UnixProcessSubject(static_cast<uint>(QCoreApplication::applicationPid()));
-    
+
     result = Authority::instance()->checkAuthorizationSync(action->actionId(), subject,
-                      Authority::AllowUserInteraction);
+             Authority::AllowUserInteraction);
     if (result == Authority::Yes) {
         // in the helper you will do the action
         qDebug() << "caller is authorized to do:" << action->actionId();

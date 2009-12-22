@@ -14,15 +14,15 @@ include (${QT_USE_FILE})
 include (InstallSettings)
 include (FindPkgConfig)
 
-pkg_check_modules (POLKIT REQUIRED polkit-gobject-1>=0.95)
-pkg_check_modules (POLKIT_AGENT REQUIRED polkit-agent-1>=0.95)
+pkg_check_modules (POLKIT-1 REQUIRED polkit-gobject-1>=0.95)
+pkg_check_modules (POLKIT-1_AGENT REQUIRED polkit-agent-1>=0.95)
 
-message(STATUS " ${POLKIT_INCLUDE_DIRS} ===========")
+message(STATUS " ${POLKIT-1_INCLUDE_DIRS} ===========")
 
 include_directories(
     ${CMAKE_CURRENT_BINARY_DIR}
-    ${POLKIT_INCLUDE_DIRS}
-    ${POLKITDBUS_INCLUDE_DIRS}
+    ${POLKIT-1_INCLUDE_DIRS}
+    ${POLKIT-1_AGENT_INCLUDE_DIRS}
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${CMAKE_CURRENT_SOURCE_DIR}/core
     ${CMAKE_CURRENT_SOURCE_DIR}/includes

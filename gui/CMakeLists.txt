@@ -16,7 +16,7 @@ target_link_libraries(polkit-qt-gui-1
 	${QT_QTCORE_LIBRARY}
 	${QT_QTGUI_LIBRARY}
 	${QT_QTDBUS_LIBRARY}
-	${POLKIT_LIBRARIES}
+	${POLKIT-1_LIBRARIES}
 )
                       
 set_target_properties(polkit-qt-gui-1 PROPERTIES VERSION ${CMAKE_POLKITQT-1_VERSION_STRING}

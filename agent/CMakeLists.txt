@@ -12,10 +12,10 @@ set(polkit_qt_agent_SRCS
 automoc4_add_library(polkit-qt-agent-1 SHARED ${polkit_qt_agent_SRCS})
 
 target_link_libraries(polkit-qt-agent-1
-	${POLKIT_LIBRARIES}
+  ${POLKIT-1_LIBRARIES}
   ${QT_QTCORE_LIBRARY}
-  ${POLKIT_AGENT_LIBRARIES}
-	polkit-qt-core-1
+  ${POLKIT-1_AGENT_LIBRARIES}
+  polkit-qt-core-1
 )
 
 set_target_properties(polkit-qt-agent-1 PROPERTIES VERSION ${CMAKE_POLKITQT-1_VERSION_STRING}

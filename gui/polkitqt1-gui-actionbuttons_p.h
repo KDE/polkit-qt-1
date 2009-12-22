@@ -18,8 +18,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef ACTIONBUTTONS_P_H
-#define ACTIONBUTTONS_P_H
+#ifndef POLKITQT1_GUI_ACTIONBUTTONS_P_H
+#define POLKITQT1_GUI_ACTIONBUTTONS_P_H
 
 #include "polkitqt1-gui-actionbutton_p.h"
 

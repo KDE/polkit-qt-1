@@ -18,8 +18,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef SESSION_H
-#define SESSION_H
+#ifndef POLKITQT1_AGENT_SESSION_H
+#define POLKITQT1_AGENT_SESSION_H
 
 #include <QtCore/QObject>
 #include "polkitqt1-identity.h"

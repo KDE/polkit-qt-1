@@ -1,7 +1,7 @@
 /**
-\mainpage Polkit-qt - Qt PolicyKit wrapper
+\mainpage Polkit-qt-1 - Qt wrapper around polkit-1
 
-\section polkitqt_overview Overview
+\section polkitqt1_overview Overview
 
 \note Please note that if you're developing an application on the KDE Development
       Platform and not just with Qt, you might want to use KAuth (kdelibs/core/auth)
@@ -35,7 +35,7 @@ Action, ActionButton and ActionButtons
 
 
 
-\page polkitqt1_example Polkit-qt usage example
+\page polkitqt1_example Polkit-qt-1 usage example
 
 You can find an example usage of Polkit-qt-1 in the examples/ dir. You can
 build it by passing \c -DBUILD_EXAMPLES=TRUE to your cmake line. The structure
@@ -90,10 +90,10 @@ connect(bt, SIGNAL(authorized()), this, SLOT(actionActivated()));
 Those three signals are all you need to control the action and the activation. Action::triggered()
 lets you start the activation/revoke when needed, ActionButton::clicked() lets you do the same thing
 with even more ease, just by manually connecting the signal to ActionButton::activate() (see the docs
-to understand why this connection doesn't happen automatically), and Action::activated() signal notifies
-you when PolicyKit has authorized you to perform the action.
+to understand why this connection doesn't happen automatically), and Action::authorized() signal notifies
+you when polkit has authorized you to perform the action.
 
-As you can see, usage of Polkit-Qt is extremely simple. Have a look at the complete example
+As you can see, usage of polkit-qt-1 is extremely simple. Have a look at the complete example
 and to the API Docs for more details.
 
 

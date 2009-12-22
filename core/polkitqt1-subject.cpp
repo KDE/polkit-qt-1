@@ -70,7 +70,7 @@ QString Subject::toString() const
 
 Subject *Subject::fromString(const QString &string)
 {
-    // should be in polkit library!!! but for strange reason it's neccessary to have it here
+    // should be in polkit library!!! but for strange reason it's necessary to have it here
     g_type_init();
 
     Subject *subject = new Subject();

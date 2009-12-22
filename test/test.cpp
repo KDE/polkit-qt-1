@@ -58,15 +58,15 @@ void TestAuth::test_Auth_checkAuthorization()
     wait();
     QCOMPARE(spy.count(), 0);
 
-    // Check if it can cancel user authentification dialog
+    // Check if it can cancel user authentication dialog
     authority->checkAuthorization("org.qt.policykit.examples.bleed", process, Authority::AllowUserInteraction);
     // Show it for second
     sleep(1);
     // And now kill it
     authority->checkAuthorizationCancel();
     QVERIFY(!authority->hasError());
-    // But how to test if it was successfull?
-    qWarning() << "You should see authentification dialog for short period.";
+    // But how to test if it was successful?
+    qWarning() << "You should see an authentication dialog for a short period.";
 }
 
 void TestAuth::test_Auth_enumerateActions()

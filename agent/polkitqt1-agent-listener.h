@@ -18,8 +18,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef POLKIT_QT_AGENT_LISTENER_H
-#define POLKIT_QT_AGENT_LISTENER_H
+#ifndef POLKITQT1_AGENT_LISTENER_H
+#define POLKITQT1_AGENT_LISTENER_H
 
 #include "polkitqt1-export.h"
 

@@ -18,8 +18,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef POLKIT_QT_AGENT_LISTENER_ADAPTER_H
-#define POLKIT_QT_AGENT_LISTENER_ADAPTER_H
+#ifndef LISTENER_ADAPTER_P_H
+#define LISTENER_ADAPTER_P_H
 
 #include <QtCore/QObject>
 

@@ -21,8 +21,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef POLKIT_QT_AUTHORITY_H
-#define POLKIT_QT_AUTHORITY_H
+#ifndef POLKITQT1_AUTHORITY_H
+#define POLKITQT1_AUTHORITY_H
 
 #include "polkitqt1-export.h"
 #include "polkitqt1-identity.h"
@@ -95,7 +95,7 @@ public:
 
     /** Error codes for the authority class */
     enum ErrorCode {
-        /** No error occured **/
+        /** No error occurred **/
         E_None = 0x00,
         /** Authority cannot be obtained **/
         E_GetAuthority = 0x01,
@@ -157,7 +157,7 @@ public:
     ErrorCode lastError() const;
 
     /**
-     * Get detail information about error that occured.
+     * Get detail information about error that occurred.
      *
      * \return detail message
      */

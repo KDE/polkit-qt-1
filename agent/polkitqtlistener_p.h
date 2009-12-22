@@ -20,8 +20,8 @@
  * polkit-qt-listener based on code by David Zeuthen <davidz@redhat.com>
  */
 
-#ifndef POLKIT_QT_LISTENER_H
-#define POLKIT_QT_LISTENER_H
+#ifndef POLKITQT_LISTENER_P_H
+#define POLKITQT_LISTENER_P_H
 
 #define POLKIT_AGENT_I_KNOW_API_IS_SUBJECT_TO_CHANGE 1
 

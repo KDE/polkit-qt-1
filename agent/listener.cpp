@@ -29,9 +29,13 @@
 #include "identity.h"
 #include "details.h"
 
-using namespace PolkitQt1::Agent;
+namespace PolkitQt1
+{
 
-class PolkitQt1::Agent::ListenerPrivate
+namespace Agent
+{
+
+class ListenerPrivate
 {
     public:
         PolkitAgentListener *listener;
@@ -86,3 +90,8 @@ const PolkitAgentListener *Listener::listener()
      return d->listener;
 }
 
+}
+
+}
+
+#include "listener.moc"

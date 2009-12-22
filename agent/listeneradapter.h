@@ -50,7 +50,7 @@ class ListenerAdapter : public QObject
 public:
     static ListenerAdapter* instance();
     ~ListenerAdapter() {}
-    
+
     void polkit_qt_listener_initiate_authentication(PolkitAgentListener  *listener,
                                                     const gchar          *action_id,
                                                     const gchar          *message,
@@ -60,7 +60,7 @@ public:
                                                     GList                *identities,
                                                     GCancellable         *cancellable,
                                                     GSimpleAsyncResult   *result);
-							   
+
     gboolean polkit_qt_listener_initiate_authentication_finish(PolkitAgentListener  *listener,
                                                                GAsyncResult         *res,
                                                                GError               **error);
@@ -69,10 +69,10 @@ private:
     void addListener(Listener *listener);
     void removeListener(Listener *listener);
     Listener* findListener(PolkitAgentListener *listener);
-    
+
     explicit ListenerAdapter(QObject *parent = 0); 
     QList<Listener *> m_listeners;
-    
+
     friend class Listener;
 };
 

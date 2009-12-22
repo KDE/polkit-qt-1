@@ -45,9 +45,8 @@ namespace Agent
  * \internal
  * \brief Encapsulation of GSimpleAsyncResult to QObject class
  */
-class POLKITQT1_EXPORT AsyncResult : public QObject
+class POLKITQT1_EXPORT AsyncResult
 {
-    Q_OBJECT
 public:
     explicit AsyncResult(GSimpleAsyncResult *result);
     virtual ~AsyncResult();
@@ -55,7 +54,7 @@ public:
     /**
      * \brief Mark the action that is tied to this result as completed.
      */
-    void complete();
+    void setCompleted();
 
     /**
      * \brief Sets an error for the asynchronous result.
@@ -81,6 +80,7 @@ private:
 class POLKITQT1_EXPORT Session : public QObject
 {
     Q_OBJECT
+    Q_DISABLE_COPY(Session)
 public:
     /**
      * Create a new authentication session.
@@ -119,7 +119,7 @@ public:
      *
      * \param response Response from the user, typically a password
      */
-    void response(const QString &response);
+    void setResponse(const QString &response);
 
     /**
      * Cancel the authentication session.

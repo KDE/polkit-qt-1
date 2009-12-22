@@ -82,7 +82,7 @@ void Session::initiate()
     polkit_agent_session_initiate(d->polkitAgentSession);
 }
 
-void Session::response(const QString &response)
+void Session::setResponse(const QString &response)
 {
     polkit_agent_session_response(d->polkitAgentSession, response.toUtf8().data());
 }
@@ -142,7 +142,7 @@ AsyncResult::~AsyncResult()
     g_object_unref(d->result);
 }
 
-void AsyncResult::complete()
+void AsyncResult::setCompleted()
 {
     if (d->result == NULL)
         return;
@@ -157,3 +157,5 @@ void AsyncResult::setError(const QString &text)
     Q_ASSERT(d->result);
     g_simple_async_result_set_error(d->result, POLKIT_ERROR, POLKIT_ERROR_FAILED, "%s", text.toUtf8().data());
 }
+
+#include "session.moc"

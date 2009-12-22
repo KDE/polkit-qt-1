@@ -23,7 +23,11 @@
 #define POLKIT_AGENT_I_KNOW_API_IS_SUBJECT_TO_CHANGE 1
 #include <polkitagent/polkitagent.h>
 
-using namespace PolkitQt1::Agent;
+namespace PolkitQt1
+{
+
+namespace Agent
+{
 
 class ListenerAdapterHelper
 {
@@ -136,3 +140,8 @@ void ListenerAdapter::removeListener(Listener *listener)
     m_listeners.removeOne(listener);
 }
 
+}
+
+}
+
+#include "listeneradapter.moc"

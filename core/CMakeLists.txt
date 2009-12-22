@@ -4,12 +4,12 @@ include_directories(
 )
 
 set(polkit_qt_core_SRCS
-    authority.cpp
-    identity.cpp
-    subject.cpp
-    temporaryauthorization.cpp
-    details.cpp
-    actiondescription.cpp
+    polkitqt1-authority.cpp
+    polkitqt1-identity.cpp
+    polkitqt1-subject.cpp
+    polkitqt1-temporaryauthorization.cpp
+    polkitqt1-details.cpp
+    polkitqt1-actiondescription.cpp
 )
 
 automoc4_add_library(polkit-qt-core-1 SHARED ${polkit_qt_core_SRCS})

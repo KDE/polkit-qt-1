@@ -24,10 +24,10 @@
 #include <QtCore/QObject>
 #include <QtCore/QString>
 
-#include "agent/listener.h"
-#include "core/identity.h"
-#include "core/details.h"
-#include "agent/session.h"
+#include "agent/polkitqt1-agent-listener.h"
+#include "core/polkitqt1-identity.h"
+#include "core/polkitqt1-details.h"
+#include "agent/polkitqt1-agent-session.h"
 
 class KListener : public PolkitQt1::Agent::Listener
 {

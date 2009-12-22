@@ -21,7 +21,7 @@
 #ifndef DETAILS_H
 #define DETAILS_H
 
-#include "export.h"
+#include "polkitqt1-export.h"
 
 #include <QtCore/QObject>
 
@@ -38,7 +38,7 @@ namespace PolkitQt1
 {
 
 /**
- * \class Details details.h Details
+ * \class Details polkitqt1-details.h Details
  * \author Radek Novacek <rnovacek@redhat.com>
  *
  * \brief Class used for passing details around.

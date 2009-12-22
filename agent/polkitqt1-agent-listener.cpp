@@ -18,16 +18,16 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "listener.h"
+#include "polkitqt1-agent-listener.h"
 
 #include <QtCore/QDebug>
 
 #include "polkitqtlistener_p.h"
 
-#include "authority.h"
-#include "subject.h"
-#include "identity.h"
-#include "details.h"
+#include "polkitqt1-authority.h"
+#include "polkitqt1-subject.h"
+#include "polkitqt1-identity.h"
+#include "polkitqt1-details.h"
 
 namespace PolkitQt1
 {
@@ -94,4 +94,4 @@ const PolkitAgentListener *Listener::listener()
 
 }
 
-#include "listener.moc"
+#include "polkitqt1-agent-listener.moc"

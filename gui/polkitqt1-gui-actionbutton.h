@@ -22,8 +22,8 @@
 #ifndef POLKIT_QT_ACTIONBUTTON_H
 #define POLKIT_QT_ACTIONBUTTON_H
 
-#include "export.h"
-#include "action.h"
+#include "polkitqt1-export.h"
+#include "polkitqt1-gui-action.h"
 
 class QAbstractButton;
 
@@ -35,7 +35,7 @@ namespace Gui
 
 class ActionButtonPrivate;
 /**
- * \class ActionButton actionbutton.h ActionButton
+ * \class ActionButton polkitqt1-gui-actionbutton.h ActionButton
  * \author Daniel Nicoletti <dantti85-pk@yahoo.com.br>
  * \author Dario Freddi <drf@kde.org>
  *

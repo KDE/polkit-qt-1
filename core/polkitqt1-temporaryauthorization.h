@@ -21,7 +21,7 @@
 #ifndef TEMPORARYAUTHORIZATION_H
 #define TEMPORARYAUTHORIZATION_H
 
-#include "subject.h"
+#include "polkitqt1-subject.h"
 
 #include <QtCore/QObject>
 #include <QtCore/QDateTime>
@@ -39,7 +39,7 @@ namespace PolkitQt1
 {
 
 /**
- * \class TemporaryAuthorization temporaryauthorization.h TemporaryAuthorization
+ * \class TemporaryAuthorization polkitqt1-temporaryauthorization.h TemporaryAuthorization
  * \author Radek Novacek <rnovacek@redhat.com>
  *
  * \brief This class represents PolicyKit temporary authorization

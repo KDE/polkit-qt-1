@@ -22,7 +22,7 @@
 #define SESSION_H
 
 #include <QtCore/QObject>
-#include "identity.h"
+#include "polkitqt1-identity.h"
 
 typedef struct _GSimpleAsyncResult GSimpleAsyncResult;
 typedef struct _PolkitAgentSession PolkitAgentSession;
@@ -70,7 +70,7 @@ private:
 };
 
 /**
- * \class Session session.h Session
+ * \class Session polkitqt1-agent-session.h Session
  * \author Radek Novacek <rnovacek@redhat.com>
  *
  * This class is interface for interacting with native
@@ -137,7 +137,7 @@ public:
 Q_SIGNALS:
     /**
      * This signal will be emitted when the authentication
-     * session has been completed or cancelled.
+     * polkitqt1-agent-session.has been completed or cancelled.
      *
      * \param gainedAuthorization \c True if authorization was successfully obtained.
      */

@@ -18,7 +18,7 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "identity.h"
+#include "polkitqt1-identity.h"
 
 #include <polkit/polkit.h>
 

@@ -21,7 +21,7 @@
 #ifndef POLICYKIT_QT_SUBJECT_H
 #define POLICYKIT_QT_SUBJECT_H
 
-#include "export.h"
+#include "polkitqt1-export.h"
 
 #include <QtCore/QObject>
 
@@ -40,7 +40,7 @@ namespace PolkitQt1
 {
 
 /**
- * \class Subject subject.h Subject
+ * \class Subject polkitqt1-subject.h Subject
  * \author Jaroslav Reznik <jreznik@redhat.com>
  *
  * \brief This class represents PolicyKit subjects
@@ -93,7 +93,7 @@ private:
 };
 
 /**
- * \class UnixProcessSubject subject.h Subject
+ * \class UnixProcessSubject polkitqt1-subject.h Subject
  * \author Jaroslav Reznik <jreznik@redhat.com>
  *
  * \brief A class for representing a UNIX process.
@@ -156,7 +156,7 @@ public:
 };
 
 /**
- * \class SystemBusNameSubject subject.h Subject
+ * \class SystemBusNameSubject polkitqt1-subject.h Subject
  * \author Jaroslav Reznik <jreznik@redhat.com>
  *
  * \brief A class for representing a process owning a unique name on the system bus.
@@ -198,7 +198,7 @@ public:
 };
 
 /**
- * \class UnixSessionSubject subject.h Subject
+ * \class UnixSessionSubject polkitqt1-subject.h Subject
  * \author Jaroslav Reznik <jreznik@redhat.com>
  *
  * \brief A class for representing unix session.

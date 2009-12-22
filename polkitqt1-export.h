@@ -1,6 +1,7 @@
 /*
  * This file is part of the Polkit-qt project
  * Copyright (C) 2009 Dario Freddi <drf@kde.org>
+ * Copyright (C) 2007 David Faure <faure@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -18,33 +19,26 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef ACTIONBUTTON_P_H
-#define ACTIONBUTTON_P_H
+#ifndef POLKITQT1_EXPORT_H
+#define POLKITQT1_EXPORT_H
 
-#include <actionbutton.h>
+/** \file polkitqt1-export.h
+    \brief Contains Macros for exporting symbols
 
-#include <QtCore/QList>
-#include <QtGui/QAbstractButton>
+    This file contains macros needed for exporting/importing symbols
+*/
 
-/**
-  * \internal
-  */
-class PolkitQt1::Gui::ActionButtonPrivate
-{
-public:
-    ActionButtonPrivate(const QList<QAbstractButton *> &b)
-            : buttons(b) {}
-    virtual ~ActionButtonPrivate() {}
+#include <QtCore/QtGlobal>
 
-    void addButton(QAbstractButton *button);
-    void removeButton(QAbstractButton *button);
-    void updateButton();
-    void streamClicked(bool);
+#ifndef POLKITQT1_EXPORT
+# if defined(MAKE_POLKITQT1_LIB)
+/* We are building this library */
+#  define POLKITQT1_EXPORT Q_DECL_EXPORT
+# else
+/* We are using this library */
+#  define POLKITQT1_EXPORT Q_DECL_IMPORT
+# endif
+#endif
 
-    Q_DECLARE_PUBLIC(ActionButton)
-    ActionButton *q_ptr;
+#endif /*POLKITQT1_EXPORT_H*/
 
-    QList<QAbstractButton *> buttons;
-};
-
-#endif /* ACTIONBUTTON_P_H */

@@ -4,8 +4,8 @@ include_directories(
 )
 
 set(polkit_qt_agent_SRCS
-    session.cpp
-    listener.cpp
+    polkitqt1-agent-session.cpp
+    polkitqt1-agent-listener.cpp
     listeneradapter.cpp
     polkitqtlistener.cpp
 )

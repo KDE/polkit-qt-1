@@ -21,9 +21,9 @@
 
 #include "PkExample.h"
 
-#include "gui/actionbutton.h"
-#include "gui/actionbuttons.h"
-#include "core/authority.h"
+#include "gui/polkitqt1-gui-actionbutton.h"
+#include "gui/polkitqt1-gui-actionbuttons.h"
+#include "core/polkitqt1-authority.h"
 #include <QtCore/QDebug>
 
 #include <QtDBus/QDBusMessage>

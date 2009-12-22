@@ -18,7 +18,7 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "actiondescription.h"
+#include "polkitqt1-actiondescription.h"
 
 #include <QtCore/QString>
 

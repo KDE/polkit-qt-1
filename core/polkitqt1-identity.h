@@ -21,7 +21,7 @@
 #ifndef POLKIT_QT_IDENTITY_H
 #define POLKIT_QT_IDENTITY_H
 
-#include "export.h"
+#include "polkitqt1-export.h"
 
 #include <unistd.h>
 
@@ -42,7 +42,7 @@ namespace PolkitQt1
 {
 
 /**
- * \class Identity identity.h Identity
+ * \class Identity polkitqt1-identity.h Identity
  * \author Lukas Tinkl <ltinkl@redhat.com>
  *
  * This class encapsulates the PolkitIdentity interface.
@@ -100,7 +100,7 @@ private:
 };
 
 /**
-  * \class UnixUserIdentity identity.h Identity
+  * \class UnixUserIdentity polkitqt1-identity.h Identity
   *
   * An object representing a user identity on a UNIX system.
   *
@@ -149,7 +149,7 @@ public:
 };
 
 /**
-  * \class UnixGroupIdentity identity.h Identity
+  * \class UnixGroupIdentity polkitqt1-identity.h Identity
   *
   * An object representing a group identity on a UNIX system.
   *

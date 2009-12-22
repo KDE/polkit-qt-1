@@ -1,1 +1,1 @@
-#include "../authority.h"
+#include "../polkitqt1-authority.h"

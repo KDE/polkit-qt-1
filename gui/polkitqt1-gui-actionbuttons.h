@@ -21,7 +21,7 @@
 #ifndef POLKIT_QT_ACTIONBUTTONS_H
 #define POLKIT_QT_ACTIONBUTTONS_H
 
-#include "actionbutton.h"
+#include "polkitqt1-gui-actionbutton.h"
 
 namespace PolkitQt1
 {
@@ -31,7 +31,7 @@ namespace Gui
 
 class ActionButtonsPrivate;
 /**
- * \class ActionButtons actionbuttons.h ActionButtons
+ * \class ActionButtons polkitqt1-gui-actionbuttons.h ActionButtons
  * \author Dario Freddi <drf@kde.org>
  *
  * \brief Class used to hold and update a list of QAbstractButtons

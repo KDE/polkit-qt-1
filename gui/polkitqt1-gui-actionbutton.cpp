@@ -19,9 +19,9 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "actionbutton.h"
+#include "polkitqt1-gui-actionbutton.h"
 
-#include "actionbutton_p.h"
+#include "polkitqt1-gui-actionbutton_p.h"
 
 namespace PolkitQt1
 {
@@ -163,4 +163,4 @@ void ActionButtonPrivate::streamClicked(bool c)
 
 }
 
-#include "actionbutton.moc"
+#include "polkitqt1-gui-actionbutton.moc"

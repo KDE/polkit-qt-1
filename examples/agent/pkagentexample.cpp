@@ -4,8 +4,7 @@
 #include "pkagentexample.h"
 #include <glib-object.h>
 #include <QtCore/QDebug>
-#include "klistener.h"
-#include "subject.h"
+#include "polkitqt1-subject.h"
 
 PkAgentExample::PkAgentExample(int &argc, char **argv)
         : QCoreApplication(argc, argv)

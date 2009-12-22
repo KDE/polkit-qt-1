@@ -18,8 +18,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "temporaryauthorization.h"
-#include "authority.h"
+#include "polkitqt1-temporaryauthorization.h"
+#include "polkitqt1-authority.h"
 
 #include <polkit/polkit.h>
 
@@ -91,4 +91,4 @@ bool TemporaryAuthorization::revoke()
 
 }
 
-#include "temporaryauthorization.moc"
+#include "polkitqt1-temporaryauthorization.moc"

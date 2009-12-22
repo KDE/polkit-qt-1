@@ -21,7 +21,7 @@
 #ifndef _POLKITQT1_VERSION_H_
 #define _POLKITQT1_VERSION_H_
 
-#include "export.h"
+#include "polkitqt1-export.h"
 
 /// @brief PolkitQt-1 version as string at compile time.
 #define POLKITQT1_VERSION_STRING "${CMAKE_POLKITQT-1_VERSION_STRING}"

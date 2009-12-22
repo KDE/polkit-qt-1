@@ -24,11 +24,11 @@
 #ifndef POLKIT_QT_AUTHORITY_H
 #define POLKIT_QT_AUTHORITY_H
 
-#include "export.h"
-#include "identity.h"
-#include "subject.h"
-#include "temporaryauthorization.h"
-#include "actiondescription.h"
+#include "polkitqt1-export.h"
+#include "polkitqt1-identity.h"
+#include "polkitqt1-subject.h"
+#include "polkitqt1-temporaryauthorization.h"
+#include "polkitqt1-actiondescription.h"
 
 #include <QtCore/QObject>
 #include <QtCore/QMetaType>
@@ -47,7 +47,7 @@ namespace PolkitQt1
 {
 
 /**
- * \class Authority authority.h Authority
+ * \class Authority polkitqt1-authority.h Authority
  * \author Daniel Nicoletti <dantti85-pk@yahoo.com.br>
  * \author Dario Freddi <drf@kde.org>
  * \author Jaroslav Reznik <jreznik@redhat.com>
@@ -111,7 +111,7 @@ public:
         E_RegisterFailed = 0x06,
         /** Unregistration of authentication agent failed **/
         E_UnregisterFailed = 0x07,
-        /** Cookie or identity handled to the action is empty **/
+        /** Cookie or polkitqt1-identity.handled to the action is empty **/
         E_CookieOrIdentityEmpty = 0x08,
         /** Response of auth agent failed **/
         E_AgentResponseFailed = 0x09,

@@ -21,11 +21,11 @@
 #ifndef POLKIT_QT_AGENT_LISTENER_H
 #define POLKIT_QT_AGENT_LISTENER_H
 
-#include "export.h"
+#include "polkitqt1-export.h"
 
 #include <QtCore/QObject>
 
-#include "session.h"
+#include "polkitqt1-agent-session.h"
 
 #define POLKIT_AGENT_I_KNOW_API_IS_SUBJECT_TO_CHANGE 1
 
@@ -46,7 +46,7 @@ namespace Agent
 
 class ListenerPrivate;
 /**
- * \class Listener listener.h Listener
+ * \class Listener polkitqt1-agent-listener.h Listener
  * \author Jaroslav Reznik <jreznik@redhat.com>
  *
  * \brief Listener is abstract class used for implementing authentication agents.
@@ -91,7 +91,7 @@ public:
      *
      * \param subject Subject that listener will be registered for
      * \param objectPath DBus object path
-     * \return \c True if the listener has been registered, \c False otherwise
+     * \return \c True if the polkitqt1-agent-listener.has been registered, \c False otherwise
      */
     bool registerListener(PolkitQt1::Subject *subject, const QString &objectPath);
 

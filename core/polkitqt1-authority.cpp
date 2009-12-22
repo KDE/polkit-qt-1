@@ -21,7 +21,7 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "authority.h"
+#include "polkitqt1-authority.h"
 
 #include <QtDBus/QDBusInterface>
 #include <QtDBus/QDBusReply>
@@ -808,4 +808,4 @@ void Authority::revokeTemporaryAuthorizationCancel()
 
 }
 
-#include "authority.moc"
+#include "polkitqt1-authority.moc"

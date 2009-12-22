@@ -21,7 +21,7 @@
 #ifndef POLKIT_QT_ACTION_DESCRIPTION_H
 #define POLKIT_QT_ACTION_DESCRIPTION_H
 
-#include "export.h"
+#include "polkitqt1-export.h"
 
 #include <QtCore/QList>
 #include <QtCore/QMetaType>
@@ -31,7 +31,7 @@ typedef struct _PolkitActionDescription PolkitActionDescription;
 namespace PolkitQt1
 {
 /**
- * \class ActionDescription actiondescription.h ActionDescription
+ * \class ActionDescription polkitqt1-actiondescription.h ActionDescription
  * \author Jaroslav Reznik <jreznik@redhat.com>
  *
  * \brief Class used to encapsulate a registered action.

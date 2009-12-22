@@ -18,7 +18,7 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "details.h"
+#include "polkitqt1-details.h"
 
 #include <QtCore/QStringList>
 
@@ -85,4 +85,4 @@ QStringList Details::keys() const
 
 }
 
-#include "details.moc"
+#include "polkitqt1-details.moc"

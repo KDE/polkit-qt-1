@@ -4,9 +4,9 @@ include_directories(
 )
 
 set(polkit_qt_gui_SRCS
-    action.cpp
-    actionbutton.cpp
-    actionbuttons.cpp
+    polkitqt1-gui-action.cpp
+    polkitqt1-gui-actionbutton.cpp
+    polkitqt1-gui-actionbuttons.cpp
 )
 
 automoc4_add_library(polkit-qt-gui-1 SHARED ${polkit_qt_gui_SRCS})

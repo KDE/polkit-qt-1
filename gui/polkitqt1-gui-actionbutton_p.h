@@ -18,56 +18,33 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "actionbuttons.h"
+#ifndef ACTIONBUTTON_P_H
+#define ACTIONBUTTON_P_H
 
-#include "actionbuttons_p.h"
+#include <polkitqt1-gui-actionbutton.h>
 
-namespace PolkitQt1
+#include <QtCore/QList>
+#include <QtGui/QAbstractButton>
+
+/**
+  * \internal
+  */
+class PolkitQt1::Gui::ActionButtonPrivate
 {
+public:
+    ActionButtonPrivate(const QList<QAbstractButton *> &b)
+            : buttons(b) {}
+    virtual ~ActionButtonPrivate() {}
 
-namespace Gui
-{
+    void addButton(QAbstractButton *button);
+    void removeButton(QAbstractButton *button);
+    void updateButton();
+    void streamClicked(bool);
 
-ActionButtons::ActionButtons(const QList<QAbstractButton *> &buttons, const QString &actionId, QObject *parent)
-        : ActionButton(*new ActionButtonsPrivate(buttons), actionId, parent)
-{
-    setButtons(buttons);
-}
+    Q_DECLARE_PUBLIC(ActionButton)
+    ActionButton *q_ptr;
 
-ActionButtons::~ActionButtons()
-{
-}
+    QList<QAbstractButton *> buttons;
+};
 
-void ActionButtons::setButtons(const QList<QAbstractButton *> &buttons)
-{
-    foreach(QAbstractButton *ent, buttons) {
-        addButton(ent);
-    }
-}
-
-QList<QAbstractButton *> ActionButtons::buttons() const
-{
-    Q_D(const ActionButtons);
-
-    return d->buttons;
-}
-
-void ActionButtons::addButton(QAbstractButton *button)
-{
-    Q_D(ActionButtons);
-
-    d->addButton(button);
-}
-
-void ActionButtons::removeButton(QAbstractButton *button)
-{
-    Q_D(ActionButtons);
-
-    d->removeButton(button);
-}
-
-}
-
-}
-
-#include "actionbuttons.moc"
+#endif /* ACTIONBUTTON_P_H */

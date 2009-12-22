@@ -20,9 +20,9 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "action.h"
-#include "authority.h"
-#include "subject.h"
+#include "polkitqt1-gui-action.h"
+#include "polkitqt1-authority.h"
+#include "polkitqt1-subject.h"
 
 #include <QtCore/QCoreApplication>
 
@@ -514,4 +514,4 @@ QString Action::actionId() const
 
 }
 
-#include "action.moc"
+#include "polkitqt1-gui-action.moc"

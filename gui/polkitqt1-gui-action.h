@@ -22,7 +22,7 @@
 #ifndef POLKIT_QT_ACTION_H
 #define POLKIT_QT_ACTION_H
 
-#include "export.h"
+#include "polkitqt1-export.h"
 
 #include <QtGui/QAction>
 
@@ -33,7 +33,7 @@ namespace Gui
 {
 
 /**
- * \class Action action.h Action
+ * \class Action polkitqt1-gui-action.h Action
  * \author Daniel Nicoletti <dantti85-pk@yahoo.com.br>
  * \author Dario Freddi <drf@kde.org>
  *

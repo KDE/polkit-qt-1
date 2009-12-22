@@ -18,11 +18,11 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "session.h"
+#include "polkitqt1-agent-session.h"
 
 #include <QtCore/QDebug>
 
-#include "identity.h"
+#include "polkitqt1-identity.h"
 
 #define POLKIT_AGENT_I_KNOW_API_IS_SUBJECT_TO_CHANGE 1
 #include <polkitagent/polkitagent.h>
@@ -158,4 +158,4 @@ void AsyncResult::setError(const QString &text)
     g_simple_async_result_set_error(d->result, POLKIT_ERROR, POLKIT_ERROR_FAILED, "%s", text.toUtf8().data());
 }
 
-#include "session.moc"
+#include "polkitqt1-agent-session.moc"

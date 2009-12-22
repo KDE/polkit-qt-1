@@ -18,7 +18,7 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "subject.h"
+#include "polkitqt1-subject.h"
 
 #include <QtCore/QDebug>
 #include <polkit/polkit.h>

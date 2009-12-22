@@ -22,7 +22,7 @@
 #include "PkExampleHelper.h"
 #include "examplesadaptor.h"
 
-#include "authority.h"
+#include "polkitqt1-authority.h"
 
 #include <QtDBus/QDBusConnection>
 #include <QtCore/QTimer>

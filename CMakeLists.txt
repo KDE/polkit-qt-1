@@ -34,25 +34,25 @@ set(CMAKE_MINOR_POLKITQT-1_VERSION 95 CACHE INT "PolkitQt-1's minor version numb
 set(CMAKE_RELEASE_POLKITQT-1_VERSION 1 CACHE INT "PolkitQt-1's release version number" FORCE)
 set(CMAKE_POLKITQT-1_VERSION_STRING "${CMAKE_MAJOR_POLKITQT-1_VERSION}.${CMAKE_MINOR_POLKITQT-1_VERSION}.${CMAKE_RELEASE_POLKITQT-1_VERSION}")
 
-configure_file(polkitqt1version.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/polkitqt1version.h)
+configure_file(polkitqt1-version.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/polkitqt1-version.h)
 
 install(FILES
-    gui/action.h
-    gui/actionbutton.h
-    gui/actionbuttons.h
+    gui/polkitqt1-gui-action.h
+    gui/polkitqt1-gui-actionbutton.h
+    gui/polkitqt1-gui-actionbuttons.h
 
-    core/authority.h
-    core/details.h
-    core/identity.h
-    core/subject.h
-    core/temporaryauthorization.h
-    core/actiondescription.h
+    core/polkitqt1-authority.h
+    core/polkitqt1-details.h
+    core/polkitqt1-identity.h
+    core/polkitqt1-subject.h
+    core/polkitqt1-temporaryauthorization.h
+    core/polkitqt1-actiondescription.h
 
-    agent/listener.h
-    agent/session.h
+    agent/polkitqt1-agent-listener.h
+    agent/polkitqt1-agent-session.h
 
-    ${CMAKE_CURRENT_BINARY_DIR}/polkitqt1version.h
-    export.h
+    ${CMAKE_CURRENT_BINARY_DIR}/polkitqt1-version.h
+    polkitqt1-export.h
 
     DESTINATION
     ${INCLUDE_INSTALL_DIR}/polkit-qt-1 COMPONENT Devel)

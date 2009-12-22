@@ -10,4 +10,4 @@ TODO
   
 - document Listener and co.
 - fix the cmake library names
-- fix the list of installed header files (authority.h + includes/Authority)
+- fix the list of installed header files (polkitqt1-authority.h + includes/Authority)

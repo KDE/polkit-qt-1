@@ -23,9 +23,9 @@
 
 #include <QtCore/QObject>
 
-#include "listener.h"
-#include "identity.h"
-#include "details.h"
+#include "polkitqt1-agent-listener.h"
+#include "polkitqt1-identity.h"
+#include "polkitqt1-details.h"
 
 typedef struct _GList GList;
 typedef struct _GCancellable GCancellable;

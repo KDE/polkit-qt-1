@@ -29,7 +29,7 @@
 #include "core/details.h"
 #include "agent/session.h"
 
-class KListener : public PolkitQtAgent::Listener
+class KListener : public PolkitQt1::Agent::Listener
 {
     Q_OBJECT
     Q_DISABLE_COPY(KListener)
@@ -40,10 +40,10 @@ public slots:
     void initiateAuthentication(const QString &actionId,
                                 const QString &message,
                                 const QString &iconName,
-                                PolkitQt::Details *details,
+                                PolkitQt1::Details *details,
                                 const QString &cookie,
-                                QList<PolkitQt::Identity *> identities,
-                                PolkitQtAgent::AsyncResult *result);
+                                QList<PolkitQt1::Identity *> identities,
+                                PolkitQt1::Agent::AsyncResult *result);
     bool initiateAuthenticationFinish();
     void cancelAuthentication();
     

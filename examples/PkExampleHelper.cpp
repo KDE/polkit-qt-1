@@ -31,7 +31,7 @@
 
 #define MINUTE 60000
 
-using namespace PolkitQt;
+using namespace PolkitQt1;
 
 PkExampleHelper::PkExampleHelper(int &argc, char **argv)
         : QCoreApplication(argc, argv)

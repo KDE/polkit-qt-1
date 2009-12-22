@@ -29,7 +29,7 @@
 #include <QtDBus/QDBusMessage>
 #include <QtDBus/QDBusConnection>
 
-using namespace PolkitQt;
+using namespace PolkitQt1;
 
 PkExample::PkExample(QMainWindow *parent)
         : QMainWindow(parent)

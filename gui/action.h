@@ -26,7 +26,7 @@
 
 #include <QtGui/QAction>
 
-namespace PolkitQt
+namespace PolkitQt1
 {
 
 /**
@@ -292,7 +292,7 @@ private:
     Q_PRIVATE_SLOT(d, void configChanged())
 };
 
-Q_DECLARE_OPERATORS_FOR_FLAGS(PolkitQt::Action::States)
+Q_DECLARE_OPERATORS_FOR_FLAGS(PolkitQt1::Action::States)
 
 }
 

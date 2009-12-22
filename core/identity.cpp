@@ -24,7 +24,7 @@
 
 #include <QtCore/QDebug>
 
-using namespace PolkitQt;
+using namespace PolkitQt1;
 
 class Identity::Private
 {

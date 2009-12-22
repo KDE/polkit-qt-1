@@ -24,7 +24,7 @@
 #include "klistener.h"
 #include "agent/session.h"
 
-using namespace PolkitQtAgent;
+using namespace PolkitQt1::Agent;
 
 KListener::KListener(QObject *parent)
         : Listener(parent)
@@ -37,9 +37,9 @@ KListener::KListener(QObject *parent)
 void KListener::initiateAuthentication(const QString &actionId,
                                        const QString &message,
                                        const QString &iconName,
-                                       PolkitQt::Details *details,
+                                       PolkitQt1::Details *details,
                                        const QString &cookie,
-                                       QList<PolkitQt::Identity *> identities,
+                                       QList<PolkitQt1::Identity *> identities,
                                        AsyncResult *result)
 {
     qDebug() << "initiateAuthentication for " << actionId << " with message " << message;
@@ -47,7 +47,7 @@ void KListener::initiateAuthentication(const QString &actionId,
     qDebug() << details->getKeys();
     qDebug() << "cookie" << cookie;
     
-    PolkitQt::Identity *identity;
+    PolkitQt1::Identity *identity;
     
     foreach(identity, identities)
     {

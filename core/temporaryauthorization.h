@@ -29,13 +29,13 @@
 typedef struct _PolkitTemporaryAuthorization PolkitTemporaryAuthorization;
 
 /**
- * \namespace PolkitQt PolkitQt
+ * \namespace PolkitQt1 PolkitQt
  *
  * \brief Namespace wrapping PolicyKit-Qt classes
  *
  * This namespace wraps all PolicyKit-Qt classes.
  */
-namespace PolkitQt
+namespace PolkitQt1
 {
 
 /**

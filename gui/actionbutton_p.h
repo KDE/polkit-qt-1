@@ -27,7 +27,7 @@
 /**
   * \internal
   */
-class PolkitQt::ActionButtonPrivate
+class PolkitQt1::ActionButtonPrivate
 {
 public:
     ActionButtonPrivate(const QList<QAbstractButton *> &b)

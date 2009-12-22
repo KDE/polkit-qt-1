@@ -23,7 +23,7 @@
 
 #include "actionbutton.h"
 
-namespace PolkitQt
+namespace PolkitQt1
 {
 
 class ActionButtonsPrivate;

@@ -23,7 +23,7 @@
 
 #include "actionbutton_p.h"
 
-using namespace PolkitQt;
+using namespace PolkitQt1;
 
 ActionButton::ActionButton(QAbstractButton *button, const QString &actionId, QObject *parent)
         : Action(actionId, parent)

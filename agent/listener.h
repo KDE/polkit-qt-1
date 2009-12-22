@@ -31,20 +31,16 @@
 
 typedef struct _PolkitAgentListener PolkitAgentListener;
 
-namespace PolkitQt {
+namespace PolkitQt1 {
     class Subject;
     class Identity;
     class Details;
 }
 
-/**
- * \namespace PolkitQtAgent PolkitQtAgent
- *
- * \brief Namespace wrapping Polkit-Qt Agent classes
- *
- * This namespace wraps all Polkit-Qt Agent classes.
- */
-namespace PolkitQtAgent
+namespace PolkitQt1
+{
+
+namespace Agent
 {
 
 class ListenerPrivate;
@@ -96,7 +92,7 @@ public:
      * \param objectPath DBus object path
      * \return \c True if the listener has been registered, \c False otherwise
      */
-    bool registerListener(PolkitQt::Subject *subject, const QString &objectPath);
+    bool registerListener(PolkitQt1::Subject *subject, const QString &objectPath);
 
     /**
      * \brief Returns pointer to the PolkitAgentListener.
@@ -129,9 +125,9 @@ public Q_SLOTS:
     virtual void initiateAuthentication(const QString &actionId,
                                         const QString &message,
                                         const QString &iconName,
-                                        PolkitQt::Details *details,
+                                        PolkitQt1::Details *details,
                                         const QString &cookie,
-                                        QList<PolkitQt::Identity *> identities,
+                                        QList<PolkitQt1::Identity *> identities,
                                         AsyncResult *result) = 0;
 
     /**
@@ -157,6 +153,8 @@ public Q_SLOTS:
 private:
     ListenerPrivate * const d;
 };
+}
+
 }
 
 #endif

@@ -71,7 +71,7 @@
 #define POLKITQT1_IS_VERSION(a,b,c) ( POLKITQT1_VERSION >= POLKITQT1_MAKE_VERSION(a,b,c) )
 
 
-namespace PolkitQt {
+namespace PolkitQt1 {
     /**
      * @brief Returns the major number of PolkitQt's version, e.g.
      * 1 for %PolkitQt 1.0.2.

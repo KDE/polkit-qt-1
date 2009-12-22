@@ -26,7 +26,7 @@
 
 #include <QtCore/QCoreApplication>
 
-using namespace PolkitQt;
+using namespace PolkitQt1;
 
 /**
   * \internal

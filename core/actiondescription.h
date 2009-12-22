@@ -28,7 +28,7 @@
 
 typedef struct _PolkitActionDescription PolkitActionDescription;
 
-namespace PolkitQt
+namespace PolkitQt1
 {
 class ActionDescription;
 typedef QList<ActionDescription *> ActionDescriptionList;
@@ -137,6 +137,6 @@ private:
 };
 }
 
-Q_DECLARE_METATYPE(PolkitQt::ActionDescriptionList);
+Q_DECLARE_METATYPE(PolkitQt1::ActionDescriptionList);
 
 #endif //POLKIT_QT_ACTION_DESCRIPTION_H

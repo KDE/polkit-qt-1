@@ -28,7 +28,7 @@
 
 #define POLKIT_AGENT_I_KNOW_API_IS_SUBJECT_TO_CHANGE 1
 
-using namespace PolkitQtAgent;
+using namespace PolkitQt1::Agent;
 
 /**
   * \internal

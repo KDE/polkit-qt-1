@@ -28,7 +28,7 @@
 
 #include <polkit/polkit.h>
 
-using namespace PolkitQt;
+using namespace PolkitQt1;
 
 class AuthorityHelper
 {
@@ -140,8 +140,8 @@ Authority::Authority(PolkitAuthority *authority, QObject *parent)
         : QObject(parent)
         , d(new Private(this))
 {
-    qRegisterMetaType<PolkitQt::Authority::Result> ();
-    qRegisterMetaType<PolkitQt::ActionDescriptionList>("ActionDescriptionList");
+    qRegisterMetaType<PolkitQt1::Authority::Result> ();
+    qRegisterMetaType<PolkitQt1::ActionDescriptionList>("ActionDescriptionList");
 
     Q_ASSERT(!s_globalAuthority()->q);
     s_globalAuthority()->q = this;

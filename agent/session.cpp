@@ -27,7 +27,7 @@
 #define POLKIT_AGENT_I_KNOW_API_IS_SUBJECT_TO_CHANGE 1
 #include <polkitagent/polkitagent.h>
 
-using namespace PolkitQtAgent;
+using namespace PolkitQt1::Agent;
 
 class Session::Private
 {
@@ -49,7 +49,7 @@ Session::Private::~Private()
     g_object_unref(polkitAgentSession);
 }
 
-Session::Session(PolkitQt::Identity *identity, const QString &cookie, AsyncResult *result, QObject *parent)
+Session::Session(PolkitQt1::Identity *identity, const QString &cookie, AsyncResult *result, QObject *parent)
         : QObject(parent)
         , d(new Private)
 {

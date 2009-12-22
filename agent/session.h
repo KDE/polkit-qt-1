@@ -27,14 +27,18 @@
 typedef struct _GSimpleAsyncResult GSimpleAsyncResult;
 typedef struct _PolkitAgentSession PolkitAgentSession;
 
+namespace PolkitQt1
+{
+
 /**
- * \namespace PolkitQtAgent PolkitQtAgent
+ * \namespace Agent Agent
  *
  * \brief Namespace wrapping Polkit-Qt Agent classes
  *
  * This namespace wraps all Polkit-Qt Agent classes.
  */
-namespace PolkitQtAgent
+
+namespace Agent
 {
 
 /**
@@ -86,7 +90,7 @@ public:
      * \param result Result of the authentication action. Must be finished using complete() method.
      * \param parent
      */
-    Session(PolkitQt::Identity *identity, const QString &cookie, AsyncResult *result = 0, QObject *parent = 0);
+    Session(PolkitQt1::Identity *identity, const QString &cookie, AsyncResult *result = 0, QObject *parent = 0);
 
     /**
      * Create a new authentication session from PolkitAgentSession object
@@ -168,6 +172,8 @@ private:
     class Private;
     Private * const d;
 };
+
+}
 
 }
 

@@ -32,13 +32,13 @@ typedef struct _PolkitUnixUser PolkitUnixUser;
 typedef struct _PolkitUnixGroup PolkitUnixGroup;
 
 /**
- * \namespace PolkitQt PolkitQt
+ * \namespace PolkitQt1 PolkitQt
  *
  * \brief Namespace wrapping Polkit-Qt classes
  *
  * This namespace wraps all Polkit-Qt classes.
  */
-namespace PolkitQt
+namespace PolkitQt1
 {
 
 /**

@@ -27,7 +27,7 @@
 
 class QAbstractButton;
 
-namespace PolkitQt
+namespace PolkitQt1
 {
 
 class ActionButtonPrivate;

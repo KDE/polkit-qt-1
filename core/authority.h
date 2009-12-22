@@ -37,13 +37,13 @@ typedef struct _PolkitAuthority PolkitAuthority;
 class QStringList;
 
 /**
- * \namespace PolkitQt PolkitQt
+ * \namespace PolkitQt1 PolkitQt
  *
  * \brief Namespace wrapping Polkit-Qt classes
  *
  * This namespace wraps all Polkit-Qt classes.
  */
-namespace PolkitQt
+namespace PolkitQt1
 {
 
 /**
@@ -463,7 +463,7 @@ Q_SIGNALS:
      *
      * The argument is the result of authorization.
      */
-    void checkAuthorizationFinished(PolkitQt::Authority::Result);
+    void checkAuthorizationFinished(PolkitQt1::Authority::Result);
 
     /**
      * This signal is emitted when asynchronous method enumerateActions finishes.
@@ -529,10 +529,10 @@ private:
     Q_PRIVATE_SLOT(d, void dbusFilter(const QDBusMessage &message))
 };
 
-Q_DECLARE_OPERATORS_FOR_FLAGS(PolkitQt::Authority::AuthorizationFlags)
+Q_DECLARE_OPERATORS_FOR_FLAGS(PolkitQt1::Authority::AuthorizationFlags)
 
 }
 
-Q_DECLARE_METATYPE(PolkitQt::Authority::Result);
+Q_DECLARE_METATYPE(PolkitQt1::Authority::Result);
 
 #endif

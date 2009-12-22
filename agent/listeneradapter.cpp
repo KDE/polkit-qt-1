@@ -23,7 +23,7 @@
 #define POLKIT_AGENT_I_KNOW_API_IS_SUBJECT_TO_CHANGE 1
 #include <polkitagent/polkitagent.h>
 
-using namespace PolkitQtAgent;
+using namespace PolkitQt1::Agent;
 
 class ListenerAdapterHelper
 {
@@ -81,15 +81,15 @@ void ListenerAdapter::polkit_qt_listener_initiate_authentication (PolkitAgentLis
 {
     qDebug() << "polkit_qt_listener_initiate_authentication callback for " << listener;
     
-    QList<PolkitQt::Identity *> idents;
-    PolkitQt::Details *dets;
+    QList<PolkitQt1::Identity *> idents;
+    PolkitQt1::Details *dets;
     
     Listener *list = findListener(listener);
     
     for (GList *identity = g_list_first(identities); identity != NULL; identity = g_list_next(identity))
-        idents.append(new PolkitQt::Identity((PolkitIdentity *)identity->data));
+        idents.append(new PolkitQt1::Identity((PolkitIdentity *)identity->data));
 
-    dets = new PolkitQt::Details(details);
+    dets = new PolkitQt1::Details(details);
 
     list->initiateAuthentication(QString::fromUtf8(action_id),
                                  QString::fromUtf8(message),

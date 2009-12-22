@@ -9,8 +9,8 @@
 #include <pwd.h>
 #include <QtDBus/QDBusMessage>
 #include <QtDBus/QDBusConnection>
-using namespace PolkitQt;
-using namespace PolkitQtAgent;
+using namespace PolkitQt1;
+using namespace PolkitQt1::Agent;
 
 void wait()
 {
@@ -39,7 +39,7 @@ void TestAuth::test_Auth_checkAuthorization()
     QVERIFY(!authority->hasError());
 
     // Now we try async methods
-    QSignalSpy spy(authority, SIGNAL(checkAuthorizationFinished(PolkitQt::Authority::Result)));
+    QSignalSpy spy(authority, SIGNAL(checkAuthorizationFinished(PolkitQt1::Authority::Result)));
     // Call asynchronous checkAuthorization
     authority->checkAuthorization("org.qt.policykit.examples.kick", process, Authority::None);
     // Give the polkit time to obtain the result and emit the signal with it
@@ -47,7 +47,7 @@ void TestAuth::test_Auth_checkAuthorization()
     // Test if the signal was emitted
     QCOMPARE(spy.count(), 1);
     // Test the result
-    result = qVariantValue<PolkitQt::Authority::Result> (spy.takeFirst()[0]);
+    result = qVariantValue<PolkitQt1::Authority::Result> (spy.takeFirst()[0]);
     QCOMPARE(result, Authority::No);
     QVERIFY(!authority->hasError());
     spy.clear();

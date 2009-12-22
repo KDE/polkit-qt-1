@@ -29,9 +29,9 @@
 #include "identity.h"
 #include "details.h"
 
-using namespace PolkitQtAgent;
+using namespace PolkitQt1::Agent;
 
-class PolkitQtAgent::ListenerPrivate
+class PolkitQt1::Agent::ListenerPrivate
 {
     public:
         PolkitAgentListener *listener;
@@ -65,7 +65,7 @@ Listener::~Listener()
     g_object_unref(d->listener);
 }
 
-bool Listener::registerListener(PolkitQt::Subject *subject, const QString &objectPath)
+bool Listener::registerListener(PolkitQt1::Subject *subject, const QString &objectPath)
 {
     GError *error = NULL;
 

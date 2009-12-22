@@ -24,7 +24,7 @@
 
 #include <polkit/polkit.h>
 
-using namespace PolkitQt;
+using namespace PolkitQt1;
 
 class ActionDescription::Private
 {

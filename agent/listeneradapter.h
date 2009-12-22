@@ -35,15 +35,12 @@ typedef struct _GError GError;
 typedef int gboolean;
 typedef char gchar;
 
-/**
- * \namespace PolkitQtAgent PolkitQtAgent
- *
- * \brief Namespace wrapping Polkit-Qt Agent classes
- *
- * This namespace wraps all Polkit-Qt Agent classes.
- */
-namespace PolkitQtAgent
+namespace PolkitQt1
 {
+
+namespace Agent
+{
+
 class AsyncResult;
 class Listener;
 class ListenerAdapter : public QObject
@@ -78,6 +75,8 @@ private:
     
     friend class Listener;
 };
+
+}
 
 }
 

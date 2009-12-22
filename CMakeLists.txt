@@ -29,10 +29,12 @@ include_directories(
     ${QT_QTXML_INCLUDE_DIR}
 )
 
-set(MAJOR_POLKITQT1_VERSION "0")
-set(MINOR_POLKITQT1_VERSION "95")
-set(PATCH_POLKITQT1_VERSION "0")
-set(POLKITQT1_VERSION_STRING "${MAJOR_POLKITQT1_VERSION}.${MINOR_POLKITQT1_VERSION}.${PATCH_POLKITQT1_VERSION}")
+set(CMAKE_MAJOR_POLKITQT-1_VERSION 0 CACHE INT "PolkitQt-1's major version number" FORCE)
+set(CMAKE_MINOR_POLKITQT-1_VERSION 95 CACHE INT "PolkitQt-1's minor version number" FORCE)
+set(CMAKE_RELEASE_POLKITQT-1_VERSION 1 CACHE INT "PolkitQt-1's release version number" FORCE)
+set(CMAKE_POLKITQT-1_VERSION_STRING "${CMAKE_MAJOR_POLKITQT-1_VERSION}.${CMAKE_MINOR_POLKITQT-1_VERSION}.${CMAKE_RELEASE_POLKITQT-1_VERSION}")
+
+configure_file(version.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/version.h)
 
 install(FILES
     gui/action.h
@@ -49,29 +51,30 @@ install(FILES
     agent/listener.h
     agent/session.h
 
+    ${CMAKE_CURRENT_BINARY_DIR}/version.h
     export.h
 
     DESTINATION
     ${INCLUDE_INSTALL_DIR}/polkit-qt-1 COMPONENT Devel)
 
 install(FILES
-    includes/PolkitQt/Action
-    includes/PolkitQt/Authority
-    includes/PolkitQt/ActionButton
-    includes/PolkitQt/ActionButtons
-    includes/PolkitQt/Details
-    includes/PolkitQt/Identity
-    includes/PolkitQt/Subject
-    includes/PolkitQt/TemporaryAuthorization
-    includes/PolkitQt/ActionDescription
+    includes/PolkitQt1/Action
+    includes/PolkitQt1/Authority
+    includes/PolkitQt1/ActionButton
+    includes/PolkitQt1/ActionButtons
+    includes/PolkitQt1/Details
+    includes/PolkitQt1/Identity
+    includes/PolkitQt1/Subject
+    includes/PolkitQt1/TemporaryAuthorization
+    includes/PolkitQt1/ActionDescription
     DESTINATION
-    ${INCLUDE_INSTALL_DIR}/polkit-qt-1/PolkitQt COMPONENT Devel)
+    ${INCLUDE_INSTALL_DIR}/polkit-qt-1/PolkitQt1 COMPONENT Devel)
 
 install(FILES
-    includes/PolkitQtAgent/Listener
-    includes/PolkitQtAgent/Session
+    includes/PolkitQt1/Agent/Listener
+    includes/PolkitQt1/Agent/Session
     DESTINATION
-    ${INCLUDE_INSTALL_DIR}/polkit-qt-1/PolkitQtAgent COMPONENT Devel)
+    ${INCLUDE_INSTALL_DIR}/polkit-qt-1/PolkitQt1/Agent COMPONENT Devel)
 
 
 if(NOT WIN32)

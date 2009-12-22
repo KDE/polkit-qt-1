@@ -19,8 +19,8 @@ target_link_libraries(polkit-qt-gui-1
 	${POLKIT_LIBRARIES}
 )
                       
-set_target_properties(polkit-qt-gui-1 PROPERTIES VERSION ${MAJOR_POLKITQT1_VERSION}.${MINOR_POLKITQT1_VERSION}.${PATCH_POLKITQT1_VERSION}
-                                SOVERSION ${MAJOR_POLKITQT1_VERSION}
+set_target_properties(polkit-qt-gui-1 PROPERTIES VERSION ${CMAKE_POLKITQT-1_VERSION_STRING}
+                                SOVERSION ${CMAKE_MAJOR_POLKITQT-1_VERSION}
                                 DEFINE_SYMBOL MAKE_POLKITQT1_LIB
                       )
 

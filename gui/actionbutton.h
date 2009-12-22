@@ -23,7 +23,7 @@
 #define POLKIT_QT_ACTIONBUTTON_H
 
 #include "export.h"
-#include <PolkitQt/Action>
+#include "action.h"
 
 class QAbstractButton;
 
@@ -47,7 +47,7 @@ class ActionButtonPrivate;
  * permission to perform the given action. If you set 'noEnabled'
  * to \c true it will be emitted when PolKitResult is NO.
  */
-class POLKIT_QT_EXPORT ActionButton : public Action
+class POLKITQT1_EXPORT ActionButton : public Action
 {
     Q_OBJECT
     Q_DECLARE_PRIVATE(ActionButton)
@@ -128,7 +128,7 @@ Q_SIGNALS:
 protected:
     ActionButton(ActionButtonPrivate &dd, const QString &actionId, QObject *parent = 0);
 
-    ActionButtonPrivate *d_ptr;
+    ActionButtonPrivate * const d_ptr;
 
 private:
     Q_PRIVATE_SLOT(d_func(), void updateButton())

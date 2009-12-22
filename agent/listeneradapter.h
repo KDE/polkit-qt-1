@@ -24,8 +24,8 @@
 #include <QtCore/QObject>
 
 #include "listener.h"
-#include <PolkitQt/Identity>
-#include <PolkitQt/Details>
+#include "identity.h"
+#include "details.h"
 
 typedef struct _GList GList;
 typedef struct _GCancellable GCancellable;

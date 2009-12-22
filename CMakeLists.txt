@@ -29,10 +29,10 @@ include_directories(
     ${QT_QTXML_INCLUDE_DIR}
 )
 
-set(MAJOR_POLKIT_QT_VERSION "0")
-set(MINOR_POLKIT_QT_VERSION "95")
-set(PATCH_POLKIT_QT_VERSION "0")
-set(POLKIT_QT_VERSION_STRING "${MAJOR_POLKIT_QT_VERSION}.${MINOR_POLKIT_QT_VERSION}.${PATCH_POLKIT_QT_VERSION}")
+set(MAJOR_POLKITQT1_VERSION "0")
+set(MINOR_POLKITQT1_VERSION "95")
+set(PATCH_POLKITQT1_VERSION "0")
+set(POLKITQT1_VERSION_STRING "${MAJOR_POLKITQT1_VERSION}.${MINOR_POLKITQT1_VERSION}.${PATCH_POLKITQT1_VERSION}")
 
 install(FILES
     gui/action.h
@@ -45,8 +45,16 @@ install(FILES
     core/subject.h
     core/temporaryauthorization.h
     core/actiondescription.h
+
+    agent/listener.h
+    agent/session.h
+
     export.h
 
+    DESTINATION
+    ${INCLUDE_INSTALL_DIR}/polkit-qt-1 COMPONENT Devel)
+
+install(FILES
     includes/PolkitQt/Action
     includes/PolkitQt/Authority
     includes/PolkitQt/ActionButton
@@ -60,11 +68,6 @@ install(FILES
     ${INCLUDE_INSTALL_DIR}/polkit-qt-1/PolkitQt COMPONENT Devel)
 
 install(FILES
-    agent/listener.h
-    agent/session.h
-
-    export.h
-
     includes/PolkitQtAgent/Listener
     includes/PolkitQtAgent/Session
     DESTINATION

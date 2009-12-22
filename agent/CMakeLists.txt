@@ -3,10 +3,10 @@ include_directories(
       ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
-set(MAJOR_POLKIT_QT_VERSION "0")
-set(MINOR_POLKIT_QT_VERSION "95")
-set(PATCH_POLKIT_QT_VERSION "0")
-set(POLKIT_QT_VERSION_STRING "${MAJOR_POLKIT_QT_VERSION}.${MINOR_POLKIT_QT_VERSION}.${PATCH_POLKIT_QT_VERSION}")
+set(MAJOR_POLKITQT1_VERSION "0")
+set(MINOR_POLKITQT1_VERSION "95")
+set(PATCH_POLKITQT1_VERSION "0")
+set(POLKITQT1_VERSION_STRING "${MAJOR_POLKITQT1_VERSION}.${MINOR_POLKITQT1_VERSION}.${PATCH_POLKITQT1_VERSION}")
 
 set(polkit_qt_agent_SRCS
     session.cpp
@@ -23,9 +23,9 @@ target_link_libraries(polkit-qt-agent-1
 	polkit-qt-core-1
 )
 
-set_target_properties(polkit-qt-agent-1 PROPERTIES VERSION ${MAJOR_POLKIT_QT_VERSION}.${MINOR_POLKIT_QT_VERSION}.${PATCH_POLKIT_QT_VERSION}
-                                SOVERSION ${MAJOR_POLKIT_QT_VERSION}
-                                DEFINE_SYMBOL MAKE_POLKIT_QT_LIB
+set_target_properties(polkit-qt-agent-1 PROPERTIES VERSION ${MAJOR_POLKITQT1_VERSION}.${MINOR_POLKITQT1_VERSION}.${PATCH_POLKITQT1_VERSION}
+                                SOVERSION ${MAJOR_POLKITQT1_VERSION}
+                                DEFINE_SYMBOL MAKE_POLKITQT1_LIB
                       )
   
 install(TARGETS polkit-qt-agent-1 ${INSTALL_TARGETS_DEFAULT_ARGS}) 

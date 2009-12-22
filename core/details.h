@@ -43,7 +43,7 @@ namespace PolkitQt
  *
  * \brief Class used for passing details around.
  */
-class POLKIT_QT_EXPORT Details : public QObject
+class POLKITQT1_EXPORT Details : public QObject
 {
     Q_OBJECT
 public:

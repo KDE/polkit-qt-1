@@ -63,7 +63,7 @@ namespace PolkitQt
  * Call Authority::instance() to get an instance of the Authority object.
  * Do not delete Authority::instance(), cleanup will be done automatically.
  */
-class POLKIT_QT_EXPORT Authority : public QObject
+class POLKITQT1_EXPORT Authority : public QObject
 {
     Q_OBJECT
     Q_DISABLE_COPY(Authority)

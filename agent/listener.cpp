@@ -24,10 +24,10 @@
 
 #include "polkitqtlistener.h"
 
-#include <PolkitQt/Authority>
-#include <PolkitQt/Subject>
-#include <PolkitQt/Identity>
-#include <PolkitQt/Details>
+#include "authority.h"
+#include "subject.h"
+#include "identity.h"
+#include "details.h"
 
 using namespace PolkitQtAgent;
 

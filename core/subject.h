@@ -51,7 +51,7 @@ namespace PolkitQt
  * \see SystemBusName
  * \see UnixSession
  */    
-class POLKIT_QT_EXPORT Subject
+class POLKITQT1_EXPORT Subject
 {
 public:
     ~Subject();
@@ -105,7 +105,7 @@ private:
  * 
  * \sa Subject
  */    
-class POLKIT_QT_EXPORT UnixProcessSubject : public Subject
+class POLKITQT1_EXPORT UnixProcessSubject : public Subject
 {
 public:
     /**
@@ -163,7 +163,7 @@ public:
  *
  * \sa Subject
  */    
-class POLKIT_QT_EXPORT SystemBusNameSubject : public Subject
+class POLKITQT1_EXPORT SystemBusNameSubject : public Subject
 {
 public:
     /**
@@ -208,7 +208,7 @@ public:
  *
  * \sa Subject
  */    
-class POLKIT_QT_EXPORT UnixSessionSubject : public Subject
+class POLKITQT1_EXPORT UnixSessionSubject : public Subject
 {
 public:
     /**

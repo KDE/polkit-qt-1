@@ -25,7 +25,7 @@
 
 #include <QtCore/QObject>
 
-#include <PolkitQtAgent/Session>
+#include "session.h"
 
 #define POLKIT_AGENT_I_KNOW_API_IS_SUBJECT_TO_CHANGE 1
 
@@ -61,7 +61,7 @@ class ListenerPrivate;
  * You can also use Session class to authenticate users however it isn't required.
  * \sa Session
  */
-class POLKIT_QT_EXPORT Listener : public QObject
+class POLKITQT1_EXPORT Listener : public QObject
 {
     Q_OBJECT
     Q_DISABLE_COPY(Listener)

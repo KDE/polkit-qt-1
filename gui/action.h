@@ -47,7 +47,7 @@ namespace PolkitQt
  *
  * \see ActionButton
  */
-class POLKIT_QT_EXPORT Action : public QAction
+class POLKITQT1_EXPORT Action : public QAction
 {
     Q_OBJECT
     Q_DISABLE_COPY(Action)

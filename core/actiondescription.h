@@ -39,7 +39,7 @@ typedef QList<ActionDescription *> ActionDescriptionList;
  *
  * \brief Class used to encapsulate a registered action.
  */
-class POLKIT_QT_EXPORT ActionDescription
+class POLKITQT1_EXPORT ActionDescription
 {
 public:
     enum ImplicitAuthorization {

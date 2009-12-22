@@ -22,7 +22,7 @@
 #define SESSION_H
 
 #include <QtCore/QObject>
-#include <PolkitQt/Identity>
+#include "identity.h"
 
 typedef struct _GSimpleAsyncResult GSimpleAsyncResult;
 typedef struct _PolkitAgentSession PolkitAgentSession;
@@ -41,7 +41,7 @@ namespace PolkitQtAgent
  * \internal
  * \brief Encapsulation of GSimpleAsyncResult to QObject class
  */
-class POLKIT_QT_EXPORT AsyncResult : public QObject
+class POLKITQT1_EXPORT AsyncResult : public QObject
 {
     Q_OBJECT
 public:
@@ -74,7 +74,7 @@ private:
  * authentication system for obtaining authorizations.
  *
  */
-class POLKIT_QT_EXPORT Session : public QObject
+class POLKITQT1_EXPORT Session : public QObject
 {
     Q_OBJECT
 public:

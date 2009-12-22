@@ -21,9 +21,9 @@ target_link_libraries(polkit-qt-core-1
 	${POLKIT_LIBRARIES}
 )
 
-set_target_properties(polkit-qt-core-1 PROPERTIES VERSION ${MAJOR_POLKIT_QT_VERSION}.${MINOR_POLKIT_QT_VERSION}.${PATCH_POLKIT_QT_VERSION}
-                                SOVERSION ${MAJOR_POLKIT_QT_VERSION}
-                                DEFINE_SYMBOL MAKE_POLKIT_QT_LIB
+set_target_properties(polkit-qt-core-1 PROPERTIES VERSION ${MAJOR_POLKITQT1_VERSION}.${MINOR_POLKITQT1_VERSION}.${PATCH_POLKITQT1_VERSION}
+                                SOVERSION ${MAJOR_POLKITQT1_VERSION}
+                                DEFINE_SYMBOL MAKE_POLKITQT1_LIB
                       )
   
 install(TARGETS polkit-qt-core-1 ${INSTALL_TARGETS_DEFAULT_ARGS})

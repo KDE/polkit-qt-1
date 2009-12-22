@@ -52,7 +52,7 @@ namespace PolkitQt
  * \see UnixGroup
  * \see UnixUser
  */
-class POLKIT_QT_EXPORT Identity
+class POLKITQT1_EXPORT Identity
 {
 public:
     /**
@@ -107,7 +107,7 @@ private:
   * \brief UNIX user identity
   * \sa Identity
   */
-class POLKIT_QT_EXPORT UnixUserIdentity : public Identity
+class POLKITQT1_EXPORT UnixUserIdentity : public Identity
 {
 public:
     /**
@@ -156,7 +156,7 @@ public:
   * \brief UNIX group identity
   * \sa Identity
   */
-class POLKIT_QT_EXPORT UnixGroupIdentity : public Identity
+class POLKITQT1_EXPORT UnixGroupIdentity : public Identity
 {
 public:
     /**

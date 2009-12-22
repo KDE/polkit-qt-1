@@ -19,8 +19,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef POLKIT_QT_EXPORT_H
-#define POLKIT_QT_EXPORT_H
+#ifndef POLKITQT1_EXPORT_H
+#define POLKITQT1_EXPORT_H
 
 /** \file export.h
     \brief Contains Macros for exporting symbols
@@ -30,15 +30,15 @@
 
 #include <QtCore/QtGlobal>
 
-#ifndef POLKIT_QT_EXPORT
-# if defined(MAKE_POLKIT_QT_LIB)
+#ifndef POLKITQT1_EXPORT
+# if defined(MAKE_POLKITQT1_LIB)
 /* We are building this library */
-#  define POLKIT_QT_EXPORT Q_DECL_EXPORT
+#  define POLKITQT1_EXPORT Q_DECL_EXPORT
 # else
 /* We are using this library */
-#  define POLKIT_QT_EXPORT Q_DECL_IMPORT
+#  define POLKITQT1_EXPORT Q_DECL_IMPORT
 # endif
 #endif
 
-#endif /*POLKIT_QT_EXPORT_H*/
+#endif /*POLKITQT1_EXPORT_H*/
 

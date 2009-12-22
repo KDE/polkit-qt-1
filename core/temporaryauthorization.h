@@ -46,7 +46,7 @@ namespace PolkitQt
  *
  * This class encapsulates the PolkitTemporaryAuthorization interface.
  */
-class POLKIT_QT_EXPORT TemporaryAuthorization : public QObject
+class POLKITQT1_EXPORT TemporaryAuthorization : public QObject
 {
     Q_OBJECT
 public:

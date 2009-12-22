@@ -21,7 +21,7 @@
  */
 
 
-#include "polkitqtlistener.h"
+#include "polkitqtlistener_p.h"
 #include <stdio.h>
 
 #include <QtCore/QDebug>

@@ -18,7 +18,7 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "listeneradapter.h"
+#include "listeneradapter_p.h"
 #include <QtCore/QDebug>
 #define POLKIT_AGENT_I_KNOW_API_IS_SUBJECT_TO_CHANGE 1
 #include <polkitagent/polkitagent.h>
@@ -144,4 +144,4 @@ void ListenerAdapter::removeListener(Listener *listener)
 
 }
 
-#include "listeneradapter.moc"
+#include "listeneradapter_p.moc"

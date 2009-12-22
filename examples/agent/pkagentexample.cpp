@@ -1,7 +1,6 @@
 #define POLKIT_AGENT_I_KNOW_API_IS_SUBJECT_TO_CHANGE 1
 
 #include <polkitagent/polkitagent.h>
-#include "agent/polkitqtlistener.h"
 #include "pkagentexample.h"
 #include <glib-object.h>
 #include <QtCore/QDebug>

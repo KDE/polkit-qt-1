@@ -25,7 +25,7 @@
 
 #define POLKIT_AGENT_I_KNOW_API_IS_SUBJECT_TO_CHANGE 1
 
-#include "listeneradapter.h"
+#include "listeneradapter_p.h"
 
 #include <polkitagent/polkitagent.h>
 

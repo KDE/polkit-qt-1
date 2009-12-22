@@ -22,7 +22,7 @@
 
 #include <QtCore/QDebug>
 
-#include "polkitqtlistener.h"
+#include "polkitqtlistener_p.h"
 
 #include "authority.h"
 #include "subject.h"

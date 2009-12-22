@@ -30,6 +30,9 @@ class QAbstractButton;
 namespace PolkitQt1
 {
 
+namespace Gui
+{
+
 class ActionButtonPrivate;
 /**
  * \class ActionButton actionbutton.h ActionButton
@@ -97,7 +100,7 @@ public Q_SLOTS:
     /**
      * Connect clicked() signals to this slot. This should be
      * manually done, as in some cases we might want
-     * to manually call this. Calling this will emit activated().
+     * to manually call this. Calling this will emit authorized().
      *
      * \note This slot is reentrant which is likely to only be a problem
      * if you are creating an interface to setup PolicyKit policies.
@@ -135,6 +138,7 @@ private:
     Q_PRIVATE_SLOT(d_func(), void streamClicked(bool))
 };
 
+}
 
 }
 

@@ -22,7 +22,11 @@
 
 #include "actionbuttons_p.h"
 
-using namespace PolkitQt1;
+namespace PolkitQt1
+{
+
+namespace Gui
+{
 
 ActionButtons::ActionButtons(const QList<QAbstractButton *> &buttons, const QString &actionId, QObject *parent)
         : ActionButton(*new ActionButtonsPrivate(buttons), actionId, parent)
@@ -61,3 +65,9 @@ void ActionButtons::removeButton(QAbstractButton *button)
 
     d->removeButton(button);
 }
+
+}
+
+}
+
+#include "actionbuttons.moc"

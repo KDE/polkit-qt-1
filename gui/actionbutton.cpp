@@ -23,7 +23,11 @@
 
 #include "actionbutton_p.h"
 
-using namespace PolkitQt1;
+namespace PolkitQt1
+{
+
+namespace Gui
+{
 
 ActionButton::ActionButton(QAbstractButton *button, const QString &actionId, QObject *parent)
         : Action(actionId, parent)
@@ -155,4 +159,8 @@ void ActionButtonPrivate::streamClicked(bool c)
     emit q->clicked(qobject_cast<QAbstractButton *>(q->sender()), c);
 }
 
-#include "moc_actionbutton.cpp"
+}
+
+}
+
+#include "actionbutton.moc"

@@ -29,6 +29,9 @@
 namespace PolkitQt1
 {
 
+namespace Gui
+{
+
 /**
  * \class Action action.h Action
  * \author Daniel Nicoletti <dantti85-pk@yahoo.com.br>
@@ -95,17 +98,17 @@ Q_SIGNALS:
      *
      * \see activate()
      */
-    void activated();
+    void authorized();
 
 public Q_SLOTS:
     /**
      * Use this slot if you want to activate
-     * the action. activated() will be emitted
+     * the action. authorized() will be emitted
      * if the action gets authorized.
      *
      * \return \c true if the caller can do the action
      *
-     * \see activated()
+     * \see authorized()
      */
     bool activate();
 
@@ -292,8 +295,10 @@ private:
     Q_PRIVATE_SLOT(d, void configChanged())
 };
 
-Q_DECLARE_OPERATORS_FOR_FLAGS(PolkitQt1::Action::States)
+}
 
 }
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(PolkitQt1::Gui::Action::States)
 
 #endif

@@ -26,6 +26,9 @@
 namespace PolkitQt1
 {
 
+namespace Gui
+{
+
 class ActionButtonsPrivate;
 /**
  * \class ActionButtons actionbuttons.h ActionButtons
@@ -103,6 +106,8 @@ public:
      */
     void removeButton(QAbstractButton *button);
 };
+
+}
 
 }
 

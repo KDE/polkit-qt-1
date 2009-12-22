@@ -21,13 +21,15 @@
 #ifndef ACTIONBUTTON_P_H
 #define ACTIONBUTTON_P_H
 
+#include <actionbutton.h>
+
 #include <QtCore/QList>
 #include <QtGui/QAbstractButton>
 
 /**
   * \internal
   */
-class PolkitQt1::ActionButtonPrivate
+class PolkitQt1::Gui::ActionButtonPrivate
 {
 public:
     ActionButtonPrivate(const QList<QAbstractButton *> &b)

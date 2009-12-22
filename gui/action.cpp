@@ -26,7 +26,9 @@
 
 #include <QtCore/QCoreApplication>
 
-using namespace PolkitQt1;
+namespace PolkitQt1 {
+
+namespace Gui {
 
 /**
   * \internal
@@ -124,7 +126,7 @@ bool Action::activate()
     case Authority::Yes:
     case Authority::Challenge:
         // just emit the 'activated' signal
-        emit activated();
+        emit authorized();
         return true;
         break;
     default:
@@ -137,7 +139,7 @@ bool Action::activate()
              * Hence, they probably have a good reason for doing
              * this so do let the 'activate' signal propagate..
              */
-            emit activated();
+            emit authorized();
             return true;
         }
         break;
@@ -506,4 +508,8 @@ QString Action::actionId() const
     return d->actionId;
 }
 
-#include "moc_action.cpp"
+}
+
+}
+
+#include "action.moc"

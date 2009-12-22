@@ -30,6 +30,7 @@
 #include <QtDBus/QDBusConnection>
 
 using namespace PolkitQt1;
+using namespace PolkitQt1::Gui;
 
 PkExample::PkExample(QMainWindow *parent)
         : QMainWindow(parent)
@@ -61,7 +62,7 @@ PkExample::PkExample(QMainWindow *parent)
     connect(bt, SIGNAL(clicked(QAbstractButton *, bool)), bt, SLOT(activate()));
     // this is the Action activated signal, it is always emmited whenever
     // someone click and get authorized to do the action
-    connect(bt, SIGNAL(activated()), this, SLOT(actionActivated()));
+    connect(bt, SIGNAL(authorized()), this, SLOT(actionActivated()));
 
     bt = new ActionButton(cryPB, "org.qt.policykit.examples.cry", this);
     bt->setText("Cry!");
@@ -70,7 +71,7 @@ PkExample::PkExample(QMainWindow *parent)
     toolBar->addAction(qobject_cast<Action *>(bt));
     connect(bt, SIGNAL(triggered(bool)), this, SLOT(activateAction()));
     connect(bt, SIGNAL(clicked(QAbstractButton *, bool)), bt, SLOT(activate()));
-    connect(bt, SIGNAL(activated()), this, SLOT(actionActivated()));
+    connect(bt, SIGNAL(authorized()), this, SLOT(actionActivated()));
 
     bt = new ActionButton(bleedPB, "org.qt.policykit.examples.bleed", this);
     bt->setText("Bleed!");
@@ -79,7 +80,7 @@ PkExample::PkExample(QMainWindow *parent)
     toolBar->addAction(qobject_cast<Action *>(bt));
     connect(bt, SIGNAL(triggered(bool)), this, SLOT(activateAction()));
     connect(bt, SIGNAL(clicked(QAbstractButton *, bool)), bt, SLOT(activate()));
-    connect(bt, SIGNAL(activated()), this, SLOT(actionActivated()));
+    connect(bt, SIGNAL(authorized()), this, SLOT(actionActivated()));
 
     // This action is more customized
     bt = new ActionButton(playPB, "org.qt.policykit.examples.play", this);
@@ -103,7 +104,7 @@ PkExample::PkExample(QMainWindow *parent)
     toolBar->addAction(qobject_cast<Action *>(bt));
     connect(bt, SIGNAL(triggered(bool)), this, SLOT(activateAction()));
     connect(bt, SIGNAL(clicked(QAbstractButton *, bool)), bt, SLOT(activate()));
-    connect(bt, SIGNAL(activated()), this, SLOT(actionActivated()));
+    connect(bt, SIGNAL(authorized()), this, SLOT(actionActivated()));
 
     bt = new ActionButton(deletePB, "org.qt.policykit.examples.delete", this);
     bt->setText("Delete!");
@@ -114,7 +115,7 @@ PkExample::PkExample(QMainWindow *parent)
     toolBar->addAction(qobject_cast<Action *>(bt));
     connect(bt, SIGNAL(triggered(bool)), this, SLOT(activateAction()));
     connect(bt, SIGNAL(clicked(QAbstractButton *, bool)), bt, SLOT(activate()));
-    connect(bt, SIGNAL(activated()), this, SLOT(actionActivated()));
+    connect(bt, SIGNAL(authorized()), this, SLOT(actionActivated()));
 
     bt = new ActionButton(listenPB, "org.qt.policykit.examples.listen", this);
     bt->setText("Listen!");
@@ -125,7 +126,7 @@ PkExample::PkExample(QMainWindow *parent)
     toolBar->addAction(qobject_cast<Action *>(bt));
     connect(bt, SIGNAL(triggered(bool)), this, SLOT(activateAction()));
     connect(bt, SIGNAL(clicked(QAbstractButton *, bool)), bt, SLOT(activate()));
-    connect(bt, SIGNAL(activated()), this, SLOT(actionActivated()));
+    connect(bt, SIGNAL(authorized()), this, SLOT(actionActivated()));
 
     bt = new ActionButton(setPB, "org.qt.policykit.examples.set", this);
     bt->setText("Set!");
@@ -136,7 +137,7 @@ PkExample::PkExample(QMainWindow *parent)
     toolBar->addAction(qobject_cast<Action *>(bt));
     connect(bt, SIGNAL(triggered(bool)), this, SLOT(activateAction()));
     connect(bt, SIGNAL(clicked(QAbstractButton *, bool)), bt, SLOT(activate()));
-    connect(bt, SIGNAL(activated()), this, SLOT(actionActivated()));
+    connect(bt, SIGNAL(authorized()), this, SLOT(actionActivated()));
 
     bt = new ActionButton(shoutPB, "org.qt.policykit.examples.shout", this);
     bt->setIcon(QPixmap(":/Icons/custom-no.png"), Action::No);
@@ -149,7 +150,7 @@ PkExample::PkExample(QMainWindow *parent)
     toolBar->addAction(qobject_cast<Action *>(bt));
     connect(bt, SIGNAL(triggered(bool)), this, SLOT(activateAction()));
     connect(bt, SIGNAL(clicked(QAbstractButton *, bool)), bt, SLOT(activate()));
-    connect(bt, SIGNAL(activated()), this, SLOT(actionActivated()));
+    connect(bt, SIGNAL(authorized()), this, SLOT(actionActivated()));
 
     // test configChanged
 }

@@ -5,7 +5,7 @@ includedir=@CMAKE_INSTALL_PREFIX@/include
 
 Name: polkit-qt-gui-1
 Description: Convenience library for using polkit with a Qt-styled API, GUI classes
-Version: @POLKITQT1_VERSION_STRING@
+Version: @CMAKE_POLKITQT-1_VERSION_STRING@
 Requires: QtCore QtGui polkit-qt-core-1
 Libs: -L${libdir} -lpolkit-qt-gui-1
 Cflags: -I${includedir}

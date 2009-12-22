@@ -58,10 +58,7 @@ install(FILES
     ${INCLUDE_INSTALL_DIR}/polkit-qt-1 COMPONENT Devel)
 
 install(FILES
-    includes/PolkitQt1/Action
     includes/PolkitQt1/Authority
-    includes/PolkitQt1/ActionButton
-    includes/PolkitQt1/ActionButtons
     includes/PolkitQt1/Details
     includes/PolkitQt1/Identity
     includes/PolkitQt1/Subject
@@ -69,6 +66,13 @@ install(FILES
     includes/PolkitQt1/ActionDescription
     DESTINATION
     ${INCLUDE_INSTALL_DIR}/polkit-qt-1/PolkitQt1 COMPONENT Devel)
+
+install(FILES
+    includes/PolkitQt1/Gui/Action
+    includes/PolkitQt1/Gui/ActionButton
+    includes/PolkitQt1/Gui/ActionButtons
+    DESTINATION
+    ${INCLUDE_INSTALL_DIR}/polkit-qt-1/PolkitQt1/Gui COMPONENT Devel)
 
 install(FILES
     includes/PolkitQt1/Agent/Listener

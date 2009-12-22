@@ -24,16 +24,16 @@
 #include "export.h"
 
 /// @brief PolkitQt-1 version as string at compile time.
-#define POLKITQT-1_VERSION_STRING "${CMAKE_POLKITQT-1_VERSION_STRING}"
+#define POLKITQT1_VERSION_STRING "${CMAKE_POLKITQT-1_VERSION_STRING}"
 
 /// @brief The major PolkitQt-1 version number at compile time
-#define POLKITQT-1_VERSION_MAJOR ${CMAKE_MAJOR_POLKITQT-1_VERSION}
+#define POLKITQT1_VERSION_MAJOR ${CMAKE_MAJOR_POLKITQT-1_VERSION}
 
 /// @brief The minor PolkitQt-1 version number at compile time
-#define POLKITQT-1_VERSION_MINOR ${CMAKE_MINOR_POLKITQT-1_VERSION}
+#define POLKITQT1_VERSION_MINOR ${CMAKE_MINOR_POLKITQT-1_VERSION}
 
 /// @brief The PolkitQt-1 release version number at compile time
-#define POLKITQT-1_VERSION_RELEASE ${CMAKE_RELEASE_POLKITQT-1_VERSION}
+#define POLKITQT1_VERSION_RELEASE ${CMAKE_RELEASE_POLKITQT-1_VERSION}
 
 /**
  * \brief Create a unique number from the major, minor and release number of a %PolkitQt-1 version
@@ -41,7 +41,7 @@
  * This function can be used for preprocessing. For version information at runtime
  * use the version methods in the PolkitQt-1 namespace.
  */
-#define POLKITQT-1_MAKE_VERSION( a,b,c ) (((a) << 16) | ((b) << 8) | (c))
+#define POLKITQT1_MAKE_VERSION( a,b,c ) (((a) << 16) | ((b) << 8) | (c))
 
 /**
  * \brief %PolkitQt-1 Version as a unique number at compile time
@@ -50,8 +50,8 @@
  * through POLKITQT1_IS_VERSION in preprocessing. For version information at runtime
  * use the version methods in the PolkitQt-1 namespace.
  */
-#define POLKITQT-1_VERSION \
-    POLKITQT-1_MAKE_VERSION(POLKITQT-1_VERSION_MAJOR,POLKITQT-1_VERSION_MINOR,POLKITQT-1_VERSION_RELEASE)
+#define POLKITQT1_VERSION \
+    POLKITQT1_MAKE_VERSION(POLKITQT1_VERSION_MAJOR,POLKITQT1_VERSION_MINOR,POLKITQT1_VERSION_RELEASE)
 
 /**
  * \brief Check if the %PolkitQt-1 version matches a certain version or is higher
@@ -68,7 +68,7 @@
  * For version information at runtime
  * use the version methods in the PolkitQt-1 namespace.
  */
-#define POLKITQT-1_IS_VERSION(a,b,c) ( POLKITQT-1_VERSION >= POLKITQT-1_MAKE_VERSION(a,b,c) )
+#define POLKITQT1_IS_VERSION(a,b,c) ( POLKITQT1_VERSION >= POLKITQT1_MAKE_VERSION(a,b,c) )
 
 
 namespace PolkitQt1 {

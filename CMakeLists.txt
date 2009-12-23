@@ -31,7 +31,7 @@ include_directories(
 
 set(CMAKE_MAJOR_POLKITQT-1_VERSION 0 CACHE INT "PolkitQt-1's major version number" FORCE)
 set(CMAKE_MINOR_POLKITQT-1_VERSION 95 CACHE INT "PolkitQt-1's minor version number" FORCE)
-set(CMAKE_RELEASE_POLKITQT-1_VERSION 1 CACHE INT "PolkitQt-1's release version number" FORCE)
+set(CMAKE_RELEASE_POLKITQT-1_VERSION 2 CACHE INT "PolkitQt-1's release version number" FORCE)
 set(CMAKE_POLKITQT-1_VERSION_STRING "${CMAKE_MAJOR_POLKITQT-1_VERSION}.${CMAKE_MINOR_POLKITQT-1_VERSION}.${CMAKE_RELEASE_POLKITQT-1_VERSION}")
 
 configure_file(polkitqt1-version.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/polkitqt1-version.h)

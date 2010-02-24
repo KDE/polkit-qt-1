@@ -87,6 +87,7 @@ QDateTime TemporaryAuthorization::expirationTime() const
 bool TemporaryAuthorization::revoke()
 {
     Authority::instance()->revokeTemporaryAuthorization(id());
+    return true;
 }
 
 }

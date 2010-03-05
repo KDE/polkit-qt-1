@@ -65,7 +65,7 @@ include(FindPackageHandleStandardArgs)
 # handle the QUIETLY and REQUIRED arguments and set POLKIT_FOUND to TRUE if
 # all listed variables are TRUE
 find_package_handle_standard_args(Polkit DEFAULT_MSG POLKIT_LIBRARY POLKIT_AGENT_LIBRARY
-                                                     POLKIT_INCLUDE_DIRS POLKIT_AGENT_INCLUDE_DIRS GLIB2_FOUND)
+                                                     _POLKIT_INCLUDE_DIR _POLKIT_AGENT_INCLUDE_DIR GLIB2_FOUND)
 
 mark_as_advanced(POLKIT_INCLUDE_DIRS POLKIT_AGENT_INCLUDE_DIRS POLKIT_LIBRARY POLKIT_AGENT_LIBRARY GLIB_INCLUDE_DIR)
 

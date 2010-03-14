@@ -12,9 +12,9 @@ set(polkit_qt_agent_SRCS
 automoc4_add_library(polkit-qt-agent-1 SHARED ${polkit_qt_agent_SRCS})
 
 target_link_libraries(polkit-qt-agent-1
-  ${POLKIT-1_LIBRARIES}
+  ${POLKIT_LIBRARIES}
   ${QT_QTCORE_LIBRARY}
-  ${POLKIT-1_AGENT_LIBRARIES}
+  ${POLKIT_AGENT_LIBRARY}
   polkit-qt-core-1
 )
 
@@ -22,5 +22,5 @@ set_target_properties(polkit-qt-agent-1 PROPERTIES VERSION ${CMAKE_POLKITQT-1_VE
                                 SOVERSION ${CMAKE_MAJOR_POLKITQT-1_VERSION}
                                 DEFINE_SYMBOL MAKE_POLKITQT1_LIB
                       )
-  
-install(TARGETS polkit-qt-agent-1 ${INSTALL_TARGETS_DEFAULT_ARGS}) 
+
+install(TARGETS polkit-qt-agent-1 ${INSTALL_TARGETS_DEFAULT_ARGS})

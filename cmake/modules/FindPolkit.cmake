@@ -4,7 +4,7 @@
 #  POLKIT_FOUND - system has Polkit
 #  POLKIT_INCLUDE_DIRS - Polkit's include directories
 #  POLKIT_AGENT_INCLUDE_DIRS - Polkit-agent's include directories
-#  POLKIT_LIBRARY - Link this to use polkit's gobject library
+#  POLKIT_LIBRARIES - Link this to use polkit's gobject library
 #  POLKIT_AGENT_LIBRARY - Link this to use the agent wrapper in polkit
 #  POLKIT_DEFINITIONS - Compiler switches required for using Polkit
 
@@ -50,7 +50,7 @@ find_path( _POLKIT_AGENT_INCLUDE_DIR
 set(POLKIT_INCLUDE_DIRS ${GLIB2_INCLUDE_DIRS} ${_POLKIT_INCLUDE_DIR})
 set(POLKIT_AGENT_INCLUDE_DIRS ${GLIB2_INCLUDE_DIRS} ${_POLKIT_AGENT_INCLUDE_DIR})
 
-find_library( POLKIT_LIBRARY
+find_library( POLKIT_LIBRARIES
     NAMES polkit-gobject-1
     HINTS ${PC_POLKIT_LIBDIR}
 )
@@ -64,9 +64,9 @@ include(FindPackageHandleStandardArgs)
 
 # handle the QUIETLY and REQUIRED arguments and set POLKIT_FOUND to TRUE if
 # all listed variables are TRUE
-find_package_handle_standard_args(Polkit DEFAULT_MSG POLKIT_LIBRARY POLKIT_AGENT_LIBRARY
+find_package_handle_standard_args(Polkit DEFAULT_MSG POLKIT_LIBRARIES POLKIT_AGENT_LIBRARY
                                                      _POLKIT_INCLUDE_DIR _POLKIT_AGENT_INCLUDE_DIR GLIB2_FOUND)
 
-mark_as_advanced(POLKIT_INCLUDE_DIRS POLKIT_AGENT_INCLUDE_DIRS POLKIT_LIBRARY POLKIT_AGENT_LIBRARY GLIB_INCLUDE_DIR)
+mark_as_advanced(POLKIT_INCLUDE_DIRS POLKIT_AGENT_INCLUDE_DIRS POLKIT_LIBRARIES POLKIT_AGENT_LIBRARY GLIB_INCLUDE_DIR)
 
 set(POLKIT_POLICY_FILES_INSTALL_DIR ${CMAKE_INSTALL_PREFIX}/share/polkit-1/actions)

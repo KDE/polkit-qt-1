@@ -10,6 +10,7 @@ set(QT_MIN_VERSION "4.4.0")
 find_package(Qt4 REQUIRED)
 find_package(Automoc4 REQUIRED)
 find_package(Polkit)
+find_package(GObject)
 
 if(POLKIT_FOUND)
     include (${QT_USE_FILE})
@@ -20,6 +21,7 @@ if(POLKIT_FOUND)
         ${POLKIT_INCLUDE_DIR}
         ${POLKIT_AGENT_INCLUDE_DIR}
         ${GLIB2_INCLUDE_DIR}
+        ${GOBJECT_INCLUDE_DIR}
         ${CMAKE_CURRENT_SOURCE_DIR}
         ${CMAKE_CURRENT_SOURCE_DIR}/core
         ${CMAKE_CURRENT_SOURCE_DIR}/includes

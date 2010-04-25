@@ -21,6 +21,7 @@ target_link_libraries(polkit-qt-core-1
 	${POLKIT_LIBRARIES}
         ${GLIB2_LIBRARIES}
         ${GOBJECT_LIBRARIES}
+        ${GIO_LIBRARIES}
 )
 
 set_target_properties(polkit-qt-core-1 PROPERTIES VERSION ${CMAKE_POLKITQT-1_VERSION_STRING}

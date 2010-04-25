@@ -19,7 +19,7 @@ endif(GLIB2_INCLUDE_DIR AND GLIB2_LIBRARIES)
 if (NOT WIN32)
    find_package(PkgConfig)
    if (PKG_CONFIG_FOUND)
-     pkg_check_modules(PC_LibGLIB2 QUIET glib-2.0)
+     pkg_check_modules(PC_LibGLIB2 glib-2.0)
    endif (PKG_CONFIG_FOUND)
 endif(NOT WIN32)
 

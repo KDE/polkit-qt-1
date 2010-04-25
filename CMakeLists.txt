@@ -17,8 +17,9 @@ if(POLKIT_FOUND)
 
     include_directories(
         ${CMAKE_CURRENT_BINARY_DIR}
-        ${POLKIT_INCLUDE_DIRS}
-        ${POLKIT_AGENT_INCLUDE_DIRS}
+        ${POLKIT_INCLUDE_DIR}
+        ${POLKIT_AGENT_INCLUDE_DIR}
+        ${GLIB2_INCLUDE_DIR}
         ${CMAKE_CURRENT_SOURCE_DIR}
         ${CMAKE_CURRENT_SOURCE_DIR}/core
         ${CMAKE_CURRENT_SOURCE_DIR}/includes

@@ -27,7 +27,7 @@ if (NOT WIN32)
 endif (NOT WIN32)
 
 # We must include glib paths too... which sucks balls
-find_package(GLib2)
+find_package(GLIB2)
 
 find_path( GLIB_CONFIG_INCLUDE_DIR
      NAMES glibconfig.h
@@ -47,24 +47,27 @@ find_path( _POLKIT_AGENT_INCLUDE_DIR
      HINTS ${PC_POLKIT_AGENT_INCLUDE_DIRS}
 )
 
-set(POLKIT_INCLUDE_DIRS ${GLIB2_INCLUDE_DIRS} ${_POLKIT_INCLUDE_DIR})
-set(POLKIT_AGENT_INCLUDE_DIRS ${GLIB2_INCLUDE_DIRS} ${_POLKIT_AGENT_INCLUDE_DIR})
+set(POLKIT_INCLUDE_DIRS ${GLIB2_INCLUDE_DIR} ${_POLKIT_INCLUDE_DIR})
+set(POLKIT_AGENT_INCLUDE_DIRS ${GLIB2_INCLUDE_DIR} ${_POLKIT_AGENT_INCLUDE_DIR})
 
-find_library( POLKIT_LIBRARIES
+find_library( _POLKIT_LIBRARIES
     NAMES polkit-gobject-1
     HINTS ${PC_POLKIT_LIBDIR}
 )
 
-find_library( POLKIT_AGENT_LIBRARY
+find_library( _POLKIT_AGENT_LIBRARY
     NAMES polkit-agent-1
     HINTS ${PC_POLKIT_AGENT_LIBDIR}
 )
+
+set(POLKIT_LIBRARIES ${_POLKIT_LIBRARIES} ${GLIB2_LIBRARIES})
+set(POLKIT_AGENT_LIBRARY ${_POLKIT_AGENT_LIBRARY} ${GLIB2_LIBRARIES})
 
 include(FindPackageHandleStandardArgs)
 
 # handle the QUIETLY and REQUIRED arguments and set POLKIT_FOUND to TRUE if
 # all listed variables are TRUE
-find_package_handle_standard_args(Polkit DEFAULT_MSG POLKIT_LIBRARIES POLKIT_AGENT_LIBRARY
+find_package_handle_standard_args(Polkit DEFAULT_MSG _POLKIT_LIBRARIES _POLKIT_AGENT_LIBRARY
                                                      _POLKIT_INCLUDE_DIR _POLKIT_AGENT_INCLUDE_DIR GLIB2_FOUND)
 
 mark_as_advanced(POLKIT_INCLUDE_DIRS POLKIT_AGENT_INCLUDE_DIRS POLKIT_LIBRARIES POLKIT_AGENT_LIBRARY GLIB_INCLUDE_DIR)

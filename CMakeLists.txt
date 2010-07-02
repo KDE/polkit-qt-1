@@ -13,6 +13,8 @@ find_package(Polkit)
 find_package(GObject)
 find_package(GIO)
 
+add_definitions(-DQT_NO_KEYWORDS)
+
 if(POLKIT_FOUND)
     include (${QT_USE_FILE})
     include (InstallSettings)

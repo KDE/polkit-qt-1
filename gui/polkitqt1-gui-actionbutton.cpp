@@ -57,7 +57,7 @@ void ActionButtonPrivate::updateButton()
 {
     Q_Q(ActionButton);
 
-    foreach(QAbstractButton *ent, buttons) {
+    Q_FOREACH(QAbstractButton *ent, buttons) {
         ent->setVisible(q->isVisible());
         ent->setEnabled(q->isEnabled());
         ent->setText(q->text());
@@ -81,7 +81,7 @@ bool ActionButton::activate()
     Q_D(ActionButton);
 
     bool tg = false;
-    foreach(QAbstractButton *ent, d->buttons) {
+    Q_FOREACH(QAbstractButton *ent, d->buttons) {
         if (ent->isCheckable()) {
             // we set the the current Action state
             ent->setChecked(isChecked());
@@ -102,7 +102,7 @@ void ActionButton::setButton(QAbstractButton *button)
     Q_D(ActionButton);
 
     // First, let's clear the list
-    foreach(QAbstractButton *ent, d->buttons) {
+    Q_FOREACH(QAbstractButton *ent, d->buttons) {
         d->removeButton(ent);
     }
 
@@ -124,7 +124,7 @@ void ActionButtonPrivate::addButton(QAbstractButton *button)
         // if we are not checkable BUT the button
         // is (eg a QCheckBox) we should set all buttons to
         // checkable.
-        foreach(QAbstractButton *ent, buttons) {
+        Q_FOREACH(QAbstractButton *ent, buttons) {
             ent->setCheckable(true);
         }
         // set the checkable state of Action to store the initial state
@@ -156,7 +156,7 @@ void ActionButtonPrivate::streamClicked(bool c)
 {
     Q_Q(ActionButton);
 
-    emit q->clicked(qobject_cast<QAbstractButton *>(q->sender()), c);
+    Q_EMIT q->clicked(qobject_cast<QAbstractButton *>(q->sender()), c);
 }
 
 }

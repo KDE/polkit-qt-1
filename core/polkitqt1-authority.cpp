@@ -208,7 +208,7 @@ void Authority::Private::init()
     QList<QString> seats;
     qVariantValue<QDBusArgument> (msg.arguments()[0]) >> seats;
     // it can be multiple seats present so connect all their signals
-    foreach(const QString &seat, seats) {
+    Q_FOREACH(const QString &seat, seats) {
         seatSignalsConnect(seat);
     }
 }
@@ -244,7 +244,7 @@ void Authority::Private::dbusSignalAdd(const QString &service, const QString &pa
 void Authority::Private::dbusFilter(const QDBusMessage &message)
 {
     if (message.type() == QDBusMessage::SignalMessage) {
-        emit q->consoleKitDBChanged();
+        Q_EMIT q->consoleKitDBChanged();
 
         // TODO: Test this with the multiseat support
         if (message.member() == "SeatAdded")
@@ -278,7 +278,7 @@ void Authority::clearError()
 
 void Authority::Private::pk_config_changed()
 {
-    emit Authority::instance()->configChanged();
+    Q_EMIT Authority::instance()->configChanged();
 }
 
 PolkitAuthority *Authority::polkitAuthority() const
@@ -361,7 +361,7 @@ void Authority::Private::checkAuthorizationCallback(GObject *object, GAsyncResul
         return;
     }
     if (pkResult != NULL) {
-        emit authority->checkAuthorizationFinished(polkitResultToResult(pkResult));
+        Q_EMIT authority->checkAuthorizationFinished(polkitResultToResult(pkResult));
         g_object_unref(pkResult);
     } else {
         authority->d->setError(E_UnknownResult);
@@ -421,7 +421,7 @@ void Authority::Private::enumerateActionsCallback(GObject *object, GAsyncResult 
         return;
     }
 
-    emit authority->enumerateActionsFinished(actionsToListAndFree(list));
+    Q_EMIT authority->enumerateActionsFinished(actionsToListAndFree(list));
 }
 
 void Authority::enumerateActionsCancel()
@@ -491,7 +491,7 @@ void Authority::Private::registerAuthenticationAgentCallback(GObject *object, GA
         return;
     }
 
-    emit authority->registerAuthenticationAgentFinished(res);
+    Q_EMIT authority->registerAuthenticationAgentFinished(res);
 }
 
 void Authority::registerAuthenticationAgentCancel()
@@ -559,7 +559,7 @@ void Authority::Private::unregisterAuthenticationAgentCallback(GObject *object, 
         return;
     }
 
-    emit authority->unregisterAuthenticationAgentFinished(res);
+    Q_EMIT authority->unregisterAuthenticationAgentFinished(res);
 }
 
 void Authority::unregisterAuthenticationAgentCancel()
@@ -626,7 +626,7 @@ void Authority::Private::authenticationAgentResponseCallback(GObject *object, GA
         return;
     }
 
-    emit authority->authenticationAgentResponseFinished(res);
+    Q_EMIT authority->authenticationAgentResponseFinished(res);
 }
 
 void Authority::authenticationAgentResponseCancel()
@@ -685,7 +685,7 @@ void Authority::Private::enumerateTemporaryAuthorizationsCallback(GObject *objec
 
     g_list_free(glist);
 
-    emit authority->enumerateTemporaryAuthorizationsFinished(res);
+    Q_EMIT authority->enumerateTemporaryAuthorizationsFinished(res);
 }
 
 void Authority::enumerateTemporaryAuthorizationsCancel()
@@ -741,7 +741,7 @@ void Authority::Private::revokeTemporaryAuthorizationsCallback(GObject *object, 
         return;
     }
 
-    emit authority->revokeTemporaryAuthorizationsFinished(res);
+    Q_EMIT authority->revokeTemporaryAuthorizationsFinished(res);
 }
 
 void Authority::revokeTemporaryAuthorizationsCancel()
@@ -797,7 +797,7 @@ void Authority::Private::revokeTemporaryAuthorizationCallback(GObject *object, G
         return;
     }
 
-    emit authority->revokeTemporaryAuthorizationFinished(res);
+    Q_EMIT authority->revokeTemporaryAuthorizationFinished(res);
 }
 
 void Authority::revokeTemporaryAuthorizationCancel()

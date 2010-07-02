@@ -61,7 +61,7 @@ Listener* ListenerAdapter::findListener(PolkitAgentListener *listener)
 {
     Listener *listItem;
 
-    foreach(listItem, m_listeners) {
+    Q_FOREACH(listItem, m_listeners) {
         Q_ASSERT(listItem);
 
         if (listItem->listener() == listener)

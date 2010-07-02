@@ -127,8 +127,8 @@ bool Action::activate()
     switch (d->pkResult) {
     case Authority::Yes:
     case Authority::Challenge:
-        // just emit the 'activated' signal
-        emit authorized();
+        // just Q_EMIT the 'activated' signal
+        Q_EMIT authorized();
         return true;
         break;
     default:
@@ -141,7 +141,7 @@ bool Action::activate()
              * Hence, they probably have a good reason for doing
              * this so do let the 'activate' signal propagate..
              */
-            emit authorized();
+            Q_EMIT authorized();
             return true;
         }
         break;
@@ -207,7 +207,7 @@ void Action::Private::updateAction()
         }
         break;
     }
-    emit parent->dataChanged();
+    Q_EMIT parent->dataChanged();
 }
 
 void Action::Private::configChanged()

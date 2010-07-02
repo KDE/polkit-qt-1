@@ -40,7 +40,7 @@ ActionButtons::~ActionButtons()
 
 void ActionButtons::setButtons(const QList<QAbstractButton *> &buttons)
 {
-    foreach(QAbstractButton *ent, buttons) {
+    Q_FOREACH(QAbstractButton *ent, buttons) {
         addButton(ent);
     }
 }

@@ -32,7 +32,7 @@ public:
     PkExample(QMainWindow *parent = 0);
     ~PkExample();
 
-private slots:
+private Q_SLOTS:
     void activateAction();
     void actionActivated();
 };

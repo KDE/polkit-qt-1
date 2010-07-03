@@ -2,9 +2,7 @@
 
 FIND_PACKAGE(Qt4 REQUIRED)
 include (${QT_USE_FILE})
-include (FindPkgConfig)
 
-pkg_check_modules (POLKIT REQUIRED polkit-gobject-1>=0.94)
 include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${CMAKE_CURRENT_BINARY_DIR}

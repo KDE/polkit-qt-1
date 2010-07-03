@@ -7,7 +7,7 @@
 class TestAuth : public QObject
 {
     Q_OBJECT
-private slots:
+private Q_SLOTS:
     void test_Auth_checkAuthorization();
     void test_Auth_enumerateActions();
     void test_Identity();

@@ -36,7 +36,7 @@ class KListener : public PolkitQt1::Agent::Listener
 public:
     KListener(QObject *parent = 0);
     ~KListener() {};
-public slots:
+public Q_SLOTS:
     void initiateAuthentication(const QString &actionId,
                                 const QString &message,
                                 const QString &iconName,

@@ -76,7 +76,7 @@ void TestAuth::test_Auth_enumerateActions()
     QVERIFY(!Authority::instance()->hasError());
     // Check whether enumerateAction returns at least example actions
     int count = 0;
-    foreach(ActionDescription *ad, list) {
+    Q_FOREACH(ActionDescription *ad, list) {
         if ((ad->actionId() == "org.qt.policykit.examples.kick") ||
                 (ad->actionId() == "org.qt.policykit.examples.cry") ||
                 (ad->actionId() == "org.qt.policykit.examples.bleed"))
@@ -94,7 +94,7 @@ void TestAuth::test_Auth_enumerateActions()
     QCOMPARE(spy.count(), 1);
     list = qVariantValue<PolkitQt1::ActionDescription::List> (spy.takeFirst()[0]);
     QVERIFY(!Authority::instance()->hasError());
-    foreach(ActionDescription *ad, list) {
+    Q_FOREACH(ActionDescription *ad, list) {
         if ((ad->actionId() == "org.qt.policykit.examples.kick") ||
                 (ad->actionId() == "org.qt.policykit.examples.cry") ||
                 (ad->actionId() == "org.qt.policykit.examples.bleed"))

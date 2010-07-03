@@ -47,9 +47,7 @@ void KListener::initiateAuthentication(const QString &actionId,
     qDebug() << details->keys();
     qDebug() << "cookie" << cookie;
 
-    PolkitQt1::Identity *identity;
-
-    foreach(identity, identities) {
+    Q_FOREACH (PolkitQt1::Identity *identity, identities) {
         qDebug() << identity->toString();
         Session *session;
         session = new Session(identity, cookie, result);
@@ -59,8 +57,6 @@ void KListener::initiateAuthentication(const QString &actionId,
         connect(session, SIGNAL(showInfo(QString)), this, SLOT(showInfo(QString)));
         session->initiate();
     }
-
-
 }
 
 bool KListener::initiateAuthenticationFinish()

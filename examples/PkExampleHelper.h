@@ -33,7 +33,7 @@ public:
     PkExampleHelper(int &argc, char **argv);
     ~PkExampleHelper();
 
-public slots:
+public Q_SLOTS:
     bool set(const QString &action);
     bool setValue(const QString &action);
 };

@@ -534,6 +534,6 @@ private:
 }
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(PolkitQt1::Authority::AuthorizationFlags)
-Q_DECLARE_METATYPE(PolkitQt1::Authority::Result);
+Q_DECLARE_METATYPE(PolkitQt1::Authority::Result)
 
 #endif

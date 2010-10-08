@@ -177,17 +177,12 @@ void Authority::Private::init()
     m_revokeTemporaryAuthorizationsCancellable = g_cancellable_new();
     m_revokeTemporaryAuthorizationCancellable = g_cancellable_new();
 
-    GError *gerror = NULL;
     if (pkAuthority == NULL) {
-        pkAuthority = polkit_authority_get_sync(NULL, &gerror);
-        if (gerror != NULL) {
-            setError(E_GetAuthority, gerror->message);
-            g_error_free(gerror);
-            return;
-        }
+        pkAuthority = polkit_authority_get();
     }
 
     if (pkAuthority == NULL) {
+        (E_GetAuthority);
         return;
     }
 

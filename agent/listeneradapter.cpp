@@ -84,15 +84,13 @@ void ListenerAdapter::polkit_qt_listener_initiate_authentication(PolkitAgentList
 {
     qDebug() << "polkit_qt_listener_initiate_authentication callback for " << listener;
 
-    QList<PolkitQt1::Identity *> idents;
-    PolkitQt1::Details *dets;
+    PolkitQt1::Identity::List idents;
+    PolkitQt1::Details dets(details);
 
     Listener *list = findListener(listener);
 
     for (GList *identity = g_list_first(identities); identity != NULL; identity = g_list_next(identity))
-        idents.append(new PolkitQt1::Identity((PolkitIdentity *)identity->data));
-
-    dets = new PolkitQt1::Details(details);
+         idents.append(PolkitQt1::Identity((PolkitIdentity *)identity->data));
 
     list->initiateAuthentication(QString::fromUtf8(action_id),
                                  QString::fromUtf8(message),

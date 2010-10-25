@@ -23,7 +23,7 @@ void wait()
 void TestAuth::test_Auth_checkAuthorization()
 {
     // This needs the file org.qt.policykit.examples.policy from examples to be installed
-    UnixProcessSubject *process = new UnixProcessSubject(QCoreApplication::applicationPid());
+    UnixProcessSubject process(QCoreApplication::applicationPid());
     Authority::Result result;
     // Check if this method returns good authorization results
     Authority *authority = Authority::instance();
@@ -76,10 +76,10 @@ void TestAuth::test_Auth_enumerateActions()
     QVERIFY(!Authority::instance()->hasError());
     // Check whether enumerateAction returns at least example actions
     int count = 0;
-    Q_FOREACH(ActionDescription *ad, list) {
-        if ((ad->actionId() == "org.qt.policykit.examples.kick") ||
-                (ad->actionId() == "org.qt.policykit.examples.cry") ||
-                (ad->actionId() == "org.qt.policykit.examples.bleed"))
+    Q_FOREACH(const ActionDescription &ad, list) {
+        if ((ad.actionId() == "org.qt.policykit.examples.kick") ||
+                (ad.actionId() == "org.qt.policykit.examples.cry") ||
+                (ad.actionId() == "org.qt.policykit.examples.bleed"))
             count++;
     }
     QCOMPARE(count, 3);
@@ -94,10 +94,10 @@ void TestAuth::test_Auth_enumerateActions()
     QCOMPARE(spy.count(), 1);
     list = qVariantValue<PolkitQt1::ActionDescription::List> (spy.takeFirst()[0]);
     QVERIFY(!Authority::instance()->hasError());
-    Q_FOREACH(ActionDescription *ad, list) {
-        if ((ad->actionId() == "org.qt.policykit.examples.kick") ||
-                (ad->actionId() == "org.qt.policykit.examples.cry") ||
-                (ad->actionId() == "org.qt.policykit.examples.bleed"))
+    Q_FOREACH(const ActionDescription &ad, list) {
+        if ((ad.actionId() == "org.qt.policykit.examples.kick") ||
+                (ad.actionId() == "org.qt.policykit.examples.cry") ||
+                (ad.actionId() == "org.qt.policykit.examples.bleed"))
             count++;
     }
     QCOMPARE(count, 3);
@@ -124,23 +124,20 @@ void TestAuth::test_Identity()
     QVERIFY(user.identity());
 
     // Create generic Identity from UnixUser via string representation
-    Identity *id = Identity::fromString(user.toString());
+    Identity id = Identity::fromString(user.toString());
     // Compare obtained uid with real uid
-    QCOMPARE(((UnixUserIdentity *)id)->uid(), userId);
-    delete id;
+    QCOMPARE(id.toUnixUserIdentity().uid(), userId);
 
     // Create generic Identity from UnixGroup via string representation
     UnixGroupIdentity group(groupId);
     QVERIFY(group.identity());
     id = Identity::fromString(group.toString());
-    QCOMPARE(((UnixGroupIdentity *) id)->gid(), groupId);
-    delete id;
+    QCOMPARE(id.toUnixGroupIdentity().gid(), groupId);
 
     // Test setting gid to another value
     group.setGid(9999U);
     id = Identity::fromString(group.toString());
-    QCOMPARE(((UnixGroupIdentity *) id)->gid(), 9999U);
-    delete id;
+    QCOMPARE(id.toUnixGroupIdentity().gid(), 9999U);
 }
 
 void TestAuth::test_Authority()

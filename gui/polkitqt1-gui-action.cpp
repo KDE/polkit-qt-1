@@ -222,16 +222,13 @@ void Action::Private::configChanged()
 bool Action::Private::computePkResult()
 {
     Authority::Result old_result;
-    UnixProcessSubject *subject;
-
-    subject = new UnixProcessSubject(parent->targetPID());
+    UnixProcessSubject subject(parent->targetPID());
 
     old_result = pkResult;
     pkResult = Authority::Unknown;
 
     pkResult = Authority::instance()->checkAuthorizationSync(actionId, subject, Authority::None);
 
-    delete subject;
     return old_result != pkResult;
 }
 

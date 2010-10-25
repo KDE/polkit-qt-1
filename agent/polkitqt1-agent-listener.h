@@ -93,7 +93,7 @@ public:
      * \param objectPath DBus object path
      * \return \c True if the polkitqt1-agent-listener.has been registered, \c False otherwise
      */
-    bool registerListener(PolkitQt1::Subject *subject, const QString &objectPath);
+    bool registerListener(const PolkitQt1::Subject &subject, const QString &objectPath);
 
     /**
      * \brief Returns pointer to the PolkitAgentListener.
@@ -126,9 +126,9 @@ public Q_SLOTS:
     virtual void initiateAuthentication(const QString &actionId,
                                         const QString &message,
                                         const QString &iconName,
-                                        PolkitQt1::Details *details,
+                                        const PolkitQt1::Details &details,
                                         const QString &cookie,
-                                        QList<PolkitQt1::Identity *> identities,
+                                        const PolkitQt1::Identity::List &identities,
                                         AsyncResult *result) = 0;
 
     /**

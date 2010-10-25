@@ -24,6 +24,7 @@
 #include "polkitqt1-export.h"
 
 #include <QtCore/QObject>
+#include <QtCore/QSharedData>
 
 typedef struct _PolkitDetails PolkitDetails;
 
@@ -43,15 +44,13 @@ namespace PolkitQt1
  *
  * \brief Class used for passing details around.
  */
-class POLKITQT1_EXPORT Details : public QObject
+class POLKITQT1_EXPORT Details
 {
-    Q_OBJECT
 public:
     /**
      * Creates a new Details object
-     * \param parent
      */
-    Details(QObject *parent = 0);
+    Details();
 
     /**
      * Creates Details object from PolkitDetails
@@ -59,11 +58,12 @@ public:
      * \warning Use this only if you are completely aware of what are you doing!
      *
      * \param pkDetails PolkitDetails object
-     * \param parent
      */
-    explicit Details(PolkitDetails *pkDetails, QObject *parent = 0);
+    explicit Details(PolkitDetails *pkDetails);
 
     ~Details();
+
+    Details &operator=(const Details &other);
 
     /**
      * Get the value for \p key
@@ -88,8 +88,8 @@ public:
      */
     QStringList keys() const;
 private:
-    class Private;
-    Private * const d;
+    class Data;
+    QExplicitlySharedDataPointer< Data > d;
 };
 
 }

@@ -25,6 +25,8 @@
 
 #include <QtCore/QObject>
 #include <QtCore/QDateTime>
+#include <QtCore/QMetaType>
+#include <QtCore/QSharedData>
 
 typedef struct _PolkitTemporaryAuthorization PolkitTemporaryAuthorization;
 
@@ -46,10 +48,11 @@ namespace PolkitQt1
  *
  * This class encapsulates the PolkitTemporaryAuthorization interface.
  */
-class POLKITQT1_EXPORT TemporaryAuthorization : public QObject
+class POLKITQT1_EXPORT TemporaryAuthorization
 {
-    Q_OBJECT
 public:
+    typedef QList< TemporaryAuthorization > List;
+    TemporaryAuthorization();
     /**
      * Creates TemporaryAuthorization object from PolkitTemporaryAuthorization
      *
@@ -58,9 +61,12 @@ public:
      * \param pkTemporaryAuthorization PolkitTemporaryAuthorization object
      * \param parent
      */
-    explicit TemporaryAuthorization(PolkitTemporaryAuthorization *pkTemporaryAuthorization, QObject *parent = 0);
+    explicit TemporaryAuthorization(PolkitTemporaryAuthorization *pkTemporaryAuthorization);
+    TemporaryAuthorization(const TemporaryAuthorization &other);
 
     ~TemporaryAuthorization();
+
+    TemporaryAuthorization &operator=(const TemporaryAuthorization &other);
 
     /**
      * \brief Gets the identifier for the authorization.
@@ -83,7 +89,7 @@ public:
      *
      * \return A Subject.
      */
-    Subject *subject();
+    Subject subject() const;
 
     /**
      * \brief Gets the time when authorization was obtained
@@ -108,9 +114,11 @@ public:
     bool revoke();
 
 private:
-    class Private;
-    Private * const d;
+    class Data;
+    QSharedDataPointer< Data > d;
 };
 }
+
+Q_DECLARE_METATYPE(PolkitQt1::TemporaryAuthorization::List)
 
 #endif // TEMPORARYAUTHORIZATION_H

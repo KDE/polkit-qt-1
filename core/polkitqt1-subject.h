@@ -24,6 +24,7 @@
 #include "polkitqt1-export.h"
 
 #include <QtCore/QObject>
+#include <QtCore/QSharedData>
 
 typedef struct _PolkitSubject PolkitSubject;
 typedef struct _PolkitUnixProcess PolkitUnixProcess;
@@ -54,7 +55,13 @@ namespace PolkitQt1
 class POLKITQT1_EXPORT Subject
 {
 public:
+    Subject();
+    Subject(const Subject &other);
     ~Subject();
+
+    Subject &operator=(const Subject &other);
+
+    bool isValid() const;
 
     /**
      * Serialization of object to the string
@@ -70,7 +77,7 @@ public:
      *
      * \return Pointer to new Subject instance
      */
-    static Subject *fromString(const QString &string);
+    static Subject fromString(const QString &string);
 
     /**
      * Gets PolkitSubject object.
@@ -82,14 +89,13 @@ public:
     PolkitSubject *subject() const;
 
 protected:
-    Subject();
     Subject(PolkitSubject *subject);
 
     void setSubject(PolkitSubject *subject);
 
 private:
-    class Private;
-    Private * const d;
+    class Data;
+    QExplicitlySharedDataPointer< Data > d;
 };
 
 /**

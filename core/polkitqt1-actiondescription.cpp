@@ -1,6 +1,7 @@
 /*
  * This file is part of the Polkit-qt project
  * Copyright (C) 2009 Jaroslav Reznik <jreznik@redhat.com>
+ * Copyright (C) 2010 Dario Freddi <drf@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -27,10 +28,24 @@
 namespace PolkitQt1
 {
 
-class ActionDescription::Private
+class ActionDescription::Data : public QSharedData
 {
 public:
-    Private() {}
+    Data() {}
+    Data(const Data& other)
+        : QSharedData(other)
+        , actionId(other.actionId)
+        , description(other.description)
+        , message(other.message)
+        , vendorName(other.vendorName)
+        , vendorUrl(other.vendorUrl)
+        , iconName(other.iconName)
+        , implicitAny(other.implicitAny)
+        , implicitInactive(other.implicitInactive)
+        , implicitActive(other.implicitActive)
+    {
+    }
+    virtual ~Data() {}
 
     QString actionId;
     QString description;
@@ -44,8 +59,14 @@ public:
     ActionDescription::ImplicitAuthorization implicitActive;
 };
 
+ActionDescription::ActionDescription()
+        : d(new Data)
+{
+
+}
+
 ActionDescription::ActionDescription(PolkitActionDescription *polkitActionDescription)
-        : d(new Private)
+        : d(new Data)
 {
     g_type_init();
 
@@ -64,9 +85,19 @@ ActionDescription::ActionDescription(PolkitActionDescription *polkitActionDescri
                             polkitActionDescription));
 }
 
+ActionDescription::ActionDescription(const PolkitQt1::ActionDescription& other)
+        : d(other.d)
+{
+}
+
+ActionDescription& ActionDescription::operator=(const PolkitQt1::ActionDescription& other)
+{
+    d = other.d;
+    return *this;
+}
+
 ActionDescription::~ActionDescription()
 {
-    delete d;
 }
 
 QString ActionDescription::actionId() const

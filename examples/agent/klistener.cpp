@@ -37,18 +37,18 @@ KListener::KListener(QObject *parent)
 void KListener::initiateAuthentication(const QString &actionId,
                                        const QString &message,
                                        const QString &iconName,
-                                       PolkitQt1::Details *details,
+                                       const PolkitQt1::Details &details,
                                        const QString &cookie,
-                                       QList<PolkitQt1::Identity *> identities,
+                                       const PolkitQt1::Identity::List &identities,
                                        AsyncResult *result)
 {
     qDebug() << "initiateAuthentication for " << actionId << " with message " << message;
     qDebug() << "iconName " << iconName;
-    qDebug() << details->keys();
+    qDebug() << details.keys();
     qDebug() << "cookie" << cookie;
 
-    Q_FOREACH (PolkitQt1::Identity *identity, identities) {
-        qDebug() << identity->toString();
+    Q_FOREACH (const PolkitQt1::Identity &identity, identities) {
+        qDebug() << identity.toString();
         Session *session;
         session = new Session(identity, cookie, result);
         connect(session, SIGNAL(request(QString, bool)), this, SLOT(request(QString, bool)));

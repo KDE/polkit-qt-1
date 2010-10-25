@@ -26,22 +26,30 @@
 namespace PolkitQt1
 {
 
-class TemporaryAuthorization::Private
+class TemporaryAuthorization::Data : public QSharedData
 {
 public:
-    Private() {}
+    Data() {}
+    Data(const Data& other)
+        : QSharedData(other)
+        , id(other.id)
+        , actionId(other.actionId)
+        , subject(other.subject)
+        , timeObtained(other.timeObtained)
+        , timeExpires(other.timeExpires)
+    {
+    }
+    ~Data() {}
 
-    PolkitTemporaryAuthorization *temporaryAuthorization;
     QString id;
     QString actionId;
-    Subject *subject;
+    Subject subject;
     QDateTime timeObtained;
     QDateTime timeExpires;
 };
 
-TemporaryAuthorization::TemporaryAuthorization(PolkitTemporaryAuthorization *pkTemporaryAuthorization, QObject *parent)
-        : QObject(parent)
-        , d(new Private)
+TemporaryAuthorization::TemporaryAuthorization(PolkitTemporaryAuthorization *pkTemporaryAuthorization)
+        : d(new Data)
 {
     g_type_init();
     d->id = QString::fromUtf8(polkit_temporary_authorization_get_id(pkTemporaryAuthorization));
@@ -52,10 +60,26 @@ TemporaryAuthorization::TemporaryAuthorization(PolkitTemporaryAuthorization *pkT
     g_object_unref(pkTemporaryAuthorization);
 }
 
+TemporaryAuthorization::TemporaryAuthorization(const PolkitQt1::TemporaryAuthorization& other)
+        : d(other.d)
+{
+
+}
+
+TemporaryAuthorization::TemporaryAuthorization()
+        : d(new Data)
+{
+
+}
+
+TemporaryAuthorization& TemporaryAuthorization::operator=(const PolkitQt1::TemporaryAuthorization& other)
+{
+    d = other.d;
+    return *this;
+}
+
 TemporaryAuthorization::~TemporaryAuthorization()
 {
-    delete d->subject;
-    delete d;
 }
 
 QString TemporaryAuthorization::id() const
@@ -68,7 +92,7 @@ QString TemporaryAuthorization::actionId() const
     return d->actionId;
 }
 
-Subject *TemporaryAuthorization::subject()
+Subject TemporaryAuthorization::subject() const
 {
     //qFatal(polkit_subject_to_string(polkit_temporary_authorization_get_subject(d->temporaryAuthorization)));
     return d->subject;//Subject::fromString(polkit_subject_to_string(d->subject));
@@ -91,5 +115,3 @@ bool TemporaryAuthorization::revoke()
 }
 
 }
-
-#include "polkitqt1-temporaryauthorization.moc"

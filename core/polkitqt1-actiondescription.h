@@ -1,6 +1,7 @@
 /*
  * This file is part of the Polkit-qt project
  * Copyright (C) 2009 Jaroslav Reznik <jreznik@redhat.com>
+ * Copyright (C) 2010 Dario Freddi <drf@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -25,6 +26,7 @@
 
 #include <QtCore/QList>
 #include <QtCore/QMetaType>
+#include <QtCore/QSharedData>
 
 typedef struct _PolkitActionDescription PolkitActionDescription;
 
@@ -33,6 +35,7 @@ namespace PolkitQt1
 /**
  * \class ActionDescription polkitqt1-actiondescription.h ActionDescription
  * \author Jaroslav Reznik <jreznik@redhat.com>
+ * \author Dario Freddi <drf@kde.org>
  *
  * \brief Class used to encapsulate a registered action.
  */
@@ -56,8 +59,9 @@ public:
         Authorized = 5
     };
 
-    typedef QList<ActionDescription *> List;
+    typedef QList< ActionDescription > List;
 
+    ActionDescription();
     /**
      * \brief Constructor of ActionDescription object from PolkitActionDescription
      *
@@ -65,8 +69,11 @@ public:
      *
      * \param actionDesciption PolkitActionDescription
      */
-    ActionDescription(PolkitActionDescription *actionDescription);
+    explicit ActionDescription(PolkitActionDescription *actionDescription);
+    ActionDescription(const ActionDescription &other);
     ~ActionDescription();
+
+    ActionDescription &operator=(const ActionDescription &other);
 
     /**
      * \brief Gets the action id for ActionDescription
@@ -132,8 +139,8 @@ public:
     ActionDescription::ImplicitAuthorization implicitActive() const;
 
 private:
-    class Private;
-    Private * const d;
+    class Data;
+    QSharedDataPointer< Data > d;
 };
 }
 

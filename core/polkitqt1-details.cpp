@@ -27,25 +27,33 @@
 namespace PolkitQt1
 {
 
-class Details::Private
+class Details::Data : public QSharedData
 {
 public:
-    Private() {}
+    Data() {}
+    Data(const Data &other)
+        : QSharedData(other)
+        , polkitDetails(other.polkitDetails)
+    {
+        g_object_ref(polkitDetails);
+    }
+    ~Data()
+    {
+        g_object_unref(polkitDetails);
+    }
 
     PolkitDetails *polkitDetails;
 };
 
-Details::Details(QObject *parent)
-        : QObject(parent)
-        , d(new Private)
+Details::Details()
+        : d(new Data)
 {
     g_type_init();
     d->polkitDetails = polkit_details_new();
 }
 
-Details::Details(PolkitDetails *pkDetails, QObject *parent)
-        : QObject(parent)
-        , d(new Private)
+Details::Details(PolkitDetails *pkDetails)
+        : d(new Data)
 {
     g_type_init();
     d->polkitDetails = pkDetails;
@@ -53,8 +61,12 @@ Details::Details(PolkitDetails *pkDetails, QObject *parent)
 
 Details::~Details()
 {
-    g_object_unref(d->polkitDetails);
-    delete d;
+}
+
+Details& Details::operator=(const PolkitQt1::Details& other)
+{
+    d = other.d;
+    return *this;
 }
 
 QString Details::lookup(const QString &key) const
@@ -84,5 +96,3 @@ QStringList Details::keys() const
 }
 
 }
-
-#include "polkitqt1-details.moc"

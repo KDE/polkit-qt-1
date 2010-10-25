@@ -26,30 +26,59 @@
 namespace PolkitQt1
 {
 
-class Subject::Private
+class Subject::Data : public QSharedData
 {
 public:
-    Private(PolkitSubject *s) : subject(s) {}
+    Data()
+        : QSharedData()
+        , subject(0)
+    {}
+    Data(const Data& other)
+        : QSharedData(other)
+        , subject(other.subject)
+    {
+        g_object_ref(subject);
+    }
+    ~Data()
+    {
+        g_object_unref(subject);
+    }
 
     PolkitSubject *subject;
 };
 
 Subject::Subject()
-        : d(new Private(0))
+        : d(new Data)
 {
     g_type_init();
 }
 
 Subject::Subject(PolkitSubject *subject)
-        : d(new Private(subject))
+        : d(new Data)
 {
     g_type_init();
+    d->subject = subject;
+}
+
+Subject::Subject(const PolkitQt1::Subject& other)
+        : d(other.d)
+{
+
+}
+
+Subject& Subject::operator=(const PolkitQt1::Subject& other)
+{
+    d = other.d;
+    return *this;
 }
 
 Subject::~Subject()
 {
-    g_object_unref(d->subject);
-    delete d;
+}
+
+bool Subject::isValid() const
+{
+    return d->subject != NULL;
 }
 
 PolkitSubject *Subject::subject() const
@@ -68,14 +97,14 @@ QString Subject::toString() const
     return QString::fromUtf8(polkit_subject_to_string(d->subject));
 }
 
-Subject *Subject::fromString(const QString &string)
+Subject Subject::fromString(const QString &string)
 {
     // should be in polkit library!!! but for strange reason it's necessary to have it here
     g_type_init();
 
-    Subject *subject = new Subject();
+    Subject subject;
     GError *error = NULL;
-    subject->d->subject = polkit_subject_from_string(string.toUtf8().data(), &error);
+    subject.d->subject = polkit_subject_from_string(string.toUtf8().data(), &error);
     if (error != NULL) {
         qWarning() << QString("Cannot create Subject from string: %1").arg(error->message);
         return NULL;

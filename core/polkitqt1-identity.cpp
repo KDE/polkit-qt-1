@@ -27,30 +27,56 @@
 namespace PolkitQt1
 {
 
-class Identity::Private
+class Identity::Data : public QSharedData
 {
 public:
-    Private(PolkitIdentity *i) : identity(i) {}
+    Data() : identity(0) {}
+    Data(const Data& other)
+        : QSharedData(other)
+        , identity(other.identity)
+    {
+        g_object_ref(identity);
+    }
+    ~Data()
+    {
+        g_object_unref(identity);
+    }
 
     PolkitIdentity *identity;
 };
 
 Identity::Identity()
-        : d(new Private(0))
+        : d(new Data)
 {
     g_type_init();
 }
 
 Identity::Identity(PolkitIdentity *polkitIdentity)
-        : d(new Private(polkitIdentity))
+        : d(new Data)
 {
     g_type_init();
+    d->identity = polkitIdentity;
+}
+
+Identity::Identity(const PolkitQt1::Identity& other)
+        : d(other.d)
+{
+
 }
 
 Identity::~Identity()
 {
-    g_object_unref(d->identity);
-    delete d;
+}
+
+Identity& Identity::operator=(const PolkitQt1::Identity& other)
+{
+    d = other.d;
+    return *this;
+}
+
+bool Identity::isValid() const
+{
+    return d->identity != NULL;
 }
 
 PolkitIdentity *Identity::identity() const
@@ -69,15 +95,35 @@ QString Identity::toString() const
     return QString::fromUtf8(polkit_identity_to_string(d->identity));
 }
 
-Identity *Identity::fromString(const QString &string)
+Identity Identity::fromString(const QString &string)
 {
     GError *error = NULL;
     PolkitIdentity *pkIdentity = polkit_identity_from_string(string.toUtf8().data(), &error);
     if (error != NULL) {
         qWarning() << QString("Cannot create Identity from string: %1").arg(error->message);
-        return NULL;
+        return Identity();
     }
-    return new Identity(pkIdentity);
+    return Identity(pkIdentity);
+}
+
+UnixGroupIdentity Identity::toUnixGroupIdentity()
+{
+    UnixGroupIdentity *ugid = static_cast< UnixGroupIdentity* >(this);
+    if (!ugid) {
+        return UnixGroupIdentity();
+    }
+
+    return *ugid;
+}
+
+UnixUserIdentity Identity::toUnixUserIdentity()
+{
+    UnixUserIdentity *uuid = static_cast< UnixUserIdentity* >(this);
+    if (!uuid) {
+        return UnixUserIdentity();
+    }
+
+    return *uuid;
 }
 
 UnixUserIdentity::UnixUserIdentity(const QString &name)
@@ -99,6 +145,12 @@ UnixUserIdentity::UnixUserIdentity(uid_t uid)
 
 UnixUserIdentity::UnixUserIdentity(PolkitUnixUser *pkUnixUser)
         : Identity((PolkitIdentity *)pkUnixUser)
+{
+
+}
+
+UnixUserIdentity::UnixUserIdentity()
+        : Identity()
 {
 
 }
@@ -132,6 +184,12 @@ UnixGroupIdentity::UnixGroupIdentity(gid_t gid)
 
 UnixGroupIdentity::UnixGroupIdentity(PolkitUnixGroup *pkUnixGroup)
         : Identity((PolkitIdentity *) pkUnixGroup)
+{
+
+}
+
+UnixGroupIdentity::UnixGroupIdentity()
+        : Identity()
 {
 
 }

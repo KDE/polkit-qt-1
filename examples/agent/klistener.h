@@ -40,9 +40,9 @@ public Q_SLOTS:
     void initiateAuthentication(const QString &actionId,
                                 const QString &message,
                                 const QString &iconName,
-                                PolkitQt1::Details *details,
+                                const PolkitQt1::Details &details,
                                 const QString &cookie,
-                                QList<PolkitQt1::Identity *> identities,
+                                const PolkitQt1::Identity::List &identities,
                                 PolkitQt1::Agent::AsyncResult *result);
     bool initiateAuthenticationFinish();
     void cancelAuthentication();

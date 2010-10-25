@@ -49,12 +49,12 @@ Session::Private::~Private()
     g_object_unref(polkitAgentSession);
 }
 
-Session::Session(PolkitQt1::Identity *identity, const QString &cookie, AsyncResult *result, QObject *parent)
+Session::Session(const PolkitQt1::Identity &identity, const QString &cookie, AsyncResult *result, QObject *parent)
         : QObject(parent)
         , d(new Private)
 {
     d->result = result;
-    d->polkitAgentSession = polkit_agent_session_new(identity->identity(), cookie.toUtf8().data());
+    d->polkitAgentSession = polkit_agent_session_new(identity.identity(), cookie.toUtf8().data());
     g_signal_connect(G_OBJECT(d->polkitAgentSession), "completed", G_CALLBACK(Private::completed), this);
     g_signal_connect(G_OBJECT(d->polkitAgentSession), "request", G_CALLBACK(Private::request), this);
     g_signal_connect(G_OBJECT(d->polkitAgentSession), "show-error", G_CALLBACK(Private::showError), this);

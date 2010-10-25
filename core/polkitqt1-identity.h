@@ -26,6 +26,7 @@
 #include <unistd.h>
 
 #include <QtCore/QObject>
+#include <QtCore/QSharedData>
 
 typedef struct _PolkitIdentity PolkitIdentity;
 typedef struct _PolkitUnixUser PolkitUnixUser;
@@ -41,6 +42,9 @@ typedef struct _PolkitUnixGroup PolkitUnixGroup;
 namespace PolkitQt1
 {
 
+class UnixUserIdentity;
+class UnixGroupIdentity;
+
 /**
  * \class Identity polkitqt1-identity.h Identity
  * \author Lukas Tinkl <ltinkl@redhat.com>
@@ -55,15 +59,17 @@ namespace PolkitQt1
 class POLKITQT1_EXPORT Identity
 {
 public:
-    /**
-     * Creates Identity object from PolkitIdentity
-     *
-     * \warning Use this only if you are completely aware of what are you doing!
-     *
-     * \param polkitIdentity PolkitIdentity object
-     */
+    typedef QList< Identity > List;
+
+    Identity();
     explicit Identity(PolkitIdentity *polkitIdentity);
+    Identity(const Identity &other);
+
     ~Identity();
+
+    Identity &operator=(const Identity &other);
+
+    bool isValid() const;
 
     /**
      * Serialization of object to the string
@@ -79,7 +85,10 @@ public:
      *
      * \return Pointer to new Identity instance
      */
-    static Identity *fromString(const QString &string);
+    static Identity fromString(const QString &string);
+
+    UnixUserIdentity toUnixUserIdentity();
+    UnixGroupIdentity toUnixGroupIdentity();
 
     /**
      * Gets PolkitIdentity object.
@@ -90,13 +99,11 @@ public:
      */
     PolkitIdentity *identity() const;
 protected:
-    Identity();
-
     void setIdentity(PolkitIdentity *identity);
 
 private:
-    class Private;
-    Private * const d;
+    class Data;
+    QExplicitlySharedDataPointer< Data > d;
 };
 
 /**
@@ -110,6 +117,7 @@ private:
 class POLKITQT1_EXPORT UnixUserIdentity : public Identity
 {
 public:
+    UnixUserIdentity();
     /**
      * Creates UnixUser object by UID of the user
      *
@@ -159,6 +167,7 @@ public:
 class POLKITQT1_EXPORT UnixGroupIdentity : public Identity
 {
 public:
+    UnixGroupIdentity();
     /**
      * Creates UnixGroup object by GID of the group
      *

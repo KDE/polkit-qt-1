@@ -67,7 +67,7 @@ ActionDescription::List actionsToListAndFree(GList *glist)
     ActionDescription::List result;
     for (GList *glist2 = glist; glist2; glist2 = g_list_next(glist2)) {
         gpointer i = glist2->data;
-        result.append(new ActionDescription(static_cast<PolkitActionDescription *>(i)));
+        result.append(ActionDescription(static_cast<PolkitActionDescription *>(i)));
         g_object_unref(i);
     }
 
@@ -177,12 +177,17 @@ void Authority::Private::init()
     m_revokeTemporaryAuthorizationsCancellable = g_cancellable_new();
     m_revokeTemporaryAuthorizationCancellable = g_cancellable_new();
 
+    GError *gerror = NULL;
     if (pkAuthority == NULL) {
-        pkAuthority = polkit_authority_get();
+        pkAuthority = polkit_authority_get_sync(NULL, &gerror);
+        if (gerror != NULL) {
+            setError(E_GetAuthority, gerror->message);
+            g_error_free(gerror);
+            return;
+        }
     }
 
     if (pkAuthority == NULL) {
-        (E_GetAuthority);
         return;
     }
 
@@ -286,7 +291,7 @@ PolkitAuthority *Authority::polkitAuthority() const
     return d->pkAuthority;
 }
 
-Authority::Result Authority::checkAuthorizationSync(const QString &actionId, Subject *subject, AuthorizationFlags flags)
+Authority::Result Authority::checkAuthorizationSync(const QString &actionId, const Subject &subject, AuthorizationFlags flags)
 {
     PolkitAuthorizationResult *pk_result;
     GError *error = NULL;
@@ -295,13 +300,13 @@ Authority::Result Authority::checkAuthorizationSync(const QString &actionId, Sub
         return Unknown;
     }
 
-    if (subject == NULL) {
+    if (!subject.isValid()) {
         d->setError(E_WrongSubject);
         return Unknown;
     }
 
     pk_result = polkit_authority_check_authorization_sync(d->pkAuthority,
-                subject->subject(),
+                subject.subject(),
                 actionId.toAscii().data(),
                 NULL,
                 (PolkitCheckAuthorizationFlags)(int)flags,
@@ -324,19 +329,19 @@ Authority::Result Authority::checkAuthorizationSync(const QString &actionId, Sub
     }
 }
 
-void Authority::checkAuthorization(const QString &actionId, Subject *subject, AuthorizationFlags flags)
+void Authority::checkAuthorization(const QString &actionId, const Subject &subject, AuthorizationFlags flags)
 {
     if (Authority::instance()->hasError()) {
         return;
     }
 
-    if (subject == NULL) {
+    if (!subject.isValid()) {
         d->setError(E_WrongSubject);
         return;
     }
 
     polkit_authority_check_authorization(d->pkAuthority,
-                                         subject->subject(),
+                                         subject.subject(),
                                          actionId.toAscii().data(),
                                          NULL,
                                          (PolkitCheckAuthorizationFlags)(int)flags,
@@ -430,7 +435,7 @@ void Authority::enumerateActionsCancel()
         g_cancellable_cancel(d->m_enumerateActionsCancellable);
 }
 
-bool Authority::registerAuthenticationAgentSync(Subject *subject, const QString &locale, const QString &objectPath)
+bool Authority::registerAuthenticationAgentSync(const Subject &subject, const QString &locale, const QString &objectPath)
 {
     if (Authority::instance()->hasError()) {
         return false;
@@ -439,13 +444,13 @@ bool Authority::registerAuthenticationAgentSync(Subject *subject, const QString 
     gboolean result;
     GError *error = NULL;
 
-    if (!subject) {
+    if (!subject.isValid()) {
         d->setError(E_WrongSubject);
         return false;
     }
 
     result = polkit_authority_register_authentication_agent_sync(d->pkAuthority,
-             subject->subject(), locale.toAscii().data(),
+             subject.subject(), locale.toAscii().data(),
              objectPath.toAscii().data(), NULL, &error);
 
     if (error) {
@@ -457,19 +462,19 @@ bool Authority::registerAuthenticationAgentSync(Subject *subject, const QString 
     return result;
 }
 
-void Authority::registerAuthenticationAgent(Subject *subject, const QString &locale, const QString &objectPath)
+void Authority::registerAuthenticationAgent(const Subject &subject, const QString &locale, const QString &objectPath)
 {
     if (Authority::instance()->hasError()) {
         return;
     }
 
-    if (!subject) {
+    if (!subject.isValid()) {
         d->setError(E_WrongSubject);
         return;
     }
 
     polkit_authority_register_authentication_agent(d->pkAuthority,
-            subject->subject(),
+            subject.subject(),
             locale.toAscii().data(),
             objectPath.toAscii().data(),
             d->m_registerAuthenticationAgentCancellable,
@@ -500,12 +505,12 @@ void Authority::registerAuthenticationAgentCancel()
         g_cancellable_cancel(d->m_registerAuthenticationAgentCancellable);
 }
 
-bool Authority::unregisterAuthenticationAgentSync(Subject *subject, const QString &objectPath)
+bool Authority::unregisterAuthenticationAgentSync(const Subject &subject, const QString &objectPath)
 {
     if (d->pkAuthority)
         return false;
 
-    if (!subject) {
+    if (!subject.isValid()) {
         d->setError(E_WrongSubject);
         return false;
     }
@@ -513,7 +518,7 @@ bool Authority::unregisterAuthenticationAgentSync(Subject *subject, const QStrin
     GError *error = NULL;
 
     bool result = polkit_authority_unregister_authentication_agent_sync(d->pkAuthority,
-                  subject->subject(),
+                  subject.subject(),
                   objectPath.toUtf8().data(),
                   NULL,
                   &error);
@@ -527,18 +532,18 @@ bool Authority::unregisterAuthenticationAgentSync(Subject *subject, const QStrin
     return result;
 }
 
-void Authority::unregisterAuthenticationAgent(Subject *subject, const QString &objectPath)
+void Authority::unregisterAuthenticationAgent(const Subject &subject, const QString &objectPath)
 {
     if (Authority::instance()->hasError())
         return;
 
-    if (!subject) {
+    if (!subject.isValid()) {
         d->setError(E_WrongSubject);
         return;
     }
 
     polkit_authority_unregister_authentication_agent(d->pkAuthority,
-            subject->subject(),
+            subject.subject(),
             objectPath.toUtf8().data(),
             d->m_unregisterAuthenticationAgentCancellable,
             d->unregisterAuthenticationAgentCallback,
@@ -568,12 +573,12 @@ void Authority::unregisterAuthenticationAgentCancel()
         g_cancellable_cancel(d->m_unregisterAuthenticationAgentCancellable);
 }
 
-bool Authority::authenticationAgentResponseSync(const QString &cookie, Identity *identity)
+bool Authority::authenticationAgentResponseSync(const QString &cookie, const Identity &identity)
 {
     if (Authority::instance()->hasError())
         return false;
 
-    if (cookie.isEmpty() || !identity) {
+    if (cookie.isEmpty() || !identity.isValid()) {
         d->setError(E_CookieOrIdentityEmpty);
         return false;
     }
@@ -582,7 +587,7 @@ bool Authority::authenticationAgentResponseSync(const QString &cookie, Identity 
 
     bool result = polkit_authority_authentication_agent_response_sync(d->pkAuthority,
                   cookie.toUtf8().data(),
-                  identity->identity(),
+                  identity.identity(),
                   NULL,
                   &error);
     if (error != NULL) {
@@ -594,19 +599,19 @@ bool Authority::authenticationAgentResponseSync(const QString &cookie, Identity 
     return result;
 }
 
-void Authority::authenticationAgentResponse(const QString &cookie, Identity *identity)
+void Authority::authenticationAgentResponse(const QString &cookie, const Identity &identity)
 {
     if (Authority::instance()->hasError())
         return;
 
-    if (cookie.isEmpty() || !identity) {
+    if (cookie.isEmpty() || !identity.isValid()) {
         d->setError(E_CookieOrIdentityEmpty);
         return;
     }
 
     polkit_authority_authentication_agent_response(d->pkAuthority,
             cookie.toUtf8().data(),
-            identity->identity(),
+            identity.identity(),
             d->m_authenticationAgentResponseCancellable,
             d->authenticationAgentResponseCallback,
             this);
@@ -635,13 +640,13 @@ void Authority::authenticationAgentResponseCancel()
         g_cancellable_cancel(d->m_authenticationAgentResponseCancellable);
 }
 
-QList<TemporaryAuthorization *> Authority::enumerateTemporaryAuthorizationsSync(Subject *subject)
+TemporaryAuthorization::List Authority::enumerateTemporaryAuthorizationsSync(const Subject &subject)
 {
-    QList<TemporaryAuthorization *> result;
+    TemporaryAuthorization::List result;
 
     GError *error = NULL;
     GList *glist = polkit_authority_enumerate_temporary_authorizations_sync(d->pkAuthority,
-                   subject->subject(),
+                   subject.subject(),
                    NULL,
                    &error);
     if (error != NULL) {
@@ -652,7 +657,7 @@ QList<TemporaryAuthorization *> Authority::enumerateTemporaryAuthorizationsSync(
 
     GList *glist2;
     for (glist2 = glist; glist2 != NULL; glist2 = g_list_next(glist2)) {
-        result.append(new TemporaryAuthorization((PolkitTemporaryAuthorization *) glist2->data));
+        result.append(TemporaryAuthorization((PolkitTemporaryAuthorization *) glist2->data));
         g_object_unref(glist2->data);
     }
 
@@ -676,10 +681,10 @@ void Authority::Private::enumerateTemporaryAuthorizationsCallback(GObject *objec
         g_error_free(error);
         return;
     }
-    QList<TemporaryAuthorization *> res;
+    TemporaryAuthorization::List res;
     GList *glist2;
     for (glist2 = glist; glist2 != NULL; glist2 = g_list_next(glist2)) {
-        res.append(new TemporaryAuthorization((PolkitTemporaryAuthorization *) glist2->data));
+        res.append(TemporaryAuthorization((PolkitTemporaryAuthorization *) glist2->data));
         g_object_unref(glist2->data);
     }
 
@@ -694,7 +699,7 @@ void Authority::enumerateTemporaryAuthorizationsCancel()
         g_cancellable_cancel(d->m_enumerateTemporaryAuthorizationsCancellable);
 }
 
-bool Authority::revokeTemporaryAuthorizationsSync(Subject *subject)
+bool Authority::revokeTemporaryAuthorizationsSync(const Subject &subject)
 {
     bool result;
     if (Authority::instance()->hasError())
@@ -702,7 +707,7 @@ bool Authority::revokeTemporaryAuthorizationsSync(Subject *subject)
 
     GError *error = NULL;
     result = polkit_authority_revoke_temporary_authorizations_sync(d->pkAuthority,
-             subject->subject(),
+             subject.subject(),
              NULL,
              &error);
     if (error != NULL) {
@@ -713,13 +718,13 @@ bool Authority::revokeTemporaryAuthorizationsSync(Subject *subject)
     return result;
 }
 
-void Authority::revokeTemporaryAuthorizations(Subject *subject)
+void Authority::revokeTemporaryAuthorizations(const Subject &subject)
 {
     if (Authority::instance()->hasError())
         return;
 
     polkit_authority_revoke_temporary_authorizations(d->pkAuthority,
-            subject->subject(),
+            subject.subject(),
             d->m_revokeTemporaryAuthorizationsCancellable,
             d->revokeTemporaryAuthorizationsCallback,
             this);

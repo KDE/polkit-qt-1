@@ -21,8 +21,8 @@ if (NOT WIN32)
    # use pkg-config to get the directories and then use these values
    # in the FIND_PATH() and FIND_LIBRARY() calls
    find_package(PkgConfig)
-   pkg_check_modules(PC_POLKIT polkit-gobject-1>=0.98)
-   pkg_check_modules(PC_POLKIT_AGENT polkit-agent-1>=0.98)
+   pkg_check_modules(PC_POLKIT REQUIRED polkit-gobject-1>=0.98)
+   pkg_check_modules(PC_POLKIT_AGENT REQUIRED polkit-agent-1>=0.98)
    set(POLKIT_DEFINITIONS ${PC_POLKIT_CFLAGS_OTHER})
 endif (NOT WIN32)
 

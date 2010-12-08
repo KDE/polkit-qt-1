@@ -31,11 +31,16 @@ include_directories(
     ${QT_QTXML_INCLUDE_DIR}
 )
 
-set(CMAKE_MAJOR_POLKITQT-1_VERSION 0 CACHE INT "PolkitQt-1's major version number" FORCE)
-set(CMAKE_MINOR_POLKITQT-1_VERSION 98 CACHE INT "PolkitQt-1's minor version number" FORCE)
-set(CMAKE_RELEASE_POLKITQT-1_VERSION 1 CACHE INT "PolkitQt-1's release version number" FORCE)
-set(CMAKE_POLKITQT-1_VERSION_STRING
-    "${CMAKE_MAJOR_POLKITQT-1_VERSION}.${CMAKE_MINOR_POLKITQT-1_VERSION}.${CMAKE_RELEASE_POLKITQT-1_VERSION}")
+set(POLKITQT-1_VERSION_MAJOR 0 CACHE INT "PolkitQt-1's major version number" FORCE)
+set(POLKITQT-1_VERSION_MINOR 98 CACHE INT "PolkitQt-1's minor version number" FORCE)
+set(POLKITQT-1_VERSION_PATCH 1 CACHE INT "PolkitQt-1's release version number" FORCE)
+set(POLKITQT-1_VERSION_STRING
+    "${POLKITQT-1_VERSION_MAJOR}.${POLKITQT-1_VERSION_MINOR}.${POLKITQT-1_VERSION_PATCH}")
+
+# The SONUMBER of the polkit-qt-1 libraries
+set(POLKITQT-1_ABI_VERSION 1)
+# The version number of the polkit-qt-1 libraries
+set(POLKITQT-1_LIBRARY_VERSION "${POLKITQT-1_ABI_VERSION}.${POLKITQT-1_VERSION_MINOR}.${POLKITQT-1_VERSION_PATCH}")
 
 configure_file(polkitqt1-version.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/polkitqt1-version.h)
 

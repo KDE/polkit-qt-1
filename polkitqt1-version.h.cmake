@@ -24,16 +24,16 @@
 #include "polkitqt1-export.h"
 
 /// @brief PolkitQt-1 version as string at compile time.
-#define POLKITQT1_VERSION_STRING "${CMAKE_POLKITQT-1_VERSION_STRING}"
+#define POLKITQT1_VERSION_STRING "${POLKITQT-1_VERSION_STRING}"
 
 /// @brief The major PolkitQt-1 version number at compile time
-#define POLKITQT1_VERSION_MAJOR ${CMAKE_MAJOR_POLKITQT-1_VERSION}
+#define POLKITQT1_VERSION_MAJOR ${POLKITQT-1_VERSION_MAJOR}
 
 /// @brief The minor PolkitQt-1 version number at compile time
-#define POLKITQT1_VERSION_MINOR ${CMAKE_MINOR_POLKITQT-1_VERSION}
+#define POLKITQT1_VERSION_MINOR ${POLKITQT-1_VERSION_MINOR}
 
-/// @brief The PolkitQt-1 release version number at compile time
-#define POLKITQT1_VERSION_RELEASE ${CMAKE_RELEASE_POLKITQT-1_VERSION}
+/// @brief The PolkitQt-1 patch version number at compile time
+#define POLKITQT1_VERSION_PATCH ${POLKITQT-1_VERSION_PATCH}
 
 /**
  * \brief Create a unique number from the major, minor and release number of a %PolkitQt-1 version
@@ -51,7 +51,7 @@
  * use the version methods in the PolkitQt-1 namespace.
  */
 #define POLKITQT1_VERSION \
-    POLKITQT1_MAKE_VERSION(POLKITQT1_VERSION_MAJOR,POLKITQT1_VERSION_MINOR,POLKITQT1_VERSION_RELEASE)
+    POLKITQT1_MAKE_VERSION(POLKITQT1_VERSION_MAJOR,POLKITQT1_VERSION_MINOR,POLKITQT1_VERSION_PATCH)
 
 /**
  * \brief Check if the %PolkitQt-1 version matches a certain version or is higher
@@ -87,11 +87,11 @@ namespace PolkitQt1 {
     POLKITQT1_EXPORT unsigned int versionMinor();
 
     /**
-     * @brief Returns the release of PolkitQt-1's version, e.g.
+     * @brief Returns the patch number of PolkitQt-1's version, e.g.
      * 2 for %PolkitQt-1 1.0.2.
      * @return the release number at runtime.
      */
-    POLKITQT1_EXPORT unsigned int versionRelease();
+    POLKITQT1_EXPORT unsigned int versionPatch();
 
     /**
      * @brief Returns the %PolkitQt-1 version as string, e.g. "1.0.2".

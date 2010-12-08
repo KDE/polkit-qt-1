@@ -151,3 +151,6 @@ endif (BUILD_TEST)
 add_subdirectory(core)
 add_subdirectory(gui)
 add_subdirectory(agent)
+
+# Always last!
+include (PolkitQt-1Dist)

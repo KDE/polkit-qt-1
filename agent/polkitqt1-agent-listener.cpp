@@ -39,7 +39,9 @@ class ListenerPrivate
 {
 public:
     PolkitAgentListener *listener;
+#ifndef POLKIT_QT_1_COMPATIBILITY_MODE
     void *registeredHandle;
+#endif
 };
 
 Listener::Listener(QObject *parent)
@@ -67,8 +69,10 @@ Listener::~Listener()
     qDebug("Destroying listener");
 
     ListenerAdapter::instance()->removeListener(this);
+#ifndef POLKIT_QT_1_COMPATIBILITY_MODE
     if (d->registeredHandle)
         polkit_agent_listener_unregister(d->registeredHandle);
+#endif
     if (d->listener != NULL)
         g_object_unref(d->listener);
 }
@@ -77,11 +81,17 @@ bool Listener::registerListener(const PolkitQt1::Subject &subject, const QString
 {
     GError *error = NULL;
 
+#ifndef POLKIT_QT_1_COMPATIBILITY_MODE
     d->registeredHandle = polkit_agent_listener_register(d->listener,
                                             POLKIT_AGENT_REGISTER_FLAGS_NONE,
+#else
+    bool r = polkit_agent_register_listener(d->listener,
+#endif
                                             subject.subject(),
                                             objectPath.toAscii().data(),
+#ifndef POLKIT_QT_1_COMPATIBILITY_MODE
                                             NULL,
+#endif
                                             &error);
 
     if (error != NULL) {
@@ -89,12 +99,16 @@ bool Listener::registerListener(const PolkitQt1::Subject &subject, const QString
         g_error_free(error);
         return false;
     }
+#ifndef POLKIT_QT_1_COMPATIBILITY_MODE
     if (d->registeredHandle == NULL)
     {
         qWarning() << QString("Cannot register authentication agent!");
         return false;
     }
     return true;
+#else
+    return r;
+#endif
 }
 
 const PolkitAgentListener *Listener::listener()

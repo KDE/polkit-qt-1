@@ -177,17 +177,26 @@ void Authority::Private::init()
     m_revokeTemporaryAuthorizationsCancellable = g_cancellable_new();
     m_revokeTemporaryAuthorizationCancellable = g_cancellable_new();
 
+#ifndef POLKIT_QT_1_COMPATIBILITY_MODE
     GError *gerror = NULL;
+#endif
     if (pkAuthority == NULL) {
+#ifndef POLKIT_QT_1_COMPATIBILITY_MODE
         pkAuthority = polkit_authority_get_sync(NULL, &gerror);
         if (gerror != NULL) {
             setError(E_GetAuthority, gerror->message);
             g_error_free(gerror);
             return;
         }
+#else
+        pkAuthority = polkit_authority_get();
+#endif
     }
 
     if (pkAuthority == NULL) {
+#ifdef POLKIT_QT_1_COMPATIBILITY_MODE
+        (E_GetAuthority);
+#endif
         return;
     }
 

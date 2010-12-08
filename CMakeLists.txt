@@ -18,6 +18,7 @@ add_definitions(-DQT_NO_KEYWORDS)
 include (${QT_USE_FILE})
 include (InstallSettings)
 include (MacroWriteBasicCMakeVersionFile)
+include (CheckFunctionExists)
 
 include_directories(
     ${CMAKE_CURRENT_BINARY_DIR}
@@ -31,6 +32,17 @@ include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/includes
     ${QT_QTXML_INCLUDE_DIR}
 )
+
+# Check for older polkit
+set(CMAKE_REQUIRED_INCLUDES ${POLKIT_INCLUDE_DIR} ${POLKIT_AGENT_INCLUDE_DIR})
+set(CMAKE_REQUIRED_LIBRARIES ${POLKIT_LIBRARIES} ${POLKIT_AGENT_LIBRARY})
+check_function_exists(polkit_agent_listener_register HAVE_POLKIT_AGENT_LISTENER_REGISTER)
+check_function_exists(polkit_authority_get_sync HAVE_POLKIT_AUTHORITY_GET_SYNC)
+
+if (NOT HAVE_POLKIT_AGENT_LISTENER_REGISTER OR NOT HAVE_POLKIT_AUTHORITY_GET_SYNC)
+    message(STATUS "You have an older polkit-1 version: Polkit-Qt-1 will be built in compatibility mode")
+    add_definitions(-DPOLKIT_QT_1_COMPATIBILITY_MODE)
+endif (NOT HAVE_POLKIT_AGENT_LISTENER_REGISTER OR NOT HAVE_POLKIT_AUTHORITY_GET_SYNC)
 
 if(${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}.${CMAKE_PATCH_VERSION} VERSION_GREATER 2.6.2)
   option(USE_COMMON_CMAKE_PACKAGE_CONFIG_DIR "Prefer to install the <package>Config.cmake files to lib/cmake/<package> instead of lib/<package>/cmake" TRUE)

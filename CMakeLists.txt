@@ -17,6 +17,7 @@ add_definitions(-DQT_NO_KEYWORDS)
 
 include (${QT_USE_FILE})
 include (InstallSettings)
+include (MacroWriteBasicCMakeVersionFile)
 
 include_directories(
     ${CMAKE_CURRENT_BINARY_DIR}
@@ -30,6 +31,10 @@ include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/includes
     ${QT_QTXML_INCLUDE_DIR}
 )
+
+if(${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}.${CMAKE_PATCH_VERSION} VERSION_GREATER 2.6.2)
+  option(USE_COMMON_CMAKE_PACKAGE_CONFIG_DIR "Prefer to install the <package>Config.cmake files to lib/cmake/<package> instead of lib/<package>/cmake" TRUE)
+endif(${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}.${CMAKE_PATCH_VERSION} VERSION_GREATER 2.6.2)
 
 set(POLKITQT-1_VERSION_MAJOR 0 CACHE INT "PolkitQt-1's major version number" FORCE)
 set(POLKITQT-1_VERSION_MINOR 98 CACHE INT "PolkitQt-1's minor version number" FORCE)
@@ -101,6 +106,23 @@ if(NOT WIN32)
                    @ONLY)
     install(FILES ${CMAKE_CURRENT_BINARY_DIR}/polkit-qt-agent-1.pc DESTINATION ${LIB_INSTALL_DIR}/pkgconfig )
 endif(NOT WIN32)
+
+# CMake Config files
+configure_file(PolkitQt-1Config.cmake.in "${CMAKE_BINARY_DIR}/PolkitQt-1Config.cmake" @ONLY)
+
+# this file is used by to check if the installed version can be used.
+macro_write_basic_cmake_version_file(${CMAKE_BINARY_DIR}/PolkitQt-1ConfigVersion.cmake
+                                     ${POLKITQT-1_VERSION_MAJOR} ${POLKITQT-1_VERSION_MINOR} ${POLKITQT-1_VERSION_PATCH})
+
+if(USE_COMMON_CMAKE_PACKAGE_CONFIG_DIR)
+   set(_PolkitQt-1Config_INSTALL_DIR ${LIB_INSTALL_DIR}/cmake/PolkitQt-1)
+else(USE_COMMON_CMAKE_PACKAGE_CONFIG_DIR)
+   set(_PolkitQt-1Config_INSTALL_DIR ${LIB_INSTALL_DIR}/PolkitQt-1/cmake)
+endif(USE_COMMON_CMAKE_PACKAGE_CONFIG_DIR)
+
+install(FILES ${CMAKE_BINARY_DIR}/PolkitQt-1ConfigVersion.cmake
+              ${CMAKE_BINARY_DIR}/PolkitQt-1Config.cmake
+        DESTINATION ${_PolkitQt-1Config_INSTALL_DIR} )
 
 option(BUILD_EXAMPLES "Builds a set of examples for polkit-qt-1" OFF)
 if (BUILD_EXAMPLES)

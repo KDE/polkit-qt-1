@@ -72,8 +72,9 @@ static void polkit_qt_listener_finalize(GObject *object)
 
     listener = POLKIT_QT_LISTENER(object);
 
-    if (G_OBJECT_CLASS(polkit_qt_listener_parent_class)->finalize != NULL)
+    if (G_OBJECT_CLASS(polkit_qt_listener_parent_class)->finalize != NULL) {
         G_OBJECT_CLASS(polkit_qt_listener_parent_class)->finalize(object);
+    }
 }
 
 static void polkit_qt_listener_class_init(PolkitQtListenerClass *klass)

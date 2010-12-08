@@ -72,10 +72,11 @@ Details& Details::operator=(const PolkitQt1::Details& other)
 QString Details::lookup(const QString &key) const
 {
     const gchar *result = polkit_details_lookup(d->polkitDetails, key.toUtf8().data());
-    if (result != NULL)
+    if (result != NULL) {
         return QString::fromUtf8(result);
-    else
+    } else {
         return QString();
+    }
 }
 
 void Details::insert(const QString &key, const QString &value)

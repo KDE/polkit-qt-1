@@ -70,11 +70,13 @@ Listener::~Listener()
 
     ListenerAdapter::instance()->removeListener(this);
 #ifndef POLKIT_QT_1_COMPATIBILITY_MODE
-    if (d->registeredHandle)
+    if (d->registeredHandle) {
         polkit_agent_listener_unregister(d->registeredHandle);
+    }
 #endif
-    if (d->listener != NULL)
+    if (d->listener != NULL) {
         g_object_unref(d->listener);
+    }
 }
 
 bool Listener::registerListener(const PolkitQt1::Subject &subject, const QString &objectPath)
@@ -100,8 +102,7 @@ bool Listener::registerListener(const PolkitQt1::Subject &subject, const QString
         return false;
     }
 #ifndef POLKIT_QT_1_COMPATIBILITY_MODE
-    if (d->registeredHandle == NULL)
-    {
+    if (d->registeredHandle == NULL) {
         qWarning() << QString("Cannot register authentication agent!");
         return false;
     }

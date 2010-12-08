@@ -64,9 +64,9 @@ Listener* ListenerAdapter::findListener(PolkitAgentListener *listener)
     Q_FOREACH(listItem, m_listeners) {
         Q_ASSERT(listItem);
 
-        if (listItem->listener() == listener)
+        if (listItem->listener() == listener) {
             return listItem;
-
+        }
     }
 
     return NULL;
@@ -89,8 +89,9 @@ void ListenerAdapter::polkit_qt_listener_initiate_authentication(PolkitAgentList
 
     Listener *list = findListener(listener);
 
-    for (GList *identity = g_list_first(identities); identity != NULL; identity = g_list_next(identity))
+    for (GList *identity = g_list_first(identities); identity != NULL; identity = g_list_next(identity)) {
          idents.append(PolkitQt1::Identity((PolkitIdentity *)identity->data));
+    }
 
     list->initiateAuthentication(QString::fromUtf8(action_id),
                                  QString::fromUtf8(message),
@@ -108,8 +109,9 @@ gboolean ListenerAdapter::polkit_qt_listener_initiate_authentication_finish(Polk
     qDebug() << "polkit_qt_listener_initiate_authentication_finish callback for " << listener;
 
     GSimpleAsyncResult *simple = G_SIMPLE_ASYNC_RESULT(res);
-    if (g_simple_async_result_propagate_error(simple, error))
+    if (g_simple_async_result_propagate_error(simple, error)) {
         return false;
+    }
     return true;
 }
 

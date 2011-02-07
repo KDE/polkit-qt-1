@@ -144,6 +144,6 @@ private:
 };
 }
 
-Q_DECLARE_METATYPE(PolkitQt1::ActionDescription::List);
+Q_DECLARE_METATYPE(PolkitQt1::ActionDescription::List)
 
 #endif //POLKIT_QT_ACTION_DESCRIPTION_H

@@ -46,7 +46,7 @@ public:
 
 Session::Private::~Private()
 {
-    g_object_unref(polkitAgentSession);
+    // polkitAgentSession is freed in Session d'tor
 }
 
 Session::Session(const PolkitQt1::Identity &identity, const QString &cookie, AsyncResult *result, QObject *parent)
@@ -74,6 +74,9 @@ Session::Session(PolkitAgentSession *pkAgentSession, QObject *parent)
 
 Session::~Session()
 {
+    if (d->polkitAgentSession)
+        g_object_unref(d->polkitAgentSession);
+
     delete d;
 }
 
@@ -101,7 +104,11 @@ void Session::Private::completed(PolkitAgentSession *s, gboolean gained_authoriz
 {
     qDebug() << "COMPLETED";
     Session *session = (Session *)user_data;
-    Q_EMIT((Session *)user_data)->completed(gained_authorization);
+    Q_EMIT(session)->completed(gained_authorization);
+
+    //free session here as polkit documentation asks
+    g_object_unref(session->d->polkitAgentSession);
+    session->d->polkitAgentSession = 0;
 }
 
 void Session::Private::request(PolkitAgentSession *s, gchar *request, gboolean echo_on, gpointer user_data)
@@ -139,7 +146,8 @@ AsyncResult::AsyncResult(GSimpleAsyncResult *result)
 
 AsyncResult::~AsyncResult()
 {
-    g_object_unref(d->result);
+    if (d->result)
+        g_object_unref(d->result);
 }
 
 void AsyncResult::setCompleted()

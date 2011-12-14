@@ -35,13 +35,15 @@ public:
         : QSharedData(other)
         , identity(other.identity)
     {
-        if (identity)
+        if (identity) {
             g_object_ref(identity);
+        }
     }
     ~Data()
     {
-        if (identity)
+        if (identity) {
             g_object_unref(identity);
+        }
     }
 
     PolkitIdentity *identity;
@@ -58,8 +60,10 @@ Identity::Identity(PolkitIdentity *polkitIdentity)
 {
     g_type_init();
     d->identity = polkitIdentity;
-    if (d->identity)
+
+    if (d->identity) {
         g_object_ref(d->identity);
+    }
 }
 
 Identity::Identity(const PolkitQt1::Identity& other)
@@ -90,14 +94,19 @@ PolkitIdentity *Identity::identity() const
 
 void Identity::setIdentity(PolkitIdentity *identity)
 {
-    if (d->identity == identity)
+    if (d->identity == identity) {
         return;
-    
-    if (d->identity)
+    }
+
+    if (d->identity) {
         g_object_unref(d->identity);
+    }
+
     d->identity = identity;
-    if (d->identity)
+
+    if (d->identity) {
         g_object_ref(d->identity);
+    }
 }
 
 QString Identity::toString() const

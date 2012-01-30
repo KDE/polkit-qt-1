@@ -51,7 +51,7 @@ void KListener::initiateAuthentication(const QString &actionId,
         qDebug() << identity.toString();
         Session *session;
         session = new Session(identity, cookie, result);
-        connect(session, SIGNAL(request(QString, bool)), this, SLOT(request(QString, bool)));
+        connect(session, SIGNAL(request(QString,bool)), this, SLOT(request(QString,bool)));
         connect(session, SIGNAL(completed(bool)), this, SLOT(completed(bool)));
         connect(session, SIGNAL(showError(QString)), this, SLOT(showError(QString)));
         connect(session, SIGNAL(showInfo(QString)), this, SLOT(showInfo(QString)));

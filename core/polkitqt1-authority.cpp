@@ -256,7 +256,7 @@ void Authority::Private::dbusSignalAdd(const QString &service, const QString &pa
 {
     // FIXME: This code seems to be nonfunctional - it needs to be fixed somewhere (is it Qt BUG?)
     QDBusConnection::systemBus().connect(service, path, interface, name,
-                                         q, SLOT(dbusFilter(const QDBusMessage &)));
+                                         q, SLOT(dbusFilter(QDBusMessage)));
 }
 
 void Authority::Private::dbusFilter(const QDBusMessage &message)

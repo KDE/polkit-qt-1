@@ -70,4 +70,4 @@ void ActionButtons::removeButton(QAbstractButton *button)
 
 }
 
-#include "polkitqt1-gui-actionbuttons.moc"
+

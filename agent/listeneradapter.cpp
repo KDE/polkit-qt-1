@@ -143,4 +143,4 @@ void ListenerAdapter::removeListener(Listener *listener)
 
 }
 
-#include "listeneradapter_p.moc"
+

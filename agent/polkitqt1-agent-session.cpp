@@ -166,4 +166,4 @@ void AsyncResult::setError(const QString &text)
     g_simple_async_result_set_error(d->result, POLKIT_ERROR, POLKIT_ERROR_FAILED, "%s", text.toUtf8().data());
 }
 
-#include "polkitqt1-agent-session.moc"
+

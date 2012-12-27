@@ -9,7 +9,7 @@ set(polkit_qt_agent_SRCS
     listeneradapter.cpp
     polkitqtlistener.cpp
 )
-automoc4_add_library(polkit-qt-agent-1 SHARED ${polkit_qt_agent_SRCS})
+add_library(polkit-qt-agent-1 SHARED ${polkit_qt_agent_SRCS})
 
 target_link_libraries(polkit-qt-agent-1
     ${POLKIT_LIBRARIES}

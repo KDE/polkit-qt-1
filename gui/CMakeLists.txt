@@ -9,7 +9,7 @@ set(polkit_qt_gui_SRCS
     polkitqt1-gui-actionbuttons.cpp
 )
 
-automoc4_add_library(polkit-qt-gui-1 SHARED ${polkit_qt_gui_SRCS})
+add_library(polkit-qt-gui-1 SHARED ${polkit_qt_gui_SRCS})
 
 target_link_libraries(polkit-qt-gui-1
     ${QT_QTCORE_LIBRARY}

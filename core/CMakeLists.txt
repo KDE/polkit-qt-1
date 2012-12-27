@@ -12,7 +12,7 @@ set(polkit_qt_core_SRCS
     polkitqt1-actiondescription.cpp
 )
 
-automoc4_add_library(polkit-qt-core-1 SHARED ${polkit_qt_core_SRCS})
+add_library(polkit-qt-core-1 SHARED ${polkit_qt_core_SRCS})
 
 target_link_libraries(polkit-qt-core-1
     ${QT_QTCORE_LIBRARY}

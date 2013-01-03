@@ -16,7 +16,7 @@ find_package(GIO REQUIRED)
 add_definitions(-DQT_NO_KEYWORDS)
 
 #include (${QT_USE_FILE})
-include (InstallSettings)
+include (KDEInstallDirs)
 include (MacroWriteBasicCMakeVersionFile)
 include (CheckFunctionExists)
 

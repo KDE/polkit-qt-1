@@ -24,7 +24,7 @@
 
 #include "polkitqt1-export.h"
 
-#include <QtGui/QAction>
+#include <QAction>
 
 namespace PolkitQt1
 {

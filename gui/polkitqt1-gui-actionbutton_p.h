@@ -24,7 +24,7 @@
 #include <polkitqt1-gui-actionbutton.h>
 
 #include <QtCore/QList>
-#include <QtGui/QAbstractButton>
+#include <QAbstractButton>
 
 /**
   * \internal

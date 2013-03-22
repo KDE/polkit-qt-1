@@ -62,6 +62,10 @@ Listener::Listener(PolkitAgentListener *listener, QObject *parent)
     g_type_init();
 
     d->listener = listener;
+    
+    if (d->listener != NULL) {
+        g_object_ref(d->listener);
+    }
 }
 
 Listener::~Listener()

@@ -35,11 +35,15 @@ public:
         : QSharedData(other)
         , polkitDetails(other.polkitDetails)
     {
-        g_object_ref(polkitDetails);
+        if (polkitDetails != NULL) {
+            g_object_ref(polkitDetails);
+        }
     }
     ~Data()
     {
-        g_object_unref(polkitDetails);
+        if (polkitDetails != NULL) {
+            g_object_unref(polkitDetails);
+        }
     }
 
     PolkitDetails *polkitDetails;
@@ -57,6 +61,10 @@ Details::Details(PolkitDetails *pkDetails)
 {
     g_type_init();
     d->polkitDetails = pkDetails;
+    
+    if (d->polkitDetails != NULL) {
+        g_object_ref(d->polkitDetails);
+    }
 }
 
 Details::~Details()

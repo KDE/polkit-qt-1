@@ -58,6 +58,10 @@ Subject::Subject(PolkitSubject *subject)
 {
     g_type_init();
     d->subject = subject;
+    
+    if (d->subject != NULL) {
+        g_object_ref(d->subject);
+    }
 }
 
 Subject::Subject(const PolkitQt1::Subject& other)
@@ -88,6 +92,9 @@ PolkitSubject *Subject::subject() const
 
 void Subject::setSubject(PolkitSubject *subject)
 {
+    if (d->subject != NULL) {
+        g_object_unref(d->subject);
+    }
     d->subject = subject;
 }
 

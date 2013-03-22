@@ -66,6 +66,9 @@ Session::Session(PolkitAgentSession *pkAgentSession, QObject *parent)
         , d(new Private)
 {
     d->polkitAgentSession = pkAgentSession;
+    if (d->polkitAgentSession) {
+        g_object_ref(d->polkitAgentSession);
+    }
     g_signal_connect(G_OBJECT(d->polkitAgentSession), "completed", G_CALLBACK(Private::completed), this);
     g_signal_connect(G_OBJECT(d->polkitAgentSession), "request", G_CALLBACK(Private::request), this);
     g_signal_connect(G_OBJECT(d->polkitAgentSession), "show-error", G_CALLBACK(Private::showError), this);

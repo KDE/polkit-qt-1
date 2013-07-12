@@ -115,6 +115,13 @@ static void polkit_qt_listener_initiate_authentication(PolkitAgentListener  *age
     qDebug() << "Listener adapter polkit_qt_listener_initiate_authentication";
     PolkitQtListener *listener = POLKIT_QT_LISTENER(agent_listener);
 
+    if (cancellable != NULL) {
+        g_cancellable_connect(cancellable,
+                              G_CALLBACK(cancelled_cb),
+                              agent_listener,
+                              NULL);
+    }
+
     // The result of asynchronous method will be created here and it will be pushed to the listener.
     GSimpleAsyncResult *result = g_simple_async_result_new((GObject *) listener, callback, user_data, agent_listener);
     qDebug() << "GSimpleAsyncResult:" << result;
@@ -128,13 +135,6 @@ static void polkit_qt_listener_initiate_authentication(PolkitAgentListener  *age
             identities,
             cancellable,
             result);
-
-    if (cancellable != NULL) {
-        g_signal_connect(cancellable,
-                         "cancelled",
-                         G_CALLBACK(cancelled_cb),
-                         agent_listener);
-    }
 
 }
 

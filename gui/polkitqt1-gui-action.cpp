@@ -512,4 +512,5 @@ QString Action::actionId() const
 
 }
 
-
+//needed because of Q_PRIVATE_SLOT
+#include "moc_polkitqt1-gui-action.cpp"

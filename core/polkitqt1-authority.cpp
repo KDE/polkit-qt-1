@@ -25,6 +25,7 @@
 
 #include <QtDBus/QDBusInterface>
 #include <QtDBus/QDBusReply>
+#include <QtDBus/QDBusMessage>
 
 #include <polkit/polkit.h>
 
@@ -852,4 +853,4 @@ void Authority::revokeTemporaryAuthorizationCancel()
 
 }
 
-
+#include "moc_polkitqt1-authority.cpp"

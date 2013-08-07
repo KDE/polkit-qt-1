@@ -1,36 +1,36 @@
 ## Polkit Qt Library
 project("PolkitQt-1")
 
-cmake_minimum_required(VERSION 2.8.10.1)
+cmake_minimum_required(VERSION 2.8.11)
 find_package(ECM 0.0.6 REQUIRED NO_MODULE)
 
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules" ${ECM_MODULE_PATH} ${CMAKE_MODULE_PATH})
 
-set(QT_MIN_VERSION "5.0.0")
+find_package(Qt5 5.1.0 REQUIRED COMPONENTS Core DBus Widgets Xml)
+add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0)
 
-find_package(Qt5Transitional REQUIRED)
 find_package(Polkit REQUIRED)
 find_package(GObject REQUIRED)
 find_package(GIO REQUIRED)
 
 add_definitions(-DQT_NO_KEYWORDS)
 
-#include (${QT_USE_FILE})
 include (KDEInstallDirs)
 include (MacroWriteBasicCMakeVersionFile)
 include (CheckFunctionExists)
 
+set(CMAKE_AUTOMOC TRUE)
+set(CMAKE_INCLUDE_CURRENT_DIR TRUE)
+
 include_directories(
-    ${CMAKE_CURRENT_BINARY_DIR}
     ${POLKIT_INCLUDE_DIR}
     ${POLKIT_AGENT_INCLUDE_DIR}
     ${GLIB2_INCLUDE_DIR}
     ${GOBJECT_INCLUDE_DIR}
     ${GIO_INCLUDE_DIR}
-    ${CMAKE_CURRENT_SOURCE_DIR}
-    ${CMAKE_CURRENT_SOURCE_DIR}/core
-    ${CMAKE_CURRENT_SOURCE_DIR}/includes
-    ${QT_QTXML_INCLUDE_DIR}
+    ${CMAKE_SOURCE_DIR}
+    ${CMAKE_SOURCE_DIR}/core
+    ${CMAKE_SOURCE_DIR}/includes
 )
 
 # Check for older polkit
@@ -145,6 +145,7 @@ add_subdirectory(cmake)
 
 option(BUILD_TEST "Builds unit tests for polkit-qt-1" OFF)
 if (BUILD_TEST)
+    find_package(Qt5Test 5.1.0 REQUIRED)
     add_subdirectory(test)
 endif (BUILD_TEST)
 

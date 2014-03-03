@@ -124,5 +124,3 @@ const PolkitAgentListener *Listener::listener()
 }
 
 }
-
-#include "polkitqt1-agent-listener.moc"

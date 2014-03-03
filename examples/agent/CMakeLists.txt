@@ -1,6 +1,4 @@
 include_directories(
-    ${CMAKE_CURRENT_SOURCE_DIR}
-    ${CMAKE_CURRENT_BINARY_DIR}
     ${CMAKE_SOURCE_DIR}/agent
 )
 
@@ -10,15 +8,13 @@ set(polkit_agent_example_SRCS
     klistener.cpp
 )
 
-automoc4(polkit-agent-example polkit_agent_example_SRCS)
-
-add_executable(polkit-agent-example
+add_executable(${POLKITQT-1_AGENT_EXAMPLE}
     ${polkit_agent_example_SRCS}
 )
 
-target_link_libraries(polkit-agent-example
+target_link_libraries(${POLKITQT-1_AGENT_EXAMPLE}
     ${QT_QTCORE_LIBRARY}
     ${QT_QTGUI_LIBRARY}
-    polkit-qt-agent-1
-    polkit-qt-core-1
+    ${POLKITQT-1_AGENT_PCNAME}
+    ${POLKITQT-1_CORE_PCNAME}
 )

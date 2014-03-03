@@ -2,8 +2,6 @@
 install(FILES org.qt.policykit.examples.policy DESTINATION ${SHARE_INSTALL_PREFIX}/polkit-1/actions/)
 
 include_directories(
-    ${CMAKE_CURRENT_SOURCE_DIR}
-    ${CMAKE_CURRENT_BINARY_DIR}
     ${CMAKE_SOURCE_DIR}/gui
 )
 
@@ -16,28 +14,24 @@ SET(polkit_example_RESOUCES
     icons/icons.qrc
 )
 
-QT4_WRAP_CPP(polkit_example_MOC_SRCS
-    PkExample.h
-)
-
 QT4_WRAP_UI(polkit_example_UI_SRCS
     PkExample.ui
 )
 
 QT4_ADD_RESOURCES (qtsourceview_RC_SRCS  ${polkit_example_RESOUCES})
 
-add_executable(polkit-example
+add_executable(${POLKITQT-1_EXAMPLE}
     ${polkit_example_SRCS}
-    ${polkit_example_MOC_SRCS}
     ${polkit_example_UI_SRCS}
     ${qtsourceview_RC_SRCS}
 )
 
-target_link_libraries(polkit-example
+target_link_libraries(${POLKITQT-1_EXAMPLE}
     ${QT_QTCORE_LIBRARY}
+    ${QT_QTDBUS_LIBRARY}
     ${QT_QTGUI_LIBRARY}
-    polkit-qt-gui-1
-    polkit-qt-core-1
+    ${POLKITQT-1_GUI_PCNAME}
+    ${POLKITQT-1_CORE_PCNAME}
 )
 
 #--------Helper Application
@@ -65,22 +59,18 @@ qt4_add_dbus_adaptor(polkit_example_helper_SRCS
     PkExampleHelper
 )
 
-QT4_WRAP_CPP(polkit_example_helper_MOC_SRCS
-    PkExampleHelper.h
-)
-
-add_executable(polkit-example-helper
+add_executable(${POLKITQT-1_EXAMPLE_HELPER}
     ${polkit_example_helper_SRCS}
-    ${polkit_example_helper_MOC_SRCS}
 )
 
 # see our helper is pretty small :D
-target_link_libraries(polkit-example-helper
+target_link_libraries(${POLKITQT-1_EXAMPLE_HELPER}
     ${QT_QTCORE_LIBRARY}
-    polkit-qt-core-1
+    ${QT_QTXML_LIBRARY}
+    ${POLKITQT-1_GUI_PCNAME}
 )
 
-install(TARGETS polkit-example-helper DESTINATION ${BIN_INSTALL_DIR})
+install(TARGETS ${POLKITQT-1_EXAMPLE_HELPER} DESTINATION ${BIN_INSTALL_DIR})
 
 dbus_add_activation_system_service(org.qt.policykit.examples.service.in)
 

@@ -122,13 +122,13 @@ Subject Subject::fromString(const QString &string)
 UnixProcessSubject::UnixProcessSubject(qint64 pid)
         : Subject()
 {
-    setSubject(polkit_unix_process_new(pid));
+    setSubject(polkit_unix_process_new_for_owner(pid, 0, getuid ()));
 }
 
 UnixProcessSubject::UnixProcessSubject(qint64 pid, quint64 startTime)
         : Subject()
 {
-    setSubject(polkit_unix_process_new_full(pid, startTime));
+    setSubject(polkit_unix_process_new_for_owner(pid, startTime, getuid ()));
 }
 
 UnixProcessSubject::UnixProcessSubject(PolkitUnixProcess *pkUnixProcess)

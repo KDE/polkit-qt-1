@@ -34,7 +34,7 @@ if(USE_QT5)
 
     set(REQUIRED_QT_VERSION 5.1.0)
 
-    find_package(Qt5 ${REQUIRED_QT_VERSION} REQUIRED COMPONENTS Core DBus Widgets Xml)
+    find_package(Qt5 ${REQUIRED_QT_VERSION} REQUIRED COMPONENTS Core DBus Widgets)
     add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0)
 
     set(POLKITQT-1_PCNAME "polkit-qt5-1")
@@ -48,7 +48,6 @@ if(USE_QT5)
     set(POLKITQT-1_INCLUDE_PATH "polkit-qt5-1")
 
     set(QT_QTCORE_LIBRARY Qt5::Core)
-    set(QT_QTXML_LIBRARY Qt5::Xml)
     set(QT_QTDBUS_LIBRARY Qt5::DBus)
     set(QT_QTTEST_LIBRARY Qt5::Test)
     set(QT_QTGUI_LIBRARY Qt5::Widgets)
@@ -225,6 +224,10 @@ install(EXPORT ${POLKITQT-1_CAMEL_NAME}Export FILE ${POLKITQT-1_CAMEL_NAME}Targe
 
 option(BUILD_EXAMPLES "Builds a set of examples for polkit-qt-1" OFF)
 if (BUILD_EXAMPLES)
+    if(USE_QT5)
+        find_package(Qt5Xml ${REQUIRED_QT_VERSION} REQUIRED)
+        set(QT_QTXML_LIBRARY Qt5::Xml)
+    endif()
     add_subdirectory(examples)
 endif (BUILD_EXAMPLES)
 

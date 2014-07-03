@@ -154,18 +154,18 @@ public:
     qint64 startTime() const;
 
     /**
-    * Sets Unix process PID.
-    *
-    * \param pid An Unix process PID.
-    */
-    void setPid(qint64 pid);
-
-    /**
     * Returns Unix process UID.
     *
     * \return A UID of associated Unix process.
     */
     qint64 uid() const;
+
+    /**
+    * Sets Unix process PID.
+    *
+    * \param pid An Unix process PID.
+    */
+    void setPid(qint64 pid);
 };
 
 /**

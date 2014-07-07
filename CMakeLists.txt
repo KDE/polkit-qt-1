@@ -3,6 +3,22 @@ project("PolkitQt-1")
 
 cmake_minimum_required(VERSION 2.8.11)
 
+set(CMAKE_AUTOMOC TRUE)
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
+
+set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules ${CMAKE_MODULE_PATH})
+
+# Used to create CMake config files
+include(CMakePackageConfigHelpers)
+
+# Used to set installation paths
+include(GNUInstallDirs)
+
+# Set the different paths
+set(LIB_DESTINATION         "${CMAKE_INSTALL_FULL_LIBDIR}" CACHE PATH "Library directory name")
+set(INCLUDE_DESTINATION     "${CMAKE_INSTALL_FULL_INCLUDEDIR}" CACHE PATH "The subdirectory to the header prefix")
+
+
 # Check whether we explicitely select the Qt version to be used or autodetect
 if(NOT USE_QT4 AND NOT USE_QT5)
     # Autodetect, prefering Qt 5
@@ -15,10 +31,6 @@ endif()
 
 if(USE_QT5)
     message(STATUS "Using Qt 5")
-
-    find_package(ECM 0.0.6 REQUIRED NO_MODULE)
-
-    set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules" ${ECM_MODULE_PATH} ${CMAKE_MODULE_PATH})
 
     set(REQUIRED_QT_VERSION 5.1.0)
 
@@ -34,8 +46,6 @@ if(USE_QT5)
     set(POLKITQT-1_EXAMPLE_HELPER "polkit-example-helper-qt5")
     set(POLKITQT-1_AGENT_EXAMPLE "polkit-agent-example-qt5")
     set(POLKITQT-1_INCLUDE_PATH "polkit-qt5-1")
-
-    include (KDEInstallDirs)
 
     set(QT_QTCORE_LIBRARY Qt5::Core)
     set(QT_QTXML_LIBRARY Qt5::Xml)
@@ -57,8 +67,6 @@ if(USE_QT5)
 else()
     message(STATUS "Using Qt 4")
 
-    set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules" ${CMAKE_MODULE_PATH})
-
     set(QT_MIN_VERSION "4.4.0")
 
     find_package(Qt4 REQUIRED)
@@ -77,16 +85,12 @@ else()
     set(POLKITQT-1_INCLUDE_PATH "polkit-qt-1")
 endif()
 
-set(CMAKE_AUTOMOC TRUE)
-set(CMAKE_INCLUDE_CURRENT_DIR TRUE)
-
 find_package(Polkit REQUIRED)
 find_package(GObject REQUIRED)
 find_package(GIO REQUIRED)
 
 add_definitions(-DQT_NO_KEYWORDS)
 
-include (MacroWriteBasicCMakeVersionFile)
 include (CheckFunctionExists)
 
 include_directories(
@@ -116,9 +120,7 @@ if (NOT HAVE_POLKIT_AGENT_LISTENER_REGISTER OR NOT HAVE_POLKIT_AUTHORITY_GET_SYN
     add_definitions(-DPOLKIT_QT_1_COMPATIBILITY_MODE)
 endif (NOT HAVE_POLKIT_AGENT_LISTENER_REGISTER OR NOT HAVE_POLKIT_AUTHORITY_GET_SYNC)
 
-if(${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}.${CMAKE_PATCH_VERSION} VERSION_GREATER 2.6.2)
-  option(USE_COMMON_CMAKE_PACKAGE_CONFIG_DIR "Prefer to install the <package>Config.cmake files to lib/cmake/<package> instead of lib/<package>/cmake" TRUE)
-endif(${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}.${CMAKE_PATCH_VERSION} VERSION_GREATER 2.6.2)
+option(USE_COMMON_CMAKE_PACKAGE_CONFIG_DIR "Prefer to install the <package>Config.cmake files to lib/cmake/<package> instead of lib/<package>/cmake" TRUE)
 
 set(POLKITQT-1_VERSION_MAJOR 0 CACHE INT "PolkitQt-1's major version number" FORCE)
 set(POLKITQT-1_VERSION_MINOR 103 CACHE INT "PolkitQt-1's minor version number" FORCE)
@@ -130,6 +132,7 @@ set(POLKITQT-1_VERSION_STRING
 set(POLKITQT-1_ABI_VERSION 1)
 # The version number of the polkit-qt-1 libraries
 set(POLKITQT-1_LIBRARY_VERSION "${POLKITQT-1_ABI_VERSION}.${POLKITQT-1_VERSION_MINOR}.${POLKITQT-1_VERSION_PATCH}")
+set(POLKITQT-1_LIB_NAMESPACE ${POLKITQT-1_CAMEL_NAME})
 
 configure_file(polkitqt1-version.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/polkitqt1-version.h)
 
@@ -152,7 +155,7 @@ install(FILES
     polkitqt1-export.h
 
     DESTINATION
-    ${INCLUDE_INSTALL_DIR}/${POLKITQT-1_INCLUDE_PATH} COMPONENT Devel)
+    ${INCLUDE_DESTINATION}/${POLKITQT-1_INCLUDE_PATH} COMPONENT Devel)
 
 install(FILES
     includes/PolkitQt1/Authority
@@ -162,51 +165,63 @@ install(FILES
     includes/PolkitQt1/TemporaryAuthorization
     includes/PolkitQt1/ActionDescription
     DESTINATION
-    ${INCLUDE_INSTALL_DIR}/${POLKITQT-1_INCLUDE_PATH}/PolkitQt1 COMPONENT Devel)
+    ${INCLUDE_DESTINATION}/${POLKITQT-1_INCLUDE_PATH}/PolkitQt1 COMPONENT Devel)
 
 install(FILES
     includes/PolkitQt1/Gui/Action
     includes/PolkitQt1/Gui/ActionButton
     includes/PolkitQt1/Gui/ActionButtons
     DESTINATION
-    ${INCLUDE_INSTALL_DIR}/${POLKITQT-1_INCLUDE_PATH}/PolkitQt1/Gui COMPONENT Devel)
+    ${INCLUDE_DESTINATION}/${POLKITQT-1_INCLUDE_PATH}/PolkitQt1/Gui COMPONENT Devel)
 
 install(FILES
     includes/PolkitQt1/Agent/Listener
     includes/PolkitQt1/Agent/Session
     DESTINATION
-    ${INCLUDE_INSTALL_DIR}/${POLKITQT-1_INCLUDE_PATH}/PolkitQt1/Agent COMPONENT Devel)
+    ${INCLUDE_DESTINATION}/${POLKITQT-1_INCLUDE_PATH}/PolkitQt1/Agent COMPONENT Devel)
 
 if(NOT WIN32)
     # Pkgconfig
-    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/polkit-qt-1.pc.cmake ${CMAKE_CURRENT_BINARY_DIR}/${POLKITQT-1_PCNAME}.pc @ONLY)
-    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${POLKITQT-1_PCNAME}.pc DESTINATION ${LIB_INSTALL_DIR}/pkgconfig )
-    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/polkit-qt-core-1.pc.cmake ${CMAKE_CURRENT_BINARY_DIR}/${POLKITQT-1_CORE_PCNAME}.pc
+    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/${POLKITQT-1_PCNAME}.pc.cmake ${CMAKE_CURRENT_BINARY_DIR}/${POLKITQT-1_PCNAME}.pc @ONLY)
+    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${POLKITQT-1_PCNAME}.pc DESTINATION ${LIB_DESTINATION}/pkgconfig )
+    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/${POLKITQT-1_CORE_PCNAME}.pc.cmake ${CMAKE_CURRENT_BINARY_DIR}/${POLKITQT-1_CORE_PCNAME}.pc
                    @ONLY)
-    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${POLKITQT-1_CORE_PCNAME}.pc DESTINATION ${LIB_INSTALL_DIR}/pkgconfig )
-    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/polkit-qt-gui-1.pc.cmake ${CMAKE_CURRENT_BINARY_DIR}/${POLKITQT-1_GUI_PCNAME}.pc @ONLY)
-    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${POLKITQT-1_GUI_PCNAME}.pc DESTINATION ${LIB_INSTALL_DIR}/pkgconfig )
-    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/polkit-qt-agent-1.pc.cmake ${CMAKE_CURRENT_BINARY_DIR}/${POLKITQT-1_AGENT_PCNAME}.pc
+    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${POLKITQT-1_CORE_PCNAME}.pc DESTINATION ${LIB_DESTINATION}/pkgconfig )
+    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/${POLKITQT-1_GUI_PCNAME}.pc.cmake ${CMAKE_CURRENT_BINARY_DIR}/${POLKITQT-1_GUI_PCNAME}.pc @ONLY)
+    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${POLKITQT-1_GUI_PCNAME}.pc DESTINATION ${LIB_DESTINATION}/pkgconfig )
+    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/${POLKITQT-1_AGENT_PCNAME}.pc.cmake ${CMAKE_CURRENT_BINARY_DIR}/${POLKITQT-1_AGENT_PCNAME}.pc
                    @ONLY)
-    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${POLKITQT-1_AGENT_PCNAME}.pc DESTINATION ${LIB_INSTALL_DIR}/pkgconfig )
+    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${POLKITQT-1_AGENT_PCNAME}.pc DESTINATION ${LIB_DESTINATION}/pkgconfig )
 endif(NOT WIN32)
 
-# CMake Config files
-configure_file(PolkitQt-1Config.cmake.in "${CMAKE_BINARY_DIR}/${POLKITQT-1_CAMEL_NAME}Config.cmake" @ONLY)
-
-# this file is used by to check if the installed version can be used.
-macro_write_basic_cmake_version_file(${CMAKE_BINARY_DIR}/${POLKITQT-1_CAMEL_NAME}ConfigVersion.cmake
-                                     ${POLKITQT-1_VERSION_MAJOR} ${POLKITQT-1_VERSION_MINOR} ${POLKITQT-1_VERSION_PATCH})
 
 if(USE_COMMON_CMAKE_PACKAGE_CONFIG_DIR)
-   set(_PolkitQt-1Config_INSTALL_DIR ${LIB_INSTALL_DIR}/cmake/${POLKITQT-1_CAMEL_NAME})
+   set(_PolkitQt-1Config_INSTALL_DIR ${LIB_DESTINATION}/cmake/${POLKITQT-1_CAMEL_NAME})
 else(USE_COMMON_CMAKE_PACKAGE_CONFIG_DIR)
-   set(_PolkitQt-1Config_INSTALL_DIR ${LIB_INSTALL_DIR}/${POLKITQT-1_CAMEL_NAME}/cmake)
+   set(_PolkitQt-1Config_INSTALL_DIR ${LIB_DESTINATION}/${POLKITQT-1_CAMEL_NAME}/cmake)
 endif(USE_COMMON_CMAKE_PACKAGE_CONFIG_DIR)
 
-install(FILES ${CMAKE_BINARY_DIR}/${POLKITQT-1_CAMEL_NAME}ConfigVersion.cmake
-              ${CMAKE_BINARY_DIR}/${POLKITQT-1_CAMEL_NAME}Config.cmake
-        DESTINATION ${_PolkitQt-1Config_INSTALL_DIR} )
+
+# Create the CMake Config files
+configure_package_config_file(PolkitQt-1Config.cmake.in
+                              ${CMAKE_BINARY_DIR}/${POLKITQT-1_CAMEL_NAME}Config.cmake
+                              INSTALL_DESTINATION ${_PolkitQt-1Config_INSTALL_DIR}
+                              PATH_VARS LIB_DESTINATION INCLUDE_DESTINATION
+)
+
+write_basic_package_version_file(${CMAKE_BINARY_DIR}/${POLKITQT-1_CAMEL_NAME}ConfigVersion.cmake
+                                 VERSION ${POLKITQT-1_VERSION_STRING}
+                                 COMPATIBILITY SameMajorVersion
+                                )
+
+install(FILES ${CMAKE_BINARY_DIR}/${POLKITQT-1_CAMEL_NAME}Config.cmake
+              ${CMAKE_BINARY_DIR}/${POLKITQT-1_CAMEL_NAME}ConfigVersion.cmake
+        DESTINATION ${_PolkitQt-1Config_INSTALL_DIR}
+       )
+
+install(EXPORT ${POLKITQT-1_CAMEL_NAME}Export FILE ${POLKITQT-1_CAMEL_NAME}Targets.cmake
+        DESTINATION ${_PolkitQt-1Config_INSTALL_DIR}
+        NAMESPACE ${POLKITQT-1_LIB_NAMESPACE}::)
 
 option(BUILD_EXAMPLES "Builds a set of examples for polkit-qt-1" OFF)
 if (BUILD_EXAMPLES)

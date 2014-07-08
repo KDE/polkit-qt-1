@@ -1,5 +1,5 @@
 
-install(FILES org.qt.policykit.examples.policy DESTINATION ${SHARE_INSTALL_PREFIX}/polkit-1/actions/)
+install(FILES org.qt.policykit.examples.policy DESTINATION ${CMAKE_INSTALL_FULL_DATAROOTDIR}/polkit-1/actions/)
 
 include_directories(
     ${CMAKE_SOURCE_DIR}/gui
@@ -32,6 +32,7 @@ target_link_libraries(${POLKITQT-1_EXAMPLE}
     ${QT_QTGUI_LIBRARY}
     ${POLKITQT-1_GUI_PCNAME}
     ${POLKITQT-1_CORE_PCNAME}
+    ${GOBJECT_LIBRARIES}
 )
 
 #--------Helper Application
@@ -43,7 +44,7 @@ macro(dbus_add_activation_system_service _sources)
         string(REGEX REPLACE "\\.service.*$" ".service" _output_file ${_i})
         set(_target ${CMAKE_CURRENT_BINARY_DIR}/${_output_file})
         configure_file(${_service_file} ${_target})
-        install(FILES ${_target} DESTINATION ${SHARE_INSTALL_PREFIX}/dbus-1/system-services )
+        install(FILES ${_target} DESTINATION ${CMAKE_INSTALL_FULL_DATAROOTDIR}/dbus-1/system-services )
         #install(FILES ${_target} DESTINATION ${_install_dir})
     endforeach (_i ${ARGN})
 endmacro(dbus_add_activation_system_service _sources)
@@ -67,10 +68,11 @@ add_executable(${POLKITQT-1_EXAMPLE_HELPER}
 target_link_libraries(${POLKITQT-1_EXAMPLE_HELPER}
     ${QT_QTCORE_LIBRARY}
     ${QT_QTXML_LIBRARY}
+    ${QT_QTDBUS_LIBRARY}
     ${POLKITQT-1_GUI_PCNAME}
 )
 
-install(TARGETS ${POLKITQT-1_EXAMPLE_HELPER} DESTINATION ${BIN_INSTALL_DIR})
+install(TARGETS ${POLKITQT-1_EXAMPLE_HELPER} RUNTIME DESTINATION ${CMAKE_INSTALL_FULL_BINDIR})
 
 dbus_add_activation_system_service(org.qt.policykit.examples.service.in)
 

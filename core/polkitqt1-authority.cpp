@@ -233,11 +233,17 @@ void Authority::Private::init()
 
     // then we need to extract all seats from ConsoleKit
     QDBusMessage msg = QDBusMessage::createMethodCall(consoleKitService, consoleKitManagerPath, consoleKitManagerInterface, "GetSeats");
-    msg = m_systemBus->call(msg);
-    if (!msg.arguments().isEmpty()) {
+    const QDBusMessage reply = m_systemBus->call(msg);
+
+    if (reply.type() != QDBusMessage::ErrorMessage && !reply.arguments().isEmpty()) {
         // this method returns a list with present seats
-        QList<QString> seats;
-        qVariantValue<QDBusArgument> (msg.arguments()[0]) >> seats;
+        QStringList seats;
+        QVariant arg = reply.arguments()[0];
+        if (arg.type() == qMetaTypeId<QDBusArgument>()) {
+            arg.value<QDBusArgument>() >> seats;
+        } else {
+            seats = arg.toStringList();
+        }
         // it can be multiple seats present so connect all their signals
         Q_FOREACH(const QString &seat, seats) {
             seatSignalsConnect(seat);

@@ -19,6 +19,7 @@
  */
 
 #include "polkitqt1-subject.h"
+#include "polkitqt1-identity.h"
 
 #include <QtCore/QDebug>
 #include <polkit/polkit.h>
@@ -178,6 +179,11 @@ QString SystemBusNameSubject::name() const
 void SystemBusNameSubject::setName(const QString &name)
 {
     polkit_system_bus_name_set_name((PolkitSystemBusName *) subject(), name.toUtf8().data());
+}
+
+UnixUserIdentity SystemBusNameSubject::user()
+{
+    return UnixUserIdentity(polkit_system_bus_name_get_user_sync((PolkitSystemBusName *) subject(), NULL, NULL));
 }
 
 // ----- SystemSession

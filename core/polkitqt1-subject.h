@@ -40,6 +40,8 @@ typedef struct _PolkitSystemBusName PolkitSystemBusName;
 namespace PolkitQt1
 {
 
+class UnixUserIdentity;
+
 /**
  * \class Subject polkitqt1-subject.h Subject
  * \author Jaroslav Reznik <jreznik@redhat.com>
@@ -208,6 +210,14 @@ public:
     * \param name System bus name.
     */
     void setName(const QString &name);
+
+    /**
+     * Returns the UnixUserIdentity for this subject.
+     *
+     * The ownership of the returned pointer is passed to the caller.
+     * \since 0.113
+     **/
+    UnixUserIdentity user();
 };
 
 /**

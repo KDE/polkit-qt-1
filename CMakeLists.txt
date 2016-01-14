@@ -33,6 +33,7 @@ if(USE_QT5)
     message(STATUS "Using Qt 5")
 
     set(REQUIRED_QT_VERSION 5.1.0)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
 
     find_package(Qt5 ${REQUIRED_QT_VERSION} REQUIRED COMPONENTS Core DBus Widgets)
 

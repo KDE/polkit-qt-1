@@ -94,7 +94,7 @@ bool Listener::registerListener(const PolkitQt1::Subject &subject, const QString
     bool r = polkit_agent_register_listener(d->listener,
 #endif
                                             subject.subject(),
-                                            objectPath.toAscii().data(),
+                                            objectPath.toLatin1().data(),
 #ifndef POLKIT_QT_1_COMPATIBILITY_MODE
                                             NULL,
 #endif

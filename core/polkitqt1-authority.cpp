@@ -286,7 +286,7 @@ void Authority::Private::dbusFilter(const QDBusMessage &message)
 
         // TODO: Test this with the multiseat support
         if (message.member() == "SeatAdded") {
-            seatSignalsConnect(qVariantValue<QDBusObjectPath> (message.arguments()[0]).path());
+            seatSignalsConnect(message.arguments()[0].value<QDBusObjectPath>().path());
         }
     }
 }
@@ -342,7 +342,7 @@ Authority::Result Authority::checkAuthorizationSync(const QString &actionId, con
 
     pk_result = polkit_authority_check_authorization_sync(d->pkAuthority,
                 subject.subject(),
-                actionId.toAscii().data(),
+                actionId.toLatin1().data(),
                 NULL,
                 (PolkitCheckAuthorizationFlags)(int)flags,
                 NULL,
@@ -377,7 +377,7 @@ void Authority::checkAuthorization(const QString &actionId, const Subject &subje
 
     polkit_authority_check_authorization(d->pkAuthority,
                                          subject.subject(),
-                                         actionId.toAscii().data(),
+                                         actionId.toLatin1().data(),
                                          NULL,
                                          (PolkitCheckAuthorizationFlags)(int)flags,
                                          d->m_checkAuthorizationCancellable,
@@ -489,8 +489,8 @@ bool Authority::registerAuthenticationAgentSync(const Subject &subject, const QS
     }
 
     result = polkit_authority_register_authentication_agent_sync(d->pkAuthority,
-             subject.subject(), locale.toAscii().data(),
-             objectPath.toAscii().data(), NULL, &error);
+             subject.subject(), locale.toLatin1().data(),
+             objectPath.toLatin1().data(), NULL, &error);
 
     if (error) {
         d->setError(E_RegisterFailed, error->message);
@@ -514,8 +514,8 @@ void Authority::registerAuthenticationAgent(const Subject &subject, const QStrin
 
     polkit_authority_register_authentication_agent(d->pkAuthority,
             subject.subject(),
-            locale.toAscii().data(),
-            objectPath.toAscii().data(),
+            locale.toLatin1().data(),
+            objectPath.toLatin1().data(),
             d->m_registerAuthenticationAgentCancellable,
             d->registerAuthenticationAgentCallback,
             this);

@@ -35,7 +35,6 @@ if(USE_QT5)
     set(REQUIRED_QT_VERSION 5.1.0)
 
     find_package(Qt5 ${REQUIRED_QT_VERSION} REQUIRED COMPONENTS Core DBus Widgets)
-    add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0)
 
     set(POLKITQT-1_PCNAME "polkit-qt5-1")
     set(POLKITQT-1_CORE_PCNAME "polkit-qt5-core-1")

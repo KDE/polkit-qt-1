@@ -20,6 +20,7 @@
 
 #include "polkitqt1-subject.h"
 #include "polkitqt1-identity.h"
+#include "polkitqt1-config.h"
 
 #include <QtCore/QDebug>
 #include <polkit/polkit.h>
@@ -183,7 +184,12 @@ void SystemBusNameSubject::setName(const QString &name)
 
 UnixUserIdentity SystemBusNameSubject::user()
 {
+#if HAVE_POLKIT_SYSTEM_BUS_NAME_GET_USER_SYNC
     return UnixUserIdentity(polkit_system_bus_name_get_user_sync((PolkitSystemBusName *) subject(), NULL, NULL));
+#else
+    qWarning("Polkit is too old, returning invalid user from SystemBusNameSubject::user()!");
+    return UnixUserIdentity();
+#endif
 }
 
 // ----- SystemSession

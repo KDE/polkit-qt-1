@@ -214,7 +214,8 @@ public:
     /**
      * Returns the UnixUserIdentity for this subject.
      *
-     * The ownership of the returned pointer is passed to the caller.
+     * \note This can be an invalid UnixUserIdentity so be sure to check before using it
+     *
      * \since 0.113
      **/
     UnixUserIdentity user();

@@ -46,7 +46,7 @@ void TestAuth::test_Auth_checkAuthorization()
     // Test if the signal was emitted
     QCOMPARE(spy.count(), 1);
     // Test the result
-    result = qVariantValue<PolkitQt1::Authority::Result> (spy.takeFirst()[0]);
+    result = spy.takeFirst()[0].value<PolkitQt1::Authority::Result>();
     QCOMPARE(result, Authority::No);
     QVERIFY(!authority->hasError());
     spy.clear();
@@ -92,7 +92,7 @@ void TestAuth::test_Auth_enumerateActions()
     Authority::instance()->enumerateActions();
     wait();
     QCOMPARE(spy.count(), 1);
-    list = qVariantValue<PolkitQt1::ActionDescription::List> (spy.takeFirst()[0]);
+    list = spy.takeFirst()[0].value<PolkitQt1::ActionDescription::List>();
     QVERIFY(!Authority::instance()->hasError());
     Q_FOREACH(const ActionDescription &ad, list) {
         if ((ad.actionId() == "org.qt.policykit.examples.kick") ||
@@ -154,7 +154,7 @@ void TestAuth::test_Authority()
                        "OpenSession");
     QDBusMessage reply = QDBusConnection::systemBus().call(msg);
     QString cookie;
-    cookie = qVariantValue<QString> (reply.arguments()[0]);
+    cookie = reply.arguments()[0].value<QString>();
 
 
     msg = QDBusMessage::createMethodCall("org.freedesktop.ConsoleKit",

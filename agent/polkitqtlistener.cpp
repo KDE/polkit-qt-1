@@ -59,7 +59,7 @@ static gboolean polkit_qt_listener_initiate_authentication_finish(PolkitAgentLis
         GAsyncResult         *res,
         GError              **error);
 
-G_DEFINE_TYPE(PolkitQtListener, polkit_qt_listener, POLKIT_AGENT_TYPE_LISTENER);
+G_DEFINE_TYPE(PolkitQtListener, polkit_qt_listener, POLKIT_AGENT_TYPE_LISTENER)
 
 static void polkit_qt_listener_init(PolkitQtListener *listener)
 {

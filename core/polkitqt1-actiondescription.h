@@ -83,14 +83,14 @@ public:
     QString actionId() const;
 
     /**
-     * \brief Gets the description used of ActionDescription
+     * \brief Gets the description used for ActionDescription
      *
      * \return description of the action
      */
     QString description() const;
 
     /**
-     * \brief Gets the message user for ActionDescription
+     * \brief Gets the message used for ActionDescription
      *
      * \return action message
      */

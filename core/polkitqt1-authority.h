@@ -46,6 +46,8 @@ class QStringList;
 namespace PolkitQt1
 {
 
+typedef QMap<QString, QString> DetailsMap;
+
 /**
  * \class Authority polkitqt1-authority.h Authority
  * \author Daniel Nicoletti <dantti85-pk@yahoo.com.br>
@@ -211,6 +213,22 @@ public:
                             AuthorizationFlags flags);
 
     /**
+     * This function does the same as checkAuthorization(const QString&, const
+     * Subject&, AuthorizationFlags), but also accepts a
+     * DetailsMap parameter. This map can contain key/value pairs that, for
+     * example, are used to expand placeholders in polkit authentication
+     * messages that are formatted like "Authentication required to access
+     * $(device)". For this example, when a key "device" exists in the map,
+     * the "$(device)" will be replaced by the corresponding value in the map.
+     *
+     * \see checkAuthorization(const QString&, const Subject&, AuthorizationFlags) Base version of this method.
+     */
+    // TODO: merge with checkAuthorization when we decide to break binary compatibility probably in Plasma 6
+    void checkAuthorizationWithDetails(
+                            const QString &actionId, const Subject &subject,
+                            AuthorizationFlags flags, const DetailsMap &details);
+
+    /**
      * Synchronous version of the checkAuthorization method.
      *
      * \param actionId the Id of the action in question
@@ -221,6 +239,18 @@ public:
      */
     Result checkAuthorizationSync(const QString &actionId, const Subject &subject,
                                   AuthorizationFlags flags);
+
+    /**
+     * This function does the same as checkAuthorizationSync(const QString&,
+     * const Subject&, AuthorizationFlags), but also accepts a DetailsMap
+     * parameter.
+     *
+     * \see checkAuthorization(const QString&, const Subject&, AuthorizationFlags, const DetailsMap&) for a description of the details parameter.
+     *
+     * \see checkAuthorizationSync(const QString&, const Subject, AuthorizationFlags) Base version of this method.
+     */
+    Result checkAuthorizationSyncWithDetails(const QString &actionId, const Subject &subject,
+                                  AuthorizationFlags flags, const DetailsMap &details);
 
     /**
      * This method can be used to cancel last authorization check.

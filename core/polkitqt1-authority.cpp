@@ -123,7 +123,13 @@ public:
     *m_revokeTemporaryAuthorizationsCancellable,
     *m_revokeTemporaryAuthorizationCancellable;
 
-
+    /**
+     * \brief Convert a Qt DetailsMap to the lower level PolkitDetails type
+     *
+     * The returned pointer needs to be freed via g_object_unref when no
+     * longer needed. Returns nullptr if details is empty.
+     */
+    static PolkitDetails* convertDetailsMap(const DetailsMap &details);
     static void pk_config_changed();
     static void checkAuthorizationCallback(GObject *object, GAsyncResult *result, gpointer user_data);
     static void enumerateActionsCallback(GObject *object, GAsyncResult *result, gpointer user_data);
@@ -316,6 +322,23 @@ void Authority::clearError()
     d->m_lastError = E_None;
 }
 
+PolkitDetails* Authority::Private::convertDetailsMap(const DetailsMap &details)
+{
+    if (details.empty())
+        return nullptr;
+
+    auto ret = polkit_details_new();
+
+    for (const auto &entry: details.toStdMap()) {
+        const auto &key = entry.first;
+        const auto &value = entry.second;
+
+        polkit_details_insert(ret, key.toUtf8().constData(), value.toUtf8().data());
+    }
+
+    return ret;
+}
+
 void Authority::Private::pk_config_changed()
 {
     Q_EMIT Authority::instance()->configChanged();
@@ -326,7 +349,7 @@ PolkitAuthority *Authority::polkitAuthority() const
     return d->pkAuthority;
 }
 
-Authority::Result Authority::checkAuthorizationSync(const QString &actionId, const Subject &subject, AuthorizationFlags flags)
+Authority::Result Authority::checkAuthorizationSyncWithDetails(const QString &actionId, const Subject &subject, AuthorizationFlags flags, const DetailsMap &details)
 {
     PolkitAuthorizationResult *pk_result;
     GError *error = NULL;
@@ -340,13 +363,19 @@ Authority::Result Authority::checkAuthorizationSync(const QString &actionId, con
         return Unknown;
     }
 
+    auto pk_details = Authority::Private::convertDetailsMap(details);
+
     pk_result = polkit_authority_check_authorization_sync(d->pkAuthority,
                 subject.subject(),
                 actionId.toLatin1().data(),
-                NULL,
+                pk_details,
                 (PolkitCheckAuthorizationFlags)(int)flags,
                 NULL,
                 &error);
+
+    if (pk_details) {
+        g_object_unref(pk_details);
+    }
 
     if (error != NULL) {
         d->setError(E_CheckFailed, error->message);
@@ -364,7 +393,12 @@ Authority::Result Authority::checkAuthorizationSync(const QString &actionId, con
     }
 }
 
-void Authority::checkAuthorization(const QString &actionId, const Subject &subject, AuthorizationFlags flags)
+Authority::Result Authority::checkAuthorizationSync(const QString &actionId, const Subject &subject, AuthorizationFlags flags)
+{
+    return checkAuthorizationSyncWithDetails(actionId, subject, flags, DetailsMap());
+}
+
+void Authority::checkAuthorizationWithDetails(const QString &actionId, const Subject &subject, AuthorizationFlags flags, const DetailsMap &details)
 {
     if (Authority::instance()->hasError()) {
         return;
@@ -375,13 +409,24 @@ void Authority::checkAuthorization(const QString &actionId, const Subject &subje
         return;
     }
 
+    auto pk_details = Authority::Private::convertDetailsMap(details);
+
     polkit_authority_check_authorization(d->pkAuthority,
                                          subject.subject(),
                                          actionId.toLatin1().data(),
-                                         NULL,
+                                         pk_details,
                                          (PolkitCheckAuthorizationFlags)(int)flags,
                                          d->m_checkAuthorizationCancellable,
                                          d->checkAuthorizationCallback, this);
+
+    if (pk_details) {
+        g_object_unref(pk_details);
+    }
+}
+
+void Authority::checkAuthorization(const QString &actionId, const Subject &subject, AuthorizationFlags flags)
+{
+    checkAuthorizationWithDetails(actionId, subject, flags, DetailsMap());
 }
 
 void Authority::Private::checkAuthorizationCallback(GObject *object, GAsyncResult *result, gpointer user_data)

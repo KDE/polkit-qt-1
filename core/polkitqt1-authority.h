@@ -203,11 +203,6 @@ public:
      * \param actionId the Id of the action in question
      * \param subject subject that the action is authorized for (e.g. unix process)
      * \param flags flags that influences the authorization checking
-     *
-     * \return \c Result::Yes if the caller is authorized and the action should be performed
-     *         \c otherwise if the caller was not authorized and the action should not be performed,
-     *                      or an error has occurred
-     *
      */
     void checkAuthorization(const QString &actionId, const Subject &subject,
                             AuthorizationFlags flags);

@@ -13,8 +13,8 @@ add_executable(${POLKITQT-1_AGENT_EXAMPLE}
 )
 
 target_link_libraries(${POLKITQT-1_AGENT_EXAMPLE}
-    ${QT_QTCORE_LIBRARY}
-    ${QT_QTGUI_LIBRARY}
+    Qt5::Core
+    Qt5::Widgets
     ${POLKITQT-1_AGENT_PCNAME}
     ${POLKITQT-1_CORE_PCNAME}
     ${GOBJECT_LIBRARIES}

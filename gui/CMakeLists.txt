@@ -11,10 +11,10 @@ add_library(${POLKITQT-1_CAMEL_NAME}::Gui ALIAS ${POLKITQT-1_GUI_PCNAME})
 target_link_libraries(${POLKITQT-1_GUI_PCNAME}
     LINK_PUBLIC
     ${POLKITQT-1_CORE_PCNAME}
-    ${QT_QTGUI_LIBRARY}
+    Qt5::Widgets
     LINK_PRIVATE
-    ${QT_QTCORE_LIBRARY}
-    ${QT_QTDBUS_LIBRARY}
+    Qt5::Core
+    Qt5::DBus
     ${POLKIT_LIBRARIES}
 )
 

@@ -14,11 +14,11 @@ SET(polkit_example_RESOUCES
     icons/icons.qrc
 )
 
-QT4_WRAP_UI(polkit_example_UI_SRCS
+qt5_wrap_ui(polkit_example_UI_SRCS
     PkExample.ui
 )
 
-QT4_ADD_RESOURCES (qtsourceview_RC_SRCS  ${polkit_example_RESOUCES})
+qt5_add_resources (qtsourceview_RC_SRCS  ${polkit_example_RESOUCES})
 
 add_executable(${POLKITQT-1_EXAMPLE}
     ${polkit_example_SRCS}
@@ -27,9 +27,9 @@ add_executable(${POLKITQT-1_EXAMPLE}
 )
 
 target_link_libraries(${POLKITQT-1_EXAMPLE}
-    ${QT_QTCORE_LIBRARY}
-    ${QT_QTDBUS_LIBRARY}
-    ${QT_QTGUI_LIBRARY}
+    Qt5::Core
+    Qt5::DBus
+    Qt5::Widgets
     ${POLKITQT-1_GUI_PCNAME}
     ${POLKITQT-1_CORE_PCNAME}
     ${GOBJECT_LIBRARIES}
@@ -54,7 +54,7 @@ set(polkit_example_helper_SRCS
     mainHelper.cpp
 )
 
-qt4_add_dbus_adaptor(polkit_example_helper_SRCS
+qt5_add_dbus_adaptor(polkit_example_helper_SRCS
     org.qt.policykit.examples.xml
     PkExampleHelper.h
     PkExampleHelper
@@ -66,9 +66,9 @@ add_executable(${POLKITQT-1_EXAMPLE_HELPER}
 
 # see our helper is pretty small :D
 target_link_libraries(${POLKITQT-1_EXAMPLE_HELPER}
-    ${QT_QTCORE_LIBRARY}
-    ${QT_QTXML_LIBRARY}
-    ${QT_QTDBUS_LIBRARY}
+    Qt5::Core
+    Qt5::Xml
+    Qt5::DBus
     ${POLKITQT-1_GUI_PCNAME}
 )
 

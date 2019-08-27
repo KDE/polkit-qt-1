@@ -68,9 +68,9 @@ endif (NOT HAVE_POLKIT_AGENT_LISTENER_REGISTER OR NOT HAVE_POLKIT_AUTHORITY_GET_
 
 option(USE_COMMON_CMAKE_PACKAGE_CONFIG_DIR "Prefer to install the <package>Config.cmake files to lib/cmake/<package> instead of lib/<package>/cmake" TRUE)
 
-set(POLKITQT-1_VERSION_MAJOR 0 CACHE INT "PolkitQt-1's major version number" FORCE)
-set(POLKITQT-1_VERSION_MINOR 112 CACHE INT "PolkitQt-1's minor version number" FORCE)
-set(POLKITQT-1_VERSION_PATCH 0 CACHE INT "PolkitQt-1's release version number" FORCE)
+set(POLKITQT-1_VERSION_MAJOR "0")
+set(POLKITQT-1_VERSION_MINOR "112")
+set(POLKITQT-1_VERSION_PATCH "0")
 set(POLKITQT-1_VERSION_STRING
     "${POLKITQT-1_VERSION_MAJOR}.${POLKITQT-1_VERSION_MINOR}.${POLKITQT-1_VERSION_PATCH}")
 

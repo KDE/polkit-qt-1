@@ -1,7 +1,7 @@
+cmake_minimum_required(VERSION 2.8.11)
+
 ## Polkit Qt Library
 project("PolkitQt-1")
-
-cmake_minimum_required(VERSION 2.8.11)
 
 set(CMAKE_AUTOMOC TRUE)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)

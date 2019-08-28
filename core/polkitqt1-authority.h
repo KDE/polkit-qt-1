@@ -69,8 +69,6 @@ class POLKITQT1_EXPORT Authority : public QObject
 {
     Q_OBJECT
     Q_DISABLE_COPY(Authority)
-    Q_ENUMS(Result)
-    Q_ENUMS(ErrorCode)
 public:
     enum Result {
         /** Result unknown */
@@ -82,6 +80,7 @@ public:
         /** The subject is authorized if more information is provided */
         Challenge = 0x03
     };
+    Q_ENUM(Result)
 
     enum AuthorizationFlag {
         /** No flags set **/
@@ -120,6 +119,7 @@ public:
         /** Revoke temporary authorizations failed **/
         E_RevokeFailed = 0x0A
     };
+    Q_ENUM(ErrorCode)
 
     /**
      * \brief Returns the instance of Authority
@@ -559,7 +559,5 @@ private:
 Q_DECLARE_OPERATORS_FOR_FLAGS(Authority::AuthorizationFlags)
 
 }
-
-Q_DECLARE_METATYPE(PolkitQt1::Authority::Result)
 
 #endif

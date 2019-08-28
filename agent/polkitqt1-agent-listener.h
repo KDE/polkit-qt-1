@@ -116,7 +116,7 @@ public Q_SLOTS:
                                         const PolkitQt1::Details &details,
                                         const QString &cookie,
                                         const PolkitQt1::Identity::List &identities,
-                                        AsyncResult *result) = 0;
+                                        PolkitQt1::Agent::AsyncResult *result) = 0;
 
     /**
      * TODO: Is this method really required ?

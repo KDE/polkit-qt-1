@@ -60,7 +60,7 @@ PkExample::PkExample(QMainWindow *parent)
     // convenience in this case we don't have any benefit but the code
     // look cleaner
     connect(bt, SIGNAL(clicked(QAbstractButton*,bool)), bt, SLOT(activate()));
-    // this is the Action activated signal, it is always emmited whenever
+    // this is the Action activated signal, it is always emitted whenever
     // someone click and get authorized to do the action
     connect(bt, SIGNAL(authorized()), this, SLOT(actionActivated()));
 
@@ -166,7 +166,7 @@ void PkExample::activateAction()
     // Be careful in doing the same for ActionButton won't work as expected
     // as action->activate() is calling Action::activate() and
     // not ActionButton::activate which are different.
-    // You can cast then to ActionButton but be carefull
+    // You can cast then to ActionButton but be careful
     // an Action casted to ActionButton may crash you app
     Action *action = qobject_cast<Action *>(sender());
     // calling activate with winId() makes the auth dialog

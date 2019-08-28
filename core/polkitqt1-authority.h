@@ -523,7 +523,7 @@ Q_SIGNALS:
     void authenticationAgentResponseFinished(bool);
 
     /**
-     * This signal is emmited when asynchronous method enumerateTemporaryAuthorizations finishes.
+     * This signal is emitted when asynchronous method enumerateTemporaryAuthorizations finishes.
      *
      * The argument is list of all temporary authorizations.
      *
@@ -532,7 +532,7 @@ Q_SIGNALS:
     void enumerateTemporaryAuthorizationsFinished(PolkitQt1::TemporaryAuthorization::List);
 
     /**
-     * This signal is emmited when asynchronous method revokeTemporaryAuthorizations finishes.
+     * This signal is emitted when asynchronous method revokeTemporaryAuthorizations finishes.
      *
      * The argument is \c true if all temporary authorizations were revoked
      *                 \c false if the revoking failed
@@ -540,7 +540,7 @@ Q_SIGNALS:
     void revokeTemporaryAuthorizationsFinished(bool);
 
     /**
-     * This signal is emmited when asynchronous method revokeTemporaryAuthorization finishes.
+     * This signal is emitted when asynchronous method revokeTemporaryAuthorization finishes.
      * \return \c true if the temporary authorization was revoked
      *         \c false if the revoking failed
      */

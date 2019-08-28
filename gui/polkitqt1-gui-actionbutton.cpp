@@ -83,7 +83,7 @@ bool ActionButton::activate()
     bool tg = false;
     Q_FOREACH(QAbstractButton *ent, d->buttons) {
         if (ent->isCheckable()) {
-            // we set the the current Action state
+            // we set the current Action state
             ent->setChecked(isChecked());
             // toggle the action cause we are not directly connected there..
             tg = true;

@@ -106,7 +106,7 @@ public:
     bool m_hasError;
     Authority::ErrorCode m_lastError;
     QString m_errorDetails;
-    // Local system bus. QDBusConnection::systemBus() may only be savely used
+    // Local system bus. QDBusConnection::systemBus() may only be safely used
     // inside a QCoreApplication scope as for example destruction of connected
     // objects need to happen before the bus disappears. Since this class however
     // is a global static and systemBus() internally is a global static we

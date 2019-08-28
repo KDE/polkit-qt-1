@@ -19,7 +19,7 @@ since PolicyKit <= 0.9 is no longer maintained.
 polkit-qt-1 is split in three libraries: polkit-qt-core-1, polkit-qt-gui-1 and polkit-qt-agent-1
 
 \b polkit-qt-core-1 lets you control actions and authentication without a GUI, with some very
-simple functions. It also lets you retrieve and control useful informations on the polkit
+simple functions. It also lets you retrieve and control useful information on the polkit
 authority. You will be mostly interested in the \c Authority class.
 
 \b polkit-qt-gui-1 lets you easily associate GUI items with polkit actions. Through some simple

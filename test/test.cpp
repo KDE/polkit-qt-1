@@ -146,7 +146,7 @@ void TestAuth::test_Authority()
     QVERIFY(authority);
     QVERIFY(!authority->hasError());
 
-    // Verify emiting of the signals
+    // Verify emitting of the signals
     QSignalSpy spy(authority, SIGNAL(consoleKitDBChanged()));
     QDBusMessage msg = QDBusMessage::createMethodCall("org.freedesktop.ConsoleKit",
                        "/org/freedesktop/ConsoleKit/Manager",
@@ -175,7 +175,7 @@ void TestAuth::test_Authority()
 
 void TestAuth::test_Subject()
 {
-    // Get pid of this appication
+    // Get pid of this application
     qint64 pid = QCoreApplication::applicationPid();
     // Create unix process for it
     UnixProcessSubject *process = new UnixProcessSubject(pid);

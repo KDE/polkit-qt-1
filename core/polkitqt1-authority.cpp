@@ -175,7 +175,7 @@ void Authority::Private::init()
     g_type_init();
 
     m_systemBus = new QDBusConnection(QDBusConnection::connectToBus(QDBusConnection::SystemBus,
-                                                                    QString("polkit_qt_system_bus")));
+                                                                    QStringLiteral("polkit_qt_system_bus")));
 
     m_checkAuthorizationCancellable = g_cancellable_new();
     m_enumerateActionsCancellable = g_cancellable_new();

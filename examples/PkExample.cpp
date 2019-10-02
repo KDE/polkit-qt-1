@@ -191,7 +191,7 @@ void PkExample::actionActivated()
                   "org.qt.policykit.examples",
                   QLatin1String("set"));
         QList<QVariant> argumentList;
-        argumentList << qVariantFromValue(setCB->currentText());
+        argumentList << QVariant::fromValue(setCB->currentText());
         message.setArguments(argumentList);
         // notice the systemBus here..
         QDBusMessage reply = QDBusConnection::systemBus().call(message);

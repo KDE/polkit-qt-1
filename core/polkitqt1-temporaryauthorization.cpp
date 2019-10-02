@@ -55,8 +55,8 @@ TemporaryAuthorization::TemporaryAuthorization(PolkitTemporaryAuthorization *pkT
     d->id = QString::fromUtf8(polkit_temporary_authorization_get_id(pkTemporaryAuthorization));
     d->actionId = QString::fromUtf8(polkit_temporary_authorization_get_action_id(pkTemporaryAuthorization));
     d->subject = Subject::fromString(polkit_subject_to_string(polkit_temporary_authorization_get_subject(pkTemporaryAuthorization)));
-    d->timeObtained = QDateTime::fromTime_t(polkit_temporary_authorization_get_time_obtained(pkTemporaryAuthorization));
-    d->timeExpires = QDateTime::fromTime_t(polkit_temporary_authorization_get_time_expires(pkTemporaryAuthorization));
+    d->timeObtained = QDateTime::fromSecsSinceEpoch(polkit_temporary_authorization_get_time_obtained(pkTemporaryAuthorization));
+    d->timeExpires = QDateTime::fromSecsSinceEpoch(polkit_temporary_authorization_get_time_expires(pkTemporaryAuthorization));
     g_object_unref(pkTemporaryAuthorization);
 }
 

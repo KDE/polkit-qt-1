@@ -1,0 +1,21 @@
+fancyname: PolkitQt-1
+description: Qt wrapper around polkit-1
+platforms:
+    - name: Linux
+#    - name: FreeBSD
+#    - name: Windows
+#    - name: MacOSX
+#    - name: Android
+release: true
+public_lib: true
+public_source_dirs:
+    - core
+    - gui
+    - agent
+libraries:
+    - cmake: "PolkitQt5-1::Core"
+    - cmake: "PolkitQt5-1::Gui"
+    - cmake: "PolkitQt5-1::Agent"
+cmakename: PolkitQt-1
+irc: kde-devel
+mailinglist: kde-core-devel

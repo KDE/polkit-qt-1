@@ -3,8 +3,9 @@
 
 \section polkitqt1_overview Overview
 
-\note Please note that if you're developing an application on the KDE Development
-      Platform and not just with Qt, you might want to use KAuth (kdelibs/core/auth)
+\note Please note that if you're developing an application which can rely not just on Qt modules,
+      but also Qt extensions like from the KDE Frameworks, you might want to use instead
+      KAuth from KDE Frameworks.
 
 polkit-qt-1 aims to make it easy for Qt developers to take advantage of
 polkit API. It is a convenience wrapper around QAction and QAbstractButton
@@ -12,8 +13,8 @@ that lets you integrate those two components easily with polkit.
 
 polkit-qt-1 is not a direct replacement of polkit-qt: it is based on polkit-1, which is not
 backwards compatible in any way with Policykit <= 0.9, which was the backend of polkit-qt.
-You are encouraged to port polkit-qt applications to polkit-qt or KAuth, if based on the KDE
-Development Platform, since PolicyKit <= 0.9 is no longer maintained.
+You are encouraged to port polkit-qt applications to polkit-qt or KAuth (from KDE Frameworks),
+since PolicyKit <= 0.9 is no longer maintained.
 
 polkit-qt-1 is split in three libraries: polkit-qt-core-1, polkit-qt-gui-1 and polkit-qt-agent-1
 

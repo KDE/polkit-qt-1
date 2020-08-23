@@ -556,9 +556,10 @@ private:
     Q_PRIVATE_SLOT(d, void dbusFilter(const QDBusMessage &message))
 };
 
+Q_DECLARE_OPERATORS_FOR_FLAGS(Authority::AuthorizationFlags)
+
 }
 
-Q_DECLARE_OPERATORS_FOR_FLAGS(PolkitQt1::Authority::AuthorizationFlags)
 Q_DECLARE_METATYPE(PolkitQt1::Authority::Result)
 
 #endif

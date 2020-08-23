@@ -295,10 +295,10 @@ private:
     Q_PRIVATE_SLOT(d, void configChanged())
 };
 
-}
+Q_DECLARE_OPERATORS_FOR_FLAGS(Action::States)
 
 }
 
-Q_DECLARE_OPERATORS_FOR_FLAGS(PolkitQt1::Gui::Action::States)
+}
 
 #endif

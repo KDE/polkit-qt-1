@@ -35,7 +35,7 @@ namespace PolkitQt1
 class AuthorityHelper
 {
 public:
-    AuthorityHelper() : q(0) {}
+    AuthorityHelper() : q(nullptr) {}
     ~AuthorityHelper() {
         delete q;
     }
@@ -82,9 +82,9 @@ class Authority::Private
 public:
     // Polkit will return NULL on failures, hence we use it instead of 0
     Private(Authority *qq) : q(qq)
-            , pkAuthority(NULL)
+            , pkAuthority(nullptr)
             , m_hasError(false)
-            , m_systemBus(0)
+            , m_systemBus(nullptr)
     {
     }
 
@@ -173,7 +173,7 @@ Authority::Authority(PolkitAuthority *authority, QObject *parent)
 
 Authority::~Authority()
 {
-    if (d->pkAuthority != NULL) {
+    if (d->pkAuthority != nullptr) {
         g_object_unref(d->pkAuthority);
     }
 
@@ -200,12 +200,12 @@ void Authority::Private::init()
     m_revokeTemporaryAuthorizationCancellable = g_cancellable_new();
 
 #ifndef POLKIT_QT_1_COMPATIBILITY_MODE
-    GError *gerror = NULL;
+    GError *gerror = nullptr;
 #endif
-    if (pkAuthority == NULL) {
+    if (pkAuthority == nullptr) {
 #ifndef POLKIT_QT_1_COMPATIBILITY_MODE
-        pkAuthority = polkit_authority_get_sync(NULL, &gerror);
-        if (gerror != NULL) {
+        pkAuthority = polkit_authority_get_sync(nullptr, &gerror);
+        if (gerror != nullptr) {
             setError(E_GetAuthority, gerror->message);
             g_error_free(gerror);
             return;
@@ -215,7 +215,7 @@ void Authority::Private::init()
 #endif
     }
 
-    if (pkAuthority == NULL) {
+    if (pkAuthority == nullptr) {
 #ifdef POLKIT_QT_1_COMPATIBILITY_MODE
         (E_GetAuthority);
 #endif
@@ -352,7 +352,7 @@ PolkitAuthority *Authority::polkitAuthority() const
 Authority::Result Authority::checkAuthorizationSyncWithDetails(const QString &actionId, const Subject &subject, AuthorizationFlags flags, const DetailsMap &details)
 {
     PolkitAuthorizationResult *pk_result;
-    GError *error = NULL;
+    GError *error = nullptr;
 
     if (Authority::instance()->hasError()) {
         return Unknown;
@@ -370,14 +370,14 @@ Authority::Result Authority::checkAuthorizationSyncWithDetails(const QString &ac
                 actionId.toLatin1().data(),
                 pk_details,
                 (PolkitCheckAuthorizationFlags)(int)flags,
-                NULL,
+                nullptr,
                 &error);
 
     if (pk_details) {
         g_object_unref(pk_details);
     }
 
-    if (error != NULL) {
+    if (error != nullptr) {
         d->setError(E_CheckFailed, error->message);
         g_error_free(error);
         return Unknown;
@@ -433,12 +433,12 @@ void Authority::Private::checkAuthorizationCallback(GObject *object, GAsyncResul
 {
     Authority *authority = (Authority *) user_data;
 
-    Q_ASSERT(authority != NULL);
+    Q_ASSERT(authority != nullptr);
 
-    GError *error = NULL;
+    GError *error = nullptr;
     PolkitAuthorizationResult *pkResult = polkit_authority_check_authorization_finish((PolkitAuthority *) object, result, &error);
 
-    if (error != NULL) {
+    if (error != nullptr) {
         // We don't want to set error if this is cancellation of some action
         if (error->code != 1) {
             authority->d->setError(E_CheckFailed, error->message);
@@ -446,7 +446,7 @@ void Authority::Private::checkAuthorizationCallback(GObject *object, GAsyncResul
         g_error_free(error);
         return;
     }
-    if (pkResult != NULL) {
+    if (pkResult != nullptr) {
         Q_EMIT authority->checkAuthorizationFinished(polkitResultToResult(pkResult));
         g_object_unref(pkResult);
     } else {
@@ -467,13 +467,13 @@ ActionDescription::List Authority::enumerateActionsSync()
         return ActionDescription::List();
     }
 
-    GError *error = NULL;
+    GError *error = nullptr;
 
     GList *glist = polkit_authority_enumerate_actions_sync(d->pkAuthority,
-                   NULL,
+                   nullptr,
                    &error);
 
-    if (error != NULL) {
+    if (error != nullptr) {
         d->setError(E_EnumFailed, error->message);
         g_error_free(error);
         return ActionDescription::List();
@@ -497,10 +497,10 @@ void Authority::enumerateActions()
 void Authority::Private::enumerateActionsCallback(GObject *object, GAsyncResult *result, gpointer user_data)
 {
     Authority *authority = (Authority *) user_data;
-    Q_ASSERT(authority != NULL);
-    GError *error = NULL;
+    Q_ASSERT(authority != nullptr);
+    GError *error = nullptr;
     GList *list = polkit_authority_enumerate_actions_finish((PolkitAuthority *) object, result, &error);
-    if (error != NULL) {
+    if (error != nullptr) {
         // We don't want to set error if this is cancellation of some action
         if (error->code != 1) {
             authority->d->setError(E_EnumFailed, error->message);
@@ -526,7 +526,7 @@ bool Authority::registerAuthenticationAgentSync(const Subject &subject, const QS
     }
 
     gboolean result;
-    GError *error = NULL;
+    GError *error = nullptr;
 
     if (!subject.isValid()) {
         d->setError(E_WrongSubject);
@@ -535,7 +535,7 @@ bool Authority::registerAuthenticationAgentSync(const Subject &subject, const QS
 
     result = polkit_authority_register_authentication_agent_sync(d->pkAuthority,
              subject.subject(), locale.toLatin1().data(),
-             objectPath.toLatin1().data(), NULL, &error);
+             objectPath.toLatin1().data(), nullptr, &error);
 
     if (error) {
         d->setError(E_RegisterFailed, error->message);
@@ -569,10 +569,10 @@ void Authority::registerAuthenticationAgent(const Subject &subject, const QStrin
 void Authority::Private::registerAuthenticationAgentCallback(GObject *object, GAsyncResult *result, gpointer user_data)
 {
     Authority *authority = (Authority *) user_data;
-    Q_ASSERT(authority != NULL);
-    GError *error = NULL;
+    Q_ASSERT(authority != nullptr);
+    GError *error = nullptr;
     bool res = polkit_authority_register_authentication_agent_finish((PolkitAuthority *) object, result, &error);
-    if (error != NULL) {
+    if (error != nullptr) {
         // We don't want to set error if this is cancellation of some action
         if (error->code != 1) {
             authority->d->setError(E_EnumFailed , error->message);
@@ -602,15 +602,15 @@ bool Authority::unregisterAuthenticationAgentSync(const Subject &subject, const 
         return false;
     }
 
-    GError *error = NULL;
+    GError *error = nullptr;
 
     bool result = polkit_authority_unregister_authentication_agent_sync(d->pkAuthority,
                   subject.subject(),
                   objectPath.toUtf8().data(),
-                  NULL,
+                  nullptr,
                   &error);
 
-    if (error != NULL) {
+    if (error != nullptr) {
         d->setError(E_UnregisterFailed, error->message);
         g_error_free(error);
         return false;
@@ -642,9 +642,9 @@ void Authority::Private::unregisterAuthenticationAgentCallback(GObject *object, 
 {
     Authority *authority = (Authority *) user_data;
     Q_ASSERT(authority);
-    GError *error = NULL;
+    GError *error = nullptr;
     bool res = polkit_authority_unregister_authentication_agent_finish((PolkitAuthority *) object, result, &error);
-    if (error != NULL) {
+    if (error != nullptr) {
         // We don't want to set error if this is cancellation of some action
         if (error->code != 1) {
             authority->d->setError(E_UnregisterFailed, error->message);
@@ -674,14 +674,14 @@ bool Authority::authenticationAgentResponseSync(const QString &cookie, const Ide
         return false;
     }
 
-    GError *error = NULL;
+    GError *error = nullptr;
 
     bool result = polkit_authority_authentication_agent_response_sync(d->pkAuthority,
                   cookie.toUtf8().data(),
                   identity.identity(),
-                  NULL,
+                  nullptr,
                   &error);
-    if (error != NULL) {
+    if (error != nullptr) {
         d->setError(E_AgentResponseFailed, error->message);
         g_error_free(error);
         return false;
@@ -713,9 +713,9 @@ void Authority::Private::authenticationAgentResponseCallback(GObject *object, GA
 {
     Authority *authority = (Authority *) user_data;
     Q_ASSERT(authority);
-    GError *error = NULL;
+    GError *error = nullptr;
     bool res = polkit_authority_authentication_agent_response_finish((PolkitAuthority *) object, result, &error);
-    if (error != NULL) {
+    if (error != nullptr) {
         // We don't want to set error if this is cancellation of some action
         if (error->code != 1) {
             authority->d->setError(E_AgentResponseFailed, error->message);
@@ -738,19 +738,19 @@ TemporaryAuthorization::List Authority::enumerateTemporaryAuthorizationsSync(con
 {
     TemporaryAuthorization::List result;
 
-    GError *error = NULL;
+    GError *error = nullptr;
     GList *glist = polkit_authority_enumerate_temporary_authorizations_sync(d->pkAuthority,
                    subject.subject(),
-                   NULL,
+                   nullptr,
                    &error);
-    if (error != NULL) {
+    if (error != nullptr) {
         d->setError(E_EnumFailed, error->message);
         g_error_free(error);
         return result;
     }
 
     GList *glist2;
-    for (glist2 = glist; glist2 != NULL; glist2 = g_list_next(glist2)) {
+    for (glist2 = glist; glist2 != nullptr; glist2 = g_list_next(glist2)) {
         result.append(TemporaryAuthorization((PolkitTemporaryAuthorization *) glist2->data));
         g_object_unref(glist2->data);
     }
@@ -764,11 +764,11 @@ void Authority::Private::enumerateTemporaryAuthorizationsCallback(GObject *objec
 {
     Authority *authority = (Authority *) user_data;
     Q_ASSERT(authority);
-    GError *error = NULL;
+    GError *error = nullptr;
 
     GList *glist = polkit_authority_enumerate_temporary_authorizations_finish((PolkitAuthority *) object, result, &error);
 
-    if (error != NULL) {
+    if (error != nullptr) {
         // We don't want to set error if this is cancellation of some action
         if (error->code != 1) {
             authority->d->setError(E_EnumFailed, error->message);
@@ -778,7 +778,7 @@ void Authority::Private::enumerateTemporaryAuthorizationsCallback(GObject *objec
     }
     TemporaryAuthorization::List res;
     GList *glist2;
-    for (glist2 = glist; glist2 != NULL; glist2 = g_list_next(glist2)) {
+    for (glist2 = glist; glist2 != nullptr; glist2 = g_list_next(glist2)) {
         res.append(TemporaryAuthorization((PolkitTemporaryAuthorization *) glist2->data));
         g_object_unref(glist2->data);
     }
@@ -802,12 +802,12 @@ bool Authority::revokeTemporaryAuthorizationsSync(const Subject &subject)
         return false;
     }
 
-    GError *error = NULL;
+    GError *error = nullptr;
     result = polkit_authority_revoke_temporary_authorizations_sync(d->pkAuthority,
              subject.subject(),
-             NULL,
+             nullptr,
              &error);
-    if (error != NULL) {
+    if (error != nullptr) {
         d->setError(E_RevokeFailed, error->message);
         g_error_free(error);
         return false;
@@ -831,12 +831,12 @@ void Authority::revokeTemporaryAuthorizations(const Subject &subject)
 void Authority::Private::revokeTemporaryAuthorizationsCallback(GObject *object, GAsyncResult *result, gpointer user_data)
 {
     Authority *authority = (Authority *) user_data;
-    Q_ASSERT(authority != NULL);
-    GError *error = NULL;
+    Q_ASSERT(authority != nullptr);
+    GError *error = nullptr;
 
     bool res = polkit_authority_revoke_temporary_authorizations_finish((PolkitAuthority *) object, result, &error);
 
-    if (error != NULL) {
+    if (error != nullptr) {
         // We don't want to set error if this is cancellation of some action
         if (error->code != 1) {
             authority->d->setError(E_RevokeFailed, error->message);
@@ -862,12 +862,12 @@ bool Authority::revokeTemporaryAuthorizationSync(const QString &id)
         return false;
     }
 
-    GError *error = NULL;
+    GError *error = nullptr;
     result =  polkit_authority_revoke_temporary_authorization_by_id_sync(d->pkAuthority,
               id.toUtf8().data(),
-              NULL,
+              nullptr,
               &error);
-    if (error != NULL) {
+    if (error != nullptr) {
         d->setError(E_RevokeFailed, error->message);
         g_error_free(error);
         return false;
@@ -891,12 +891,12 @@ void Authority::revokeTemporaryAuthorization(const QString &id)
 void Authority::Private::revokeTemporaryAuthorizationCallback(GObject *object, GAsyncResult *result, gpointer user_data)
 {
     Authority *authority = (Authority *) user_data;
-    Q_ASSERT(authority != NULL);
-    GError *error = NULL;
+    Q_ASSERT(authority != nullptr);
+    GError *error = nullptr;
 
     bool res = polkit_authority_revoke_temporary_authorization_by_id_finish((PolkitAuthority *) object, result, &error);
 
-    if (error != NULL) {
+    if (error != nullptr) {
         // We don't want to set error if this is cancellation of some action
         if (error->code != 1) {
             authority->d->setError(E_RevokeFailed, error->message);

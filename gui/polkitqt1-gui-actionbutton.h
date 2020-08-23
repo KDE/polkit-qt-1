@@ -70,7 +70,7 @@ public:
      * \param actionId the action Id to create the underlying Action
      * \param parent the parent object
      */
-    explicit ActionButton(QAbstractButton *button, const QString &actionId = QString(), QObject *parent = 0);
+    explicit ActionButton(QAbstractButton *button, const QString &actionId = QString(), QObject *parent = nullptr);
     virtual ~ActionButton();
 
     /**
@@ -129,7 +129,7 @@ Q_SIGNALS:
     void clicked(QAbstractButton *button, bool checked = false);
 
 protected:
-    ActionButton(ActionButtonPrivate &dd, const QString &actionId, QObject *parent = 0);
+    ActionButton(ActionButtonPrivate &dd, const QString &actionId, QObject *parent = nullptr);
 
     ActionButtonPrivate * const d_ptr;
 

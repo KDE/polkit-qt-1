@@ -72,7 +72,7 @@ static void polkit_qt_listener_finalize(GObject *object)
 
     listener = POLKIT_QT_LISTENER(object);
 
-    if (G_OBJECT_CLASS(polkit_qt_listener_parent_class)->finalize != NULL) {
+    if (G_OBJECT_CLASS(polkit_qt_listener_parent_class)->finalize != nullptr) {
         G_OBJECT_CLASS(polkit_qt_listener_parent_class)->finalize(object);
     }
 }
@@ -93,7 +93,7 @@ static void polkit_qt_listener_class_init(PolkitQtListenerClass *klass)
 
 PolkitAgentListener *polkit_qt_listener_new(void)
 {
-    return POLKIT_AGENT_LISTENER(g_object_new(POLKIT_QT_TYPE_LISTENER, NULL));
+    return POLKIT_AGENT_LISTENER(g_object_new(POLKIT_QT_TYPE_LISTENER, nullptr));
 }
 
 static void cancelled_cb(GCancellable *cancellable, gpointer user_data)
@@ -115,11 +115,11 @@ static void polkit_qt_listener_initiate_authentication(PolkitAgentListener  *age
     qDebug() << "Listener adapter polkit_qt_listener_initiate_authentication";
     PolkitQtListener *listener = POLKIT_QT_LISTENER(agent_listener);
 
-    if (cancellable != NULL) {
+    if (cancellable != nullptr) {
         g_cancellable_connect(cancellable,
                               G_CALLBACK(cancelled_cb),
                               agent_listener,
-                              NULL);
+                              nullptr);
     }
 
     // The result of asynchronous method will be created here and it will be pushed to the listener.

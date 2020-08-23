@@ -66,7 +66,7 @@ public:
     /**
      * \brief Constructor of Listener class
      */
-    Listener(QObject *parent = 0);
+    Listener(QObject *parent = nullptr);
 
     /**
      * \brief Constructor of Listener class from PolkitAgentListener
@@ -76,7 +76,7 @@ public:
      * \param listener Pointer to the PolkitAgentListener
      * \param parent
      */
-    explicit Listener(PolkitAgentListener *listener, QObject *parent = 0);
+    explicit Listener(PolkitAgentListener *listener, QObject *parent = nullptr);
 
     virtual ~Listener();
 

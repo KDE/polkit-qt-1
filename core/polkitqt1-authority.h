@@ -138,7 +138,7 @@ public:
      *
      * \return The current authority instance
      */
-    static Authority *instance(PolkitAuthority *authority = 0);
+    static Authority *instance(PolkitAuthority *authority = nullptr);
 
     ~Authority();
 
@@ -547,7 +547,7 @@ Q_SIGNALS:
     void revokeTemporaryAuthorizationFinished(bool);
 
 private:
-    explicit Authority(PolkitAuthority *context, QObject *parent = 0);
+    explicit Authority(PolkitAuthority *context, QObject *parent = nullptr);
 
     class Private;
     friend class Private;

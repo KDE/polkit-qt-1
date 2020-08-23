@@ -33,7 +33,7 @@ class Subject::Data : public QSharedData
 public:
     Data()
         : QSharedData()
-        , subject(0)
+        , subject(nullptr)
     {}
     Data(const Data& other)
         : QSharedData(other)
@@ -61,7 +61,7 @@ Subject::Subject(PolkitSubject *subject)
     g_type_init();
     d->subject = subject;
     
-    if (d->subject != NULL) {
+    if (d->subject != nullptr) {
         g_object_ref(d->subject);
     }
 }
@@ -84,7 +84,7 @@ Subject::~Subject()
 
 bool Subject::isValid() const
 {
-    return d->subject != NULL;
+    return d->subject != nullptr;
 }
 
 PolkitSubject *Subject::subject() const
@@ -94,7 +94,7 @@ PolkitSubject *Subject::subject() const
 
 void Subject::setSubject(PolkitSubject *subject)
 {
-    if (d->subject != NULL) {
+    if (d->subject != nullptr) {
         g_object_unref(d->subject);
     }
     d->subject = subject;
@@ -112,11 +112,11 @@ Subject Subject::fromString(const QString &string)
     g_type_init();
 
     Subject subject;
-    GError *error = NULL;
+    GError *error = nullptr;
     subject.d->subject = polkit_subject_from_string(string.toUtf8().data(), &error);
-    if (error != NULL) {
+    if (error != nullptr) {
         qWarning() << QString("Cannot create Subject from string: %1").arg(error->message);
-        return NULL;
+        return nullptr;
     }
     return subject;
 }
@@ -185,7 +185,7 @@ void SystemBusNameSubject::setName(const QString &name)
 UnixUserIdentity SystemBusNameSubject::user()
 {
 #if HAVE_POLKIT_SYSTEM_BUS_NAME_GET_USER_SYNC
-    return UnixUserIdentity(polkit_system_bus_name_get_user_sync((PolkitSystemBusName *) subject(), NULL, NULL));
+    return UnixUserIdentity(polkit_system_bus_name_get_user_sync((PolkitSystemBusName *) subject(), nullptr, nullptr));
 #else
     qWarning("Polkit is too old, returning invalid user from SystemBusNameSubject::user()!");
     return UnixUserIdentity();
@@ -202,11 +202,11 @@ UnixSessionSubject::UnixSessionSubject(const QString &sessionId)
 UnixSessionSubject::UnixSessionSubject(qint64 pid)
         : Subject()
 {
-    GError *error = NULL;
-    setSubject(polkit_unix_session_new_for_process_sync(pid, NULL, &error));
-    if (error != NULL) {
+    GError *error = nullptr;
+    setSubject(polkit_unix_session_new_for_process_sync(pid, nullptr, &error));
+    if (error != nullptr) {
         qWarning() << QString("Cannot create unix session: %1").arg(error->message);
-        setSubject(NULL);
+        setSubject(nullptr);
     }
 }
 

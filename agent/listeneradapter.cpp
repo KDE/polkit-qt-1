@@ -32,7 +32,7 @@ namespace Agent
 class ListenerAdapterHelper
 {
 public:
-    ListenerAdapterHelper() : q(0) {}
+    ListenerAdapterHelper() : q(nullptr) {}
     ~ListenerAdapterHelper() {
         delete q;
     }
@@ -69,7 +69,7 @@ Listener* ListenerAdapter::findListener(PolkitAgentListener *listener)
         }
     }
 
-    return NULL;
+    return nullptr;
 }
 
 void ListenerAdapter::polkit_qt_listener_initiate_authentication(PolkitAgentListener  *listener,
@@ -89,7 +89,7 @@ void ListenerAdapter::polkit_qt_listener_initiate_authentication(PolkitAgentList
 
     Listener *list = findListener(listener);
 
-    for (GList *identity = g_list_first(identities); identity != NULL; identity = g_list_next(identity)) {
+    for (GList *identity = g_list_first(identities); identity != nullptr; identity = g_list_next(identity)) {
          idents.append(PolkitQt1::Identity((PolkitIdentity *)identity->data));
     }
 

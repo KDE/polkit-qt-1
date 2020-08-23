@@ -70,7 +70,7 @@ private:
     void removeListener(Listener *listener);
     Listener* findListener(PolkitAgentListener *listener);
 
-    explicit ListenerAdapter(QObject *parent = 0);
+    explicit ListenerAdapter(QObject *parent = nullptr);
     QList<Listener *> m_listeners;
 
     friend class Listener;

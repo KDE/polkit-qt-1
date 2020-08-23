@@ -111,7 +111,7 @@ void Session::Private::completed(PolkitAgentSession *s, gboolean gained_authoriz
 
     //free session here as polkit documentation asks
     g_object_unref(session->d->polkitAgentSession);
-    session->d->polkitAgentSession = 0;
+    session->d->polkitAgentSession = nullptr;
 }
 
 void Session::Private::request(PolkitAgentSession *s, gchar *request, gboolean echo_on, gpointer user_data)
@@ -155,12 +155,12 @@ AsyncResult::~AsyncResult()
 
 void AsyncResult::setCompleted()
 {
-    if (d->result == NULL)
+    if (d->result == nullptr)
         return;
     g_simple_async_result_complete(d->result);
     // Assure that completed won't be called twice
     g_object_unref(d->result);
-    d->result = NULL;
+    d->result = nullptr;
 }
 
 void AsyncResult::setError(const QString &text)

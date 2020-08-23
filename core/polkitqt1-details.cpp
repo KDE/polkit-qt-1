@@ -35,13 +35,13 @@ public:
         : QSharedData(other)
         , polkitDetails(other.polkitDetails)
     {
-        if (polkitDetails != NULL) {
+        if (polkitDetails != nullptr) {
             g_object_ref(polkitDetails);
         }
     }
     ~Data()
     {
-        if (polkitDetails != NULL) {
+        if (polkitDetails != nullptr) {
             g_object_unref(polkitDetails);
         }
     }
@@ -62,7 +62,7 @@ Details::Details(PolkitDetails *pkDetails)
     g_type_init();
     d->polkitDetails = pkDetails;
     
-    if (d->polkitDetails != NULL) {
+    if (d->polkitDetails != nullptr) {
         g_object_ref(d->polkitDetails);
     }
 }
@@ -80,7 +80,7 @@ Details& Details::operator=(const PolkitQt1::Details& other)
 QString Details::lookup(const QString &key) const
 {
     const gchar *result = polkit_details_lookup(d->polkitDetails, key.toUtf8().data());
-    if (result != NULL) {
+    if (result != nullptr) {
         return QString::fromUtf8(result);
     } else {
         return QString();

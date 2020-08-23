@@ -30,7 +30,7 @@ namespace PolkitQt1
 class Identity::Data : public QSharedData
 {
 public:
-    Data() : identity(0) {}
+    Data() : identity(nullptr) {}
     Data(const Data& other)
         : QSharedData(other)
         , identity(other.identity)
@@ -84,7 +84,7 @@ Identity& Identity::operator=(const PolkitQt1::Identity& other)
 
 bool Identity::isValid() const
 {
-    return d->identity != NULL;
+    return d->identity != nullptr;
 }
 
 PolkitIdentity *Identity::identity() const
@@ -117,9 +117,9 @@ QString Identity::toString() const
 
 Identity Identity::fromString(const QString &string)
 {
-    GError *error = NULL;
+    GError *error = nullptr;
     PolkitIdentity *pkIdentity = polkit_identity_from_string(string.toUtf8().data(), &error);
-    if (error != NULL) {
+    if (error != nullptr) {
         qWarning() << QString("Cannot create Identity from string: %1").arg(error->message);
         return Identity();
     }
@@ -149,11 +149,11 @@ UnixUserIdentity Identity::toUnixUserIdentity()
 UnixUserIdentity::UnixUserIdentity(const QString &name)
         : Identity()
 {
-    GError *error = NULL;
+    GError *error = nullptr;
     setIdentity(polkit_unix_user_new_for_name(name.toUtf8().data(), &error));
-    if (error != NULL) {
+    if (error != nullptr) {
         qWarning() << QString("Cannot create UnixUserIdentity: %1").arg(error->message);
-        setIdentity(NULL);
+        setIdentity(nullptr);
     }
 }
 
@@ -188,11 +188,11 @@ void UnixUserIdentity::setUid(uid_t uid)
 UnixGroupIdentity::UnixGroupIdentity(const QString &name)
         : Identity()
 {
-    GError *error = NULL;
+    GError *error = nullptr;
     setIdentity(polkit_unix_group_new_for_name(name.toUtf8().data(), &error));
-    if (error != NULL) {
+    if (error != nullptr) {
         qWarning() << QString("Cannot create UnixGroupIdentity: %1").arg(error->message);
-        setIdentity(NULL);
+        setIdentity(nullptr);
     }
 }
 

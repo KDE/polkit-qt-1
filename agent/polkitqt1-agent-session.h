@@ -90,7 +90,7 @@ public:
      * \param result Result of the authentication action. Must be finished using complete() method.
      * \param parent
      */
-    Session(const PolkitQt1::Identity& identity, const QString &cookie, AsyncResult *result = 0, QObject *parent = 0);
+    Session(const PolkitQt1::Identity& identity, const QString &cookie, AsyncResult *result = nullptr, QObject *parent = nullptr);
 
     /**
      * Create a new authentication session from PolkitAgentSession object
@@ -100,7 +100,7 @@ public:
      * \param pkAgentSession PolkitAgentSession object
      * \param parent
      */
-    explicit Session(PolkitAgentSession *pkAgentSession, QObject *parent = 0);
+    explicit Session(PolkitAgentSession *pkAgentSession, QObject *parent = nullptr);
 
     /**
      * Destroy authentication session.

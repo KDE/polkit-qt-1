@@ -16,10 +16,9 @@ target_link_libraries(${POLKITQT-1_CORE_PCNAME}
     Qt5::Core
     LINK_PRIVATE
     Qt5::DBus
-    ${POLKIT_LIBRARIES}
-    ${GLIB2_LIBRARIES}
-    ${GOBJECT_LIBRARIES}
-    ${GIO_LIBRARIES}
+    PkgConfig::POLKIT_GOBJECT
+    PkgConfig::GLIB2
+    PkgConfig::GOBJECT
 )
 
 set_target_properties(${POLKITQT-1_CORE_PCNAME} PROPERTIES VERSION ${POLKITQT-1_LIBRARY_VERSION}

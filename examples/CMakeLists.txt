@@ -32,7 +32,6 @@ target_link_libraries(${POLKITQT-1_EXAMPLE}
     Qt5::Widgets
     ${POLKITQT-1_GUI_PCNAME}
     ${POLKITQT-1_CORE_PCNAME}
-    ${GOBJECT_LIBRARIES}
 )
 
 #--------Helper Application

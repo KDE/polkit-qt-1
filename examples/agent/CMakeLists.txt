@@ -17,5 +17,6 @@ target_link_libraries(${POLKITQT-1_AGENT_EXAMPLE}
     Qt5::Widgets
     ${POLKITQT-1_AGENT_PCNAME}
     ${POLKITQT-1_CORE_PCNAME}
-    ${GOBJECT_LIBRARIES}
+    PkgConfig::POLKIT_AGENT
+    PkgConfig::GOBJECT
 )

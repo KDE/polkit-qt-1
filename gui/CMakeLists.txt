@@ -15,7 +15,6 @@ target_link_libraries(${POLKITQT-1_GUI_PCNAME}
     LINK_PRIVATE
     Qt5::Core
     Qt5::DBus
-    ${POLKIT_LIBRARIES}
 )
 
 set_target_properties(${POLKITQT-1_GUI_PCNAME} PROPERTIES VERSION ${POLKITQT-1_LIBRARY_VERSION}

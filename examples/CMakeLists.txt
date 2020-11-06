@@ -21,9 +21,9 @@ add_executable(${POLKITQT-1_EXAMPLE}
 )
 
 target_link_libraries(${POLKITQT-1_EXAMPLE}
-    Qt5::Core
-    Qt5::DBus
-    Qt5::Widgets
+    ${QT_CORE_LIBRARY}
+    ${QT_DBUS_LIBRARY}
+    ${QT_WIDGETS_LIBRARY}
     ${POLKITQT-1_GUI_PCNAME}
     ${POLKITQT-1_CORE_PCNAME}
 )
@@ -59,9 +59,9 @@ add_executable(${POLKITQT-1_EXAMPLE_HELPER}
 
 # see our helper is pretty small :D
 target_link_libraries(${POLKITQT-1_EXAMPLE_HELPER}
-    Qt5::Core
-    Qt5::Xml
-    Qt5::DBus
+    ${QT_CORE_LIBRARY}
+    ${QT_XML_LIBRARY}
+    ${QT_DBUS_LIBRARY}
     ${POLKITQT-1_GUI_PCNAME}
 )
 

@@ -19,6 +19,7 @@
  */
 
 #include "polkitqt1-details.h"
+#include "polkitqt1-details_p.h"
 
 #include <QtCore/QStringList>
 
@@ -26,28 +27,6 @@
 
 namespace PolkitQt1
 {
-
-class Details::Data : public QSharedData
-{
-public:
-    Data() {}
-    Data(const Data &other)
-        : QSharedData(other)
-        , polkitDetails(other.polkitDetails)
-    {
-        if (polkitDetails != nullptr) {
-            g_object_ref(polkitDetails);
-        }
-    }
-    ~Data()
-    {
-        if (polkitDetails != nullptr) {
-            g_object_unref(polkitDetails);
-        }
-    }
-
-    PolkitDetails *polkitDetails;
-};
 
 Details::Details()
         : d(new Data)

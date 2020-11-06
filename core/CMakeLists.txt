@@ -13,9 +13,9 @@ add_library(${POLKITQT-1_CAMEL_NAME}::Core ALIAS ${POLKITQT-1_CORE_PCNAME})
 
 target_link_libraries(${POLKITQT-1_CORE_PCNAME}
     LINK_PUBLIC
-    Qt5::Core
+    ${QT_CORE_LIBRARY}
     LINK_PRIVATE
-    Qt5::DBus
+    ${QT_DBUS_LIBRARY}
     PkgConfig::POLKIT_GOBJECT
     PkgConfig::GLIB2
     PkgConfig::GOBJECT

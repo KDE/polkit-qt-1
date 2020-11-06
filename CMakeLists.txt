@@ -20,23 +20,60 @@ include(GNUInstallDirs)
 set(LIB_DESTINATION         "${CMAKE_INSTALL_FULL_LIBDIR}" CACHE PATH "Library directory name")
 set(INCLUDE_DESTINATION     "${CMAKE_INSTALL_FULL_INCLUDEDIR}" CACHE PATH "The subdirectory to the header prefix")
 
+option(USE_QT6 "Build against Qt6 instead of Qt5" TRUE)
 
-set(REQUIRED_QT_VERSION 5.5.0)
+if (USE_QT6)
+    find_package(Qt6 ${REQUIRED_QT_VERSION} REQUIRED COMPONENTS Core DBus Widgets)
+
+    set(POLKITQT-1_PCNAME "polkit-qt6-1")
+    set(POLKITQT-1_CORE_PCNAME "polkit-qt6-core-1")
+    set(POLKITQT-1_GUI_PCNAME "polkit-qt6-gui-1")
+    set(POLKITQT-1_AGENT_PCNAME "polkit-qt6-agent-1")
+    set(POLKITQT-1_CAMEL_NAME "PolkitQt6-1")
+    set(POLKITQT-1_EXAMPLE "polkit-example-qt6")
+    set(POLKITQT-1_EXAMPLE_HELPER "polkit-example-helper-qt6")
+    set(POLKITQT-1_AGENT_EXAMPLE "polkit-agent-example-qt6")
+    set(POLKITQT-1_INCLUDE_PATH "polkit-qt6-1")
+
+    set(QT_CORE_LIBRARY Qt6::Core)
+    set(QT_DBUS_LIBRARY Qt6::DBus)
+    set(QT_TEST_LIBRARY Qt6::Test)
+    set(QT_WIDGETS_LIBRARY Qt6::Widgets)
+
+    set(QT_CORE_PCNAME Qt6Core)
+    set(QT_GUI_PCNAME Qt6Gui)
+
+    macro(qt5_add_dbus_adaptor)
+        qt6_add_dbus_adaptor(${ARGN})
+    endmacro()
+else()
+    set(REQUIRED_QT_VERSION 5.5.0)
+    find_package(Qt5 ${REQUIRED_QT_VERSION} REQUIRED COMPONENTS Core DBus Widgets)
+
+    set(POLKITQT-1_PCNAME "polkit-qt5-1")
+    set(POLKITQT-1_CORE_PCNAME "polkit-qt5-core-1")
+    set(POLKITQT-1_GUI_PCNAME "polkit-qt5-gui-1")
+    set(POLKITQT-1_AGENT_PCNAME "polkit-qt5-agent-1")
+    set(POLKITQT-1_CAMEL_NAME "PolkitQt5-1")
+    set(POLKITQT-1_EXAMPLE "polkit-example-qt5")
+    set(POLKITQT-1_EXAMPLE_HELPER "polkit-example-helper-qt5")
+    set(POLKITQT-1_AGENT_EXAMPLE "polkit-agent-example-qt5")
+    set(POLKITQT-1_INCLUDE_PATH "polkit-qt5-1")
+
+    set(QT_CORE_LIBRARY Qt5::Core)
+    set(QT_DBUS_LIBRARY Qt5::DBus)
+    set(QT_TEST_LIBRARY Qt5::Test)
+    set(QT_WIDGETS_LIBRARY Qt5::Widgets)
+
+    set(QT_CORE_PCNAME Qt5Core)
+    set(QT_GUI_PCNAME Qt5Gui)
+endif()
+
 set(CMAKE_CXX_STANDARD 11)
 
-find_package(Qt5 ${REQUIRED_QT_VERSION} REQUIRED COMPONENTS Core DBus Widgets)
+add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x050f00)
 
 find_package(PkgConfig REQUIRED)
-
-set(POLKITQT-1_PCNAME "polkit-qt5-1")
-set(POLKITQT-1_CORE_PCNAME "polkit-qt5-core-1")
-set(POLKITQT-1_GUI_PCNAME "polkit-qt5-gui-1")
-set(POLKITQT-1_AGENT_PCNAME "polkit-qt5-agent-1")
-set(POLKITQT-1_CAMEL_NAME "PolkitQt5-1")
-set(POLKITQT-1_EXAMPLE "polkit-example-qt5")
-set(POLKITQT-1_EXAMPLE_HELPER "polkit-example-helper-qt5")
-set(POLKITQT-1_AGENT_EXAMPLE "polkit-agent-example-qt5")
-set(POLKITQT-1_INCLUDE_PATH "polkit-qt5-1")
 
 pkg_check_modules(POLKIT_GOBJECT polkit-gobject-1 REQUIRED IMPORTED_TARGET)
 pkg_check_modules(POLKIT_AGENT polkit-agent-1 REQUIRED IMPORTED_TARGET)
@@ -129,14 +166,14 @@ install(FILES
 
 if(NOT WIN32)
     # Pkgconfig
-    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/${POLKITQT-1_PCNAME}.pc.cmake ${CMAKE_CURRENT_BINARY_DIR}/${POLKITQT-1_PCNAME}.pc @ONLY)
+    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/polkit-qt-1.pc.cmake ${CMAKE_CURRENT_BINARY_DIR}/${POLKITQT-1_PCNAME}.pc @ONLY)
     install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${POLKITQT-1_PCNAME}.pc DESTINATION ${LIB_DESTINATION}/pkgconfig )
-    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/${POLKITQT-1_CORE_PCNAME}.pc.cmake ${CMAKE_CURRENT_BINARY_DIR}/${POLKITQT-1_CORE_PCNAME}.pc
+    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/polkit-qt-core-1.pc.cmake ${CMAKE_CURRENT_BINARY_DIR}/${POLKITQT-1_CORE_PCNAME}.pc
                    @ONLY)
     install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${POLKITQT-1_CORE_PCNAME}.pc DESTINATION ${LIB_DESTINATION}/pkgconfig )
-    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/${POLKITQT-1_GUI_PCNAME}.pc.cmake ${CMAKE_CURRENT_BINARY_DIR}/${POLKITQT-1_GUI_PCNAME}.pc @ONLY)
+    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/polkit-qt-gui-1.pc.cmake ${CMAKE_CURRENT_BINARY_DIR}/${POLKITQT-1_GUI_PCNAME}.pc @ONLY)
     install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${POLKITQT-1_GUI_PCNAME}.pc DESTINATION ${LIB_DESTINATION}/pkgconfig )
-    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/${POLKITQT-1_AGENT_PCNAME}.pc.cmake ${CMAKE_CURRENT_BINARY_DIR}/${POLKITQT-1_AGENT_PCNAME}.pc
+    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/polkit-qt-agent-1.pc.cmake ${CMAKE_CURRENT_BINARY_DIR}/${POLKITQT-1_AGENT_PCNAME}.pc
                    @ONLY)
     install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${POLKITQT-1_AGENT_PCNAME}.pc DESTINATION ${LIB_DESTINATION}/pkgconfig )
 endif(NOT WIN32)
@@ -172,7 +209,13 @@ install(EXPORT ${POLKITQT-1_CAMEL_NAME}Export FILE ${POLKITQT-1_CAMEL_NAME}Targe
 
 option(BUILD_EXAMPLES "Builds a set of examples for polkit-qt-1" OFF)
 if (BUILD_EXAMPLES)
-    find_package(Qt5Xml ${REQUIRED_QT_VERSION} REQUIRED)
+    if (USE_QT6)
+        find_package(Qt6Xml ${REQUIRED_QT_VERSION} REQUIRED)
+        set(QT_XML_LIBRARY Qt6::Xml)
+    else()
+        find_package(Qt5Xml ${REQUIRED_QT_VERSION} REQUIRED)
+        set(QT_XML_LIBRARY Qt5::Xml)
+    endif()
     add_subdirectory(examples)
 endif (BUILD_EXAMPLES)
 
@@ -180,7 +223,11 @@ add_subdirectory(cmake)
 
 option(BUILD_TEST "Builds unit tests for polkit-qt-1" OFF)
 if (BUILD_TEST)
-    find_package(Qt5Test ${REQUIRED_QT_VERSION} REQUIRED)
+    if (USE_QT6)
+        find_package(Qt6Test ${REQUIRED_QT_VERSION} REQUIRED)
+    else()
+        find_package(Qt5Test ${REQUIRED_QT_VERSION} REQUIRED)
+    endif()
     add_subdirectory(test)
 endif (BUILD_TEST)
 

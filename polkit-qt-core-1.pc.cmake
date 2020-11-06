@@ -6,6 +6,6 @@ includedir=@INCLUDE_DESTINATION@/@POLKITQT-1_INCLUDE_PATH@
 Name: @POLKITQT-1_CORE_PCNAME@
 Description: Convenience library for using polkit with a Qt-styled API, non-GUI classes
 Version: @POLKITQT-1_VERSION_STRING@
-Requires: QtCore
+Requires: @QT_CORE_PCNAME@
 Libs: -L${libdir} -l@POLKITQT-1_CORE_PCNAME@
 Cflags: -I${includedir}

@@ -9,10 +9,10 @@ add_executable(polkit-qt-test
 )
 
 target_link_libraries(polkit-qt-test
-    Qt5::Core
-    Qt5::DBus
-    Qt5::Test
-    Qt5::Widgets
+    ${QT_CORE_LIBRARY}
+    ${QT_DBUS_LIBRARY}
+    ${QT_TEST_LIBRARY}
+    ${QT_WIDGETS_LIBRARY}
     ${POLKITQT-1_CORE_PCNAME}
 )
 

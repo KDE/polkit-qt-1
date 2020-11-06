@@ -38,6 +38,7 @@ typedef struct _PolkitDetails PolkitDetails;
 namespace PolkitQt1
 {
 
+
 /**
  * \class Details polkitqt1-details.h Details
  * \author Radek Novacek <rnovacek@redhat.com>

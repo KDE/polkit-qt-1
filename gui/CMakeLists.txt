@@ -11,11 +11,19 @@ add_library(${POLKITQT-1_CAMEL_NAME}::Gui ALIAS ${POLKITQT-1_GUI_PCNAME})
 target_link_libraries(${POLKITQT-1_GUI_PCNAME}
     LINK_PUBLIC
     ${POLKITQT-1_CORE_PCNAME}
-    Qt5::Widgets
+    ${QT_WIDGETS_LIBRARY}
     LINK_PRIVATE
-    Qt5::Core
-    Qt5::DBus
+    ${QT_CORE_LIBRARY}
+    ${QT_DBUS_LIBRARY}
 )
+
+# QAction moved from Widgets to Gui in Qt6
+if (USE_QT6)
+    target_link_libraries(${POLKITQT-1_GUI_PCNAME}
+        LINK_PUBLIC
+            Qt6::Gui
+    )
+endif()
 
 set_target_properties(${POLKITQT-1_GUI_PCNAME} PROPERTIES VERSION ${POLKITQT-1_LIBRARY_VERSION}
                                 SOVERSION ${POLKITQT-1_ABI_VERSION}

@@ -34,7 +34,6 @@
 #include <QtCore/QMetaType>
 
 typedef struct _PolkitAuthority PolkitAuthority;
-class QStringList;
 
 /**
  * \namespace PolkitQt1 PolkitQt

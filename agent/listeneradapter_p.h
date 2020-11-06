@@ -27,6 +27,10 @@
 #include "polkitqt1-identity.h"
 #include "polkitqt1-details.h"
 
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+Q_MOC_INCLUDE("polkitqt1-details_p.h")
+#endif
+
 typedef struct _GList GList;
 typedef struct _GCancellable GCancellable;
 typedef struct _GAsyncResult GAsyncResult;

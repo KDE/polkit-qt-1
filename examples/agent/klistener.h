@@ -29,6 +29,10 @@
 #include "core/polkitqt1-details.h"
 #include "agent/polkitqt1-agent-session.h"
 
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+Q_MOC_INCLUDE("polkitqt1-details_p.h")
+#endif
+
 class KListener : public PolkitQt1::Agent::Listener
 {
     Q_OBJECT

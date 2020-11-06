@@ -14,12 +14,6 @@ SET(polkit_example_RESOUCES
     icons/icons.qrc
 )
 
-qt5_wrap_ui(polkit_example_UI_SRCS
-    PkExample.ui
-)
-
-qt5_add_resources (qtsourceview_RC_SRCS  ${polkit_example_RESOUCES})
-
 add_executable(${POLKITQT-1_EXAMPLE}
     ${polkit_example_SRCS}
     ${polkit_example_UI_SRCS}

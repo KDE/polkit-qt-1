@@ -12,10 +12,9 @@
 # The minimum required version of PolkitQt-1 can be specified using the
 # standard syntax, e.g. find_package(PolkitQt-1 1.0)
 
-# Copyright (c) 2010, Dario Freddi, <drf@kde.org>
+# SPDX-FileCopyrightText: 2010 Dario Freddi <drf@kde.org>
 #
-# Redistribution and use is allowed according to the terms of the BSD license.
-# For details see the accompanying COPYING-CMAKE-SCRIPTS file.
+# SPDX-License-Identifier: BSD-3-Clause
 
 # Support POLKITQT-1_MIN_VERSION for compatibility:
 if ( NOT PolkitQt-1_FIND_VERSION AND POLKITQT-1_MIN_VERSION )

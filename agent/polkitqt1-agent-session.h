@@ -44,6 +44,11 @@ public:
     void setCompleted();
 
     /**
+     * \brief Mark the action that is tied to this result as cancelled.
+     */
+    void setCancel(const QString &text);
+
+    /**
      * \brief Sets an error for the asynchronous result.
      * Method complete() must be called anyway.
      *

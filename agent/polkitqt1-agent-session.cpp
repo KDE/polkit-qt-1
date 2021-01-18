@@ -150,6 +150,11 @@ void AsyncResult::setCompleted()
     d->result = nullptr;
 }
 
+void AsyncResult::setCancel(const QString &text){
+    Q_ASSERT(d->result);
+    g_simple_async_result_set_error(d->result, POLKIT_ERROR, POLKIT_ERROR_CANCELLED, "%s", text.toUtf8().data());
+}
+
 void AsyncResult::setError(const QString &text)
 {
     Q_ASSERT(d->result);

@@ -9,6 +9,7 @@
 #define POLKITQT1_AGENT_SESSION_H
 
 #include <QObject>
+#include <polkit/polkit.h>
 #include "polkitqt1-identity.h"
 #include "polkitqt1-agent-export.h"
 
@@ -43,6 +44,16 @@ public:
      * \brief Mark the action that is tied to this result as completed.
      */
     void setCompleted();
+
+    /**
+     * \brief Sets an polkit error for the asynchronous result.
+     * Method complete() must be called anyway.
+     *
+     * \param text text of the error message
+     * 
+     * \since 0.115
+     */
+    void setError(PolkitError error, const QString &text);
 
     /**
      * \brief Sets an error for the asynchronous result.

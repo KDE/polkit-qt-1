@@ -68,6 +68,8 @@ Listener::~Listener()
     if (d->listener != nullptr) {
         g_object_unref(d->listener);
     }
+
+    delete d;
 }
 
 bool Listener::registerListener(const PolkitQt1::Subject &subject, const QString &objectPath)

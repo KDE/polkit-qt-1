@@ -1,10 +1,6 @@
 
 install(FILES org.qt.policykit.examples.policy DESTINATION ${CMAKE_INSTALL_FULL_DATAROOTDIR}/polkit-1/actions/)
 
-include_directories(
-    ${CMAKE_SOURCE_DIR}/gui
-)
-
 set(polkit_example_SRCS
     main.cpp
     PkExample.cpp

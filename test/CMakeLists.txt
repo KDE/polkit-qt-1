@@ -1,9 +1,5 @@
 enable_testing()
 
-include_directories(
-    ${CMAKE_SOURCE_DIR}/agent
-)
-
 add_executable(polkit-qt-test
     test.cpp
 )

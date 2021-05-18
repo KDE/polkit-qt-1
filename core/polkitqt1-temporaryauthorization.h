@@ -10,10 +10,10 @@
 
 #include "polkitqt1-subject.h"
 
-#include <QtCore/QObject>
-#include <QtCore/QDateTime>
-#include <QtCore/QMetaType>
-#include <QtCore/QSharedData>
+#include <QObject>
+#include <QDateTime>
+#include <QMetaType>
+#include <QSharedData>
 
 typedef struct _PolkitTemporaryAuthorization PolkitTemporaryAuthorization;
 

@@ -8,7 +8,7 @@
 #ifndef POLKITQT1_AGENT_SESSION_H
 #define POLKITQT1_AGENT_SESSION_H
 
-#include <QtCore/QObject>
+#include <QObject>
 #include "polkitqt1-identity.h"
 
 typedef struct _GSimpleAsyncResult GSimpleAsyncResult;

@@ -12,8 +12,8 @@
 
 #include <unistd.h>
 
-#include <QtCore/QObject>
-#include <QtCore/QSharedData>
+#include <QObject>
+#include <QSharedData>
 
 typedef struct _PolkitIdentity PolkitIdentity;
 typedef struct _PolkitUnixUser PolkitUnixUser;

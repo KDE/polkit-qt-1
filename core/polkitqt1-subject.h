@@ -10,8 +10,8 @@
 
 #include "polkitqt1-export.h"
 
-#include <QtCore/QObject>
-#include <QtCore/QSharedData>
+#include <QObject>
+#include <QSharedData>
 
 typedef struct _PolkitSubject PolkitSubject;
 typedef struct _PolkitUnixProcess PolkitUnixProcess;

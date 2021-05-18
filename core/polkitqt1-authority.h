@@ -17,8 +17,8 @@
 #include "polkitqt1-temporaryauthorization.h"
 #include "polkitqt1-actiondescription.h"
 
-#include <QtCore/QObject>
-#include <QtCore/QMetaType>
+#include <QObject>
+#include <QMetaType>
 
 typedef struct _PolkitAuthority PolkitAuthority;
 class QStringList;

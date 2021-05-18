@@ -10,7 +10,7 @@
 
 #include "polkitqt1-export.h"
 
-#include <QtCore/QObject>
+#include <QObject>
 
 #include "polkitqt1-agent-session.h"
 

@@ -11,9 +11,9 @@
 
 #include "polkitqt1-export.h"
 
-#include <QtCore/QList>
-#include <QtCore/QMetaType>
-#include <QtCore/QSharedData>
+#include <QList>
+#include <QMetaType>
+#include <QSharedData>
 
 typedef struct _PolkitActionDescription PolkitActionDescription;
 

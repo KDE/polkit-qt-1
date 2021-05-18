@@ -11,7 +11,7 @@
 #include "polkitqt1-authority.h"
 #include "polkitqt1-subject.h"
 
-#include <QtCore/QCoreApplication>
+#include <QCoreApplication>
 
 namespace PolkitQt1
 {

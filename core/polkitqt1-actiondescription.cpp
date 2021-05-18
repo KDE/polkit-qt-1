@@ -8,7 +8,7 @@
 
 #include "polkitqt1-actiondescription.h"
 
-#include <QtCore/QString>
+#include <QString>
 
 #include <polkit/polkit.h>
 

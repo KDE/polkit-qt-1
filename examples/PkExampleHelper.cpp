@@ -11,10 +11,10 @@
 
 #include "polkitqt1-authority.h"
 
-#include <QtDBus/QDBusConnection>
-#include <QtCore/QTimer>
-#include <QtCore/QDebug>
-#include <QtXml/QDomDocument>
+#include <QDBusConnection>
+#include <QTimer>
+#include <QDebug>
+#include <QDomDocument>
 
 #define MINUTE 60000
 

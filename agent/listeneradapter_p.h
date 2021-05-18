@@ -8,7 +8,7 @@
 #ifndef LISTENER_ADAPTER_P_H
 #define LISTENER_ADAPTER_P_H
 
-#include <QtCore/QObject>
+#include <QObject>
 
 #include "polkitqt1-agent-listener.h"
 #include "polkitqt1-identity.h"

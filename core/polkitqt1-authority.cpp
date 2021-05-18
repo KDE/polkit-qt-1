@@ -10,9 +10,9 @@
 
 #include "polkitqt1-authority.h"
 
-#include <QtDBus/QDBusInterface>
-#include <QtDBus/QDBusMessage>
-#include <QtDBus/QDBusReply>
+#include <QDBusInterface>
+#include <QDBusMessage>
+#include <QDBusReply>
 
 #include <polkit/polkit.h>
 

@@ -1,8 +1,8 @@
 #ifndef TEST_H
 #define TEST_H
 
-#include <QtCore/QObject>
-#include <QtTest/QtTest>
+#include <QObject>
+#include <QTest>
 
 class TestAuth : public QObject
 {

@@ -5,7 +5,7 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#include <QtCore/QDebug>
+#include <QDebug>
 #include <QInputDialog>
 
 #include "klistener.h"

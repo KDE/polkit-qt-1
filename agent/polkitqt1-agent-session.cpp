@@ -7,7 +7,7 @@
 
 #include "polkitqt1-agent-session.h"
 
-#include <QtCore/QDebug>
+#include <QDebug>
 
 #include "polkitqt1-identity.h"
 

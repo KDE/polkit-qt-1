@@ -9,7 +9,7 @@
 
 #include <polkit/polkit.h>
 
-#include <QtCore/QDebug>
+#include <QDebug>
 
 namespace PolkitQt1
 {

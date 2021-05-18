@@ -7,7 +7,7 @@
 
 #include "polkitqt1-agent-listener.h"
 
-#include <QtCore/QDebug>
+#include <QDebug>
 
 #include "polkitqtlistener_p.h"
 

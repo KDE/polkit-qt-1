@@ -7,7 +7,7 @@
 
 #include "polkitqt1-details.h"
 
-#include <QtCore/QStringList>
+#include <QStringList>
 
 #include <polkit/polkit.h>
 

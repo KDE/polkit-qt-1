@@ -7,8 +7,10 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <pwd.h>
-#include <QtDBus/QDBusMessage>
-#include <QtDBus/QDBusConnection>
+#include <QDBusMessage>
+#include <QDBusConnection>
+#include <QSignalSpy>
+
 using namespace PolkitQt1;
 using namespace PolkitQt1::Agent;
 

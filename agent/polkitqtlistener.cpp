@@ -10,7 +10,7 @@
 #include "polkitqtlistener_p.h"
 #include <stdio.h>
 
-#include <QtCore/QDebug>
+#include <QDebug>
 
 #define POLKIT_AGENT_I_KNOW_API_IS_SUBJECT_TO_CHANGE 1
 

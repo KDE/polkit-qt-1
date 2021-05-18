@@ -8,8 +8,8 @@
 #ifndef POLKIT_QT_AGENT_KDE_LISTENER_H
 #define POLKIT_QT_AGENT_KDE_LISTENER_H
 
-#include <QtCore/QObject>
-#include <QtCore/QString>
+#include <QObject>
+#include <QString>
 
 #include "agent/polkitqt1-agent-listener.h"
 #include "core/polkitqt1-identity.h"

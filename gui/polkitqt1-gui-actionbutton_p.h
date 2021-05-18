@@ -10,7 +10,7 @@
 
 #include <polkitqt1-gui-actionbutton.h>
 
-#include <QtCore/QList>
+#include <QList>
 #include <QAbstractButton>
 
 /**

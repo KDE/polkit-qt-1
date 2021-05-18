@@ -9,8 +9,8 @@
 #ifndef PKEXAMPLE_HELPER_H
 #define PKEXAMPLE_HELPER_H
 
-#include <QtDBus/QDBusContext>
-#include <QtCore/QCoreApplication>
+#include <QDBusContext>
+#include <QCoreApplication>
 
 class PkExampleHelper : public QCoreApplication, protected QDBusContext
 {

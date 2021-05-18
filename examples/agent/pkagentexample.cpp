@@ -3,7 +3,7 @@
 #include <polkitagent/polkitagent.h>
 #include "pkagentexample.h"
 #include <glib-object.h>
-#include <QtCore/QDebug>
+#include <QDebug>
 #include "polkitqt1-subject.h"
 
 PkAgentExample::PkAgentExample(int &argc, char **argv)

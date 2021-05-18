@@ -9,7 +9,7 @@
 #include "polkitqt1-identity.h"
 #include "polkitqt1-config.h"
 
-#include <QtCore/QDebug>
+#include <QDebug>
 #include <polkit/polkit.h>
 
 namespace PolkitQt1

@@ -6,7 +6,7 @@
 */
 
 #include "listeneradapter_p.h"
-#include <QtCore/QDebug>
+#include <QDebug>
 #define POLKIT_AGENT_I_KNOW_API_IS_SUBJECT_TO_CHANGE 1
 #include <polkitagent/polkitagent.h>
 

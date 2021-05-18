@@ -11,10 +11,10 @@
 #include "gui/polkitqt1-gui-actionbutton.h"
 #include "gui/polkitqt1-gui-actionbuttons.h"
 #include "core/polkitqt1-authority.h"
-#include <QtCore/QDebug>
+#include <QDebug>
 
-#include <QtDBus/QDBusMessage>
-#include <QtDBus/QDBusConnection>
+#include <QDBusMessage>
+#include <QDBusConnection>
 
 using namespace PolkitQt1;
 using namespace PolkitQt1::Gui;

@@ -9,10 +9,10 @@ add_library(${POLKITQT-1_GUI_PCNAME} SHARED ${polkit_qt_gui_SRCS})
 add_library(${POLKITQT-1_CAMEL_NAME}::Gui ALIAS ${POLKITQT-1_GUI_PCNAME})
 
 target_link_libraries(${POLKITQT-1_GUI_PCNAME}
-    LINK_PUBLIC
+    PUBLIC
     ${POLKITQT-1_CORE_PCNAME}
     Qt5::Widgets
-    LINK_PRIVATE
+    PRIVATE
     Qt5::Core
     Qt5::DBus
 )

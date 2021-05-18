@@ -12,9 +12,9 @@ add_library(${POLKITQT-1_CORE_PCNAME} SHARED ${polkit_qt_core_SRCS})
 add_library(${POLKITQT-1_CAMEL_NAME}::Core ALIAS ${POLKITQT-1_CORE_PCNAME})
 
 target_link_libraries(${POLKITQT-1_CORE_PCNAME}
-    LINK_PUBLIC
+    PUBLIC
     Qt5::Core
-    LINK_PRIVATE
+    PRIVATE
     Qt5::DBus
     PkgConfig::POLKIT_GOBJECT
     PkgConfig::GLIB2

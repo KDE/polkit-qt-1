@@ -21,7 +21,7 @@ class KListener : public PolkitQt1::Agent::Listener
     Q_OBJECT
     Q_DISABLE_COPY(KListener)
 public:
-    KListener(QObject *parent = 0);
+    KListener(QObject *parent = nullptr);
     ~KListener() {};
 public Q_SLOTS:
     void initiateAuthentication(const QString &actionId,

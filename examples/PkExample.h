@@ -16,7 +16,7 @@ class PkExample : public QMainWindow, Ui::PkExample
     Q_OBJECT
 
 public:
-    PkExample(QMainWindow *parent = 0);
+    PkExample(QMainWindow *parent = nullptr);
     ~PkExample();
 
 private Q_SLOTS:

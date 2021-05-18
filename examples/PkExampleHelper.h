@@ -18,7 +18,7 @@ class PkExampleHelper : public QCoreApplication, protected QDBusContext
     Q_CLASSINFO("D-Bus Interface", "org.qt.policykit.examples")
 public:
     PkExampleHelper(int &argc, char **argv);
-    ~PkExampleHelper();
+    ~PkExampleHelper() override;
 
 public Q_SLOTS:
     bool set(const QString &action);

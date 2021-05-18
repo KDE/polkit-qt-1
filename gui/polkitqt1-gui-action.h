@@ -65,7 +65,7 @@ public:
      * \param parent the object parent
      */
     explicit Action(const QString &actionId = QString(), QObject *parent = nullptr);
-    ~Action();
+    ~Action() override;
 
 Q_SIGNALS:
     /**

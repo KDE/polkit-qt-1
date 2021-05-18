@@ -127,7 +127,7 @@ public:
      */
     static Authority *instance(PolkitAuthority *authority = nullptr);
 
-    ~Authority();
+    ~Authority() override;
 
     /**
      * You should always call this method after every action. No action will be allowed

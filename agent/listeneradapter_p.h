@@ -36,7 +36,7 @@ class ListenerAdapter : public QObject
     Q_DISABLE_COPY(ListenerAdapter)
 public:
     static ListenerAdapter* instance();
-    ~ListenerAdapter() {}
+    ~ListenerAdapter() override {}
 
     void polkit_qt_listener_initiate_authentication(PolkitAgentListener  *listener,
             const gchar          *action_id,

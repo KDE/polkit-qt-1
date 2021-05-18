@@ -92,7 +92,7 @@ public:
     /**
      * Destroy authentication session.
      */
-    ~Session();
+    ~Session() override;
 
     /**
      * Initiate the authentication session.

@@ -17,7 +17,7 @@ class PkExample : public QMainWindow, Ui::PkExample
 
 public:
     PkExample(QMainWindow *parent = nullptr);
-    ~PkExample();
+    ~PkExample() override;
 
 private Q_SLOTS:
     void activateAction();

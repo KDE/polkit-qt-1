@@ -11,10 +11,10 @@
 #include <QObject>
 #include <QString>
 
-#include "agent/polkitqt1-agent-listener.h"
-#include "core/polkitqt1-identity.h"
-#include "core/polkitqt1-details.h"
-#include "agent/polkitqt1-agent-session.h"
+#include <polkitqt1-agent-listener.h>
+#include <polkitqt1-identity.h>
+#include <polkitqt1-details.h>
+#include <polkitqt1-agent-session.h>
 
 class KListener : public PolkitQt1::Agent::Listener
 {

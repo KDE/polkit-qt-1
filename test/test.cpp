@@ -1,9 +1,9 @@
 
 
 #include "test.h"
-#include "core/polkitqt1-authority.h"
-#include "agent/polkitqt1-agent-session.h"
-#include "core/polkitqt1-details.h"
+#include <polkitqt1-authority.h>
+#include <polkitqt1-agent-session.h>
+#include <polkitqt1-details.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <pwd.h>

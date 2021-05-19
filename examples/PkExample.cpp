@@ -8,9 +8,9 @@
 
 #include "PkExample.h"
 
-#include "gui/polkitqt1-gui-actionbutton.h"
-#include "gui/polkitqt1-gui-actionbuttons.h"
-#include "core/polkitqt1-authority.h"
+#include <polkitqt1-gui-actionbutton.h>
+#include <polkitqt1-gui-actionbuttons.h>
+#include <polkitqt1-authority.h>
 #include <QDebug>
 
 #include <QDBusMessage>

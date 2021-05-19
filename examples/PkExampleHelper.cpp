@@ -9,7 +9,7 @@
 #include "PkExampleHelper.h"
 #include "examplesadaptor.h"
 
-#include "polkitqt1-authority.h"
+#include <polkitqt1-authority.h>
 
 #include <QDBusConnection>
 #include <QTimer>

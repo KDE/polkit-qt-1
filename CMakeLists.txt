@@ -53,7 +53,6 @@ include (CheckFunctionExists)
 include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${CMAKE_CURRENT_SOURCE_DIR}/core
-    ${CMAKE_CURRENT_BINARY_DIR}
 )
 
 # Check for older polkit
@@ -82,8 +81,8 @@ set(POLKITQT-1_ABI_VERSION 1)
 set(POLKITQT-1_LIBRARY_VERSION "${POLKITQT-1_ABI_VERSION}.${POLKITQT-1_VERSION_MINOR}.${POLKITQT-1_VERSION_PATCH}")
 set(POLKITQT-1_LIB_NAMESPACE ${POLKITQT-1_CAMEL_NAME})
 
-configure_file(polkitqt1-version.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/polkitqt1-version.h)
-configure_file(polkitqt1-config.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/polkitqt1-config.h)
+configure_file(polkitqt1-version.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/core/polkitqt1-version.h)
+configure_file(polkitqt1-config.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/core/polkitqt1-config.h)
 
 install(FILES
     gui/polkitqt1-gui-action.h
@@ -100,7 +99,7 @@ install(FILES
     agent/polkitqt1-agent-listener.h
     agent/polkitqt1-agent-session.h
 
-    ${CMAKE_CURRENT_BINARY_DIR}/polkitqt1-version.h
+    ${CMAKE_CURRENT_BINARY_DIR}/core/polkitqt1-version.h
 
     ${CMAKE_CURRENT_BINARY_DIR}/core/polkitqt1-core-export.h
     ${CMAKE_CURRENT_BINARY_DIR}/gui/polkitqt1-gui-export.h

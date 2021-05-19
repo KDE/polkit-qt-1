@@ -175,8 +175,6 @@ if (BUILD_EXAMPLES)
     add_subdirectory(examples)
 endif (BUILD_EXAMPLES)
 
-add_subdirectory(cmake)
-
 option(BUILD_TEST "Builds unit tests for polkit-qt-1" OFF)
 if (BUILD_TEST)
     find_package(Qt5Test ${REQUIRED_QT_VERSION} REQUIRED)

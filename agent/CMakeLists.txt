@@ -1,13 +1,12 @@
-set(polkit_qt_agent_SRCS
+add_library(${POLKITQT-1_AGENT_PCNAME} SHARED)
+add_library(${POLKITQT-1_CAMEL_NAME}::Agent ALIAS ${POLKITQT-1_AGENT_PCNAME})
+
+target_sources(${POLKITQT-1_AGENT_PCNAME} PRIVATE
     polkitqt1-agent-session.cpp
     polkitqt1-agent-listener.cpp
     listeneradapter.cpp
     polkitqtlistener.cpp
 )
-add_library(${POLKITQT-1_AGENT_PCNAME} SHARED ${polkit_qt_agent_SRCS})
-
-add_library(${POLKITQT-1_CAMEL_NAME}::Agent ALIAS ${POLKITQT-1_AGENT_PCNAME})
-
 generate_export_header(${POLKITQT-1_AGENT_PCNAME}
     BASE_NAME polkitqt1-agent
     EXPORT_FILE_NAME polkitqt1-agent-export.h

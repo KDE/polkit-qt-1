@@ -1,11 +1,9 @@
-set(polkit_agent_example_SRCS
+add_executable(${POLKITQT-1_AGENT_EXAMPLE})
+
+target_sources(${POLKITQT-1_AGENT_EXAMPLE} PRIVATE
     main.cpp
     pkagentexample.cpp
     klistener.cpp
-)
-
-add_executable(${POLKITQT-1_AGENT_EXAMPLE}
-    ${polkit_agent_example_SRCS}
 )
 
 target_link_libraries(${POLKITQT-1_AGENT_EXAMPLE}

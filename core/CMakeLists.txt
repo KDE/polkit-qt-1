@@ -1,4 +1,7 @@
-set(polkit_qt_core_SRCS
+add_library(${POLKITQT-1_CORE_PCNAME} SHARED)
+add_library(${POLKITQT-1_CAMEL_NAME}::Core ALIAS ${POLKITQT-1_CORE_PCNAME})
+
+target_sources(${POLKITQT-1_CORE_PCNAME} PRIVATE
     polkitqt1-authority.cpp
     polkitqt1-identity.cpp
     polkitqt1-subject.cpp
@@ -6,10 +9,6 @@ set(polkit_qt_core_SRCS
     polkitqt1-details.cpp
     polkitqt1-actiondescription.cpp
 )
-
-add_library(${POLKITQT-1_CORE_PCNAME} SHARED ${polkit_qt_core_SRCS})
-
-add_library(${POLKITQT-1_CAMEL_NAME}::Core ALIAS ${POLKITQT-1_CORE_PCNAME})
 
 generate_export_header(${POLKITQT-1_CORE_PCNAME}
     BASE_NAME polkitqt1-core

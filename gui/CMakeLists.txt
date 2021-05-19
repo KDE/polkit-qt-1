@@ -1,12 +1,11 @@
-set(polkit_qt_gui_SRCS
+add_library(${POLKITQT-1_GUI_PCNAME} SHARED)
+add_library(${POLKITQT-1_CAMEL_NAME}::Gui ALIAS ${POLKITQT-1_GUI_PCNAME})
+
+target_sources(${POLKITQT-1_GUI_PCNAME} PRIVATE
     polkitqt1-gui-action.cpp
     polkitqt1-gui-actionbutton.cpp
     polkitqt1-gui-actionbuttons.cpp
 )
-
-add_library(${POLKITQT-1_GUI_PCNAME} SHARED ${polkit_qt_gui_SRCS})
-
-add_library(${POLKITQT-1_CAMEL_NAME}::Gui ALIAS ${POLKITQT-1_GUI_PCNAME})
 
 generate_export_header(${POLKITQT-1_CORE_PCNAME}
     BASE_NAME polkitqt1-gui

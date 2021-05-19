@@ -1,19 +1,13 @@
 
 install(FILES org.qt.policykit.examples.policy DESTINATION ${CMAKE_INSTALL_FULL_DATAROOTDIR}/polkit-1/actions/)
 
-set(polkit_example_SRCS
+add_executable(${POLKITQT-1_EXAMPLE})
+
+target_sources(${POLKITQT-1_EXAMPLE} PRIVATE
     main.cpp
     PkExample.cpp
-)
 
-SET(polkit_example_RESOUCES
     icons/icons.qrc
-)
-
-add_executable(${POLKITQT-1_EXAMPLE}
-    ${polkit_example_SRCS}
-    ${polkit_example_UI_SRCS}
-    ${qtsourceview_RC_SRCS}
 )
 
 target_link_libraries(${POLKITQT-1_EXAMPLE}
@@ -38,19 +32,18 @@ macro(dbus_add_activation_system_service _sources)
     endforeach (_i ${ARGN})
 endmacro(dbus_add_activation_system_service _sources)
 
-set(polkit_example_helper_SRCS
-    PkExampleHelper.cpp
-    mainHelper.cpp
-)
+add_executable(${POLKITQT-1_EXAMPLE_HELPER})
 
-qt5_add_dbus_adaptor(polkit_example_helper_SRCS
+qt5_add_dbus_adaptor(polkit_example_helper_dbus_SRCS
     org.qt.policykit.examples.xml
     PkExampleHelper.h
     PkExampleHelper
 )
 
-add_executable(${POLKITQT-1_EXAMPLE_HELPER}
-    ${polkit_example_helper_SRCS}
+target_sources(${POLKITQT-1_EXAMPLE_HELPER} PRIVATE
+    PkExampleHelper.cpp
+    mainHelper.cpp
+    ${polkit_example_helper_dbus_SRCS}
 )
 
 # see our helper is pretty small :D

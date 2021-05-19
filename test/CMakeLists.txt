@@ -10,6 +10,7 @@ target_link_libraries(polkit-qt-test
     Qt5::Test
     Qt5::Widgets
     ${POLKITQT-1_CORE_PCNAME}
+    ${POLKITQT-1_AGENT_PCNAME}
 )
 
 add_test(BaseTest ${CMAKE_CURRENT_BINARY_DIR}/polkit-qt-test)

@@ -9,7 +9,7 @@
 #ifndef POLKITQT1_ACTION_DESCRIPTION_H
 #define POLKITQT1_ACTION_DESCRIPTION_H
 
-#include "polkitqt1-export.h"
+#include "polkitqt1-core-export.h"
 
 #include <QList>
 #include <QMetaType>
@@ -26,7 +26,7 @@ namespace PolkitQt1
  *
  * \brief Class used to encapsulate a registered action.
  */
-class POLKITQT1_EXPORT ActionDescription
+class POLKITQT1_CORE_EXPORT ActionDescription
 {
 public:
     enum ImplicitAuthorization {

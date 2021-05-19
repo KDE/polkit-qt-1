@@ -8,6 +8,11 @@ add_library(${POLKITQT-1_AGENT_PCNAME} SHARED ${polkit_qt_agent_SRCS})
 
 add_library(${POLKITQT-1_CAMEL_NAME}::Agent ALIAS ${POLKITQT-1_AGENT_PCNAME})
 
+generate_export_header(${POLKITQT-1_AGENT_PCNAME}
+    BASE_NAME polkitqt1-agent
+    EXPORT_FILE_NAME polkitqt1-agent-export.h
+)
+
 target_link_libraries(${POLKITQT-1_AGENT_PCNAME}
     PUBLIC
     Qt5::Core
@@ -23,7 +28,11 @@ set_target_properties(${POLKITQT-1_AGENT_PCNAME} PROPERTIES VERSION ${POLKITQT-1
                                 DEFINE_SYMBOL MAKE_POLKITQT1_LIB
                                 EXPORT_NAME Agent)
 
-target_include_directories(${POLKITQT-1_AGENT_PCNAME} INTERFACE $<INSTALL_INTERFACE:${INCLUDE_DESTINATION}/${POLKITQT-1_INCLUDE_PATH}>)
+target_include_directories(${POLKITQT-1_AGENT_PCNAME}
+    INTERFACE
+        $<INSTALL_INTERFACE:${INCLUDE_DESTINATION}/${POLKITQT-1_INCLUDE_PATH}>
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
+)
 
 install(TARGETS ${POLKITQT-1_AGENT_PCNAME} EXPORT ${POLKITQT-1_CAMEL_NAME}Export ARCHIVE DESTINATION ${LIB_DESTINATION}
                                LIBRARY DESTINATION ${LIB_DESTINATION}

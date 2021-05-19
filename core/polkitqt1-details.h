@@ -8,7 +8,7 @@
 #ifndef POLKITQT1_DETAILS_H
 #define POLKITQT1_DETAILS_H
 
-#include "polkitqt1-export.h"
+#include "polkitqt1-core-export.h"
 
 #include <QObject>
 #include <QSharedData>
@@ -31,7 +31,7 @@ namespace PolkitQt1
  *
  * \brief Class used for passing details around.
  */
-class POLKITQT1_EXPORT Details
+class POLKITQT1_CORE_EXPORT Details
 {
 public:
     /**

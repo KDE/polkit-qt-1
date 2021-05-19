@@ -8,8 +8,6 @@
 #ifndef POLKITQT1_AGENT_LISTENER_H
 #define POLKITQT1_AGENT_LISTENER_H
 
-#include "polkitqt1-export.h"
-
 #include <QObject>
 
 #include "polkitqt1-agent-session.h"
@@ -45,7 +43,7 @@ class ListenerPrivate;
  * You can also use Session class to authenticate users however it isn't required.
  * \sa Session
  */
-class POLKITQT1_EXPORT Listener : public QObject
+class POLKITQT1_AGENT_EXPORT Listener : public QObject
 {
     Q_OBJECT
     Q_DISABLE_COPY(Listener)

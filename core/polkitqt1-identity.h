@@ -8,7 +8,7 @@
 #ifndef POLKITQT1_IDENTITY_H
 #define POLKITQT1_IDENTITY_H
 
-#include "polkitqt1-export.h"
+#include "polkitqt1-core-export.h"
 
 #include <unistd.h>
 
@@ -43,7 +43,7 @@ class UnixGroupIdentity;
  * \see UnixGroup
  * \see UnixUser
  */
-class POLKITQT1_EXPORT Identity
+class POLKITQT1_CORE_EXPORT Identity
 {
 public:
     typedef QList< Identity > List;
@@ -101,7 +101,7 @@ private:
   * \brief UNIX user identity
   * \sa Identity
   */
-class POLKITQT1_EXPORT UnixUserIdentity : public Identity
+class POLKITQT1_CORE_EXPORT UnixUserIdentity : public Identity
 {
 public:
     UnixUserIdentity();
@@ -151,7 +151,7 @@ public:
   * \brief UNIX group identity
   * \sa Identity
   */
-class POLKITQT1_EXPORT UnixGroupIdentity : public Identity
+class POLKITQT1_CORE_EXPORT UnixGroupIdentity : public Identity
 {
 public:
     UnixGroupIdentity();

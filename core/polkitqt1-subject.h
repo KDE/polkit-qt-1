@@ -8,7 +8,7 @@
 #ifndef POLKITQT1_SUBJECT_H
 #define POLKITQT1_SUBJECT_H
 
-#include "polkitqt1-export.h"
+#include "polkitqt1-core-export.h"
 
 #include <QObject>
 #include <QSharedData>
@@ -41,7 +41,7 @@ class UnixUserIdentity;
  * \see SystemBusName
  * \see UnixSession
  */
-class POLKITQT1_EXPORT Subject
+class POLKITQT1_CORE_EXPORT Subject
 {
 public:
     Subject();
@@ -100,7 +100,7 @@ private:
  *
  * \sa Subject
  */
-class POLKITQT1_EXPORT UnixProcessSubject : public Subject
+class POLKITQT1_CORE_EXPORT UnixProcessSubject : public Subject
 {
 public:
     /**
@@ -165,7 +165,7 @@ public:
  *
  * \sa Subject
  */
-class POLKITQT1_EXPORT SystemBusNameSubject : public Subject
+class POLKITQT1_CORE_EXPORT SystemBusNameSubject : public Subject
 {
 public:
     /**
@@ -219,7 +219,7 @@ public:
  *
  * \sa Subject
  */
-class POLKITQT1_EXPORT UnixSessionSubject : public Subject
+class POLKITQT1_CORE_EXPORT UnixSessionSubject : public Subject
 {
 public:
     /**

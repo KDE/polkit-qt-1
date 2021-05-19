@@ -9,7 +9,7 @@
 #ifndef POLKITQT1_GUI_ACTION_H
 #define POLKITQT1_GUI_ACTION_H
 
-#include "polkitqt1-export.h"
+#include "polkitqt1-gui-export.h"
 
 #include <QAction>
 
@@ -37,7 +37,7 @@ namespace Gui
  *
  * \see ActionButton
  */
-class POLKITQT1_EXPORT Action : public QAction
+class POLKITQT1_GUI_EXPORT Action : public QAction
 {
     Q_OBJECT
     Q_DISABLE_COPY(Action)

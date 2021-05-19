@@ -9,7 +9,6 @@
 #ifndef POLKITQT1_GUI_ACTIONBUTTON_H
 #define POLKITQT1_GUI_ACTIONBUTTON_H
 
-#include "polkitqt1-export.h"
 #include "polkitqt1-gui-action.h"
 
 class QAbstractButton;
@@ -37,7 +36,7 @@ class ActionButtonPrivate;
  * permission to perform the given action. If you set 'noEnabled'
  * to \c true it will be emitted when PolKitResult is NO.
  */
-class POLKITQT1_EXPORT ActionButton : public Action
+class POLKITQT1_GUI_EXPORT ActionButton : public Action
 {
     Q_OBJECT
     Q_DECLARE_PRIVATE(ActionButton)

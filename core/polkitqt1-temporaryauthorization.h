@@ -35,7 +35,7 @@ namespace PolkitQt1
  *
  * This class encapsulates the PolkitTemporaryAuthorization interface.
  */
-class POLKITQT1_EXPORT TemporaryAuthorization
+class POLKITQT1_CORE_EXPORT TemporaryAuthorization
 {
 public:
     typedef QList< TemporaryAuthorization > List;

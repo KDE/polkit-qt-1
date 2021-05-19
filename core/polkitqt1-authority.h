@@ -11,7 +11,7 @@
 #ifndef POLKITQT1_AUTHORITY_H
 #define POLKITQT1_AUTHORITY_H
 
-#include "polkitqt1-export.h"
+#include "polkitqt1-core-export.h"
 #include "polkitqt1-identity.h"
 #include "polkitqt1-subject.h"
 #include "polkitqt1-temporaryauthorization.h"
@@ -52,7 +52,7 @@ typedef QMap<QString, QString> DetailsMap;
  * Call Authority::instance() to get an instance of the Authority object.
  * Do not delete Authority::instance(), cleanup will be done automatically.
  */
-class POLKITQT1_EXPORT Authority : public QObject
+class POLKITQT1_CORE_EXPORT Authority : public QObject
 {
     Q_OBJECT
     Q_DISABLE_COPY(Authority)

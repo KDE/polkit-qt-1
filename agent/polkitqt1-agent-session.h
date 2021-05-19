@@ -10,6 +10,7 @@
 
 #include <QObject>
 #include "polkitqt1-identity.h"
+#include "polkitqt1-agent-export.h"
 
 typedef struct _GSimpleAsyncResult GSimpleAsyncResult;
 typedef struct _PolkitAgentSession PolkitAgentSession;
@@ -32,7 +33,7 @@ namespace Agent
  * \internal
  * \brief Encapsulation of GSimpleAsyncResult to QObject class
  */
-class POLKITQT1_EXPORT AsyncResult
+class POLKITQT1_AGENT_EXPORT AsyncResult
 {
 public:
     explicit AsyncResult(GSimpleAsyncResult *result);
@@ -64,7 +65,7 @@ private:
  * authentication system for obtaining authorizations.
  *
  */
-class POLKITQT1_EXPORT Session : public QObject
+class POLKITQT1_AGENT_EXPORT Session : public QObject
 {
     Q_OBJECT
     Q_DISABLE_COPY(Session)

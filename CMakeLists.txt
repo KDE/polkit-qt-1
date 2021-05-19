@@ -13,6 +13,9 @@ set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules ${CMAKE_MODULE_P
 # Used to create CMake config files
 include(CMakePackageConfigHelpers)
 
+# Used to generate export headers
+include(GenerateExportHeader)
+
 # Used to set installation paths
 include(GNUInstallDirs)
 
@@ -98,7 +101,10 @@ install(FILES
     agent/polkitqt1-agent-session.h
 
     ${CMAKE_CURRENT_BINARY_DIR}/polkitqt1-version.h
-    polkitqt1-export.h
+
+    ${CMAKE_CURRENT_BINARY_DIR}/core/polkitqt1-core-export.h
+    ${CMAKE_CURRENT_BINARY_DIR}/gui/polkitqt1-gui-export.h
+    ${CMAKE_CURRENT_BINARY_DIR}/agent/polkitqt1-agent-export.h
 
     DESTINATION
     ${INCLUDE_DESTINATION}/${POLKITQT-1_INCLUDE_PATH} COMPONENT Devel)

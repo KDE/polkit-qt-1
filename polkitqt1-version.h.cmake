@@ -8,7 +8,7 @@
 #ifndef _POLKITQT1_VERSION_H_
 #define _POLKITQT1_VERSION_H_
 
-#include "polkitqt1-export.h"
+#include "polkitqt1-core-export.h"
 
 /// @brief PolkitQt-1 version as string at compile time.
 #define POLKITQT1_VERSION_STRING "${POLKITQT-1_VERSION_STRING}"
@@ -64,21 +64,21 @@ namespace PolkitQt1 {
      * 1 for %PolkitQt-1 1.0.2.
      * @return the major version number at runtime.
      */
-    POLKITQT1_EXPORT unsigned int versionMajor();
+    POLKITQT1_CORE_EXPORT unsigned int versionMajor();
 
     /**
      * @brief Returns the minor number of PolkitQt-1's version, e.g.
      * 0 for %PolkitQt-1 1.0.2.
      * @return the minor version number at runtime.
      */
-    POLKITQT1_EXPORT unsigned int versionMinor();
+    POLKITQT1_CORE_EXPORT unsigned int versionMinor();
 
     /**
      * @brief Returns the patch number of PolkitQt-1's version, e.g.
      * 2 for %PolkitQt-1 1.0.2.
      * @return the release number at runtime.
      */
-    POLKITQT1_EXPORT unsigned int versionPatch();
+    POLKITQT1_CORE_EXPORT unsigned int versionPatch();
 
     /**
      * @brief Returns the %PolkitQt-1 version as string, e.g. "1.0.2".
@@ -87,7 +87,7 @@ namespace PolkitQt1 {
      * the version number of PolkitQt-1 at runtime.
      * @return the %PolkitQt-1 version. You can keep the string forever
      */
-    POLKITQT1_EXPORT const char* versionString();
+    POLKITQT1_CORE_EXPORT const char* versionString();
 }
 
 #endif

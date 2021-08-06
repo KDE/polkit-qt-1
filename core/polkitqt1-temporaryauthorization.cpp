@@ -38,7 +38,6 @@ public:
 TemporaryAuthorization::TemporaryAuthorization(PolkitTemporaryAuthorization *pkTemporaryAuthorization)
         : d(new Data)
 {
-    g_type_init();
     d->id = QString::fromUtf8(polkit_temporary_authorization_get_id(pkTemporaryAuthorization));
     d->actionId = QString::fromUtf8(polkit_temporary_authorization_get_action_id(pkTemporaryAuthorization));
     d->subject = Subject::fromString(polkit_subject_to_string(polkit_temporary_authorization_get_subject(pkTemporaryAuthorization)));

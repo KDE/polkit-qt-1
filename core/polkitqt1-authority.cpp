@@ -172,8 +172,6 @@ void Authority::Private::init()
     QDBusError error;
     QDBusError dbus_error;
 
-    g_type_init();
-
     m_systemBus = new QDBusConnection(QDBusConnection::connectToBus(QDBusConnection::SystemBus,
                                                                     QStringLiteral("polkit_qt_system_bus")));
 

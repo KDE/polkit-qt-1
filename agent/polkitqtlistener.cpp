@@ -49,7 +49,6 @@ G_DEFINE_TYPE(PolkitQtListener, polkit_qt_listener, POLKIT_AGENT_TYPE_LISTENER)
 
 static void polkit_qt_listener_init(PolkitQtListener *listener)
 {
-    g_type_init();
 }
 
 static void polkit_qt_listener_finalize(GObject *object)

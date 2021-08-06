@@ -39,14 +39,12 @@ public:
 Details::Details()
         : d(new Data)
 {
-    g_type_init();
     d->polkitDetails = polkit_details_new();
 }
 
 Details::Details(PolkitDetails *pkDetails)
         : d(new Data)
 {
-    g_type_init();
     d->polkitDetails = pkDetails;
     
     if (d->polkitDetails != nullptr) {

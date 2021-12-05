@@ -56,6 +56,8 @@ Details::~Details()
 {
 }
 
+Details::Details(const Details &other) = default;
+
 Details& Details::operator=(const PolkitQt1::Details& other)
 {
     d = other.d;

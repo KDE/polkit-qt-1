@@ -5,10 +5,10 @@ add_executable(polkit-qt-test
 )
 
 target_link_libraries(polkit-qt-test
-    Qt5::Core
-    Qt5::DBus
-    Qt5::Test
-    Qt5::Widgets
+    Qt${QT_MAJOR_VERSION}::Core
+    Qt${QT_MAJOR_VERSION}::DBus
+    Qt${QT_MAJOR_VERSION}::Test
+    Qt${QT_MAJOR_VERSION}::Widgets
     ${POLKITQT-1_CORE_PCNAME}
     ${POLKITQT-1_AGENT_PCNAME}
 )

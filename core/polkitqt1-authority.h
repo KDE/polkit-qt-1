@@ -19,9 +19,9 @@
 
 #include <QObject>
 #include <QMetaType>
+#include <QStringList>
 
 typedef struct _PolkitAuthority PolkitAuthority;
-class QStringList;
 
 /**
  * \namespace PolkitQt1 PolkitQt

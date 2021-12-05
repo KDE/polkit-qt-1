@@ -14,10 +14,10 @@ generate_export_header(${POLKITQT-1_AGENT_PCNAME}
 
 target_link_libraries(${POLKITQT-1_AGENT_PCNAME}
     PUBLIC
-    Qt5::Core
+    Qt${QT_MAJOR_VERSION}::Core
     ${POLKITQT-1_CORE_PCNAME}
     PRIVATE
-    Qt5::Core
+    Qt${QT_MAJOR_VERSION}::Core
     PkgConfig::POLKIT_AGENT
     PkgConfig::GOBJECT
 )

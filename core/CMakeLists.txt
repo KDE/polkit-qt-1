@@ -17,9 +17,9 @@ generate_export_header(${POLKITQT-1_CORE_PCNAME}
 
 target_link_libraries(${POLKITQT-1_CORE_PCNAME}
     PUBLIC
-    Qt5::Core
+    Qt${QT_MAJOR_VERSION}::Core
     PRIVATE
-    Qt5::DBus
+    Qt${QT_MAJOR_VERSION}::DBus
     PkgConfig::POLKIT_GOBJECT
     PkgConfig::GLIB2
     PkgConfig::GOBJECT

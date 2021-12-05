@@ -11,9 +11,9 @@ target_sources(${POLKITQT-1_EXAMPLE} PRIVATE
 )
 
 target_link_libraries(${POLKITQT-1_EXAMPLE}
-    Qt5::Core
-    Qt5::DBus
-    Qt5::Widgets
+    Qt${QT_MAJOR_VERSION}::Core
+    Qt${QT_MAJOR_VERSION}::DBus
+    Qt${QT_MAJOR_VERSION}::Widgets
     ${POLKITQT-1_GUI_PCNAME}
     ${POLKITQT-1_CORE_PCNAME}
 )
@@ -34,7 +34,7 @@ endmacro(dbus_add_activation_system_service _sources)
 
 add_executable(${POLKITQT-1_EXAMPLE_HELPER})
 
-qt5_add_dbus_adaptor(polkit_example_helper_dbus_SRCS
+qt_add_dbus_adaptor(polkit_example_helper_dbus_SRCS
     org.qt.policykit.examples.xml
     PkExampleHelper.h
     PkExampleHelper
@@ -48,9 +48,9 @@ target_sources(${POLKITQT-1_EXAMPLE_HELPER} PRIVATE
 
 # see our helper is pretty small :D
 target_link_libraries(${POLKITQT-1_EXAMPLE_HELPER}
-    Qt5::Core
-    Qt5::Xml
-    Qt5::DBus
+    Qt${QT_MAJOR_VERSION}::Core
+    Qt${QT_MAJOR_VERSION}::Xml
+    Qt${QT_MAJOR_VERSION}::DBus
     ${POLKITQT-1_GUI_PCNAME}
 )
 

@@ -15,10 +15,10 @@ generate_export_header(${POLKITQT-1_CORE_PCNAME}
 target_link_libraries(${POLKITQT-1_GUI_PCNAME}
     PUBLIC
     ${POLKITQT-1_CORE_PCNAME}
-    Qt5::Widgets
+    Qt${QT_MAJOR_VERSION}::Widgets
     PRIVATE
-    Qt5::Core
-    Qt5::DBus
+    Qt${QT_MAJOR_VERSION}::Core
+    Qt${QT_MAJOR_VERSION}::DBus
 )
 
 set_target_properties(${POLKITQT-1_GUI_PCNAME} PROPERTIES VERSION ${POLKITQT-1_LIBRARY_VERSION}

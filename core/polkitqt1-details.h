@@ -48,6 +48,11 @@ public:
      */
     explicit Details(PolkitDetails *pkDetails);
 
+    /**
+     * Copy constructor.
+     */
+    Details(const Details &other);
+
     ~Details();
 
     Details &operator=(const Details &other);

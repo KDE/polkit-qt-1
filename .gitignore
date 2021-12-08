@@ -19,3 +19,10 @@ qtcreator-build
 moc_*
 ui_*
 Makefile
+
+# LSP and IDEs
+/.clang-format
+/compile_commands.json
+.clangd
+.cache
+.idea

@@ -64,7 +64,7 @@ ActionDescription::List actionsToListAndFree(GList *glist)
     return result;
 }
 
-class Authority::Private
+class Q_DECL_HIDDEN Authority::Private
 {
 public:
     // Polkit will return NULL on failures, hence we use it instead of 0

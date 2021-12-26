@@ -15,7 +15,7 @@
 namespace PolkitQt1
 {
 
-class ActionDescription::Data : public QSharedData
+class Q_DECL_HIDDEN ActionDescription::Data : public QSharedData
 {
 public:
     Data() {}

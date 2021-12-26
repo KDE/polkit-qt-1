@@ -22,7 +22,7 @@ namespace Gui
 /**
   * \internal
   */
-class Action::Private
+class Q_DECL_HIDDEN Action::Private
 {
 public:
     Private(Action *p);

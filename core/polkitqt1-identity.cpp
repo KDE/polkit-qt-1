@@ -14,7 +14,7 @@
 namespace PolkitQt1
 {
 
-class Identity::Data : public QSharedData
+class Q_DECL_HIDDEN Identity::Data : public QSharedData
 {
 public:
     Data() : identity(nullptr) {}

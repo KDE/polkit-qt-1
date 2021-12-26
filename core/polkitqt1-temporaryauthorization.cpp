@@ -13,7 +13,7 @@
 namespace PolkitQt1
 {
 
-class TemporaryAuthorization::Data : public QSharedData
+class Q_DECL_HIDDEN TemporaryAuthorization::Data : public QSharedData
 {
 public:
     Data() {}

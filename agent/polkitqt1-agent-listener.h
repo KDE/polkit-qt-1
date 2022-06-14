@@ -9,6 +9,7 @@
 #define POLKITQT1_AGENT_LISTENER_H
 
 #include <QObject>
+#include <QScopedPointer>
 
 #include "polkitqt1-agent-session.h"
 
@@ -137,7 +138,7 @@ public Q_SLOTS:
     virtual void cancelAuthentication() = 0;
 
 private:
-    ListenerPrivate * const d;
+    QScopedPointer<ListenerPrivate> d;
 };
 }
 

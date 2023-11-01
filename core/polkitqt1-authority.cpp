@@ -216,7 +216,6 @@ void Authority::Private::init()
     QString consoleKitService("org.freedesktop.ConsoleKit");
     QString consoleKitManagerPath("/org/freedesktop/ConsoleKit/Manager");
     QString consoleKitManagerInterface("org.freedesktop.ConsoleKit.Manager");
-    QString consoleKitSeatInterface("org.freedesktop.ConsoleKit.Seat");
 
     // first, add signals SeadAdded and SeatRemoved from ConsoleKit Manager
     dbusSignalAdd(consoleKitService, consoleKitManagerPath, consoleKitManagerInterface, "SeatAdded");

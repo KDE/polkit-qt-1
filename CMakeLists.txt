@@ -187,6 +187,3 @@ add_subdirectory(gui)
 add_subdirectory(agent)
 
 feature_summary(WHAT ALL INCLUDE_QUIET_PACKAGES FATAL_ON_MISSING_REQUIRED_PACKAGES)
-
-# Always last!
-include (PolkitQt-1Dist)

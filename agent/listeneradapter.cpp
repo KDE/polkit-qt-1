@@ -71,13 +71,17 @@ void ListenerAdapter::polkit_qt_listener_initiate_authentication(PolkitAgentList
 {
     qDebug() << "polkit_qt_listener_initiate_authentication callback for " << listener;
 
-    PolkitQt1::Identity::List idents;
     PolkitQt1::Details dets(details);
 
     Listener *list = findListener(listener);
 
-    for (GList *identity = g_list_first(identities); identity != nullptr; identity = g_list_next(identity)) {
-         idents.append(PolkitQt1::Identity((PolkitIdentity *)identity->data));
+    // Polkit enumerates identities without regard for their hash value, potentially leading to duplicated entries.
+    // Unique the identities on our end.
+    // https://github.com/polkit-org/polkit/issues/542
+    QHash<guint, PolkitQt1::Identity> uniqueIdentities;
+    for (GList *entry = g_list_first(identities); entry != nullptr; entry = g_list_next(entry)) {
+        auto identity = static_cast<PolkitIdentity *>(entry->data);
+        uniqueIdentities.insert(polkit_identity_hash(identity), PolkitQt1::Identity(identity));
     }
 
     list->initiateAuthentication(QString::fromUtf8(action_id),
@@ -85,7 +89,7 @@ void ListenerAdapter::polkit_qt_listener_initiate_authentication(PolkitAgentList
                                  QString::fromUtf8(icon_name),
                                  dets,
                                  QString::fromUtf8(cookie),
-                                 idents,
+                                 uniqueIdentities.values(),
                                  new AsyncResult(result));
 }
 

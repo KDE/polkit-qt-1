@@ -5,7 +5,7 @@
            <!-- IN: system user -->
            <arg direction="in" type="s" name="user" />
            <!-- OUT: whether the user gained the authorization -->
-           <arg direction="out" type="b" name="shadow_line">
+           <arg direction="out" type="b" name="shadow_line" />
        </method>
    </interface>
 </node>

@@ -58,6 +58,6 @@ install(TARGETS ${POLKITQT-1_EXAMPLE_HELPER} RUNTIME DESTINATION ${CMAKE_INSTALL
 
 dbus_add_activation_system_service(org.qt.policykit.examples.service.in)
 
-install(FILES org.qt.policykit.examples.conf DESTINATION ${SYSCONF_INSTALL_DIR}/dbus-1/system.d)
+install(FILES org.qt.policykit.examples.conf DESTINATION ${CMAKE_INSTALL_SYSCONFDIR}/dbus-1/system.d)
 
 add_subdirectory(agent)

@@ -1,0 +1,2 @@
+Options:
+  cmake-options: '-DBUILD_EXAMPLES=ON'

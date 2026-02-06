@@ -736,7 +736,6 @@ TemporaryAuthorization::List Authority::enumerateTemporaryAuthorizationsSync(con
     GList *glist2;
     for (glist2 = glist; glist2 != nullptr; glist2 = g_list_next(glist2)) {
         result.append(TemporaryAuthorization((PolkitTemporaryAuthorization *) glist2->data));
-        g_object_unref(glist2->data);
     }
 
     g_list_free(glist);
@@ -764,7 +763,6 @@ void Authority::Private::enumerateTemporaryAuthorizationsCallback(GObject *objec
     GList *glist2;
     for (glist2 = glist; glist2 != nullptr; glist2 = g_list_next(glist2)) {
         res.append(TemporaryAuthorization((PolkitTemporaryAuthorization *) glist2->data));
-        g_object_unref(glist2->data);
     }
 
     g_list_free(glist);

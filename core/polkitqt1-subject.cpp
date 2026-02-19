@@ -105,6 +105,11 @@ Subject Subject::fromString(const QString &string)
     return subject;
 }
 
+Subject Subject::fromSubject(PolkitSubject *subject)
+{
+    return Subject{subject};
+}
+
 UnixProcessSubject::UnixProcessSubject(qint64 pid)
         : Subject()
 {

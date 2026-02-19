@@ -69,6 +69,15 @@ public:
     static Subject fromString(const QString &string);
 
     /**
+     * Creates the Subject object
+     *
+     * \param subject string reprezentation of the object
+     *
+     * \return A new Subject instance
+     */
+    static Subject fromSubject(PolkitSubject *subject);
+
+    /**
      * Gets PolkitSubject object.
      *
      * \warning It shouldn't be used directly unless you are completely aware of what are you doing

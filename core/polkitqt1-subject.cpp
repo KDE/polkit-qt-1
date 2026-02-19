@@ -100,7 +100,7 @@ Subject Subject::fromString(const QString &string)
     subject.d->subject = polkit_subject_from_string(string.toUtf8().data(), &error);
     if (error != nullptr) {
         qWarning() << QString("Cannot create Subject from string: %1").arg(error->message);
-        return nullptr;
+        return {};
     }
     return subject;
 }

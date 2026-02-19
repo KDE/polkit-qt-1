@@ -78,7 +78,7 @@ public:
     PolkitSubject *subject() const;
 
 protected:
-    Subject(PolkitSubject *subject);
+    explicit Subject(PolkitSubject *subject);
 
     void setSubject(PolkitSubject *subject);
 

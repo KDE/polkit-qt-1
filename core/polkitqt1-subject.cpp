@@ -30,7 +30,9 @@ public:
     }
     ~Data()
     {
-        g_object_unref(subject);
+        if (subject) {
+            g_object_unref(subject);
+        }
     }
 
     PolkitSubject *subject;

@@ -22,12 +22,7 @@ public:
         : QSharedData()
         , subject(nullptr)
     {}
-    Data(const Data& other)
-        : QSharedData(other)
-        , subject(other.subject)
-    {
-        g_object_ref(subject);
-    }
+    Data(const Data& other) = delete;
     ~Data()
     {
         if (subject) {

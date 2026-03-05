@@ -72,8 +72,9 @@ void KListener::completed(bool gainedAuthorization)
     Session *session = (Session *)sender();
 
     session->result()->setCompleted();
-
-    delete session;
+    // This slot is invoked from the Session::completed signal (emitted in Session::Private::completed).
+    // Use deleteLater() to defer Session destruction; synchronous delete inside the signal callback would be unsafe.
+    session->deleteLater();
 }
 
 void KListener::showError(const QString &text)

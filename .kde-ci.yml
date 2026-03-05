@@ -1,2 +1,3 @@
 Options:
+  require-passing-tests-on: ['@all']
   cmake-options: '-DBUILD_EXAMPLES=ON'

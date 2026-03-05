@@ -1,5 +1,3 @@
-enable_testing()
-
 add_executable(polkit-qt-test
     test.cpp
 )

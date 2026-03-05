@@ -176,9 +176,12 @@ if (BUILD_EXAMPLES)
     add_subdirectory(examples)
 endif (BUILD_EXAMPLES)
 
-option(BUILD_TEST "Builds unit tests for polkit-qt-1" OFF)
+option(BUILD_TEST "Builds unit tests for polkit-qt-1" ON)
 if (BUILD_TEST)
     find_package(Qt${QT_MAJOR_VERSION}Test ${REQUIRED_QT_VERSION} REQUIRED)
+
+    enable_testing()
+
     add_subdirectory(test)
 endif (BUILD_TEST)
 

@@ -4,8 +4,12 @@
 #include <polkitqt1-authority.h>
 #include <polkitqt1-agent-session.h>
 #include <polkitqt1-details.h>
+#include <polkitqt1-config.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <errno.h>
+#include <fcntl.h>
+#include <sys/syscall.h>
 #include <pwd.h>
 #include <QDBusMessage>
 #include <QDBusConnection>
@@ -189,6 +193,28 @@ void TestAuth::test_Subject()
     // and try it
     //QCOMPARE(((UnixProcess *) subject)->pid(), pid);
     delete process;
+
+#if defined(SYS_pidfd_open)
+    // pidfd based subject (needs kernel >= 5.3)
+    int pidfd = (int) syscall(SYS_pidfd_open, (int) pid, 0);
+    if (pidfd >= 0) {
+        {
+            UnixProcessSubject pfdSubject = UnixProcessSubject::fromPidfd(pidfd);
+#if HAVE_POLKIT_UNIX_PROCESS_NEW_PIDFD
+            QVERIFY(pfdSubject.isValid());
+            QCOMPARE(pfdSubject.pid(), pid);
+            QVERIFY(pfdSubject.pidfd() >= 0);
+#else
+            QVERIFY(!pfdSubject.isValid());
+#endif
+        }
+        errno = 0;
+        int result = fcntl(pidfd, F_GETFD);
+        int error = errno;
+        QCOMPARE(result, -1);
+        QCOMPARE(error, EBADF);
+    }
+#endif
 }
 
 void TestAuth::test_Session()

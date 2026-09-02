@@ -59,10 +59,11 @@ include (CheckFunctionExists)
 
 # Check for older polkit
 set(CMAKE_REQUIRED_INCLUDES ${POLKIT_GOBJECT_INCLUDE_DIRS} ${POLKIT_AGENT_INCLUDE_DIRS})
-set(CMAKE_REQUIRED_LIBRARIES ${POLKIT_GOBJECT_LIBRARIES} ${POLKIT_AGENT_LIBRARIES})
+set(CMAKE_REQUIRED_LIBRARIES PkgConfig::POLKIT_GOBJECT PkgConfig::POLKIT_AGENT)
 check_function_exists(polkit_agent_listener_register HAVE_POLKIT_AGENT_LISTENER_REGISTER)
 check_function_exists(polkit_authority_get_sync HAVE_POLKIT_AUTHORITY_GET_SYNC)
 check_function_exists(polkit_system_bus_name_get_user_sync HAVE_POLKIT_SYSTEM_BUS_NAME_GET_USER_SYNC)
+check_function_exists(polkit_unix_process_new_pidfd HAVE_POLKIT_UNIX_PROCESS_NEW_PIDFD)
 
 if (NOT HAVE_POLKIT_AGENT_LISTENER_REGISTER OR NOT HAVE_POLKIT_AUTHORITY_GET_SYNC)
     message(STATUS "You have an older polkit-1 version: Polkit-Qt-1 will be built in compatibility mode")

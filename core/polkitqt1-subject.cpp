@@ -11,6 +11,7 @@
 
 #include <QDebug>
 #include <polkit/polkit.h>
+#include <unistd.h>
 
 namespace PolkitQt1
 {
@@ -141,6 +142,32 @@ qint64 UnixProcessSubject::uid() const
 void UnixProcessSubject::setPid(qint64 pid)
 {
     polkit_unix_process_set_pid((PolkitUnixProcess *) subject(), pid);
+}
+
+UnixProcessSubject UnixProcessSubject::fromPidfd(int pidfd, int uid)
+{
+#if HAVE_POLKIT_UNIX_PROCESS_NEW_PIDFD
+    PolkitUnixProcess *process = POLKIT_UNIX_PROCESS(polkit_unix_process_new_pidfd(pidfd, uid, nullptr));
+    UnixProcessSubject subject(process);
+    g_object_unref(process);
+    return subject;
+#else
+    if (pidfd >= 0) {
+        close(pidfd);
+    }
+    qWarning("Polkit is too old, returning invalid subject from UnixProcessSubject::fromPidfd()!");
+    return UnixProcessSubject(static_cast<PolkitUnixProcess *>(nullptr));
+#endif
+}
+
+int UnixProcessSubject::pidfd() const
+{
+#if HAVE_POLKIT_UNIX_PROCESS_NEW_PIDFD
+    return polkit_unix_process_get_pidfd((PolkitUnixProcess *) subject());
+#else
+    qWarning("Polkit is too old, returning -1 from UnixProcessSubject::pidfd()!");
+    return -1;
+#endif
 }
 
 // ----- SystemBusName

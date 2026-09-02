@@ -164,6 +164,37 @@ public:
     * \param pid An Unix process PID.
     */
     void setPid(qint64 pid);
+
+    /**
+     * Creates a UnixProcessSubject from a process file descriptor (pidfd),
+     * as returned by pidfd_open(2).
+     *
+     * \note The process file descriptor is owned by the underlying
+     *       PolkitUnixProcess and will be closed when the subject is
+     *       destroyed. Do not close it yourself.
+     *
+     * \note Calling setPid() on a subject created this way will close and
+     *       reopen the process file descriptor, degrading the subject to
+     *       the plain PID based tracking.
+     *
+     * \param pidfd Process ID file descriptor.
+     * \param uid The (real, not effective) uid of the process owner, or -1
+     *            to look it up.
+     *
+     * \return A new UnixProcessSubject. Invalid if the installed polkit is
+     *         too old to support pidfds (before polkit 124).
+     * \since 0.202
+     */
+    static UnixProcessSubject fromPidfd(int pidfd, int uid = -1);
+
+    /**
+     * Returns the process file descriptor of the subject.
+     *
+     * \return The pidfd, or -1 if not set or the installed polkit does not
+     *         support pidfds.
+     * \since 0.202
+     */
+    int pidfd() const;
 };
 
 /**
